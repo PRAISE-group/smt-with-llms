@@ -9,14 +9,14 @@ def main():
     parser.add_argument(
         '-i', '--inputFile',
         type=str,
-        help='relative path to benchmark under study',
+        help='relative path to json file containing information about the benchmarks',
         required=True
     )
     parser.add_argument(
-        '-e', '--executable',
+        '-bench', '--benchName',
         type=str,
-        help='relative path to close boxed executable',
-        required=True
+        default = "None",
+        help='name of the benchmark file'
     )
     parser.add_argument(
         '-t', '--iterations',
@@ -45,23 +45,30 @@ def main():
     if args.verbose:
         print("Verbose mode is enabled.")
 
-    solverai = smtAI()
-    # s = solverai.s
-    solverai.run(args)
 
+    with open(args.inputFile, "r") as f:
+        data = json.load(f)
+    for bench in data['benchmarks']:
+        # print(bench)
+        if not args.benchName == "None":
+            if not bench["smt_file"].endswith(args.benchName):
+                continue
+        solverai = smtAI()
+        solverai.run(args, bench)
+        del solverai
     return
 
-    x = Int('x')
-    y = Int('y')
-
-    s.add(x + y == 10)
-    s.add(x > 0, y > 0)
-
-    if s.check() == sat:
-        print("satisfiable")
-        print(s.model())
-    else:
-        print("No solution")
+    # x = Int('x')
+    # y = Int('y')
+    #
+    # s.add(x + y == 10)
+    # s.add(x > 0, y > 0)
+    #
+    # if s.check() == sat:
+    #     print("satisfiable")
+    #     print(s.model())
+    # else:
+    #     print("No solution")
 
 if __name__ == '__main__':
     main()

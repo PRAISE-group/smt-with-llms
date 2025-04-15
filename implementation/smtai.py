@@ -1,6 +1,7 @@
 from z3 import *
 from modelCheck import *
 from genLemma import *
+import json
 
 class smtAI(object):
     """docstring for smtAI.
@@ -12,6 +13,7 @@ class smtAI(object):
         self.s = Solver()
 
     def readSMTfile(self, inputfilepath):
+        print(inputfilepath)
         f = parse_smt2_file(inputfilepath)
         return f
 
@@ -43,9 +45,16 @@ class smtAI(object):
     def check(self):
         return self.s.check()
 
-    def run(self, args):
-        formulas = self.readSMTfile(args.inputFile)
-        lemmaString = genLemma(args)
+    def push(self):
+        return self.s.push()
+
+    def pop(self):
+        return self.s.pop()
+
+    def run(self, args, bench):
+            # print(bench["smt_file"])
+        formulas = self.readSMTfile(bench["smt_file"])
+        lemmaStrings = genLemma(args)
         if args.verbose:
             print(formulas)
         functions = {}
@@ -64,19 +73,42 @@ class smtAI(object):
         # s.add(f_func(3, 4) > 0)
         if args.verbose:
             print("close boxed functions", cbFunctions)
-        lemmaFormula = self.readSMTstring(lemmaString, cbFunctions)
         self.add(formulas)
-        self.add(lemmaFormula)
-        while args.iterations > 0:
-            args.iterations -= 1
+        self.push()
+        for initLemma in bench["initial_lemmas"]:
+            initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
+            self.add(initialLemmasFormula)
+        # self.push()
+        # for sanityChecks in bench["sanity_checks"]:
+        #     initialLemmasFormula = self.readSMTfile(sanityChecks)
+        #     self.add(initialLemmasFormula)
+        self.push()
+        # print("testing 1")
+        for lemmaString in lemmaStrings:
+            lemmaFormula = self.readSMTstring(lemmaString, cbFunctions)
+            self.add(lemmaFormula)
+        # print("testing 3")
+        iterations = args.iterations
+        while iterations > 0:
+            iterations -= 1
+            failedLemmas = []
             if self.check() == sat:
-                if modelCheck(self,args, cbFunctions):
+                # print("testing 2")
+                if modelCheck(self,args, cbFunctions, bench["object_file"], failedLemmas):
                     print("satisfiable")
                     print(self.model())
+                    print("Done")
+                    print("="*50)
+                    print("\n"*4)
                     break
                 else:
+                    # self.pop()
                     print("Need new lemma") # TODO: Sumit
                     break
             else:
                 print("No solution")  # TODO: Pankaj
                 break
+
+
+    def __del__(self):
+        print("MyClass object is being destroyed")
