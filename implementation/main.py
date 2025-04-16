@@ -42,20 +42,17 @@ def main():
     # Accessing the arguments
     print(f"Input file: {args.inputFile}")
 
+    if not args.inputFile.endswith(".smt2"):
+        print("input file is not in smt format")
+
     if args.verbose:
         print("Verbose mode is enabled.")
 
-
-    with open(args.inputFile, "r") as f:
+    data = None
+    with open(args.inputFile[:-4]+"json", "r") as f:
         data = json.load(f)
-    for bench in data['benchmarks']:
-        # print(bench)
-        if not args.benchName == "None":
-            if not bench["smt_file"].endswith(args.benchName):
-                continue
-        solverai = smtAI()
-        solverai.run(args, bench)
-        del solverai
+    solverai = smtAI()
+    solverai.run(args, data)
     return
 
     # x = Int('x')

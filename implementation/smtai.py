@@ -75,14 +75,16 @@ class smtAI(object):
             print("close boxed functions", cbFunctions)
         self.add(formulas)
         self.push()
-        for initLemma in bench["initial_lemmas"]:
-            initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
-            self.add(initialLemmasFormula)
+        for name in cbFunctions:
+            for initLemma in bench["cb"][name]["userLemmas"]:
+                initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
+                self.add(initialLemmasFormula)
+            self.push()
         # self.push()
         # for sanityChecks in bench["sanity_checks"]:
         #     initialLemmasFormula = self.readSMTfile(sanityChecks)
         #     self.add(initialLemmasFormula)
-        self.push()
+        # self.push()
         # print("testing 1")
         for lemmaString in lemmaStrings:
             lemmaFormula = self.readSMTstring(lemmaString, cbFunctions)
