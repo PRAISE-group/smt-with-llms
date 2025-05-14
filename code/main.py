@@ -1,44 +1,9 @@
-import argparse
-from smtai import *
+from code.utils.commandline import args
+from code.solver.smtai import *
 
 def main():
-    # Create the parser
-    parser = argparse.ArgumentParser(description="A script that accepts arguments.")
-
-    # Add arguments
-    parser.add_argument(
-        '-i', '--inputFile',
-        type=str,
-        help='relative path to json file containing information about the benchmarks',
-        required=True
-    )
-    parser.add_argument(
-        '-bench', '--benchName',
-        type=str,
-        default = "None",
-        help='name of the benchmark file'
-    )
-    parser.add_argument(
-        '-t', '--iterations',
-        type=int,
-        help='number of iterations made to LLM',
-        required=True
-    )
-    # parser.add_argument(
-    #     '-a', '--age',
-    #     type=int,
-    #     help='Your age',
-    #     required=True
-    # )
-    parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Enable verbose output'
-    )
-
     # Parse the arguments
-    args = parser.parse_args()
-    assert args.iterations >0
+    assert args.iterations > 0
     # Accessing the arguments
     print(f"Input file: {args.inputFile}")
 
