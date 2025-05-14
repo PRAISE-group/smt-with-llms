@@ -1,0 +1,28 @@
+{
+  "benchmarks": [
+    {
+      "smt_file": "./benchmarks/add_3_5.smt2",
+      "object_file": "./benchmarks/executables/foo_cb.o",
+      "close_box_description": "Verifies that foo_cb always returns positive output for integer inputs.",
+      "initial_lemmas": [
+        "(assert (forall ((x Int) (y Int)) (= (foo_cb x y) (foo_cb y x))))"
+      ],
+      "sanity_checks": [
+        "(assert (= (foo_cb 3 5) 8))",
+        "(assert (forall ((a Int) (b Int)) (> (foo_cb a b) 0)))"
+      ]
+    },
+    {
+      "smt_file": "./benchmarks/add_3_5.smt2",
+      "object_file": "./benchmarks/executables/foo_cb.o",
+      "close_box_description": "Verifies that foo_cb always returns positive output for integer inputs.",
+      "initial_lemmas": [
+        "(assert (forall ((x Int) (y Int)) (= (foo_cb x y) (foo_cb y x))))"
+      ],
+      "sanity_checks": [
+        "(assert (= (foo_cb 3 5) 8))",
+        "(assert (forall ((a Int) (b Int)) (> (foo_cb a b) 0)))"
+      ]
+    }
+  ]
+}
