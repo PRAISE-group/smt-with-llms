@@ -12,10 +12,12 @@ class smtAI(object):
     def __init__(self):
         super(smtAI, self).__init__()
         self.s = Solver()
+        self.formulas = None
 
     def readSMTfile(self, inputfilepath):
         print(inputfilepath)
         f = parse_smt2_file(inputfilepath)
+        self.formulas = f
         return f
 
     def readSMTstring(self, inputfilepath, declarations):
@@ -79,9 +81,62 @@ class smtAI(object):
     def pop(self):
         return self.s.pop()
 
+    def z3_to_c(self, expr):
+        if expr.decl().kind() == Z3_OP_IMPLIES:
+                a, b = expr.children()
+                return f"(!({self.z3_to_c(a)}) || ({self.z3_to_c(b)}))"
+        elif is_and(expr):
+            return ' && '.join(f'({self.z3_to_c(c)})' for c in expr.children())
+        elif is_or(expr):
+            return ' || '.join(f'({self.z3_to_c(c)})' for c in expr.children())
+        elif is_not(expr):
+            return f'!({self.z3_to_c(expr.arg(0))})'
+        elif is_eq(expr):
+            return f'({self.z3_to_c(expr.arg(0))} == {self.z3_to_c(expr.arg(1))})'
+        elif is_le(expr):
+            return f'({self.z3_to_c(expr.arg(0))} <= {self.z3_to_c(expr.arg(1))})'
+        elif is_lt(expr):
+            return f'({self.z3_to_c(expr.arg(0))} < {self.z3_to_c(expr.arg(1))})'
+        elif is_ge(expr):
+            return f'({self.z3_to_c(expr.arg(0))} >= {self.z3_to_c(expr.arg(1))})'
+        elif is_gt(expr):
+            return f'({self.z3_to_c(expr.arg(0))} > {self.z3_to_c(expr.arg(1))})'
+        elif is_const(expr):
+            return str(expr)
+        elif is_int_value(expr) or is_rational_value(expr):
+            return str(expr.as_long())
+        else:
+            return str(expr)  # fallback
+
+    def harnessForModelCheck(self, args, bench):
+        formulas = self.formulas
+        vars = set()
+        vardecl = ""
+        ifconds = ""
+        for f in formulas:
+            # print("formula:", f)
+            ifconds += "if " + self.z3_to_c(f) + "\n"
+            self.collect_vars(f, vars)
+        ifconds+= "assert(0);"
+        # print("vars:")
+        a = ""
+        b = ""
+        for var in vars:
+            if str(var.sort())=="Int":
+                # print("int", var.decl().name(), ";")
+                a+= "%d "
+                b+= ", &" + str(var.decl().name())
+                vardecl += "int "+ str(var.decl().name())+ ";\n"
+        prog = "void main(){" + "\n"
+        prog+= vardecl + "\n"
+        prog+= f"scanf(\"{a}\" {b});" + "\n"
+        prog+= ifconds + "\n"
+        prog+="}"
+        return prog
+
     def run(self, args, bench):
             # print(bench["smt_file"])
-        formulas = self.readSMTfile(bench["smt_file"])
+        formulas = self.formulas
         lemmaStrings = genLemma(args)
         if args.verbose:
             print(formulas)

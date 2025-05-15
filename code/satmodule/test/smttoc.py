@@ -48,11 +48,12 @@ def test(args, bench):
             a+= "%d "
             b+= ", &" + str(var.decl().name())
             vardecl += "int "+ str(var.decl().name())+ ";\n"
-    print("void main(){")
-    print(vardecl)
-    print(f"scanf(\"{a}\" {b});")
-    print(ifconds)
-    print("}")
+    prog = "void main(){" + "\n"
+    prog+= vardecl + "\n"
+    prog+= f"scanf(\"{a}\" {b});" + "\n"
+    prog+= ifconds + "\n"
+    prog+="}"
+    return prog
         # print(var.sort(), var.decl().name(),";")
         # functions.update(solverai.collect_all_functions(f,functions))
     # Show results
