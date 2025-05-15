@@ -24,8 +24,8 @@ def main():
     # exit()
     solverai = smtAI()
     solverai.readSMTfile(data["smt_file"])
-    print(solverai.harnessForModelCheck(args,data))
-    exit()
+    # print(solverai.harnessForModelCheck())
+    # exit()
     solverai.run(args, data)
     return
 

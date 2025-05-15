@@ -8,6 +8,13 @@
       "userLemmas": [
         "(assert (forall ((x Int) (y Int)) (= (foo_cb x y) (foo_cb y x))))"
       ]
+    },
+    "foo1_cb": {
+      "desc": "Verifies that foo_cb always returns positive output for integer inputs.",
+      "tests": [[1,3], [7,9]],
+      "userLemmas": [
+        "(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"
+      ]
     }
   }
 }

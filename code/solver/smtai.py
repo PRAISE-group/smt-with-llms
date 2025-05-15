@@ -13,6 +13,8 @@ class smtAI(object):
         super(smtAI, self).__init__()
         self.s = Solver()
         self.formulas = None
+        self.vars = None
+        self.mainFun = None
 
     def readSMTfile(self, inputfilepath):
         print(inputfilepath)
@@ -108,15 +110,16 @@ class smtAI(object):
         else:
             return str(expr)  # fallback
 
-    def harnessForModelCheck(self, args, bench):
+    def harnessForModelCheck(self):
         formulas = self.formulas
         vars = set()
         vardecl = ""
         ifconds = ""
         for f in formulas:
             # print("formula:", f)
-            ifconds += "if " + self.z3_to_c(f) + "\n"
+            ifconds += "if (" + self.z3_to_c(f) + ")\n"
             self.collect_vars(f, vars)
+        self.vars = vars
         ifconds+= "assert(0);"
         # print("vars:")
         a = ""
@@ -132,6 +135,7 @@ class smtAI(object):
         prog+= f"scanf(\"{a}\" {b});" + "\n"
         prog+= ifconds + "\n"
         prog+="}"
+        self.mainFun = prog
         return prog
 
     def run(self, args, bench):
@@ -161,6 +165,7 @@ class smtAI(object):
         for name in cbFunctions:
             for initLemma in bench["cb"][name]["userLemmas"]:
                 initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
+                print("string lemma", initialLemmasFormula)
                 self.add(initialLemmasFormula)
             self.push()
         # self.push()

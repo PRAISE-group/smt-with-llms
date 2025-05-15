@@ -1,12 +1,14 @@
 (set-logic AUFLIA)
 (declare-const x Int)
 (declare-const y Int)
+
 (declare-fun foo_cb (Int Int) Int)
+(declare-fun foo1_cb (Int Int) Int)
 (define-fun add ((x Int) (y Int)) Int
   (+ x y)
 )
 (assert (< x y))
 (assert (not (= (+ x y) 8) ) )
-(assert (=> (= (foo_cb x y) 8) (= (foo_cb x y) 7) ))
-(assert (= (add x y) (foo_cb x y)))
+(assert (or (= (foo1_cb x y) 8) (= (foo1_cb x y) 7) ))
+(assert (or (= (foo_cb x y) 8) (= (foo_cb x y) 7) ))
 (check-sat)
