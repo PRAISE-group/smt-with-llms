@@ -1,11 +1,12 @@
 from z3 import *
 from code.solver.modelCheck import *
 from code.genlemma.llm import *
-import json
 
 class smtAI(object):
     """docstring for smtAI.
-    uses LLM generated lemmas to find satisfying assignments in the case when smt encoding of a function is not available or it is too complicated for smt solver to solve.
+    uses LLM generated lemmas to find satisfying assignments
+    in the case when smt encoding of a function is not available
+    or it is too complicated for smt solver to solve.
     """
 
     def __init__(self):
