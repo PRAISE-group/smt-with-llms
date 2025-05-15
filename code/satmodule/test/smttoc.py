@@ -1,7 +1,10 @@
 from code.solver.smtai import *
 
 def z3_to_c(expr):
-    if is_and(expr):
+    if expr.decl().kind() == Z3_OP_IMPLIES:
+            a, b = expr.children()
+            return f"(!({z3_to_c(a)}) || ({z3_to_c(b)}))"
+    elif is_and(expr):
         return ' && '.join(f'({z3_to_c(c)})' for c in expr.children())
     elif is_or(expr):
         return ' || '.join(f'({z3_to_c(c)})' for c in expr.children())
@@ -37,12 +40,17 @@ def test(args, bench):
         solverai.collect_vars(f, vars)
     ifconds+= "assert(0);"
     print("vars:")
+    a = ""
+    b = ""
     for var in vars:
         if str(var.sort())=="Int":
             print("int", var.decl().name(), ";")
+            a+= "%d "
+            b+= ", &" + str(var.decl().name())
             vardecl += "int "+ str(var.decl().name())+ ";\n"
     print("void main(){")
     print(vardecl)
+    print(f"scanf(\"{a}\" {b});")
     print(ifconds)
     print("}")
         # print(var.sort(), var.decl().name(),";")

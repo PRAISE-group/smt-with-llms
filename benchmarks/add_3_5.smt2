@@ -7,6 +7,6 @@
 )
 (assert (< x y))
 (assert (not (= (+ x y) 8) ) )
-(assert (or (= (foo_cb x y) 8) (= (foo_cb x y) 7) ))
+(assert (=> (= (foo_cb x y) 8) (= (foo_cb x y) 7) ))
 (assert (= (add x y) (foo_cb x y)))
 (check-sat)

@@ -20,8 +20,8 @@ def main():
     data = None
     with open(args.inputFile[:-4]+"json", "r") as f:
         data = json.load(f)
-    # test(args, data)
-    # exit()
+    test(args, data)
+    exit()
     solverai = smtAI()
     solverai.run(args, data)
     return
