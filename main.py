@@ -1,5 +1,7 @@
 from code.utils.commandline import args
 from code.solver.smtai import *
+from code.satmodule.test.smttoc import *
+
 
 def main():
     # Parse the arguments
@@ -16,6 +18,8 @@ def main():
     data = None
     with open(args.inputFile[:-4]+"json", "r") as f:
         data = json.load(f)
+    # test(args, data)
+    # exit()
     solverai = smtAI()
     solverai.run(args, data)
     return

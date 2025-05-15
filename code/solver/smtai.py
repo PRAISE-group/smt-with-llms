@@ -1,6 +1,6 @@
 from z3 import *
-from modelCheck import *
-from genLemma import *
+from code.solver.modelCheck import *
+from code.genlemma.llm import *
 import json
 
 class smtAI(object):
@@ -21,6 +21,15 @@ class smtAI(object):
         f = parse_smt2_string(inputfilepath, decls=declarations)
         return f
 
+    def collect_vars(self, expr, seen=None):
+        if seen is None:
+            seen = set()
+        if is_const(expr) and expr.decl().kind() == Z3_OP_UNINTERPRETED:
+            seen.add(expr)
+        for child in expr.children():
+            self.collect_vars(child, seen)
+        return seen
+
     def collect_functions(self, expr, seen=None):
         if seen is None:
             seen = {}
@@ -34,6 +43,24 @@ class smtAI(object):
                 seen[name] = decl
         for child in expr.children():
             self.collect_functions(child, seen)
+        return seen
+
+    def collect_all_functions(self, expr, seen=None):
+        # print(expr)
+        if seen is None:
+            seen = {}
+        if is_app(expr):
+            decl = expr.decl()
+            name = str(decl.name())
+            # Filter out built-in operators like +, *, etc.
+            if decl.arity() == 0:   # z3 declares all constants as zero arity functions too
+                return seen
+            if decl.kind() == Z3_OP_UNINTERPRETED:
+                return seen
+            elif name not in seen:
+                seen[name] = decl
+        for child in expr.children():
+            self.collect_all_functions(child, seen)
         return seen
 
     def add(self, formulas):
