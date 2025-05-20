@@ -35,6 +35,7 @@ class Lemmas(BaseModel):
     generation: Optional[int] = None
     smtFormat: Optional[str] = None
     codeFormat: Optional[str] = None
+    counterExample: Optional[str] = None
 
     @field_validator("status", mode="before")
     def parse_enum_results(cls, v):
