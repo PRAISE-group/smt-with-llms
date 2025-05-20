@@ -3,10 +3,6 @@ from typing import List, Optional, Dict
 from code.models import Lemmas, LemmaStatus
 from threading import Lock
 
-class HashedContext(BaseModel):
-
-    pass
-
 class LemmaDict(BaseModel):
     values: Optional[Dict[str, Lemmas]] = Field(default_factory=dict)
     lock: Lock = Field(default_factory=Lock, exclude=True)
