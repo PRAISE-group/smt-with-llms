@@ -7,9 +7,14 @@ requires-python = ">=3.13"
 dependencies = [
     "argparse>=1.4.0",
     "dspy-ai>=2.6.23",
+    "fastapi>=0.115.12",
+    "langchain>=0.3.25",
+    "langchain-community>=0.3.24",
+    "ollama>=0.4.8",
     "psutil>=7.0.0",
     "pydantic>=2.11.4",
     "rich>=14.0.0",
     "typing>=3.10.0.0",
+    "uvicorn>=0.34.2",
     "z3-solver>=4.15.0.0",
 ]
