@@ -6,11 +6,16 @@ from rich.console import Console
 console = Console()
 
 class LemmaDict(BaseModel):
+    # This is the list of the lemmas across all functions.
     values: Optional[Dict[str, Lemmas]] = Field(default_factory=dict)
-    hashes: Optional[Set[str]] = Field(default_factory=set, exclude=True)
-    lock: Lock = Field(default_factory=Lock, exclude=True)
+
+    # Given a function key it says the latest generation number
+    # for that function.
+    latestGeneration: Optional[Dict[str, int]] = Field(default_factory=dict)
 
     # ✅ Allow non-serializable types like Lock
+    hashes: Optional[Set[str]] = Field(default_factory=set, exclude=True)
+    lock: Lock = Field(default_factory=Lock, exclude=True)
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def __getitem__(self, key: str) -> Lemmas:
@@ -46,7 +51,7 @@ class LemmaDict(BaseModel):
         with self.lock:
             return list(self.values.items())
 
-    def values_list(self):
+    def getAllLemmas(self):
         with self.lock:
             return list(self.values.values())
 

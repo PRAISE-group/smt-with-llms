@@ -6,6 +6,7 @@ from rich.console import Console
 from code.lemma.context import LemmaDict
 from code.utils.commandline import commandLineArgs
 from code.lemma.actions import generate_lemmas_background
+from code.lemma._test_ import testLocking
 from code.models import Function, Lemmas, LemmaStatus
 
 from code.solver.smtai import *
@@ -69,7 +70,8 @@ if __name__ == '__main__':
                         status=LemmaStatus.UNKNOWN,
                         associatedFunction=key,
                         smtFormat=lemmaInfo,
-                        generation=0
+                        generation=0,
+                        picked=False
                     ) for index, lemmaInfo in enumerate(value.get('userLemmas', []), 1)
                 ],
                 inputs=[str(c) for c in value.get('tests', [])],

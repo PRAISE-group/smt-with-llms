@@ -45,8 +45,8 @@ INCREMENTAL_ACTION_TEMPLATE = """
 # Sync LLMs calls with lemma refinement.
 LEMMA_REFINEMENT_TEMPLATE = """
     You generate the following <LEMMA> for the <FUNCTION>. It is incorrect. 
-    Here is a counter-example in <SAMPLES_FORMAT>. 
-    
-    <COUNTEREXAMPLE_FORMAT>
+    Here is a counter-example. 
+    <SAMPLES_FORMAT> 
+
     <COUNTEREXAMPLE_VALUES>
 """

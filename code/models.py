@@ -1,6 +1,7 @@
 from datetime import datetime
 import hashlib
-from pydantic import field_validator, BaseModel
+from threading import Lock
+from pydantic import field_validator, BaseModel, Field, ConfigDict
 from typing import Optional, List
 from enum import Enum
 
@@ -29,13 +30,17 @@ class Lemmas(BaseModel):
     Lemmas Object with id and current status
     """
     id: str
-    status: LemmaStatus
-    associatedFunction: str
+    status: LemmaStatus = None
+    associatedFunction: str = None
     hash: Optional[str] = None
     generation: Optional[int] = None
     smtFormat: Optional[str] = None
     codeFormat: Optional[str] = None
     counterExample: Optional[str] = None
+    picked: bool = False
+
+    lock: Lock = Field(default_factory=Lock, exclude=True)
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @field_validator("status", mode="before")
     def parse_enum_results(cls, v):
@@ -44,21 +49,39 @@ class Lemmas(BaseModel):
         return v
 
     def reset(self) -> None:
-        self.status = LemmaStatus.UNKNOWN
+        with self.lock:
+            self.status = LemmaStatus.UNKNOWN
 
     def setValid(self) -> None:
-        self.status = LemmaStatus.VALID
+        with self.lock:
+            self.status = LemmaStatus.VALID
 
     def setInvalid(self) -> None:
-        self.status = LemmaStatus.INVALID
+        with self.lock:
+            self.status = LemmaStatus.INVALID
 
     def setHash(self, hash: str) -> None:
-        self.hash = hash
+        with self.lock:
+            self.hash = hash
 
     def getHash(self) -> str:
-        # Normalize text (strip + lowercase), then hash
-        norm = self.smtFormat.strip().lower()
-        return hashlib.sha256(norm.encode('utf-8')).hexdigest()
+        with self.lock:
+            # Normalize text (strip + lowercase), then hash
+            norm = self.smtFormat.strip().lower()
+            return hashlib.sha256(norm.encode('utf-8')).hexdigest()
+
+    def setPicked(self):
+        with self.lock:
+            self.picked = True
+
+    def getStatus(self):
+        with self.lock:
+            return self.status
+
+    def isPicked(self):
+        with self.lock:
+            return self.picked
+
 
 class Function(BaseModel):
     """

@@ -10,6 +10,40 @@ from code.lemma.promptTemplates import *
 
 console = Console()
 
+def get_lemmas_from_llm_response(response: str, funcName: str, generationIndex: int, isCexCase: bool, lemmaId: Optional[str]) -> List[Lemmas]:
+    lemmas: List[Lemmas] = []
+    # TODO: Hashing based check to see if lemma is already added.
+    # TODO: Do not add same identical lemma again.
+    for index, fragments in enumerate(response.strip().split("\n"), 0):
+        fragments = fragments.strip().lower()
+        if (fragments is not None
+                and len(fragments) > 2
+                and "here" not in fragments
+                and "start" not in fragments
+                and "end" not in fragments
+                and "assert" in fragments
+        ):
+            # console.log(f"[bold white]{fragments}")
+
+            if isCexCase:
+                # TODO: There is a bug here, CEX from same generation can be overwritten
+                strId = f"{funcName}_cex{generationIndex}" if lemmaId is None else f"{funcName}_{lemmaId}"
+            else:
+                strId = f"{funcName}_gen{generationIndex}" if lemmaId is None else f"{funcName}_{lemmaId}"
+
+            lemmas.append(
+                Lemmas(
+                    id=f"{strId}_l{index}",
+                    status=LemmaStatus.UNKNOWN,
+                    associatedFunction=f"{funcName}",
+                    smtFormat=f"({fragments})",
+                    generation=generationIndex,
+                    picked = False
+                )
+            )
+
+    return lemmas
+
 def generateIntialLemmas(func: Function, format: str, minLimit: int, maxLimit: int, generation: int) -> List[Lemmas]:
     """
     Descp: Take in an input of type Function and return a list of Lemmas
@@ -43,29 +77,8 @@ def generateIntialLemmas(func: Function, format: str, minLimit: int, maxLimit: i
         config={"configurable": {"session_id": f"session_{func.name}"}}
     )
 
-    # TODO: Hashing based check to see if lemma is already added.
-    # TODO: Do not add same identical lemma again.
-    for index, fragments in enumerate(response.strip().split("\n"), 2):
-        fragments = fragments.strip().lower()
-        if (fragments is not None
-                and len(fragments) > 2
-                and "here" not in fragments
-                and "start" not in fragments
-                and "end" not in fragments
-                and "assert" in fragments
-        ):
-            # console.log(f"[bold white]{fragments}")
-            lemmas.append(
-                Lemmas(
-                    id=f"{func.name}_gen{generation}_l{index}",
-                    status=LemmaStatus.UNKNOWN,
-                    associatedFunction=f"{func.name}",
-                    smtFormat=f"({fragments})",
-                    generation=generation
-                )
-            )
+    return get_lemmas_from_llm_response(response, func.name, generation, False, None)
 
-    return lemmas
 
 def incrementalLemma(func: Function, format: str, minLimit: int, maxLimit: int, generation: int) -> List[Lemmas]:
     """
@@ -73,8 +86,6 @@ def incrementalLemma(func: Function, format: str, minLimit: int, maxLimit: int, 
     We use the prompts as shown in code.lemma.promptTemplates
     Lemmas added here will have UNKNOWN status
     """
-
-    lemmas: List[Lemmas] = []
 
     user_prompt = INCREMENTAL_ACTION_TEMPLATE.replace("<LEMMA>", "lemmas")
     user_prompt = user_prompt.replace("<FUNCTION>", func.name)
@@ -86,38 +97,28 @@ def incrementalLemma(func: Function, format: str, minLimit: int, maxLimit: int, 
         config={"configurable": {"session_id": f"session_{func.name}"}}
     )
 
-    # TODO: Hashing based check to see if lemma is already added.
-    # TODO: Do not add same identical lemma again.
-    for index, fragments in enumerate(response.strip().split("\n"), 2):
-        fragments = fragments.strip().lower()
-        if (fragments is not None
-                and len(fragments) > 2
-                and "here" not in fragments
-                and "start" not in fragments
-                and "end" not in fragments
-                and "assert" in fragments
-        ):
-            # console.log(f"[bold white]{fragments}")
-            lemmas.append(
-                Lemmas(
-                    id=f"{func.name}_gen{generation}_l{index}",
-                    status=LemmaStatus.UNKNOWN,
-                    associatedFunction=f"{func.name}",
-                    smtFormat=f"({fragments})",
-                    generation=generation
-                )
-            )
+    return get_lemmas_from_llm_response(response, func.name, generation, False, None)
 
-    return lemmas
-
-def refineLemmas(lemmas: List[Lemmas], counterExamples: Optional[List[str]]) -> List[Lemmas]:
+def refineLemma(lemma: Lemmas, counterExamples: str, generation: Optional[int], lemmaId: Optional[str]) -> List[Lemmas]:
     """
     Descp: Take in a list of Lemmas that have INVALID lemma status
     and return a list of Lemmas after LLM refinement
-    We will possibly create a new lemmas.
+    We will possibly create new lemmas.
     Lemmas added here will have UNKNOWN status
     """
-    return []
+    user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace("<LEMMA>", lemma.smtFormat)
+    user_prompt = user_prompt.replace("<FUNCTION>", lemma.associatedFunction)
+
+    numInputs = [x.strip() for x in counterExamples.strip().split(",")]
+    user_prompt = user_prompt.replace("<SAMPLES_FORMAT>", f"Input for the function: {len(numInputs)} integer inputs.")
+    user_prompt = user_prompt.replace("<COUNTEREXAMPLE_VALUES>", counterExamples)
+
+    response = conversation.invoke(
+        {"input": user_prompt},
+        config={"configurable": {"session_id": f"session_{lemma.associatedFunction}"}}
+    )
+
+    return get_lemmas_from_llm_response(response, lemma.associatedFunction, lemma.generation, True, lemmaId)
 
 def generate_lemmas_background(
         func: Function,
@@ -126,29 +127,31 @@ def generate_lemmas_background(
         maxLimit: int,
         lemmaDict: LemmaDict,
 ):
-    generation = 1
+    lemmaDict.latestGeneration[func.id] = 1
+
     console.log(f"[bold blue]Lemma Generation for: {func.name}")
 
     # Add existing userLemmas since we need them.
     for lemmas in func.userLemmas:
         lemmaDict[lemmas.id] = lemmas
 
-    res = generateIntialLemmas(func, formatting, minLimit, maxLimit, generation)
+    res = generateIntialLemmas(func, formatting, minLimit, maxLimit, lemmaDict.latestGeneration[func.id])
     for lms in res:
         lemmaDict[lms.id] = lms
 
     while True:
         # Keep track of generation
-        generation += 1
+        lemmaDict.latestGeneration[func.id] += 1
+
         # We are now going to make a call to LLMs to generate more lemmas
         # for the function {func.name}
         console.log(f"[bold blue]Generating more lemmas for: {func.name}, "
-                    f"T.Length: {len(lemmaDict)}, Generation: {generation}")
+                    f"T.Length: {len(lemmaDict)}, Generation: {lemmaDict.latestGeneration[func.id]}")
 
         # We probably got new lemmas.
-        res = incrementalLemma(func, formatting, minLimit, maxLimit, generation)
+        res = incrementalLemma(func, formatting, minLimit, maxLimit, lemmaDict.latestGeneration[func.id])
         for lms in res:
             lemmaDict[lms.id] = lms
 
         # Rest and start again.
-        sleep(4)
+        sleep(2)
