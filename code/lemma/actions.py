@@ -40,9 +40,6 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int, ge
 
     response = conversation.run(function_prompt)
 
-    for lms in func.userLemmas:
-        lemmas.append(lms)
-
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
     for index, fragments in enumerate(response.strip().split("\n"), 2):

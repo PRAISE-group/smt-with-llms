@@ -56,49 +56,69 @@ def generate_lemmas_background(
         lemmaDict: LemmaDict,
 ):
     console.log(f"[bold blue]Lemma Generation for: {func.name}")
+
+    # Add existing userLemmas since we need them.
+    for lemmas in func.userLemmas:
+        lemmaDict[lemmas.id] = lemmas
+
+    # This is a system prompt.
     initPrompt()
     generation = 0
+
     while True:
+        # Keep track of generation
         generation += 1
-        console.log(f"[bold blue]Generating more lemmas for: {func.name}, Length: {len(lemmaDict)}, Generation: {generation}")
+        # We are now going to make a call to LLMs to generate more lemmas
+        # for the function {func.name}
+        console.log(f"[bold blue]Generating more lemmas for: {func.name}, "
+                    f"T.Length: {len(lemmaDict)}, Generation: {generation}")
+
+        # We probably got new lemmas.
         res = generateLemmas(func, formatting, minLimit, maxLimit, generation)
         for lms in res:
             lemmaDict[lms.id] = lms
+
+        # Rest and start again.
         sleep(4)
 
 if __name__ == '__main__':
     with open(commandLineArgs.inputFile, "r") as f:
         data = json.load(f)
 
-    # TODO: Here we need to read the function input
-    # TODO: @Gourav, is format for add_3_5.json fixed?
-    # Use "data" here.
-    func = Function(
-        id="foo_cb",
-        name="foo_cb",
-        description="Verifies that foo_cb always returns positive output for integer inputs.",
-        userLemmas=[
-            Lemmas(
-                id="foo_cb_l1",
-                status=LemmaStatus.UNKNOWN,
-                associatedFunction="foo_cb",
-                smtFormat="(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))",
-                generation=0
+    functionsList: List[Function] = []
+    running_llm_threads: list[threading.Thread] = []
+
+    for key, value in data['functions'].items():
+        functionsList.append(
+            Function(
+                id=key,
+                name=key,
+                description=value.get('desc', "No description available."),
+                userLemmas=[
+                    Lemmas(
+                        id=f"{key}_gen0_l{index}",
+                        status=LemmaStatus.UNKNOWN,
+                        associatedFunction=key,
+                        smtFormat=lemmaInfo,
+                        generation=0
+                    ) for index, lemmaInfo in enumerate(value.get('userLemmas', []), 1)
+                ],
+                inputs=[str(c) for c in value.get('tests', [])],
             )
-        ],
-        inputs=['1,3','7,9']
-    )
+        )
 
     lemmaDict = LemmaDict()
 
     # Run a background thread for generating lemmas.
-    lemma_gen_thread = threading.Thread(
-        target=generate_lemmas_background,
-        args=(func, "SMTLIB", 1, 8, lemmaDict),
-        daemon=True
-    )
-
-    lemma_gen_thread.start()
+    # One for each function.
+    for f in functionsList:
+        t = threading.Thread(
+            target=generate_lemmas_background,
+            args=(f, "SMTLIB", 1, 8, lemmaDict),
+            daemon=True
+        )
+        t.start()
+        running_llm_threads.append(t)
 
     # generate_lemmas_background(func, "SMTLIB", 1, 8, lemmaDict)
     console.log("[bold red]Main Thread is running.")
@@ -111,4 +131,5 @@ if __name__ == '__main__':
 
 
 
-    lemma_gen_thread.join()
+    for t in running_llm_threads:
+        t.join()

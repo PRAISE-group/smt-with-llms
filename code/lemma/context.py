@@ -20,11 +20,13 @@ class LemmaDict(BaseModel):
     def __setitem__(self, key: str, value: Lemmas):
         with self.lock:
             text_hash = value.getHash()
+            func = value.associatedFunction
+            text_hash = f"{func}_{text_hash}__lemma"
             if text_hash in self.hashes:
-                console.log(f"[bold violet]Lemma with text '{value.smtFormat}' already exists.")
+                console.log(f"[bold violet]Lemma with text '{value.smtFormat}' already exists for {func}.")
             else:
                 value.setHash(text_hash)
-                console.log(f"[bold green]Lemma with text '{value.smtFormat}' added.")
+                console.log(f"[bold green]Lemma with text '{value.smtFormat}' added for {func}.")
                 self.hashes.add(text_hash)
                 self.values[key] = value
 
