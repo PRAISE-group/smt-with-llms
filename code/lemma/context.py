@@ -1,5 +1,5 @@
 from pydantic import BaseModel, field_validator, Field, ConfigDict
-from typing import List, Optional, Dict, Set
+from typing import List, Optional, Dict, Set, Tuple
 from code.models import Lemmas, LemmaStatus
 from threading import Lock
 from rich.console import Console
@@ -22,7 +22,7 @@ class LemmaDict(BaseModel):
         with self.lock:
             return self.values[key]
 
-    def __setitem__(self, key: str, value: Lemmas):
+    def __setitem__(self, key: str, value: Lemmas) -> None:
         with self.lock:
             text_hash = value.getHash()
             func = value.associatedFunction
@@ -34,6 +34,19 @@ class LemmaDict(BaseModel):
                 console.log(f"[bold green]Lemma with text '{value.smtFormat}' added for {func}.")
                 self.hashes.add(text_hash)
                 self.values[key] = value
+            return None
+
+    def getLatestGeneration(self, key: str) -> int:
+        with self.lock:
+            return self.latestGeneration[key]
+
+    def setLatestGeneration(self, key: str, value: int) -> None:
+        with self.lock:
+            self.latestGeneration[key] = value
+
+    def incrementLatestGeneration(self, key: str) -> None:
+        with self.lock:
+            self.latestGeneration[key] += 1
 
     def __contains__(self, key: str) -> bool:
         with self.lock:
@@ -43,19 +56,19 @@ class LemmaDict(BaseModel):
         with self.lock:
             return len(self.values)
 
-    def keys(self):
+    def keys(self) -> List[str]:
         with self.lock:
             return list(self.values.keys())
 
-    def items(self):
+    def items(self) -> List[Tuple[str, Lemmas]]:
         with self.lock:
             return list(self.values.items())
 
-    def getAllLemmas(self):
+    def getAllLemmas(self) -> List[Lemmas]:
         with self.lock:
             return list(self.values.values())
 
-    def get(self, key: str, default=None):
+    def get(self, key: str, default=None) -> Optional[Lemmas]:
         with self.lock:
             return self.values.get(key, default)
 

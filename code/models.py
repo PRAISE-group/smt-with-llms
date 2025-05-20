@@ -70,15 +70,15 @@ class Lemmas(BaseModel):
             norm = self.smtFormat.strip().lower()
             return hashlib.sha256(norm.encode('utf-8')).hexdigest()
 
-    def setPicked(self):
+    def setPicked(self) -> None:
         with self.lock:
             self.picked = True
 
-    def getStatus(self):
+    def getStatus(self) -> LemmaStatus:
         with self.lock:
             return self.status
 
-    def isPicked(self):
+    def isPicked(self) -> bool:
         with self.lock:
             return self.picked
 

@@ -127,29 +127,28 @@ def generate_lemmas_background(
         maxLimit: int,
         lemmaDict: LemmaDict,
 ):
-    lemmaDict.latestGeneration[func.id] = 1
-
+    lemmaDict.setLatestGeneration(func.id, 1)
     console.log(f"[bold blue]Lemma Generation for: {func.name}")
 
     # Add existing userLemmas since we need them.
     for lemmas in func.userLemmas:
         lemmaDict[lemmas.id] = lemmas
 
-    res = generateIntialLemmas(func, formatting, minLimit, maxLimit, lemmaDict.latestGeneration[func.id])
+    res = generateIntialLemmas(func, formatting, minLimit, maxLimit, lemmaDict.getLatestGeneration(func.id))
     for lms in res:
         lemmaDict[lms.id] = lms
 
     while True:
         # Keep track of generation
-        lemmaDict.latestGeneration[func.id] += 1
+        lemmaDict.incrementLatestGeneration(func.id)
 
         # We are now going to make a call to LLMs to generate more lemmas
         # for the function {func.name}
         console.log(f"[bold blue]Generating more lemmas for: {func.name}, "
-                    f"T.Length: {len(lemmaDict)}, Generation: {lemmaDict.latestGeneration[func.id]}")
+                    f"T.Length: {len(lemmaDict)}, Generation: {lemmaDict.getLatestGeneration(func.id)}")
 
         # We probably got new lemmas.
-        res = incrementalLemma(func, formatting, minLimit, maxLimit, lemmaDict.latestGeneration[func.id])
+        res = incrementalLemma(func, formatting, minLimit, maxLimit, lemmaDict.getLatestGeneration(func.id))
         for lms in res:
             lemmaDict[lms.id] = lms
 

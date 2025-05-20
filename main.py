@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     # @Pankaj, @Gourav. Write the main driver here or abstract it out into a function.
     # TODO: lemmaDict is a singleton, thread-safe dictionary of Lemmas.
-    # TODO: functionsList is a list of function with all intial information for the function.
+    # TODO: functionsList is a list of function with all initial information for the function.
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
 
