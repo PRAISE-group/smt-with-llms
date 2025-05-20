@@ -4,7 +4,7 @@ from time import sleep
 from rich.console import Console
 
 from code.lemma.context import LemmaDict
-from code.utils.commandline import args
+from code.utils.commandline import commandLineArgs
 from code.solver.smtai import *
 from code.lemma.actions import *
 from code.models import Function, Lemmas, LemmaStatus
@@ -55,18 +55,22 @@ def generate_lemmas_background(
         maxLimit: int,
         lemmaDict: LemmaDict,
 ):
-    console.print(f"[bold blue]Generating more lemmas for: {func.name}")
+    console.log(f"[bold blue]Lemma Generation for: {func.name}")
     initPrompt()
     while True:
-        console.print(f"[bold blue]Generating more lemmas for: {func.name}")
+        console.log(f"[bold blue]Generating more lemmas for: {func.name}")
         res = generateLemmas(func, formatting, minLimit, maxLimit)
         for lms in res:
             lemmaDict[lms.id] = lms
-        sleep(10)
+        sleep(4)
 
 if __name__ == '__main__':
+    with open(commandLineArgs.inputFile, "r") as f:
+        data = json.load(f)
+
     # TODO: Here we need to read the function input
-    # TODO: Create a Function Object.
+    # TODO: @Gourav, is format for add_3_5.json fixed?
+    # Use "data" here.
     func = Function(
         id="foo_cb",
         name="foo_cb",
@@ -92,6 +96,16 @@ if __name__ == '__main__':
     )
 
     lemma_gen_thread.start()
+
+    # generate_lemmas_background(func, "SMTLIB", 1, 8, lemmaDict)
     console.log("[bold red]Main Thread is running.")
 
-    # Now accessing lemmaDict is thread safe.
+    # @pankaj, @Gourav. Write the main driver here or abstract it out
+    # into a function.
+    # TODO: lemmaDict is a singleton, thread-safe dictionary of Lemmas.
+
+
+
+
+
+    lemma_gen_thread.join()

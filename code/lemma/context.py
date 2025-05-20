@@ -22,6 +22,10 @@ class LemmaDict(BaseModel):
         with self.lock:
             return key in self.values
 
+    def __len__(self) -> int:
+        with self.lock:
+            return len(self.values)
+
     def keys(self):
         with self.lock:
             return list(self.values.keys())
