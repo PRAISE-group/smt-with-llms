@@ -30,6 +30,7 @@ class Lemmas(BaseModel):
     id: str
     status: LemmaStatus
     associatedFunction: str
+    generation: Optional[int] = None
     smtFormat: Optional[str] = None
     codeFormat: Optional[str] = None
 

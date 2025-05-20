@@ -10,7 +10,7 @@ def initPrompt() -> Any:
     response = conversation.run(prompt)
     return response
 
-def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int) -> List[Lemmas]:
+def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int, generation: int) -> List[Lemmas]:
     """
     Descp: Take in an input of type Function and return a list of Lemmas
     We use the prompts as shown in code.lemma.promptTemplates
@@ -48,7 +48,8 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int) ->
                     id=f"{func.name}_l{index}",
                     status=LemmaStatus.UNKNOWN,
                     associatedFunction=f"{func.name}",
-                    smtFormat=fragments.strip()
+                    smtFormat=fragments.strip(),
+                    generation=generation
                 )
             )
 

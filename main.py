@@ -57,9 +57,11 @@ def generate_lemmas_background(
 ):
     console.log(f"[bold blue]Lemma Generation for: {func.name}")
     initPrompt()
+    generation = 0
     while True:
+        generation += 1
         console.log(f"[bold blue]Generating more lemmas for: {func.name}")
-        res = generateLemmas(func, formatting, minLimit, maxLimit)
+        res = generateLemmas(func, formatting, minLimit, maxLimit, generation)
         for lms in res:
             lemmaDict[lms.id] = lms
         sleep(4)
@@ -80,7 +82,8 @@ if __name__ == '__main__':
                 id="foo_cb_l1",
                 status=LemmaStatus.UNKNOWN,
                 associatedFunction="foo_cb",
-                smtFormat="(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"
+                smtFormat="(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))",
+                generation=0
             )
         ],
         inputs=['1,3','7,9']
