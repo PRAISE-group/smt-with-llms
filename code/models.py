@@ -51,14 +51,13 @@ class Lemmas(BaseModel):
     def setInvalid(self) -> None:
         self.status = LemmaStatus.INVALID
 
-    def storeHash(self) -> None:
-        # We need to a response caching here as well.
-        # TODO: Add LLM memory to redis.
-        self.hash = hashlib.sha256(self.smtFormat.encode('utf-8')).hexdigest()
+    def setHash(self, hash: str) -> None:
+        self.hash = hash
 
     def getHash(self) -> str:
         # Normalize text (strip + lowercase), then hash
-        return self.hash
+        norm = self.smtFormat.strip().lower()
+        return hashlib.sha256(norm.encode('utf-8')).hexdigest()
 
 class Function(BaseModel):
     """

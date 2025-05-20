@@ -1,10 +1,13 @@
 from pydantic import BaseModel, field_validator, Field, ConfigDict
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Set
 from code.models import Lemmas, LemmaStatus
 from threading import Lock
+from rich.console import Console
+console = Console()
 
 class LemmaDict(BaseModel):
     values: Optional[Dict[str, Lemmas]] = Field(default_factory=dict)
+    hashes: Optional[Set[str]] = Field(default_factory=set, exclude=True)
     lock: Lock = Field(default_factory=Lock, exclude=True)
 
     # ✅ Allow non-serializable types like Lock
@@ -16,7 +19,14 @@ class LemmaDict(BaseModel):
 
     def __setitem__(self, key: str, value: Lemmas):
         with self.lock:
-            self.values[key] = value
+            text_hash = value.getHash()
+            if text_hash in self.hashes:
+                console.log(f"[bold violet]Lemma with text '{value.smtFormat}' already exists.")
+            else:
+                value.setHash(text_hash)
+                console.log(f"[bold green]Lemma with text '{value.smtFormat}' added.")
+                self.hashes.add(text_hash)
+                self.values[key] = value
 
     def __contains__(self, key: str) -> bool:
         with self.lock:

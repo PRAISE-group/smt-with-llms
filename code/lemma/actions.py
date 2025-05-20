@@ -1,9 +1,12 @@
 # TODO: Sumit
 from typing import List, Optional, Any
 
+from rich.console import Console
 from code.lemma.llmModels import conversation
 from code.models import Function, Lemmas, LemmaStatus, AlgoVerdict
 from code.lemma.promptTemplates import *
+
+console = Console()
 
 def initPrompt() -> Any:
     prompt = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
@@ -43,14 +46,21 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int, ge
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
     for index, fragments in enumerate(response.strip().split("\n"), 2):
-        fragments = fragments.strip()
-        if fragments is not None or fragments != "":
+        fragments = fragments.strip().lower()
+        if (fragments is not None
+                and len(fragments) > 2
+                and "here" not in fragments
+                and "start" not in fragments
+                and "end" not in fragments
+                and "assert" in fragments
+        ):
+            # console.log(f"[bold white]{fragments}")
             lemmas.append(
                 Lemmas(
                     id=f"{func.name}_gen{generation}_l{index}",
                     status=LemmaStatus.UNKNOWN,
                     associatedFunction=f"{func.name}",
-                    smtFormat=fragments.strip(),
+                    smtFormat=f"({fragments})",
                     generation=generation
                 )
             )

@@ -18,7 +18,7 @@ LEMMA_OBJECTIVE_TEMPLATE = """
     I have provide you an initial set of input examples in SAMPLES_LIST with SAMPLES_FORMAT describing 
     the format for reading the inputs. Also a <LEMMA> sample format has been provided in LEMMA_SAMPLE,
     use it for creating the lemmas. Give me each <LEMMA> in a seperate line so that I can parse it back.
-    Donot give any extra text, only <LEMMA>. Strictly adhere to LEMMA_SAMPLE format, starting with 'assert'.
+    Strictly adhere to LEMMA_SAMPLE format, starting with 'assert'.
     
     FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
     FUNCTION_PARAMETERS: <FUNCTION_PARAMETERS>
@@ -26,6 +26,8 @@ LEMMA_OBJECTIVE_TEMPLATE = """
     SAMPLES_LIST: <SAMPLES_LIST>
     OUTPUT_FORMAT: List of lemmas in <FORMAT>.
     LEMMA_SAMPLE: <LEMMA_SAMPLE>
+    
+    Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text.
 """
 
 # Additional feedbacks if required.
