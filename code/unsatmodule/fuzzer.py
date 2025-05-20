@@ -1,16 +1,8 @@
 import os
-import utils.process_util as pu
-# TODO: make is an object for parallel computing of the getVerdict
+import utils.unsat_util as pu
+from py_console import console
 
-def createDirectory(path):
-    try:
-        os.mkdir(path)
-    except FileExistsError:
-        print(f"Directory '{path}' already exists.")
-    except PermissionError:
-        print(f"Permission denied: Unable to create {path}.")
-    except Exception as e:
-        print(f"An error occurred: {e} while creating {path}")
+# TODO: make is an object for parallel computing of the getVerdict
 
 
 def createHeader():
@@ -62,7 +54,7 @@ def createRest(filepath, lemma, varMap, id):
 def createFuzzFile(id, lemma, varMap, funcMap):
     pwd = os.getcwd()
     fuzzd = pwd + "/fuzz_temp/"
-    createDirectory(fuzzd)
+    pu.createDirectory(fuzzd)
     with open(f"{fuzzd}lemma_check_{id}.cc", "w") as ffuzz:
         ffuzz.write(createHeader())
         rest = createRest(fuzzd, lemma, varMap, id)
@@ -81,21 +73,26 @@ def fuzzIt(path, file, argObj, id):
     fuzzOutDir = path + "fuzzOut/"
 
     if not os.path.exists(seedDir):
-        createDirectory(seedDir)
+        pu.createDirectory(seedDir)
         os.system(f"head -c 255 < /dev/urandom > {seedDir}/in01.txt && head -c 255 < /dev/zero > {seedDir}/in02.txt")
 
     if not os.path.exists(fuzzOutDir):
-        createDirectory(fuzzOutDir)
+        pu.createDirectory(fuzzOutDir)
 
-    fuzzTimeout = 10 # FIXME: use from command line argument
+    fuzzTimeout = 20 # FIXME: use from command line argument
 
+    console.info(f"Fuzzing started")
     fuzzCommand = [f"AFL_BENCH_UNTIL_CRASH=1 afl-fuzz -i {seedDir} -o {fuzzOutDir} -V {str(fuzzTimeout)} {path + objFile} > /dev/null"]
     
+    '''
+    # FIXME: somehow using folllowing environment giving afl-fuzz not found error
     env = {'AFL_BENCH_UNTIL_CRASH': '1', 
            'AFL_SKIP_CPUFREQ': '1', 
            'AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES' : '1', 
            "AFL_NO_UI" : '1',
            "AFL_QUIET":"1"}
+    '''
+
 
     pu.execute_command(fuzzCommand, child_name="Fuzzzzing", need_live_output=True, shell=True)
 
