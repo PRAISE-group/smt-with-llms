@@ -1,5 +1,7 @@
 # TODO: Sumit
 from typing import List, Optional
+
+from code.genlemma.llmModels import conversation
 from code.models import Function, Lemmas, LemmaStatus, AlgoVerdict
 from code.genlemma.promptTemplates import *
 
@@ -14,7 +16,7 @@ def generateLemmas(func: Function) -> List[Lemmas]:
     """
     return []
 
-def refineLemmas(lemmas: List[Lemmas]) -> List[Lemmas]:
+def refineLemmas(lemmas: List[Lemmas], counterExamples: Optional[List[str]]) -> List[Lemmas]:
     """
     Descp: Take in a list of Lemmas that have INVALID lemma status
     and return a list of Lemmas after LLM refinement
@@ -23,3 +25,7 @@ def refineLemmas(lemmas: List[Lemmas]) -> List[Lemmas]:
     """
     return []
 
+if __name__ == "__main__":
+    user_input = SYSTEM_PROMPT_TEMPLATE.replace("<LEMMA>", "lemma")
+    response = conversation.run(user_input)
+    print(response)

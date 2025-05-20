@@ -1,6 +1,6 @@
 from z3 import *
 from code.solver.modelCheck import *
-from code.genlemma.llm import *
+from code.genlemma.actions import *
 
 class smtAI(object):
     """docstring for smtAI.

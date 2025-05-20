@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from datetime import datetime
+from pydantic import field_validator, BaseModel
 from typing import Optional, List
 from enum import Enum
 
@@ -31,6 +32,13 @@ class Lemmas(BaseModel):
     associatedFunction: str
     smtFormat: Optional[str] = None
     codeFormat: Optional[str] = None
+
+    @field_validator("status", mode="before")
+    def parse_enum_results(cls, v):
+        if isinstance(v, str) and v.isdigit():
+            return int(v)
+        return v
+
 
 class Function(BaseModel):
     """
