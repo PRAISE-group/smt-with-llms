@@ -10,11 +10,6 @@ from code.lemma.promptTemplates import *
 
 console = Console()
 
-def initPrompt() -> Any:
-    prompt = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
-    response = conversation.run(prompt)
-    return response
-
 def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int, generation: int) -> List[Lemmas]:
     """
     Descp: Take in an input of type Function and return a list of Lemmas
@@ -29,7 +24,10 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int, ge
     user_prompt = user_prompt.replace("<MIN_LIMIT>", str(minLimit))
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
-    response = conversation.run(user_prompt)
+    response = conversation.invoke(
+        {"input": user_prompt},
+        config={"configurable": {"session_id": f"session_{func.name}"}}
+    )
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
@@ -40,7 +38,10 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int, ge
     function_prompt = function_prompt.replace("<SAMPLES_LIST>", str(func.inputs))
     function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", func.userLemmas[0].smtFormat)
 
-    response = conversation.run(function_prompt)
+    response = conversation.invoke(
+        {"input": function_prompt},
+        config={"configurable": {"session_id": f"session_{func.name}"}}
+    )
 
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
@@ -88,8 +89,6 @@ def generate_lemmas_background(
     for lemmas in func.userLemmas:
         lemmaDict[lemmas.id] = lemmas
 
-    # This is a system prompt.
-    initPrompt()
     generation = 0
 
     while True:
