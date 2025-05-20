@@ -28,7 +28,7 @@ class Lemmas(BaseModel):
     Lemmas Object with id and current status
     """
     id: str
-    status: LemmaStatus.UNKNOWN
+    status: LemmaStatus
     associatedFunction: str
     smtFormat: Optional[str] = None
     codeFormat: Optional[str] = None

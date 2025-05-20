@@ -1,10 +1,10 @@
-from langchain_community.llms import Ollama
+from langchain_ollama import ChatOllama
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
 # Connect to remote Ollama instance
-llm = Ollama(
-    model="llama3",
+llm = ChatOllama(
+    model="llama3:latest",
     base_url="http://172.27.21.160:11434"
 )
 
