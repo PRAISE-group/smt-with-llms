@@ -1,0 +1,40 @@
+from typing import Dict
+from langchain_ollama import OllamaLLM
+from langchain_core.runnables import RunnableWithMessageHistory
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.chat_history import InMemoryChatMessageHistory
+
+from rich.console import Console
+from code.lemma.promptTemplates import SYSTEM_PROMPT_TEMPLATE
+
+SYSTEM_PROMPT_TEMPLATE = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
+
+# Connect to remote Ollama instance
+llm = OllamaLLM(
+    model="llama3:latest",
+    base_url="http://172.27.21.160:11434"
+)
+
+# Define the chat prompt
+prompt = ChatPromptTemplate.from_messages([
+    ("system", SYSTEM_PROMPT_TEMPLATE),
+    MessagesPlaceholder(variable_name="history"),
+    ("human", "{input}")
+])
+
+chain = prompt | llm
+chat_histories: Dict[str, InMemoryChatMessageHistory] = {}
+
+def get_session_history(session_id: str) -> InMemoryChatMessageHistory:
+    if session_id not in chat_histories:
+        chat_histories[session_id] = InMemoryChatMessageHistory()
+    return chat_histories[session_id]
+
+# Create a conversation chain
+conversation = RunnableWithMessageHistory(
+    chain,
+    get_session_history,
+    input_messages_key="input",
+    history_messages_key="history",
+    verbose=False,
+)

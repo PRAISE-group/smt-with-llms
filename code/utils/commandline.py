@@ -34,4 +34,4 @@ parser.add_argument(
     help='Enable verbose output'
 )
 
-args = parser.parse_args()
+commandLineArgs = parser.parse_args()
