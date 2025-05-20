@@ -15,7 +15,7 @@ memory = ConversationBufferMemory()
 conversation = ConversationChain(
     llm=llm,
     memory=memory,
-    verbose=True,  # optional: prints prompt/response
+    verbose=False,  # optional: prints prompt/response
 )
 
 def main():

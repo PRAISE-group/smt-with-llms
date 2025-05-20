@@ -1,11 +1,16 @@
 import json
+import threading
+from time import sleep
+from rich.console import Console
 
+from code.lemma.context import LemmaDict
 from code.utils.commandline import args
 from code.solver.smtai import *
 from code.lemma.actions import *
 from code.models import Function, Lemmas, LemmaStatus
 from code.satmodule.test.smttoc import *
 
+console = Console()
 
 def smt_with_lemmas():
     # Parse the arguments
@@ -43,9 +48,23 @@ def smt_with_lemmas():
     # else:
     #     print("No solution")
 
-def main():
+def generate_lemmas_background(
+        func: Function,
+        formatting: str,
+        minLimit: int,
+        maxLimit: int,
+        lemmaDict: LemmaDict,
+):
+    console.print(f"[bold blue]Generating more lemmas for: {func.name}")
     initPrompt()
+    while True:
+        console.print(f"[bold blue]Generating more lemmas for: {func.name}")
+        res = generateLemmas(func, formatting, minLimit, maxLimit)
+        for lms in res:
+            lemmaDict[lms.id] = lms
+        sleep(10)
 
+if __name__ == '__main__':
     # TODO: Here we need to read the function input
     # TODO: Create a Function Object.
     func = Function(
@@ -60,10 +79,19 @@ def main():
                 smtFormat="(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"
             )
         ],
-        inputs=['1,3', '7,9']
+        inputs=['1,3','7,9']
     )
-    res = generateLemmas(func, "SMTLIB", 1, 7)
-    print(res)
 
-if __name__ == '__main__':
-    main()
+    lemmaDict = LemmaDict()
+
+    # Run a background thread for generating lemmas.
+    lemma_gen_thread = threading.Thread(
+        target=generate_lemmas_background,
+        args=(func, "SMTLIB", 1, 8, lemmaDict),
+        daemon=True
+    )
+
+    lemma_gen_thread.start()
+    console.log("[bold red]Main Thread is running.")
+
+    # Now accessing lemmaDict is thread safe.

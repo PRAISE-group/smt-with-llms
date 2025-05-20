@@ -25,7 +25,6 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int) ->
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
     response = conversation.run(user_prompt)
-    print(response)
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
@@ -41,16 +40,14 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int) ->
     for lms in func.userLemmas:
         lemmas.append(lms)
 
-    index = 1
-    for fragments in response.strip().split("\n"):
+    for index, fragments in enumerate(response.strip().split("\n"), 2):
         fragments = fragments.strip()
         if fragments is not None or fragments != "":
-            index += 1
             lemmas.append(
                 Lemmas(
-                    id=f"foo_cb_l{index}",
+                    id=f"{func.name}_l{index}",
                     status=LemmaStatus.UNKNOWN,
-                    associatedFunction="foo_cb",
+                    associatedFunction=f"{func.name}",
                     smtFormat=fragments.strip()
                 )
             )
@@ -65,8 +62,3 @@ def refineLemmas(lemmas: List[Lemmas], counterExamples: Optional[List[str]]) -> 
     Lemmas added here will have UNKNOWN status
     """
     return []
-
-if __name__ == "__main__":
-    user_input = SYSTEM_PROMPT_TEMPLATE.replace("<LEMMA>", "lemma")
-    response = conversation.run(user_input)
-    print(response)

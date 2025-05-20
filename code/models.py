@@ -39,6 +39,15 @@ class Lemmas(BaseModel):
             return int(v)
         return v
 
+    def reset(self) -> None:
+        self.status = LemmaStatus.UNKNOWN
+
+    def setValid(self) -> None:
+        self.status = LemmaStatus.VALID
+
+    def setInvalid(self) -> None:
+        self.status = LemmaStatus.INVALID
+
 
 class Function(BaseModel):
     """
