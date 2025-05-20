@@ -36,6 +36,12 @@ FEEDBACK_TEMPLATE = """
     Please perform the following, <NEXT_ACTION>.
 """
 
+# Additional feedbacks if required.
+INCREMENTAL_ACTION_TEMPLATE = """
+    Nice response! 
+    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>, like the previous ones for this <FUNCTION>. 
+"""
+
 # Sync LLMs calls with lemma refinement.
 LEMMA_REFINEMENT_TEMPLATE = """
     You generate the following <LEMMA> for the <FUNCTION>. It is incorrect. 
