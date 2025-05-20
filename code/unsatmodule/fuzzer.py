@@ -94,7 +94,7 @@ def fuzzIt(path, file, argObj, id):
     '''
 
 
-    pu.execute_command(fuzzCommand, child_name="Fuzzzzing", need_live_output=True, shell=True)
+    pu.execute_command(fuzzCommand, child_name="Fuzzzzing", need_live_output=True, shell=True, timeout=fuzzTimeout)
 
     resultFile = f"{path}lemma_check_cex_{str(id)}.txt"
     if not os.path.exists(resultFile):

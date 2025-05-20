@@ -28,10 +28,10 @@ def check_unsat(lemmas,  # for now considering a map of id to string of lemma in
 
 
 
-class Arguments:
-    sharedObj = ""
 
 if __name__ == "__main__":
+    class Arguments:
+        sharedObj = ""
     lemmas = {1:"(= (+ (+ x y) z) (+ x (+ y z)))", 2:"(= (+ (+ x y) z) (- x (+ y x)))"}
     args = Arguments()
     check_unsat(lemmas, args)
