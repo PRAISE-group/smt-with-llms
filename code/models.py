@@ -82,6 +82,13 @@ class Lemmas(BaseModel):
         with self.lock:
             return self.picked
 
+    def __str__(self) -> str:
+        with self.lock:
+            return f"{self.id} - {self.status} - {self.associatedFunction} - {self.hash} - {self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample} - {self.picked}"
+
+    def __repr__(self) -> str:
+        with self.lock:
+            return f"{self.id} - {self.status} - {self.associatedFunction} - {self.hash} - {self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample} - {self.picked}"
 
 class Function(BaseModel):
     """
