@@ -50,11 +50,12 @@ def smt_with_lemmas():
     #     print("No solution")
 
 if __name__ == '__main__':
-    with open(commandLineArgs.inputFile, "r") as f:
-        data = json.load(f)
-
+    lemmaDict = LemmaDict()
     functionsList: List[Function] = []
     running_llm_threads: list[threading.Thread] = []
+
+    with open(commandLineArgs.inputFile, "r") as f:
+        data = json.load(f)
 
     for key, value in data['functions'].items():
         functionsList.append(
@@ -76,8 +77,6 @@ if __name__ == '__main__':
                 smt_file = value.get('smt_file', None)
             )
         )
-
-    lemmaDict = LemmaDict()
 
     # Run a background thread for generating lemmas.
     # One for each function.
