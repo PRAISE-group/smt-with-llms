@@ -5,9 +5,10 @@ from rich.console import Console
 
 from code.lemma.context import LemmaDict
 from code.utils.commandline import commandLineArgs
-from code.solver.smtai import *
-from code.lemma.actions import *
+from code.lemma.actions import generate_lemmas_background
 from code.models import Function, Lemmas, LemmaStatus
+
+from code.solver.smtai import *
 from code.satmodule.test.smttoc import *
 
 console = Console()
@@ -48,39 +49,6 @@ def smt_with_lemmas():
     # else:
     #     print("No solution")
 
-def generate_lemmas_background(
-        func: Function,
-        formatting: str,
-        minLimit: int,
-        maxLimit: int,
-        lemmaDict: LemmaDict,
-):
-    console.log(f"[bold blue]Lemma Generation for: {func.name}")
-
-    # Add existing userLemmas since we need them.
-    for lemmas in func.userLemmas:
-        lemmaDict[lemmas.id] = lemmas
-
-    # This is a system prompt.
-    initPrompt()
-    generation = 0
-
-    while True:
-        # Keep track of generation
-        generation += 1
-        # We are now going to make a call to LLMs to generate more lemmas
-        # for the function {func.name}
-        console.log(f"[bold blue]Generating more lemmas for: {func.name}, "
-                    f"T.Length: {len(lemmaDict)}, Generation: {generation}")
-
-        # We probably got new lemmas.
-        res = generateLemmas(func, formatting, minLimit, maxLimit, generation)
-        for lms in res:
-            lemmaDict[lms.id] = lms
-
-        # Rest and start again.
-        sleep(4)
-
 if __name__ == '__main__':
     with open(commandLineArgs.inputFile, "r") as f:
         data = json.load(f)
@@ -104,6 +72,8 @@ if __name__ == '__main__':
                     ) for index, lemmaInfo in enumerate(value.get('userLemmas', []), 1)
                 ],
                 inputs=[str(c) for c in value.get('tests', [])],
+                object_file = value.get('object_file', None),
+                smt_file = value.get('smt_file', None)
             )
         )
 
@@ -120,12 +90,13 @@ if __name__ == '__main__':
         t.start()
         running_llm_threads.append(t)
 
-    # generate_lemmas_background(func, "SMTLIB", 1, 8, lemmaDict)
     console.log("[bold red]Main Thread is running.")
 
-    # @pankaj, @Gourav. Write the main driver here or abstract it out
-    # into a function.
+    # @Pankaj, @Gourav. Write the main driver here or abstract it out into a function.
     # TODO: lemmaDict is a singleton, thread-safe dictionary of Lemmas.
+    # TODO: functionsList is a list of function with all intial information for the function.
+    # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
+    # You can add lemmas, but you cannot delete lemmas.
 
 
 

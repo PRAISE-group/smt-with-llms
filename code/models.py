@@ -69,5 +69,5 @@ class Function(BaseModel):
     userLemmas: Optional[List[Lemmas]] = None
     inputs: Optional[List[str]] = None
     outputs: Optional[List[str]] = None
-    location: Optional[str] = None
-    sourceCode: Optional[str] = None
+    smt_file: Optional[str] = None
+    object_file: Optional[str] = None

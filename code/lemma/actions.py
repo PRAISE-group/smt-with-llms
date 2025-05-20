@@ -1,8 +1,10 @@
 # TODO: Sumit
+from time import sleep
 from typing import List, Optional, Any
 
 from rich.console import Console
 from code.lemma.llmModels import conversation
+from code.lemma.context import LemmaDict
 from code.models import Function, Lemmas, LemmaStatus, AlgoVerdict
 from code.lemma.promptTemplates import *
 
@@ -72,3 +74,36 @@ def refineLemmas(lemmas: List[Lemmas], counterExamples: Optional[List[str]]) -> 
     Lemmas added here will have UNKNOWN status
     """
     return []
+
+def generate_lemmas_background(
+        func: Function,
+        formatting: str,
+        minLimit: int,
+        maxLimit: int,
+        lemmaDict: LemmaDict,
+):
+    console.log(f"[bold blue]Lemma Generation for: {func.name}")
+
+    # Add existing userLemmas since we need them.
+    for lemmas in func.userLemmas:
+        lemmaDict[lemmas.id] = lemmas
+
+    # This is a system prompt.
+    initPrompt()
+    generation = 0
+
+    while True:
+        # Keep track of generation
+        generation += 1
+        # We are now going to make a call to LLMs to generate more lemmas
+        # for the function {func.name}
+        console.log(f"[bold blue]Generating more lemmas for: {func.name}, "
+                    f"T.Length: {len(lemmaDict)}, Generation: {generation}")
+
+        # We probably got new lemmas.
+        res = generateLemmas(func, formatting, minLimit, maxLimit, generation)
+        for lms in res:
+            lemmaDict[lms.id] = lms
+
+        # Rest and start again.
+        sleep(4)
