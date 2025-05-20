@@ -1,4 +1,5 @@
 from datetime import datetime
+import hashlib
 from pydantic import field_validator, BaseModel
 from typing import Optional, List
 from enum import Enum
@@ -30,6 +31,7 @@ class Lemmas(BaseModel):
     id: str
     status: LemmaStatus
     associatedFunction: str
+    hash: Optional[str] = None
     generation: Optional[int] = None
     smtFormat: Optional[str] = None
     codeFormat: Optional[str] = None
@@ -49,6 +51,14 @@ class Lemmas(BaseModel):
     def setInvalid(self) -> None:
         self.status = LemmaStatus.INVALID
 
+    def storeHash(self) -> None:
+        # We need to a response caching here as well.
+        # TODO: Add LLM memory to redis.
+        self.hash = hashlib.sha256(self.smtFormat.encode('utf-8')).hexdigest()
+
+    def getHash(self) -> str:
+        # Normalize text (strip + lowercase), then hash
+        return self.hash
 
 class Function(BaseModel):
     """

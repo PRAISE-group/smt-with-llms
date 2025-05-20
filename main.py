@@ -60,7 +60,7 @@ def generate_lemmas_background(
     generation = 0
     while True:
         generation += 1
-        console.log(f"[bold blue]Generating more lemmas for: {func.name}")
+        console.log(f"[bold blue]Generating more lemmas for: {func.name}, Length: {len(lemmaDict)}, Generation: {generation}")
         res = generateLemmas(func, formatting, minLimit, maxLimit, generation)
         for lms in res:
             lemmaDict[lms.id] = lms

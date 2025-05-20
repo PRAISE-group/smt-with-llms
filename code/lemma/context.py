@@ -3,6 +3,10 @@ from typing import List, Optional, Dict
 from code.models import Lemmas, LemmaStatus
 from threading import Lock
 
+class HashedContext(BaseModel):
+
+    pass
+
 class LemmaDict(BaseModel):
     values: Optional[Dict[str, Lemmas]] = Field(default_factory=dict)
     lock: Lock = Field(default_factory=Lock, exclude=True)
@@ -48,5 +52,3 @@ class LemmaDict(BaseModel):
         if not all(isinstance(item, Lemmas) for item in v):
             raise ValueError("All items must be of type Lemmas")
         return v
-
-

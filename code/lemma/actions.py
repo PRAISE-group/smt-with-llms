@@ -40,12 +40,14 @@ def generateLemmas(func: Function, format: str, minLimit: int, maxLimit: int, ge
     for lms in func.userLemmas:
         lemmas.append(lms)
 
+    # TODO: Hashing based check to see if lemma is already added.
+    # TODO: Do not add same identical lemma again.
     for index, fragments in enumerate(response.strip().split("\n"), 2):
         fragments = fragments.strip()
         if fragments is not None or fragments != "":
             lemmas.append(
                 Lemmas(
-                    id=f"{func.name}_l{index}",
+                    id=f"{func.name}_gen{generation}_l{index}",
                     status=LemmaStatus.UNKNOWN,
                     associatedFunction=f"{func.name}",
                     smtFormat=fragments.strip(),
