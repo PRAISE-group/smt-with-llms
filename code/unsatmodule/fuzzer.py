@@ -1,6 +1,7 @@
 import os
 import utils.unsat_util as pu
 from py_console import console
+from models import LemmaStatus
 
 # TODO: make is an object for parallel computing of the getVerdict
 
@@ -63,6 +64,11 @@ def createFuzzFile(id, lemma, varMap, funcMap):
     return fuzzd, f"lemma_check_{id}.cc"
 
 def fuzzIt(path, file, argObj, id):
+    """
+    This function fuzz the lemma and returns VALID if fuzzer timeouts
+    or returns INVALID with counterexample
+    """
+
     # compile first
     objFile = file.replace(".cc", ".out")
     compileCommand = [f"afl-c++ {path + file} -o {path + objFile} {argObj.sharedObj}"]
@@ -72,6 +78,7 @@ def fuzzIt(path, file, argObj, id):
     seedDir = path + "seed/"
     fuzzOutDir = path + "fuzzOut/"
 
+    # creating seed input for fuzzing
     if not os.path.exists(seedDir):
         pu.createDirectory(seedDir)
         os.system(f"head -c 255 < /dev/urandom > {seedDir}/in01.txt && head -c 255 < /dev/zero > {seedDir}/in02.txt")
@@ -84,21 +91,21 @@ def fuzzIt(path, file, argObj, id):
     console.info(f"Fuzzing started")
     fuzzCommand = [f"AFL_BENCH_UNTIL_CRASH=1 afl-fuzz -i {seedDir} -o {fuzzOutDir} -V {str(fuzzTimeout)} {path + objFile} > /dev/null"]
     
-    '''
+    """
     # FIXME: somehow using folllowing environment giving afl-fuzz not found error
     env = {'AFL_BENCH_UNTIL_CRASH': '1', 
            'AFL_SKIP_CPUFREQ': '1', 
            'AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES' : '1', 
            "AFL_NO_UI" : '1',
            "AFL_QUIET":"1"}
-    '''
+    """
 
 
     pu.execute_command(fuzzCommand, child_name="Fuzzzzing", need_live_output=True, shell=True, timeout=fuzzTimeout)
 
     resultFile = f"{path}lemma_check_cex_{str(id)}.txt"
     if not os.path.exists(resultFile):
-        return "Verified", {}
+        return LemmaStatus.VALID, {}
     else:
         cex = {}
         with open(resultFile, 'r') as file:
@@ -106,7 +113,7 @@ def fuzzIt(path, file, argObj, id):
                 if ':' in line:
                     key, value = line.strip().split(':', 1)
                     cex[key.strip()] = int(value.strip())
-        return "CexFound", cex
+        return LemmaStatus.INVALID, cex
 
 
 
