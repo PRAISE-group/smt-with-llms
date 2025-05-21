@@ -8,47 +8,10 @@ from code.utils.commandline import commandLineArgs
 from code.lemma.actions import generate_lemmas_background
 from code.lemma._test_ import testLocking
 from code.models import Function, Lemmas, LemmaStatus
-
 from code.solver.smtai import *
 from code.satmodule.test.smttoc import *
 
 console = Console()
-
-def smt_with_lemmas():
-    # Parse the arguments
-    assert args.iterations > 0
-    # Accessing the arguments
-    print(f"Input file: {args.inputFile}")
-
-    if not args.inputFile.endswith(".smt2"):
-        print("input file is not in smt format")
-
-    if args.verbose:
-        print("Verbose mode is enabled.")
-
-    data = None
-    with open(args.inputFile[:-4]+"json", "r") as f:
-        data = json.load(f)
-    # test(args, data)
-    # exit()
-    solverai = smtAI()
-    solverai.readSMTfile(data["smt_file"])
-    # print(solverai.harnessForModelCheck())
-    # exit()
-    solverai.run(args, data)
-    return
-
-    # x = Int('x')
-    # y = Int('y')
-    #
-    # s.add(x + y == 10)
-    # s.add(x > 0, y > 0)
-    #
-    # if s.check() == sat:
-    #     print("satisfiable")
-    #     print(s.model())
-    # else:
-    #     print("No solution")
 
 if __name__ == '__main__':
     lemmaDict = LemmaDict()
@@ -57,12 +20,6 @@ if __name__ == '__main__':
 
     with open(commandLineArgs.inputFile, "r") as f:
         data = json.load(f)
-    solverai = smtAI()
-    solverai.readSMTfile(data["smt_file"])
-    # print(solverai.harnessForModelCheck())
-    # exit()
-    solverai.run(commandLineArgs, data)
-    exit()
 
     for key, value in data['functions'].items():
         functionsList.append(
@@ -77,11 +34,10 @@ if __name__ == '__main__':
                         associatedFunction=key,
                         smtFormat=lemmaInfo,
                         generation=0,
-                        picked=False
                     ) for index, lemmaInfo in enumerate(value.get('userLemmas', []), 1)
                 ],
                 inputs=[str(c) for c in value.get('tests', [])],
-                object_file = value.get('object_file', None),
+                object_file=commandLineArgs.sharedLib,
                 smt_file = value.get('smt_file', None)
             )
         )
@@ -91,7 +47,7 @@ if __name__ == '__main__':
     for f in functionsList:
         t = threading.Thread(
             target=generate_lemmas_background,
-            args=(f, "SMTLIB", 1, 8, lemmaDict),
+            args=(f, "SMTLIB", commandLineArgs.minLemma, commandLineArgs.maxLemma, lemmaDict),
             daemon=True
         )
         t.start()
@@ -102,6 +58,7 @@ if __name__ == '__main__':
     # @Pankaj, @Gourav. Write the main driver here or abstract it out into a function.
     # TODO: lemmaDict is a singleton, thread-safe dictionary of Lemmas.
     # TODO: functionsList is a list of function with all initial information for the function.
+    # TODO: commandLineArgs is a class dictonary of all the attributes presented via the command line.
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
 

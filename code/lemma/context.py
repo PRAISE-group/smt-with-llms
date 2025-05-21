@@ -9,8 +9,16 @@ class LemmaDict(BaseModel):
     # This is the list of the lemmas across all functions.
     values: Optional[Dict[str, Lemmas]] = Field(default_factory=dict)
 
-    # Given a function key it says the latest generation number
-    # for that function.
+    # To check if the next call is for refinement or not.
+    # Only Fuzzer Module calls it.
+    isRefinementCall: Optional[bool] = False
+
+    # To check if the next call is for new lemmas from LLM or not.
+    # Only solver/satmodule calls it.
+    isIncrementalCall: Optional[bool] = False
+
+    # Given a function key it says the latest
+    # generation number for that function.
     latestGeneration: Optional[Dict[str, int]] = Field(default_factory=dict)
 
     # ✅ Allow non-serializable types like Lock
@@ -36,18 +44,6 @@ class LemmaDict(BaseModel):
                 self.values[key] = value
             return None
 
-    def getLatestGeneration(self, key: str) -> int:
-        with self.lock:
-            return self.latestGeneration[key]
-
-    def setLatestGeneration(self, key: str, value: int) -> None:
-        with self.lock:
-            self.latestGeneration[key] = value
-
-    def incrementLatestGeneration(self, key: str) -> None:
-        with self.lock:
-            self.latestGeneration[key] += 1
-
     def __contains__(self, key: str) -> bool:
         with self.lock:
             return key in self.values
@@ -64,10 +60,6 @@ class LemmaDict(BaseModel):
         with self.lock:
             return list(self.values.items())
 
-    def getAllLemmas(self) -> List[Lemmas]:
-        with self.lock:
-            return list(self.values.values())
-
     def get(self, key: str, default=None) -> Optional[Lemmas]:
         with self.lock:
             return self.values.get(key, default)
@@ -78,3 +70,35 @@ class LemmaDict(BaseModel):
         if not all(isinstance(item, Lemmas) for item in v):
             raise ValueError("All items must be of type Lemmas")
         return v
+
+    def getLatestGeneration(self, key: str) -> int:
+        with self.lock:
+            return self.latestGeneration[key]
+
+    def setLatestGeneration(self, key: str, value: int) -> None:
+        with self.lock:
+            self.latestGeneration[key] = value
+
+    def incrementLatestGeneration(self, key: str) -> None:
+        with self.lock:
+            self.latestGeneration[key] += 1
+
+    def getAllLemmas(self) -> List[Lemmas]:
+        with self.lock:
+            return list(self.values.values())
+
+    def setRefinementCall(self, isRefinementCall: bool) -> None:
+        with self.lock:
+            self.isRefinementCall = isRefinementCall
+
+    def checkIfRefinementCall(self) -> None:
+        with self.lock:
+            return self.isRefinementCall
+
+    def setIncrementalCall(self, isIncrementalCall: bool) -> None:
+        with self.lock:
+            self.isIncrementalCall = isIncrementalCall
+
+    def checkIfIncrementalCall(self) -> None:
+        with self.lock:
+            return self.isIncrementalCall

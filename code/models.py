@@ -1,10 +1,8 @@
-from datetime import datetime
 import hashlib
+from enum import Enum
 from threading import Lock
 from pydantic import field_validator, BaseModel, Field, ConfigDict
-from typing import Optional, List
-from enum import Enum
-
+from typing import Optional, List, Dict, Any, Union, Tuple, Callable
 
 class AlgoVerdict(Enum):
     """
@@ -17,28 +15,43 @@ class AlgoVerdict(Enum):
 class LemmaStatus(Enum):
     """
     Status of a Lemma,
-    UNKNOWN: Newly generated, no checks done.
-    VALID: Tick
-    INVALID: Cross
+    UNKNOWN: ? (Newly generated, no checks done)
+    VALID: Tick (Fuzzer says correct)
+    INVALID: Cross (Fuzzer says wrong)
     """
-    UNKNOWN = 100
-    VALID = 101
-    INVALID = 102
+    VALID = 200
+    UNKNOWN = 404
+    INVALID = 502
 
 class Lemmas(BaseModel):
     """
     Lemmas Object with id and current status
     """
+    # Unique Identifier of Lemma
     id: str
-    status: LemmaStatus = None
-    associatedFunction: str = None
-    hash: Optional[str] = None
-    generation: Optional[int] = None
-    smtFormat: Optional[str] = None
-    codeFormat: Optional[str] = None
-    counterExample: Optional[str] = None
-    picked: bool = False
 
+    # Status of the lemma ?, tick, cross
+    # Lemma with status UNKNOWN is always picked.
+    status: LemmaStatus = None
+
+    # Function Name
+    # Needed by Fuzzer and Solver Module.
+    associatedFunction: str = None
+
+    # Set from Fuzzer Call
+    # To be set by Fuzzer Module if CEX found. LEMMA.INVALID
+    counterExample: Optional[Dict[str, int]] = None
+
+    # Raw string from LLM in SMTLIB Format
+    # Needed by the Fuzzer and Solver Module.
+    smtFormat: Optional[str] = None
+
+    # Internal: Compute Hash
+    hash: Optional[str] = None
+
+    # Internal, Changed only by LEMMA Generation
+    generation: Optional[int] = None
+    codeFormat: Optional[str] = None
     lock: Lock = Field(default_factory=Lock, exclude=True)
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -48,7 +61,7 @@ class Lemmas(BaseModel):
             return int(v)
         return v
 
-    def reset(self) -> None:
+    def setUnknown(self) -> None:
         with self.lock:
             self.status = LemmaStatus.UNKNOWN
 
@@ -60,6 +73,18 @@ class Lemmas(BaseModel):
         with self.lock:
             self.status = LemmaStatus.INVALID
 
+    def getStatus(self) -> LemmaStatus:
+        with self.lock:
+            return self.status
+
+    def setCounterExample(self, counterExample: Dict[str, int]) -> None:
+        with self.lock:
+            self.counterExample = counterExample
+
+    def getCounterExample(self) -> Dict[str, int] | None:
+        with self.lock:
+            return self.counterExample
+
     def setHash(self, hash: str) -> None:
         with self.lock:
             self.hash = hash
@@ -70,35 +95,47 @@ class Lemmas(BaseModel):
             norm = self.smtFormat.strip().lower()
             return hashlib.sha256(norm.encode('utf-8')).hexdigest()
 
-    def setPicked(self) -> None:
-        with self.lock:
-            self.picked = True
-
-    def getStatus(self) -> LemmaStatus:
-        with self.lock:
-            return self.status
-
-    def isPicked(self) -> bool:
-        with self.lock:
-            return self.picked
-
     def __str__(self) -> str:
         with self.lock:
-            return f"{self.id} - {self.status} - {self.associatedFunction} - {self.hash} - {self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample} - {self.picked}"
+            return (f"{self.id} - {self.status} - "
+                    f"{self.associatedFunction} - {self.hash} - "
+                    f"{self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample}")
 
     def __repr__(self) -> str:
         with self.lock:
-            return f"{self.id} - {self.status} - {self.associatedFunction} - {self.hash} - {self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample} - {self.picked}"
+            return (f"{self.id} - {self.status} - "
+                    f"{self.associatedFunction} - {self.hash} - "
+                    f"{self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample}")
 
 class Function(BaseModel):
     """
     Function Object
+    A benchmark consists of different function calls.
     """
     id: str
+
+    # Function Name, This is also the
+    # associated Function name of the Lemma.
     name: str
+
+    # Textual Description of the function.
     description: Optional[str] = None
+
+    # Some initial user given Lemmas.
+    # LLM will try to generate lemmas of this format.
     userLemmas: Optional[List[Lemmas]] = None
+
+    # Some input on which the CB Function may run.
     inputs: Optional[List[str]] = None
+
+    # Outputs from the Function for given inputs.
+    # User may optionally provide it.
     outputs: Optional[List[str]] = None
+
+    # The input SMT associated with a closed box function.
     smt_file: Optional[str] = None
+
+    # Link to the Library of all external closed box functions.
+    # We may pass a single file that has all the pre-compiled
+    # binaries of the closed box function in all benchmarks.
     object_file: Optional[str] = None
