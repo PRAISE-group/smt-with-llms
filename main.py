@@ -4,6 +4,7 @@ from time import sleep
 from rich.console import Console
 
 from code.lemma.context import LemmaDict
+from code.models import AlgoVerdict
 from code.utils.commandline import commandLineArgs
 from code.lemma.actions import generate_lemmas_background
 from code.lemma._test_ import testLocking
@@ -12,6 +13,15 @@ from code.solver.smtai import *
 from code.satmodule.test.smttoc import *
 
 console = Console()
+
+def solverVerdict(a, b, c):
+    pass
+
+def checkSat(a, b, c):
+    pass
+
+def checkUnsat(a, b, c):
+    pass
 
 if __name__ == '__main__':
     lemmaDict = LemmaDict(isIncrementalCall=True)
@@ -62,9 +72,21 @@ if __name__ == '__main__':
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
 
+    resultVerdict = AlgoVerdict.UNKNOWN
 
+    while not resultVerdict == AlgoVerdict.SAT or resultVerdict == AlgoVerdict.UNSAT:
+        # Sync_Solve() -> generate_lemmas_background already running
+        # No need to call Sync_Solve()
 
+        # This is a call that Solver/SAT module checks.
+        resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
 
+        if (resultVerdict == AlgoVerdict.SAT):
+            # Check SAT call, I think Gourav calls this.
+            resultVerdict = checkSat(lemmaDict, functionsList, commandLineArgs)
+        else:
+            # Check UNSAT call, Pankaj will call this.
+            resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
 
     for t in running_llm_threads:
         t.join()

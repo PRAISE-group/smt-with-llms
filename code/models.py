@@ -9,6 +9,7 @@ class AlgoVerdict(Enum):
     List of all cases our algorithm can
     return. SAT_OK is SAT, UNSAT_OK is UNSAT
     """
+    UNKNOWN = 9000
     SAT = 6000
     UNSAT = 7000
 
