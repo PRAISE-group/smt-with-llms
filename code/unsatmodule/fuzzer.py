@@ -71,7 +71,7 @@ def fuzzIt(path, file, argObj, id):
 
     # compile first
     objFile = file.replace(".cc", ".out")
-    compileCommand = [f"afl-c++ {path + file} -o {path + objFile} {argObj.sharedObj}"]
+    compileCommand = [f"afl-c++ {path + file} -o {path + objFile} {argObj.sharedLib}"]
     pu.execute_command(compileCommand, child_name="aflcompile", need_live_output=False, shell=True)
 
     # now fuzzzzzzzz
@@ -86,7 +86,7 @@ def fuzzIt(path, file, argObj, id):
     if not os.path.exists(fuzzOutDir):
         pu.createDirectory(fuzzOutDir)
 
-    fuzzTimeout = 20 # FIXME: use from command line argument
+    fuzzTimeout = argObj.fuzztime
 
     console.info(f"Fuzzing started")
     fuzzCommand = [f"AFL_BENCH_UNTIL_CRASH=1 afl-fuzz -i {seedDir} -o {fuzzOutDir} -V {str(fuzzTimeout)} {path + objFile} > /dev/null"]
