@@ -15,6 +15,11 @@ class smtAI(object):
         self.formulas = None
         self.vars = None
         self.mainFun = None
+        self.lemmasData = {} # key is the label to lemmas
+        self.labelsUsed = 0
+        self.unsatCores = {} # key is the iteration number starts from 1
+        self.iteration = 0
+        self.lemmasUsed = {} # key is the iteration number starts from 1
 
     def readSMTfile(self, inputfilepath):
         print(inputfilepath)
@@ -22,8 +27,9 @@ class smtAI(object):
         self.formulas = f
         return f
 
-    def readSMTstring(self, inputfilepath, declarations):
-        f = parse_smt2_string(inputfilepath, decls=declarations)
+    def readSMTstring(self, s, declarations):
+        print(s)
+        f = parse_smt2_string(s, decls=declarations)
         return f
 
     def collect_vars(self, expr, seen=None):
@@ -36,16 +42,26 @@ class smtAI(object):
         return seen
 
     def collect_functions(self, expr, seen=None):
+        # print(expr, seen)
         if seen is None:
             seen = {}
         if is_app(expr):
             decl = expr.decl()
             name = str(decl.name())
             # Filter out built-in operators like +, *, etc.
-            if decl.arity() == 0:   # z3 declares all constants as zero arity functions too
+            # if decl.arity() == 0:   # z3 declares all constants as zero arity functions too
+            #     return seen
+            # print(is_const(expr), is_func_decl(expr))
+            if is_const(expr):
                 return seen
-            if decl.kind() == Z3_OP_UNINTERPRETED and name not in seen:
+            elif decl.kind() == Z3_OP_UNINTERPRETED and name not in seen :
                 seen[name] = decl
+            else:
+                # print("This type of expression is not handled", expr)
+                pass
+                # exit()
+            # if decl.kind() == Z3_OP_UNINTERPRETED and name not in seen:
+            #     seen[name] = decl
         for child in expr.children():
             self.collect_functions(child, seen)
         return seen
@@ -120,6 +136,7 @@ class smtAI(object):
             ifconds += "if (" + self.z3_to_c(f) + ")\n"
             self.collect_vars(f, vars)
         self.vars = vars
+        # print("vars", vars)
         ifconds+= "assert(0);"
         # print("vars:")
         a = ""
@@ -141,14 +158,24 @@ class smtAI(object):
     def run(self, args, bench):
             # print(bench["smt_file"])
         formulas = self.formulas
-        lemmaStrings = genLemma(args)
+        vars = set()
+        for f in formulas:
+            # print("formula:", f, vars)
+            # ifconds += "if (" + self.z3_to_c(f) + ")\n"
+            self.collect_vars(f, vars)
+        self.vars = vars
+        # print("vars", vars)
+        self.iteration +=1
+        # lemmaStrings = genLemma(args)
+        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"]
         if args.verbose:
-            print(formulas)
+            print("\nSMT file formulas",formulas)
         functions = {}
         for f in formulas:
             functions.update(self.collect_functions(f,functions))
+            # print(f, functions)
         # Show results
-        print("Function symbols found in SMT2:")
+        # print("\nFunction symbols found in SMT2:")
         cbFunctions = {}
         for name, decl in functions.items():
             # domain_sorts = [str(decl.domain(i)) for i in range(decl.arity())]
@@ -159,14 +186,25 @@ class smtAI(object):
                 cbFunctions[name] = decl
         # s.add(f_func(3, 4) > 0)
         if args.verbose:
-            print("close boxed functions", cbFunctions)
+            print("\nclose boxed functions", cbFunctions)
         self.add(formulas)
         self.push()
         for name in cbFunctions:
-            for initLemma in bench["cb"][name]["userLemmas"]:
+            for initLemma in bench["functions"][name]["userLemmas"]:
+                if args.verbose:
+                    print("initLemma", initLemma)
                 initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
-                print("string lemma", initialLemmasFormula)
-                self.add(initialLemmasFormula)
+                if args.verbose:
+                    print("string lemma", initialLemmasFormula, cbFunctions)
+                label = Bool(f'L{self.labelsUsed}')
+                self.s.assert_and_track(initialLemmasFormula[0],label)
+                self.lemmasData[label] = initialLemmasFormula[0]
+                self.labelsUsed += 1
+                if self.iteration not in self.lemmasUsed:
+                    self.lemmasUsed[self.iteration] = [label]
+                else:
+                    self.lemmasUsed[self.iteration].append(label)
+                # self.add(initialLemmasFormula)
             self.push()
         # self.push()
         # for sanityChecks in bench["sanity_checks"]:
@@ -176,28 +214,48 @@ class smtAI(object):
         # print("testing 1")
         for lemmaString in lemmaStrings:
             lemmaFormula = self.readSMTstring(lemmaString, cbFunctions)
-            self.add(lemmaFormula)
+            if args.verbose:
+                print("lemmaString", lemmaString, cbFunctions)
+            label = Bool(f'L{self.labelsUsed}')
+            self.s.assert_and_track(lemmaFormula[0],label)
+            self.labelsUsed += 1
+            self.lemmasData[label] = lemmaFormula[0]
+            if self.iteration not in self.lemmasUsed:
+                self.lemmasUsed[self.iteration] = [label]
+            else:
+                self.lemmasUsed[self.iteration].append(label)
+            # self.add(lemmaFormula)
         # print("testing 3")
         iterations = args.iterations
-        while iterations > 0:
-            iterations -= 1
-            failedLemmas = []
-            if self.check() == sat:
-                # print("testing 2")
-                if modelCheck(self,args, cbFunctions, bench["object_file"], failedLemmas):
-                    print("satisfiable")
-                    print(self.model())
-                    print("Done")
-                    print("="*50)
-                    print("\n"*4)
-                    break
-                else:
-                    # self.pop()
-                    print("Need new lemma") # TODO: Sumit
-                    break
+        # while iterations > 0:
+        # iterations -= 1
+        failedLemmas = []
+        result = self.check()
+        if result == sat:
+            # print("testing 2")
+            if modelCheck(self,args, cbFunctions, bench["object_file"], failedLemmas):
+                print("satisfiable")
+                print(self.model())
+                print("Done")
+                print("="*50)
+                print("\n"*4)
+                return
             else:
-                print("No solution")  # TODO: Pankaj
-                break
+                # self.pop()
+                print("Need new lemma") # TODO: Sumit
+                return
+        elif result == unsat:
+            unsatCore = self.s.unsat_core()
+            self.unsatCores[self.iteration] = unsatCore
+            print("UnsatCore:", unsatCore)  # TODO: Pankaj
+            for core in unsatCore:
+                print(core, self.lemmasData[core])
+            print(self.vars)
+            print(self.lemmasUsed)
+            return
+        else:
+            print("UNKNOWN")
+            return
 
 
     def __del__(self):

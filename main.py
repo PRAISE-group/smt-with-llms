@@ -57,6 +57,12 @@ if __name__ == '__main__':
 
     with open(commandLineArgs.inputFile, "r") as f:
         data = json.load(f)
+    solverai = smtAI()
+    solverai.readSMTfile(data["smt_file"])
+    # print(solverai.harnessForModelCheck())
+    # exit()
+    solverai.run(commandLineArgs, data)
+    exit()
 
     for key, value in data['functions'].items():
         functionsList.append(
