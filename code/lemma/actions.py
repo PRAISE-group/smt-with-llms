@@ -166,11 +166,11 @@ def generate_lemmas_background(
             lemmaDict.incrementLatestGeneration(func.id)
             generation = lemmaDict.getLatestGeneration(func.id)
 
-            console.log(f"[bold blue]Generating more lemmas for: {func.name}, after INCREMENTAL"
+            console.log(f"[bold blue]Generating more lemmas for: {func.name}, after INCREMENTAL "
                         f"T.Length: {len(lemmaDict)}, Generation: {generation}")
 
-            res = incrementalLemma(func=func, minLimit=minLimit, maxLimit=maxLimit, generation=generation)
-            lemmaDict.setIncrementalCall(False)
+            res = incrementalLemma(func=func, format=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation)
+            lemmaDict.setIncrementalCall(True)
 
         for lms in res:
             lemmaDict[lms.id] = lms

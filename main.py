@@ -14,7 +14,7 @@ from code.satmodule.test.smttoc import *
 console = Console()
 
 if __name__ == '__main__':
-    lemmaDict = LemmaDict()
+    lemmaDict = LemmaDict(isIncrementalCall=True)
     functionsList: List[Function] = []
     running_llm_threads: list[threading.Thread] = []
 
