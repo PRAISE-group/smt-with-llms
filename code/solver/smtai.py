@@ -159,16 +159,16 @@ class smtAI(object):
     def run(self, args, bench):
             # print(bench["smt_file"])
         formulas = self.formulas
-        vars = set()
-        for f in formulas:
-            # print("formula:", f, vars)
-            # ifconds += "if (" + self.z3_to_c(f) + ")\n"
-            self.collect_vars(f, vars)
-        self.vars = vars
+        # vars = set()
+        # for f in formulas:
+        #     # print("formula:", f, vars)
+        #     # ifconds += "if (" + self.z3_to_c(f) + ")\n"
+        #     self.collect_vars(f, vars)
+        # self.vars = vars
         # print("vars", vars)
         self.iteration +=1
         # lemmaStrings = genLemma(args)
-        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"]
+        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"] # get from sumit as a list of assertions
         if args.verbose:
             print("\nSMT file formulas",formulas)
         functions = {}
@@ -179,10 +179,6 @@ class smtAI(object):
         # print("\nFunction symbols found in SMT2:")
         cbFunctions = {}
         for name, decl in functions.items():
-            # domain_sorts = [str(decl.domain(i)) for i in range(decl.arity())]
-            # # if decl.arity() == 0: # z3 declares all constants as zero arity functions too
-            # #     continue
-            # print(f"  {name} : ({', '.join(domain_sorts)}) -> {decl.range()} ")
             if name.endswith("_cb"):
                 cbFunctions[name] = decl
         # s.add(f_func(3, 4) > 0)
@@ -190,7 +186,7 @@ class smtAI(object):
             print("\nclose boxed functions", cbFunctions)
         self.add(formulas)
         self.push()
-        for name in cbFunctions:
+        for name in cbFunctions: # add user provided lemmas from json
             for initLemma in bench["functions"][name]["userLemmas"]:
                 if args.verbose:
                     print("initLemma", initLemma)
@@ -213,7 +209,7 @@ class smtAI(object):
         #     self.add(initialLemmasFormula)
         # self.push()
         # print("testing 1")
-        for lemmaString in lemmaStrings:
+        for lemmaString in lemmaStrings:  # add lemmas from sumit
             lemmaFormula = self.readSMTstring(lemmaString, cbFunctions)
             if args.verbose:
                 print("lemmaString", lemmaString, cbFunctions)
