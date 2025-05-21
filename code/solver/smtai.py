@@ -100,6 +100,7 @@ class smtAI(object):
         return self.s.pop()
 
     def z3_to_c(self, expr):
+        print("expr",expr)
         if expr.decl().kind() == Z3_OP_IMPLIES:
                 a, b = expr.children()
                 return f"(!({self.z3_to_c(a)}) || ({self.z3_to_c(b)}))"
@@ -167,7 +168,7 @@ class smtAI(object):
         # print("vars", vars)
         self.iteration +=1
         # lemmaStrings = genLemma(args)
-        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"]
+        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"]
         if args.verbose:
             print("\nSMT file formulas",formulas)
         functions = {}

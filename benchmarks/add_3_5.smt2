@@ -7,7 +7,6 @@
 (define-fun add ((x Int) (y Int)) Int
   (+ x y)
 )
-(assert (forall ((a Int) (b Int)) (= (foo_cb a b) (foo_cb b a))))
 (assert (< x y))
 (assert (not (= (+ x y) 8) ) )
 (assert (or (= (foo1_cb x y) 8) (= (foo1_cb x y) 7) ))
