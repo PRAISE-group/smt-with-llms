@@ -42,18 +42,19 @@ FEEDBACK_TEMPLATE = """
 # Additional feedbacks if required.
 INCREMENTAL_ACTION_TEMPLATE = """
     Nice response! 
-    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>. 
-    It must be like the previous ones for <FUNCTION>. 
-
+    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA> in <FORMAT>. 
+    <LEMMA_CONTEXT>
+    
     1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
     2) Try to use variables in the lemmas, avoid using constants.
 """
 
 # Sync LLMs calls with lemma refinement.
 LEMMA_REFINEMENT_TEMPLATE = """
-    The following lemma is wrong. Please generate new lemmas.
+    The following lemma for <FUNCTION> is wrong. Please generate new lemma.
     LEMMA_TEXT: It is the lemma text in <FORMAT>
-    INPUT_TEXT: Concrete inputs for lemma for which it is wrong.
+    INPUT_TEXT: Values for the variables in the lemmas for which it is wrong. 
+    INPUT_TYPE: <INPUT_TYPE>
     
     <LEMMA_TEXT>
     <INPUT_TEXT>

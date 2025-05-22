@@ -24,7 +24,7 @@ def checkUnsat(a, b, c):
     pass
 
 if __name__ == '__main__':
-    lemmaDict = LemmaDict(isIncrementalCall=True)
+    lemmaDict = LemmaDict()
     functionsList: List[Function] = []
     running_llm_threads: list[threading.Thread] = []
 
