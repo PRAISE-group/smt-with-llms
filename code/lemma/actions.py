@@ -10,6 +10,9 @@ from code.lemma.promptTemplates import *
 
 console = Console()
 
+def process_format(fragment: str) -> str:
+    return fragment
+
 def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) -> List[Lemmas]:
     lemmas: List[Lemmas] = []
     # TODO: Hashing based check to see if lemma is already added.
@@ -23,6 +26,7 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
                 and "end" not in fragments
                 and "assert" in fragments
         ):
+            fragments = process_format(fragments)
             lemmas.append(
                 Lemmas(
                     id=f"{funcName}_gen{generation}_l{index}",
@@ -96,27 +100,27 @@ def incrementalLemma(func: Function, format: str, minLimit: int, maxLimit: int, 
 
     return get_lemmas_from_llm_response(response, func.name, generation)
 
-# def refineLemma(lemmaDict: LemmaDict, generation: Optional[int]) -> List[Lemmas]:
-#     """
-#     Descp: Take in a list of Lemmas that have INVALID lemma status
-#     and return a list of Lemmas after LLM refinement
-#     We will possibly create new lemmas.
-#     Lemmas added here will have UNKNOWN status
-#     """
-#     user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace("<LEMMA>", lemma.smtFormat)
-#     user_prompt = user_prompt.replace("<FUNCTION>", lemma.associatedFunction)
-#
-#     numInputs = [x.strip() for x in counterExamples.strip().split(",")]
-#     user_prompt = user_prompt.replace("<SAMPLES_FORMAT>", f"Input for the function: {len(numInputs)} integer inputs.")
-#     user_prompt = user_prompt.replace("<COUNTEREXAMPLE_VALUES>", counterExamples)
-#
-#     response = conversation.invoke(
-#         {"input": user_prompt},
-#         config={"configurable": {"session_id": f"session_{lemma.associatedFunction}"}}
-#     )
-#
-#     return get_lemmas_from_llm_response(response, lemma.associatedFunction, lemma.generation, True, lemmaId)
-#     return []
+def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], format: Optional[str]) -> List[Lemmas]:
+    # """
+    # Descp: Take in a list of Lemmas that have INVALID lemma status
+    # and return a list of Lemmas after LLM refinement
+    # We will possibly create new lemmas.
+    # Lemmas added here will have UNKNOWN status
+    # """
+    # user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace("<LEMMA>", lemma.smtFormat)
+    # user_prompt = user_prompt.replace("<FUNCTION>", lemma.associatedFunction)
+    #
+    # numInputs = [x.strip() for x in counterExamples.strip().split(",")]
+    # user_prompt = user_prompt.replace("<SAMPLES_FORMAT>", f"Input for the function: {len(numInputs)} integer inputs.")
+    # user_prompt = user_prompt.replace("<COUNTEREXAMPLE_VALUES>", counterExamples)
+    #
+    # response = conversation.invoke(
+    #     {"input": user_prompt},
+    #     config={"configurable": {"session_id": f"session_{lemma.associatedFunction}"}}
+    # )
+    #
+    # return get_lemmas_from_llm_response(response, lemma.associatedFunction, lemma.generation, True, lemmaId)
+    return []
 
 def generate_lemmas_background(
         func: Function,
@@ -148,20 +152,22 @@ def generate_lemmas_background(
         # for the function {func.name}
         console.log(f"[bold blue]Checking if LEMMA generation needed for {func.name}.")
 
-        # if lemmaDict.checkIfRefinementCall():
-        #     # We got new lemmas from the counterexample.
-        #     # Keep track of generation
-        #     lemmaDict.incrementLatestGeneration(func.id)
-        #     generation = lemmaDict.getLatestGeneration(func.id)
-        #
-        #     console.log(f"[bold red]Generating more lemmas for: {func.name}, after CEX"
-        #                 f"T.Length: {len(lemmaDict)}, Generation: {generation}")
-        #
-        #     res = refineLemma(lemmaDict, generation=generation, lemmaId=func.id, )
-        #     lemmaDict.setRefinementCall(False)
+        if lemmaDict.checkIfRefinementCall():
+            # We got new lemmas from the counterexample.
+            # After Fuzzer call, we may land here.
+            # Keep track of generation
+            lemmaDict.incrementLatestGeneration(func.id)
+            generation = lemmaDict.getLatestGeneration(func.id)
+
+            console.log(f"[bold red]Generating more lemmas for: {func.name}, after CEX"
+                        f"T.Length: {len(lemmaDict)}, Generation: {generation}")
+
+            res = refineLemma(lemmaDict=lemmaDict, generation=generation, format=formatting)
+            lemmaDict.setRefinementCall(False)
 
         if lemmaDict.checkIfIncrementalCall():
             # We are asking for new lemmas incrementally.
+            # After Solver call, we may land here
             # Keep track of generation
             lemmaDict.incrementLatestGeneration(func.id)
             generation = lemmaDict.getLatestGeneration(func.id)

@@ -28,6 +28,9 @@ LEMMA_OBJECTIVE_TEMPLATE = """
     LEMMA_SAMPLE: <LEMMA_SAMPLE>
     
     Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text.
+    
+    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
+    2) Try to use variables in the lemmas, avoid using constants.
 """
 
 # Additional feedbacks if required.
@@ -39,13 +42,19 @@ FEEDBACK_TEMPLATE = """
 # Additional feedbacks if required.
 INCREMENTAL_ACTION_TEMPLATE = """
     Nice response! 
-    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>, like the previous ones for this <FUNCTION>. 
+    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>. 
+    It must be like the previous ones for <FUNCTION>. 
+
+    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
+    2) Try to use variables in the lemmas, avoid using constants.
 """
 
 # Sync LLMs calls with lemma refinement.
 LEMMA_REFINEMENT_TEMPLATE = """
-    The following lemmas are wrong. Please generate new lemmas.
-    Each line below represents a lemma, INPUT pair. INPUT on which the lemma failed.
+    The following lemma is wrong. Please generate new lemmas.
+    LEMMA_TEXT: It is the lemma text in <FORMAT>
+    INPUT_TEXT: Concrete inputs for lemma for which it is wrong.
     
-    <LEMMA_COUNTEREXAMPLE_PAIRS>
+    <LEMMA_TEXT>
+    <INPUT_TEXT>
 """
