@@ -6,7 +6,7 @@ from py_console import console
 from models import LemmaStatus
 
 
-def check_unsat(lemmaList,  # list of lemma ids appeared in unsat core
+def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
                 lemmaMap,   # Map from id to lemma appeared in unsat core as z3 object
                 lemmasDict, # Main lemma dictionary containing all the meta-data
                 argsObj,    # command line arguments, just in case
