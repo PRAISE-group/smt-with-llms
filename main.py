@@ -79,10 +79,12 @@ if __name__ == '__main__':
         # No need to call Sync_Solve()
 
         # This is a call that Solver/SAT module checks.
+        # TODO: @Gourav, What all will this function return.
         resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
 
         if (resultVerdict == AlgoVerdict.SAT):
             # Check SAT call, I think Gourav calls this.
+            # TODO: @Gourav, What all will this function return.
             resultVerdict = checkSat(lemmaDict, functionsList, commandLineArgs)
         else:
             # Check UNSAT call, Pankaj will call this.

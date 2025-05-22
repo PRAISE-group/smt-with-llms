@@ -70,8 +70,9 @@ class Lemmas(BaseModel):
         with self.lock:
             self.status = LemmaStatus.VALID
 
-    def setInvalid(self) -> None:
+    def setInvalid(self, counterExample: Dict[str, int]) -> None:
         with self.lock:
+            self.counterExample = counterExample
             self.status = LemmaStatus.INVALID
 
     def getStatus(self) -> LemmaStatus:
