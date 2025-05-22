@@ -5,8 +5,10 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.chat_history import InMemoryChatMessageHistory
 
 from rich.console import Console
+from code.lemma.callbacks import TokenTrackingHandler
 from code.lemma.promptTemplates import SYSTEM_PROMPT_TEMPLATE
 
+console = Console()
 SYSTEM_PROMPT_TEMPLATE = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
 
 # Connect to remote Ollama instance
@@ -38,3 +40,14 @@ conversation = RunnableWithMessageHistory(
     history_messages_key="history",
     verbose=False,
 )
+
+def callLLMforResponse(prompt: str, funcName: str):
+    response = conversation.invoke(
+        {"input": prompt},
+        config={
+            "configurable": {"session_id": f"session_{funcName}"},
+            "callbacks": [TokenTrackingHandler()]
+        },
+    )
+
+    return response

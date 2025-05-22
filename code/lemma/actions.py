@@ -4,9 +4,9 @@ from typing import List, Optional, Any
 from rich.console import Console
 from itertools import chain
 
-from code.lemma.llmModels import conversation
+from code.lemma.llmModels import callLLMforResponse
 from code.lemma.context import LemmaDict
-from code.models import Function, Lemmas, LemmaStatus, AlgoVerdict
+from code.models import Function, Lemmas, LemmaStatus
 from code.lemma.promptTemplates import *
 
 console = Console()
@@ -59,10 +59,7 @@ def generateIntialLemmas(func: Function,
     user_prompt = user_prompt.replace("<MIN_LIMIT>", str(minLimit))
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
-    response = conversation.invoke(
-        {"input": user_prompt},
-        config={"configurable": {"session_id": f"session_{func.name}"}}
-    )
+    response = callLLMforResponse(user_prompt, func.name)
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
@@ -73,11 +70,7 @@ def generateIntialLemmas(func: Function,
     function_prompt = function_prompt.replace("<SAMPLES_LIST>", str(func.inputs))
     function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", func.userLemmas[0].smtFormat)
 
-    response = conversation.invoke(
-        {"input": function_prompt},
-        config={"configurable": {"session_id": f"session_{func.name}"}}
-    )
-
+    response = callLLMforResponse(function_prompt, func.name)
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 
@@ -94,11 +87,7 @@ def incrementalLemma(func: Function, format: str, minLimit: int, maxLimit: int, 
     user_prompt = user_prompt.replace("<MIN_LIMIT>", str(minLimit))
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
-    response = conversation.invoke(
-        {"input": user_prompt},
-        config={"configurable": {"session_id": f"session_{func.name}"}}
-    )
-
+    response = callLLMforResponse(user_prompt, func.name)
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 def refineSingleLemma(lemma: Lemmas, format: str, generation: int) -> List[Lemmas]:
@@ -111,11 +100,7 @@ def refineSingleLemma(lemma: Lemmas, format: str, generation: int) -> List[Lemma
     user_prompt = user_prompt.replace("<INPUT_TEXT>", counterExample)
     user_prompt = user_prompt.replace("<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'")
 
-    response = conversation.invoke(
-        {"input": user_prompt},
-        config={"configurable": {"session_id": f"session_{lemma.associatedFunction}"}}
-    )
-
+    response = callLLMforResponse(user_prompt, lemma.associatedFunction)
     return get_lemmas_from_llm_response(response, lemma.associatedFunction, generation)
 
 def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], format: Optional[str], funcName: str) -> List[Lemmas]:
