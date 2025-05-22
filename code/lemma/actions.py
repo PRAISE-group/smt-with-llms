@@ -147,10 +147,6 @@ def generate_lemmas_background(
 
     while True:
         res = []
-        # We are now going to make a call to LLMs to generate more lemmas
-        # for the function {func.name}
-        console.log(f"[bold blue]Checking if LEMMA generation needed for {func.name}.")
-
         if lemmaDict.checkIfRefinementCall():
             # We got new lemmas from the counterexample.
             # After Fuzzer call, we may land here.
@@ -175,10 +171,10 @@ def generate_lemmas_background(
                         f"T.Length: {len(lemmaDict)}, Generation: {generation}")
 
             res = incrementalLemma(func=func, format=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation)
-            lemmaDict.setIncrementalCall(True)
+            lemmaDict.setIncrementalCall(False)
 
         for lms in res:
             lemmaDict[lms.id] = lms
 
         # Rest and start again.
-        sleep(1)
+        sleep(0.5)
