@@ -2,6 +2,7 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import LLMResult
 from rich.console import Console
 from typing import Any, Dict, List, Union
+from time import perf_counter
 import uuid
 
 console = Console()
@@ -11,15 +12,18 @@ class TokenTrackingHandler(BaseCallbackHandler):
         self.total_tokens = 0
         self.prompt_tokens = 0
         self.completion_tokens = 0
+        self.start_time = None
         super().__init__()
 
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], run_id: uuid.UUID, **kwargs: Any
     ) -> None:
+        self.start_time = perf_counter()
         console.log("[bold white]Starting LLM run")
 
     def on_llm_end(self, response: LLMResult, run_id: uuid.UUID, **kwargs: Any) -> None:
-        console.log("[bold white]Ending LLM run")
+        duration = perf_counter() - self.start_time
+        console.log(f"[bold white]Ending LLM run, took {duration}s")
         if response.llm_output is not None:
             self.prompt_tokens += response.llm_output['token_usage']['prompt_tokens']
             self.completion_tokens += response.llm_output['token_usage']['completion_tokens']
