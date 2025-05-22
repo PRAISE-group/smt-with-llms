@@ -44,6 +44,9 @@ INCREMENTAL_ACTION_TEMPLATE = """
     Nice response! 
     Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>. 
     It must be like the previous ones for <FUNCTION>. 
+
+    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
+    2) Try to use variables in the lemmas, avoid using constants.
 """
 
 # Sync LLMs calls with lemma refinement.
