@@ -1102,6 +1102,17 @@ wheels = [
 ]
 
 [[package]]
+name = "py-console"
+version = "0.1.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/10/24/810f4ca2f94f16eda80d29338c301bfe9ed11e16088f667bb7c4fdc61f6e/py_console-0.1.6-py3-none-any.whl", hash = "sha256:af6cfc23af72c6e5b4b784aa4bcd92cad0090e53ee3612e9e8c809cd5646d9e3", size = 6043, upload-time = "2023-03-28T08:06:30.623Z" },
+]
+
+[[package]]
 name = "pyarrow"
 version = "20.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1381,6 +1392,7 @@ dependencies = [
     { name = "langchain-ollama" },
     { name = "ollama" },
     { name = "psutil" },
+    { name = "py-console" },
     { name = "pydantic" },
     { name = "rich" },
     { name = "typing" },
@@ -1398,6 +1410,7 @@ requires-dist = [
     { name = "langchain-ollama", specifier = ">=0.3.3" },
     { name = "ollama", specifier = ">=0.4.8" },
     { name = "psutil", specifier = ">=7.0.0" },
+    { name = "py-console", specifier = ">=0.1.6" },
     { name = "pydantic", specifier = ">=2.11.4" },
     { name = "rich", specifier = ">=14.0.0" },
     { name = "typing", specifier = ">=3.10.0.0" },

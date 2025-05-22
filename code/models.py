@@ -96,18 +96,6 @@ class Lemmas(BaseModel):
             norm = self.smtFormat.strip().lower()
             return hashlib.sha256(norm.encode('utf-8')).hexdigest()
 
-    def __str__(self) -> str:
-        with self.lock:
-            return (f"{self.id} - {self.status} - "
-                    f"{self.associatedFunction} - {self.hash} - "
-                    f"{self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample}")
-
-    def __repr__(self) -> str:
-        with self.lock:
-            return (f"{self.id} - {self.status} - "
-                    f"{self.associatedFunction} - {self.hash} - "
-                    f"{self.generation} - {self.smtFormat} - {self.codeFormat} - {self.counterExample}")
-
 class Function(BaseModel):
     """
     Function Object
