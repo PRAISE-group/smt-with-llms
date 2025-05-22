@@ -42,11 +42,10 @@ def check_unsat(lemmaList,  # list of lemma ids appeared in unsat core
 
 
 
-
-
-if __name__ == "__main__":
-    class Arguments:
-        sharedObj = ""
-    lemmas = {1:"(= (+ (+ x y) z) (+ x (+ y z)))", 2:"(= (+ (+ x y) z) (- x (+ y x)))"}
-    args = Arguments()
-    check_unsat(lemmas, args)
+# if __name__ == "__main__":
+#     class Arguments:
+#         sharedObj = ""
+#     # lemmas = {1:"(= (+ (+ x y) z) (+ x (+ y z)))", 2:"(= (+ (+ x y) z) (- x (+ y x)))"}
+#     # fuzzPhi, varMap, funcMap = cnf.parse_smtlib_expr(lemma) 
+#     args = Arguments()
+#     check_unsat(lemmas, args)
