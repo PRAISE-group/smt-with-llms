@@ -179,6 +179,7 @@ class smtAI(object):
         if args.verbose:
             print("\nSMT file formulas",formulas)
         self.push()
+        print("pushed")
         self.cbFunctions = cbFunctions
         for name in cbFunctions: # add user provided lemmas from json
             for initLemma in bench["functions"][name]["userLemmas"]:
@@ -197,15 +198,20 @@ class smtAI(object):
                     self.lemmasUsed[self.iteration].append(label)
                 # self.add(initialLemmasFormula)
             self.push()
+            print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
         self.iteration +=1
+        self.push()
         # lemmaStrings = genLemma(args)
-        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"] # get from sumit as a list of assertions
+        # lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"] # get from sumit as a list of assertions
+        lemmaStrings = lemmasDict.getLemmasforSolver()
+        # print(lemmaStrings)
+        # exit()
         for lemmaString in lemmaStrings:  # add lemmas from sumit
-            lemmaFormula = self.readSMTstring(lemmaString, cbFunctions)
+            lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
             if args.verbose:
-                print("lemmaString", lemmaString, cbFunctions)
+                print("lemmaString", lemmaString, self.cbFunctions)
             label = Bool(f'L{self.labelsUsed}')
             self.s.assert_and_track(lemmaFormula[0],label)
             self.labelsUsed += 1
@@ -223,7 +229,7 @@ class smtAI(object):
         result = self.check()
         if result == sat:
             # print("testing 2")
-            if modelCheck(self,args, cbFunctions, bench["object_file"], failedLemmas):
+            if modelCheck(self,args, self.cbFunctions, bench["object_file"], failedLemmas):
                 print("satisfiable")
                 print(self.model())
                 print("Done")

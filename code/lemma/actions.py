@@ -33,7 +33,7 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
                     id=f"{funcName}_gen{generation}_l{index}",
                     status=LemmaStatus.UNKNOWN,
                     associatedFunction=f"{funcName}",
-                    smtFormat=f"({fragments})",
+                    smtFormat=f"{fragments}",
                     generation=generation,
                 )
             )
