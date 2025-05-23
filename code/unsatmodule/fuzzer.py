@@ -88,8 +88,10 @@ def fuzzIt(path, file, argObj, id):
 
     fuzzTimeout = argObj.fuzztime
 
+    aflEnv = f"AFL_BENCH_UNTIL_CRASH=1 AFL_SKIP_CPUFREQ=1 AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 AFL_NO_UI=1 AFL_QUIET=1"
+
     console.info(f"Fuzzing started")
-    fuzzCommand = [f"AFL_BENCH_UNTIL_CRASH=1 afl-fuzz -i {seedDir} -o {fuzzOutDir} -V {str(fuzzTimeout)} {path + objFile} > /dev/null"]
+    fuzzCommand = [f"{aflEnv} afl-fuzz -i {seedDir} -o {fuzzOutDir} -V {str(fuzzTimeout)} {path + objFile} > /dev/null"]
     
     """
     # FIXME: somehow using folllowing environment giving afl-fuzz not found error
