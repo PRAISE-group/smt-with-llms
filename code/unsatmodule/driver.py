@@ -1,9 +1,9 @@
-import unsatmodule.cnf as cnf
-import unsatmodule.fuzzer as fuzz
-import utils.unsat_util as pu
+import code.unsatmodule.fuzzer as fuzz
+import code.utils.unsat_util as pu
+import code.utils.z3utils as zu
 import z3
 from py_console import console
-from models import LemmaStatus
+from code.models import LemmaStatus
 
 
 def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
@@ -23,29 +23,29 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
     #for id, lemma in lemmas.items():
     for id in lemmaList:
         lemma = lemmaMap[id]
-        #fuzzPhi, varMap, funcMap = cnf.parse_smtlib_expr(lemma) 
+        # first check if quantifier is present
+        if zu.containQuantifier(lemma):
+            phi = zu.removeQuantifier(z3.Not(lemma))
+            
+        else:
+            phi = zu.getCNF(z3.Not(lemma))
 
-        notFuzzPhi = cnf.getCNF(z3.Not(lemma))
-        fuzz_cons[id] = notFuzzPhi
+        fuzz_cons[id] = phi
+
         console.info(f"Invoking fuzzer for lemma: {lemma}")
         pu.LOG(f"Invoking fuzzer for lemma: {lemma}")
+        
         verdict, cex = fuzz.getVerdict(id, fuzz_cons[id], varMap, funcMap, argsObj)
+        
         if verdict == LemmaStatus.VALID:
             console.success(f"This lemma got verified: {lemma}")
             pu.LOG(f"This lemma got verified: {lemma}")
+ 
             lemmasDict[id].setValid()
+
         elif verdict == LemmaStatus.INVALID:
             console.error(f"Cex found: {cex}")
             pu.LOG(f"Cex found: {cex}")
+
             lemmasDict[id].setInvalid(cex)
             lemmasDict.setRefinementCall(True)
-
-
-
-# if __name__ == "__main__":
-#     class Arguments:
-#         sharedObj = ""
-#     # lemmas = {1:"(= (+ (+ x y) z) (+ x (+ y z)))", 2:"(= (+ (+ x y) z) (- x (+ y x)))"}
-#     # fuzzPhi, varMap, funcMap = cnf.parse_smtlib_expr(lemma) 
-#     args = Arguments()
-#     check_unsat(lemmas, args)

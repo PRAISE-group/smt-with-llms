@@ -1,7 +1,7 @@
 import os
-import utils.unsat_util as pu
+import code.utils.unsat_util as pu
 from py_console import console
-from models import LemmaStatus
+from code.models import LemmaStatus
 
 # TODO: make is an object for parallel computing of the getVerdict
 
