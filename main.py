@@ -7,7 +7,6 @@ from code.lemma.context import LemmaDict
 from code.models import AlgoVerdict
 from code.utils.commandline import commandLineArgs
 from code.lemma.actions import generate_lemmas_background
-from code.lemma._test_ import testLocking
 from code.models import Function, Lemmas, LemmaStatus
 from code.solver.smtai import *
 from code.satmodule.test.smttoc import *
