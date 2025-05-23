@@ -20,6 +20,7 @@ class smtAI(object):
         self.unsatCores = {} # key is the iteration number starts from 1
         self.iteration = 0
         self.lemmasUsed = {} # key is the iteration number starts from 1
+        self.cbFunctions = None # Map of close box functions z3 object
 
     def readSMTfile(self, inputfilepath):
         print(inputfilepath)
@@ -129,14 +130,14 @@ class smtAI(object):
 
     def harnessForModelCheck(self):
         formulas = self.formulas
-        vars = set()
+        vars = self.vars
         vardecl = ""
         ifconds = ""
         for f in formulas:
             # print("formula:", f)
             ifconds += "if (" + self.z3_to_c(f) + ")\n"
-            self.collect_vars(f, vars)
-        self.vars = vars
+            # self.collect_vars(f, vars)
+        # self.vars = vars
         # print("vars", vars)
         ifconds+= "assert(0);"
         # print("vars:")
@@ -156,25 +157,15 @@ class smtAI(object):
         self.mainFun = prog
         return prog
 
-    def run(self, args, bench):
-            # print(bench["smt_file"])
+    def initialize(self, args, bench):
         formulas = self.formulas
-        # vars = set()
-        # for f in formulas:
-        #     # print("formula:", f, vars)
-        #     # ifconds += "if (" + self.z3_to_c(f) + ")\n"
-        #     self.collect_vars(f, vars)
-        # self.vars = vars
-        # print("vars", vars)
-        self.iteration +=1
-        # lemmaStrings = genLemma(args)
-        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"] # get from sumit as a list of assertions
-        if args.verbose:
-            print("\nSMT file formulas",formulas)
         functions = {}
+        vars = set()
         for f in formulas:
             functions.update(self.collect_functions(f,functions))
+            self.collect_vars(f, vars)
             # print(f, functions)
+        self.vars = vars
         # Show results
         # print("\nFunction symbols found in SMT2:")
         cbFunctions = {}
@@ -185,7 +176,11 @@ class smtAI(object):
         if args.verbose:
             print("\nclose boxed functions", cbFunctions)
         self.add(formulas)
+        if args.verbose:
+            print("\nSMT file formulas",formulas)
         self.push()
+        print("pushed")
+        self.cbFunctions = cbFunctions
         for name in cbFunctions: # add user provided lemmas from json
             for initLemma in bench["functions"][name]["userLemmas"]:
                 if args.verbose:
@@ -203,16 +198,20 @@ class smtAI(object):
                     self.lemmasUsed[self.iteration].append(label)
                 # self.add(initialLemmasFormula)
             self.push()
-        # self.push()
-        # for sanityChecks in bench["sanity_checks"]:
-        #     initialLemmasFormula = self.readSMTfile(sanityChecks)
-        #     self.add(initialLemmasFormula)
-        # self.push()
-        # print("testing 1")
+            print("pushed")
+
+    def run(self, args, bench, lemmasDict, functionsList):
+        self.iteration +=1
+        self.push()
+        # lemmaStrings = genLemma(args)
+        # lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"] # get from sumit as a list of assertions
+        lemmaStrings = lemmasDict.getLemmasforSolver()
+        # print(lemmaStrings)
+        # exit()
         for lemmaString in lemmaStrings:  # add lemmas from sumit
-            lemmaFormula = self.readSMTstring(lemmaString, cbFunctions)
+            lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
             if args.verbose:
-                print("lemmaString", lemmaString, cbFunctions)
+                print("lemmaString", lemmaString, self.cbFunctions)
             label = Bool(f'L{self.labelsUsed}')
             self.s.assert_and_track(lemmaFormula[0],label)
             self.labelsUsed += 1
@@ -230,17 +229,17 @@ class smtAI(object):
         result = self.check()
         if result == sat:
             # print("testing 2")
-            if modelCheck(self,args, cbFunctions, bench["object_file"], failedLemmas):
+            if modelCheck(self,args, self.cbFunctions, bench["object_file"], failedLemmas):
                 print("satisfiable")
                 print(self.model())
                 print("Done")
                 print("="*50)
                 print("\n"*4)
-                return
+                return sat
             else:
-                # self.pop()
+                self.pop()
                 print("Need new lemma") # TODO: Sumit
-                return
+                return 1
         elif result == unsat:
             unsatCore = self.s.unsat_core()
             self.unsatCores[self.iteration] = unsatCore
@@ -249,10 +248,12 @@ class smtAI(object):
                 print(core, self.lemmasData[core])
             print(self.vars)
             print(self.lemmasUsed)
-            return
+            res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, self.vars, self.cbFunctions)
+            self.pop()
+            return res
         else:
             print("UNKNOWN")
-            return
+            return -1
 
 
     def __del__(self):

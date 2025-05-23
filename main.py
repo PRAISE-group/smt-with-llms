@@ -72,6 +72,9 @@ if __name__ == '__main__':
     # You can add lemmas, but you cannot delete lemmas.
 
     resultVerdict = AlgoVerdict.UNKNOWN
+    solverai = smtAI()
+    solverai.readSMTfile(data["smt_file"])
+    solverai.initialize(commandLineArgs, data)
 
     while not resultVerdict == AlgoVerdict.SAT or resultVerdict == AlgoVerdict.UNSAT:
         # Sync_Solve() -> generate_lemmas_background already running
@@ -79,15 +82,17 @@ if __name__ == '__main__':
 
         # This is a call that Solver/SAT module checks.
         # TODO: @Gourav, What all will this function return.
-        resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
+        # self.iteration +=1
+        solverai.run(commandLineArgs, data, lemmaDict, functionsList)
+        # resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
 
-        if (resultVerdict == AlgoVerdict.SAT):
-            # Check SAT call, I think Gourav calls this.
-            # TODO: @Gourav, What all will this function return.
-            resultVerdict = checkSat(lemmaDict, functionsList, commandLineArgs)
-        else:
-            # Check UNSAT call, Pankaj will call this.
-            resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
+        # if (resultVerdict == AlgoVerdict.SAT):
+        #     # Check SAT call, I think Gourav calls this.
+        #     # TODO: @Gourav, What all will this function return.
+        #     resultVerdict = checkSat(lemmaDict, functionsList, commandLineArgs)
+        # else:
+        #     # Check UNSAT call, Pankaj will call this.
+        #     resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
 
     for t in running_llm_threads:
         t.join()

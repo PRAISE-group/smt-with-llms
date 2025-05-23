@@ -87,6 +87,14 @@ class LemmaDict(BaseModel):
         with self.lock:
             return list(self.values.values())
 
+    def getLemmasforSolver(self) -> List[Lemmas]:
+        with self.lock:
+            lms = []
+            for key, values in self.values.items():
+                if values.status == LemmaStatus.VALID or values.status == LemmaStatus.UNKNOWN:
+                    lms.append(values.smtFormat)
+            return lms
+
     def setRefinementCall(self, isRefinementCall: bool) -> None:
         with self.lock:
             self.isRefinementCall = isRefinementCall
