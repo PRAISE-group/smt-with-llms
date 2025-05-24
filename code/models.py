@@ -22,14 +22,43 @@ class Example(BaseModel):
     output: int = 0
 
 class ExampleSet(BaseModel):
-    examples: List[Example] = []
+    examples: List[Example] = Field(default_factory=list)
 
-    def addExample(self, example: Example) -> None:
-        self.examples.append(example)
+    # Iteration
+    def __iter__(self):
+        return iter(self.examples)
 
-    def createExampleFromDict(self, exampleDict: List[Dict[str, List[int]]]) -> None:
-        console.log(exampleDict)
-        pass
+    # Indexing
+    def __getitem__(self, index: int) -> Example:
+        return self.examples[index]
+
+    # Assignment
+    def __setitem__(self, index: int, value: Example):
+        self.examples[index] = value
+
+    # Deletion
+    def __delitem__(self, index: int):
+        del self.examples[index]
+
+    # Append
+    def append(self, value: Example):
+        self.examples.append(value)
+
+    # Length
+    def __len__(self) -> int:
+        return len(self.examples)
+
+    def createExampleFromDict(self, exampleDictList: List[Dict[str, List[int]]]) -> None:
+        for exampleItems in exampleDictList:
+            for key, value in exampleItems.items():
+                self.examples.append(
+                    Example(
+                        funcName=key,
+                        input=value[0:-1],
+                        output=value[-1]
+                    )
+                )
+
 
 class LemmaStatus(Enum):
     """
@@ -149,4 +178,4 @@ class Function(BaseModel):
     object_file: Optional[str] = None
 
 
-exampleSet = ExampleSet()
+exampleSet = ExampleSet(examples=[])

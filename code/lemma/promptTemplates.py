@@ -18,7 +18,8 @@ LEMMA_OBJECTIVE_TEMPLATE = """
     I have provide you an initial set of input examples in SAMPLES_LIST with SAMPLES_FORMAT describing 
     the format for reading the inputs. Also a <LEMMA> sample format has been provided in LEMMA_SAMPLE,
     use it for creating the lemmas. Give me each <LEMMA> in a seperate line so that I can parse it back.
-    Strictly adhere to LEMMA_SAMPLE format, starting with 'assert'.
+    Strictly adhere to LEMMA_SAMPLE format, starting with 'assert'. Please generate syntatically correct 
+    <LEMMA> in <FORMAT> syntax.
     
     FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
     FUNCTION_PARAMETERS: <FUNCTION_PARAMETERS>
@@ -30,7 +31,7 @@ LEMMA_OBJECTIVE_TEMPLATE = """
     Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text.
     
     1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
-    2) Try to use variables in the lemmas, avoid using constants.
+    2) Try to use variables in the <LEMMA>, avoid using constants.
 """
 
 # Additional feedbacks if required.
@@ -41,12 +42,16 @@ FEEDBACK_TEMPLATE = """
 
 # Additional feedbacks if required.
 INCREMENTAL_ACTION_TEMPLATE = """
-    Nice response! 
+    I need new <LEMMA>. 
     Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA> in <FORMAT>. 
-    <LEMMA_CONTEXT>
+    I am providing you with a set of input (a list which forms the arguments to <FUNCTION>) 
+    and output examples for the <FUNCTION>.
+    Use those to generate new <LEMMA>.
+    
+    <PAIRS>
     
     1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
-    2) Try to use variables in the lemmas, avoid using constants.
+    2) Try to use variables in the <LEMMA>, avoid using constants.
 """
 
 # Sync LLMs calls with lemma refinement.

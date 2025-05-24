@@ -27,6 +27,7 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
                 and "start" not in fragments
                 and "end" not in fragments
                 and "assert" in fragments
+                and "var_" in fragments
         ):
             fragments = process_format(fragments)
             lemmas.append(
@@ -86,11 +87,18 @@ def incrementalLemma(func: Function, formatting: str, minLimit: int, maxLimit: i
     user_prompt = user_prompt.replace("<MIN_LIMIT>", str(minLimit))
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
+    exp = []
+    for examples in exampleSet:
+        if examples.funcName == "foo_cb":
+            exp.append(f"Input: {examples.input}, Output: {examples.output}\n")
+
+    user_prompt = user_prompt.replace("<PAIRS>", "\n".join(exp))
+
     response = callLLMforResponse(user_prompt, func.name)
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[Lemmas]:
-    # Extract the counter example.
+    # Extract the counterexample.
     counterExample = str(lemma.counterExample)
 
     user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace("<FUNCTION>", lemma.associatedFunction)
