@@ -24,40 +24,50 @@ class Example(BaseModel):
 class ExampleSet(BaseModel):
     examples: List[Example] = Field(default_factory=list)
 
+    lock: Lock = Field(default_factory=Lock, exclude=True)
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     # Iteration
     def __iter__(self):
-        return iter(self.examples)
+        with self.lock:
+            return iter(self.examples)
 
     # Indexing
     def __getitem__(self, index: int) -> Example:
-        return self.examples[index]
+        with self.lock:
+            return self.examples[index]
 
     # Assignment
     def __setitem__(self, index: int, value: Example):
-        self.examples[index] = value
+        with self.lock:
+            self.examples[index] = value
 
     # Deletion
     def __delitem__(self, index: int):
-        del self.examples[index]
+        with self.lock:
+            del self.examples[index]
 
     # Append
     def append(self, value: Example):
-        self.examples.append(value)
+        with self.lock:
+            self.examples.append(value)
 
     # Length
     def __len__(self) -> int:
-        return len(self.examples)
+        with self.lock:
+            return len(self.examples)
 
     def createExampleFromDict(self, exampleDictList: List[Dict[str, List[int]]]) -> None:
-        for exampleItems in exampleDictList:
-            for key, value in exampleItems.items():
-                self.examples.append(
-                    Example(
-                        funcName=key,
-                        input=value[0:-1],
-                        output=value[-1]
+        with self.lock:
+            for exampleItems in exampleDictList:
+                for key, value in exampleItems.items():
+                    self.examples.append(
+                        Example(
+                            funcName=key,
+                            input=value[0:-1],
+                            output=value[-1]
+                        )
                     )
-                )
 
 
 class LemmaStatus(Enum):
