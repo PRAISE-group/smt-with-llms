@@ -20,10 +20,10 @@ def getHarness(solver, funs):
         args = ""
         out = ""
         for i in range(funs[name].arity()):
-            print(f"Argument {i + 1} type:", funs[name].domain(i))
+            # print(f"Argument {i + 1} type:", funs[name].domain(i))
             args+=typenameConversion(funs[name].domain(i))+","
         out = typenameConversion(funs[name].range())
-        print("out ", out)
+        # print("out ", out)
         s+= out + " " + name + f"({args[:-1]});\n"
     s+= solver.mainFun
 #     s+= """
@@ -52,6 +52,54 @@ def getHarness(solver, funs):
 # }
 #     """
 
+def getCBInputOutput(solver, args, cbFunctions, objectFile):
+    mainFun = solver.harnessForModelCheck()
+    m = solver.model()
+    input_tuple = []
+    for d in solver.vars:
+        print(f"{d} = {m[d]}")
+        input_tuple.append(m[d])
+    print("fun in getCBInputOutput", cbFunctions)
+    harnessFun = solver.harnessForOutput(cbFunctions)
+    # print(harnessFun)
+    with open("oracle.c", "w") as f:
+        f.write(harnessFun)
+
+    compilation = subprocess.run(["gcc", "-c", "oracle.c"], capture_output=True, text=True)
+    if compilation.returncode != 0:
+        print("Compilation failed:")
+        print(compilation.stderr)
+        exit()
+        return False
+    # print(objectFile)
+    compile_cmd = ["gcc", objectFile,  "oracle.o", "-o", "program"]
+    compilation = subprocess.run(compile_cmd, capture_output=True, text=True)
+    if compilation.returncode != 0:
+        print("Compilation failed:")
+        print(compilation.stderr)
+        exit()
+        return False
+    else:
+        print("Compilation successful.")
+
+        # Step 2: Run the compiled program with arguments
+        run_cmd = ["./program"]
+        process = subprocess.Popen(
+            ["./program"],          # Or use ["input_program.exe"] on Windows
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True                     # Ensures input/output is in text mode (Python 3.6+)
+        )
+        input_data = ""
+        for value in input_tuple:
+            input_data += str(value)+ " "
+        stdout, stderr = process.communicate(input=input_data)
+        print(stderr)
+        out = {}
+        out[cbFunctions] = stdout
+        return out
+
 def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     # for name in cbFunctions:
     mainFun = solver.harnessForModelCheck()
@@ -75,7 +123,7 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     # print(m)
     # exit()
     harnessFun = getHarness(solver, cbFunctions)
-    print(harnessFun)
+    # print(harnessFun)
     with open("harness.c", "w") as f:
         f.write(harnessFun)
 
@@ -85,7 +133,7 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
         print(compilation.stderr)
         exit()
         return False
-    print(objectFile)
+    # print(objectFile)
     compile_cmd = ["gcc", objectFile,  "harness.o", "-o", "program"]
     compilation = subprocess.run(compile_cmd, capture_output=True, text=True)
     if compilation.returncode != 0:

@@ -1,6 +1,7 @@
 from z3 import *
 from code.solver.modelCheck import *
 from code.lemma.actions import *
+# from code.unsatmodule.driver import *
 
 class smtAI(object):
     """docstring for smtAI.
@@ -101,7 +102,7 @@ class smtAI(object):
         return self.s.pop()
 
     def z3_to_c(self, expr):
-        print("expr",expr)
+        # print("expr",expr)
         if expr.decl().kind() == Z3_OP_IMPLIES:
                 a, b = expr.children()
                 return f"(!({self.z3_to_c(a)}) || ({self.z3_to_c(b)}))"
@@ -126,7 +127,102 @@ class smtAI(object):
         elif is_int_value(expr) or is_rational_value(expr):
             return str(expr.as_long())
         else:
+            # if is_app(expr) and expr.decl().kind() == Z3_OP_UNINTERPRETED:
+            #     print("Fallback ",expr)
             return str(expr)  # fallback
+
+    def getFunctions(self, expr, funs):
+        if expr.decl().kind() == Z3_OP_IMPLIES:
+                a, b = expr.children()
+                return f"{self.getFunctions(a, funs)}) || ({self.getFunctions(b)}))"
+        elif is_and(expr):
+            return ' && '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
+        elif is_or(expr):
+            return ' || '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
+        elif is_not(expr):
+            return f'!({self.getFunctions(expr.arg(0), funs)})'
+        elif is_eq(expr):
+            return f'({self.getFunctions(expr.arg(0), funs)} == {self.getFunctions(expr.arg(1), funs)})'
+        elif is_le(expr):
+            return f'({self.getFunctions(expr.arg(0), funs)} <= {self.getFunctions(expr.arg(1), funs)})'
+        elif is_lt(expr):
+            return f'({self.getFunctions(expr.arg(0), funs)} < {self.getFunctions(expr.arg(1), funs)})'
+        elif is_ge(expr):
+            return f'({self.getFunctions(expr.arg(0), funs)} >= {self.getFunctions(expr.arg(1), funs)})'
+        elif is_gt(expr):
+            return f'({self.getFunctions(expr.arg(0), funs)} > {self.getFunctions(expr.arg(1), funs)})'
+        elif is_const(expr):
+            return str(expr)
+        elif is_int_value(expr) or is_rational_value(expr):
+            return str(expr.as_long())
+        else:
+            if is_app(expr) and expr.decl().kind() == Z3_OP_UNINTERPRETED:
+            #     print("Fallback ",expr)
+                if expr not in funs:
+                    funs.append(expr)
+            return str(expr)  # fallback
+
+    def getOutputForCBFunctions(self, args, bench):
+        funs = []
+        for f in self.formulas:
+            self.getFunctions(f, funs)
+        inputOutput = {} # maps functions to input outputs
+        for f in funs:
+            print(f)
+            inputOutput = inputOutput | getCBInputOutput(self,args, f, bench["object_file"])
+        return inputOutput
+
+    def harnessForOutput(self, f):
+        s = """
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <assert.h>
+    """
+        for name in self.cbFunctions:
+            s+= "extern "
+            args = ""
+            out = ""
+            for i in range(self.cbFunctions[name].arity()):
+                # print(f"Argument {i + 1} type:", funs[name].domain(i))
+                args+=typenameConversion(self.cbFunctions[name].domain(i))+","
+            out = typenameConversion(self.cbFunctions[name].range())
+            # print("out ", out)
+            s+= out + " " + name + f"({args[:-1]});\n"
+        formulas = self.formulas
+        vars = self.vars
+        vardecl = ""
+        ifconds = ""
+        for formula in formulas:
+            # print("formula:", f)
+            ifconds += "if (" + self.z3_to_c(formula) + ")\n"
+            # self.collect_vars(f, vars)
+        # self.vars = vars
+        # print("vars", vars)
+        ifconds+= "assert(0);"
+        # print("vars:")
+        a = ""
+        b = ""
+        for var in vars:
+            if str(var.sort())=="Int":
+                # print("int", var.decl().name(), ";")
+                a+= "%d "
+                b+= ", &" + str(var.decl().name())
+                vardecl += "int "+ str(var.decl().name())+ ";\n"
+        s += "void main(){" + "\n"
+        s+= vardecl + "\n"
+        s+= f"scanf(\"{a}\" {b});" + "\n"
+        a = ""
+        b = ""
+        for i in range(f.num_args()):
+            arg = f.arg(i)
+            a += "%d "
+            b+= f", ({arg})"
+        s += f"printf(\"{a} %d\"{b}, {f}); \n"
+        s+="}"
+        print(f)
+        print(s)
+        return s
+
 
     def harnessForModelCheck(self):
         formulas = self.formulas
@@ -181,6 +277,8 @@ class smtAI(object):
         self.push()
         print("pushed")
         self.cbFunctions = cbFunctions
+        print(self.cbFunctions)
+        # exit()
         for name in cbFunctions: # add user provided lemmas from json
             for initLemma in bench["functions"][name]["userLemmas"]:
                 if args.verbose:
@@ -204,9 +302,9 @@ class smtAI(object):
         self.iteration +=1
         self.push()
         # lemmaStrings = genLemma(args)
-        # lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))"] # get from sumit as a list of assertions
+        # lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))", "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"] # get from sumit as a list of assertions
         lemmaStrings = lemmasDict.getLemmasforSolver()
-        # print(lemmaStrings)
+        print(lemmaStrings)
         # exit()
         for lemmaString in lemmaStrings:  # add lemmas from sumit
             lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
@@ -238,7 +336,7 @@ class smtAI(object):
                 return sat
             else:
                 self.pop()
-                print("Need new lemma") # TODO: Sumit
+                print("Need new lemma", self.getOutputForCBFunctions(args, bench)) # TODO: Sumit
                 return 1
         elif result == unsat:
             unsatCore = self.s.unsat_core()
