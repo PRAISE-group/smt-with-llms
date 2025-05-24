@@ -13,6 +13,8 @@ from code.models import exampleSet, ExampleSet
 console = Console()
 
 def process_format(fragment: str) -> str:
+    if "int" in fragment:
+        fragment = fragment.replace("int", "Int")
     return fragment
 
 def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) -> List[Lemmas]:
