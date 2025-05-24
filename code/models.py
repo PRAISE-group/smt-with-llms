@@ -1,8 +1,11 @@
 import hashlib
 from enum import Enum
 from threading import Lock
+from rich.console import Console
 from pydantic import field_validator, BaseModel, Field, ConfigDict
-from typing import Optional, List, Dict, Any, Union, Tuple, Callable
+from typing import Optional, List, Dict
+
+console = Console()
 
 class AlgoVerdict(Enum):
     """
@@ -12,6 +15,21 @@ class AlgoVerdict(Enum):
     UNKNOWN = 9000
     SAT = 6000
     UNSAT = 7000
+
+class Example(BaseModel):
+    funcName: str = None
+    input: List[int] = []
+    output: int = 0
+
+class ExampleSet(BaseModel):
+    examples: List[Example] = []
+
+    def addExample(self, example: Example) -> None:
+        self.examples.append(example)
+
+    def createExampleFromDict(self, exampleDict: List[Dict[str, List[int]]]) -> None:
+        console.log(exampleDict)
+        pass
 
 class LemmaStatus(Enum):
     """
@@ -129,3 +147,6 @@ class Function(BaseModel):
     # We may pass a single file that has all the pre-compiled
     # binaries of the closed box function in all benchmarks.
     object_file: Optional[str] = None
+
+
+exampleSet = ExampleSet()

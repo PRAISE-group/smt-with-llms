@@ -8,6 +8,7 @@ from code.lemma.llmModels import callLLMforResponse
 from code.lemma.context import LemmaDict
 from code.models import Function, Lemmas, LemmaStatus
 from code.lemma.promptTemplates import *
+from code.models import exampleSet, ExampleSet
 
 console = Console()
 
@@ -72,7 +73,7 @@ def generateIntialLemmas(func: Function,
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 
-def incrementalLemma(func: Function, formatting: str, minLimit: int, maxLimit: int, generation: int) -> List[Lemmas]:
+def incrementalLemma(func: Function, formatting: str, minLimit: int, maxLimit: int, generation: int, exampleSet: ExampleSet) -> List[Lemmas]:
     """
     Descp: Take in an input of type Function and return a list of Lemmas
     We use the prompts as shown in code.lemma.promptTemplates
@@ -168,7 +169,7 @@ def generate_lemmas_background(
             console.log(f"[bold blue]Generating more lemmas for: {func.name}, after INCREMENTAL "
                         f"T.Length: {len(lemmaDict)}, Generation: {generation}")
 
-            res = incrementalLemma(func=func, formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation)
+            res = incrementalLemma(func=func, formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation, exampleSet=exampleSet)
             lemmaDict.setIncrementalCall(False)
 
         for lms in res:
