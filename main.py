@@ -30,6 +30,9 @@ if __name__ == '__main__':
     with open(commandLineArgs.inputFile, "r") as f:
         data = json.load(f)
 
+    # FIXME: can we do better here
+    commandLineArgs.sharedLib = data["object_file"]
+
     for key, value in data['functions'].items():
         functionsList.append(
             Function(

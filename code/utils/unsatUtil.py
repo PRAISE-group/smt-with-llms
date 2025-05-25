@@ -1,6 +1,7 @@
 import logging as file_logger
 import subprocess
 import os
+from py_console import console
 
 def initLogger():
     # Path for the log file
@@ -92,6 +93,9 @@ def execute_command(command, child_name = "child",
         LOG(msg=f"error occured in '{child_name}' process",
          what=logger_level.error,
          severe=False)
+        console.error(f"error occured in '{child_name}' process")
+        console.info("Exiting!!")
+        exit()
 
     # Print the output and error messages if any
     if(print_msg):

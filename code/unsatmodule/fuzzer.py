@@ -22,6 +22,8 @@ __AFL_FUZZ_INIT();
 #pragma clang optimize off
 #pragma GCC optimize("O0")
 
+// TODO FIX IT
+extern "C" {int foo1_cb(int, int);}
 '''
 
 def createRest(filepath, lemma, varMap, id):
@@ -29,8 +31,8 @@ def createRest(filepath, lemma, varMap, id):
     __AFL_INIT();
     uint8_t *buff = (uint8_t *)__AFL_FUZZ_TESTCASE_BUF;\n\n'''
     
-    for i, z3i in varMap.items():
-        content += f"    uint16_t {i} = *((uint16_t *)buff);\n"
+    for i in varMap:
+        content += f"    uint16_t {str(i)} = *((uint16_t *)buff);\n"
         content += f"    buff += 2;\n\n"
 
     tcount = 1
@@ -41,8 +43,8 @@ def createRest(filepath, lemma, varMap, id):
     content += f"{(tcount-1) * 4 *' '}{{\n"
     content += f"{tcount*4*' '}std::ofstream resultFile(\"{filepath}lemma_check_cex_{str(id)}.txt\");\n"#%(filepath, str(id))
 
-    for i, z3i in varMap.items():
-        content += f"{tcount*4*' '}resultFile << \"{i}: \" << {i} << std::endl;\n"
+    for i in varMap:
+        content += f"{tcount*4*' '}resultFile << \"{str(i)}: \" << {str(i)} << std::endl;\n"
 
 
     content += f"{tcount*4*' '}resultFile.close();\n"
