@@ -1,7 +1,7 @@
 from z3 import *
 from code.solver.modelCheck import *
 from code.lemma.actions import *
-# from code.unsatmodule.driver import *
+from code.unsatmodule.driver import *
 
 class smtAI(object):
     """docstring for smtAI.
@@ -302,8 +302,8 @@ class smtAI(object):
         self.iteration +=1
         self.push()
         # lemmaStrings = genLemma(args)
-        # lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))", "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"] # get from sumit as a list of assertions
-        lemmaStrings = lemmasDict.getLemmasforSolver()
+        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))", "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"] # get from sumit as a list of assertions
+        # lemmaStrings = lemmasDict.getLemmasforSolver()
         print(lemmaStrings)
         # exit()
         for lemmaString in lemmaStrings:  # add lemmas from sumit

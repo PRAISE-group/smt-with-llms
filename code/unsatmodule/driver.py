@@ -17,16 +17,16 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
 
     pu.initLogger()
 
-    # get constraints for each fuzz instance/lemma    
+    # get constraints for each fuzz instance/lemma
     fuzz_cons = {} # planning to use this for parallelising fuzzer call
 
     #for id, lemma in lemmas.items():
     for id in lemmaList:
         lemma = lemmaMap[id]
         # first check if quantifier is present
-        if zu.containQuantifier(lemma):
+        if zu.containsQuantifier(lemma):
             phi = zu.removeQuantifier(z3.Not(lemma))
-            
+
         else:
             phi = zu.getCNF(z3.Not(lemma))
 
@@ -34,13 +34,13 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
 
         console.info(f"Invoking fuzzer for lemma: {lemma}")
         pu.LOG(f"Invoking fuzzer for lemma: {lemma}")
-        
+
         verdict, cex = fuzz.getVerdict(id, fuzz_cons[id], varMap, funcMap, argsObj)
-        
+
         if verdict == LemmaStatus.VALID:
             console.success(f"This lemma got verified: {lemma}")
             pu.LOG(f"This lemma got verified: {lemma}")
- 
+
             lemmasDict[id].setValid()
 
         elif verdict == LemmaStatus.INVALID:
