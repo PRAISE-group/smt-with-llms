@@ -1,5 +1,5 @@
 import code.unsatmodule.fuzzer as fuzz
-import code.utils.unsat_util as pu
+import code.utils.unsatUtil as pu
 import code.utils.z3utils as zu
 import z3
 from py_console import console

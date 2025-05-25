@@ -34,7 +34,7 @@ class logger_level:
     success = "success"
     warn = "warn"
 
-def LOG(msg, what, severe):
+def LOG(msg, what=logger_level.info, severe=False):
     if what == logger_level.error:
         file_logger.error(msg)
 
