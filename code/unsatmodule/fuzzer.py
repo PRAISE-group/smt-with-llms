@@ -85,7 +85,7 @@ def fuzzIt(path, file, argObj, id):
     # compile first
     objFile = file.replace(".cc", ".out")
     compileCommand = [f"afl-c++ {path + file} -o {path + objFile} {argObj.sharedLib}"]
-    pu.execute_command(compileCommand, child_name="aflcompile", need_live_output=False, shell=True)
+    pu.execute_command(compileCommand, child_name="aflcompile", need_live_output=False, shell=True, crash=True)
 
     # now fuzzzzzzzz
     seedDir = path + "seed/"

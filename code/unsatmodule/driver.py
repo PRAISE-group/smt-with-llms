@@ -17,6 +17,7 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
     """
     print("lemma list: ", lemmaList)
     print("lemma map: ", lemmaMap)
+    print("lemma dict: ", lemmasDict)
     print("varmap: ", varMap)
     print("funcmap: ", funcMap)
     """
