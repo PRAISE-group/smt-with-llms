@@ -100,7 +100,9 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
         print(stderr)
         out = {}
         out[cbFunctions] = stdout
-        return out
+        # print(stdout, type(stdout))
+        # input_tuple.append(int(stdout))
+        return stdout
 
 def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     # for name in cbFunctions:

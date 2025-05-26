@@ -80,6 +80,7 @@ class LemmaStatus(Enum):
     VALID = 200
     UNKNOWN = 404
     INVALID = 502
+    SYNTAXERROR = 512
 
 class Lemmas(BaseModel):
     """

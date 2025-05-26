@@ -2,6 +2,7 @@ from z3 import *
 from code.solver.modelCheck import *
 from code.lemma.actions import *
 from code.unsatmodule.driver import *
+from code.models import exampleSet, ExampleSet
 
 class smtAI(object):
     """docstring for smtAI.
@@ -166,10 +167,23 @@ class smtAI(object):
         funs = []
         for f in self.formulas:
             self.getFunctions(f, funs)
-        inputOutput = {} # maps functions to input outputs
+        inputOutput = [] # maps functions to input outputs
         for f in funs:
-            print(f)
-            inputOutput = inputOutput | getCBInputOutput(self,args, f, bench["object_file"])
+            # print(f)
+            funName = str(f)
+            index = str(funName).find("(")
+            if index != -1:
+                funName = str(funName)[:index]
+            temp = {}
+            out = getCBInputOutput(self,args, f, bench["object_file"]).split(" ")
+            outlist = []
+            # print(temp[f], len(temp[f].split(" ")))
+            for i in range(len(out)):
+                print(i, out[i])
+                outlist.append(int(out[i]))
+            # exit()
+            temp[funName] = outlist
+            inputOutput.append(temp)
         return inputOutput
 
     def harnessForOutput(self, f):
@@ -219,7 +233,7 @@ class smtAI(object):
             arg = f.arg(i)
             a += "%d "
             b+= f", ({arg})"
-        s += f"printf(\"{a} %d\"{b}, {f}); \n"
+        s += f"printf(\"{a}%d\"{b}, {f}); \n"
         s+="}"
         print(f)
         print(s)
@@ -301,6 +315,7 @@ class smtAI(object):
             print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
+        input()
         self.iteration +=1
         self.push()
         # lemmaStrings = genLemma(args)
@@ -309,7 +324,12 @@ class smtAI(object):
         print(lemmaStrings)
         # exit()
         for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
-            lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
+            try:
+                lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
+            except Exception as e:
+                lemmasDict.removeLemma(lemmaKey)
+                # exit()
+                continue
             if args.verbose:
                 print("lemmaString", lemmaString, self.cbFunctions)
             label = Bool(lemmaKey)
@@ -339,7 +359,11 @@ class smtAI(object):
                 return sat
             else:
                 self.pop()
-                print("Need new lemma", self.getOutputForCBFunctions(args, bench)) # TODO: Sumit
+                lemmasDict.setIncrementalCall(True)
+                inconsistency = self.getOutputForCBFunctions(args, bench)
+                print("Need new lemma", inconsistency) # TODO: Sumit
+                exampleSet.createExampleFromDict(inconsistency)
+                # exit()
                 return 1
         elif result == unsat:
             unsatCore = self.s.unsat_core()

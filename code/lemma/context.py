@@ -52,6 +52,10 @@ class LemmaDict(BaseModel):
         with self.lock:
             return len(self.values)
 
+    def removeLemma(self, key: str) -> int:
+        with self.lock:
+            del self.values[key]
+
     def keys(self) -> List[str]:
         with self.lock:
             return list(self.values.keys())
