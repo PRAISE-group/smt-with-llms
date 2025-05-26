@@ -66,7 +66,7 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
         print("fun in getCBInputOutput", cbFunctions)
     harnessFun = solver.harnessForOutput(cbFunctions)
     # print(harnessFun)
-    with open("oracle.cpp", "w") as f:
+    with open("oracleTemp/oracle.cpp", "w") as f:
         f.write(harnessFun)
 
     # compilation = subprocess.run(["g++", "-c", "oracle.c"], capture_output=True, text=True)
@@ -76,7 +76,7 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
     #     exit()
     #     return False
     # # print(objectFile)
-    compile_cmd = ["g++",  "oracle.cpp", "-o", "program", objectFile]
+    compile_cmd = ["g++",  "oracleTemp/oracle.cpp", "-o", "oracleTemp/program", objectFile]
     compilation = subprocess.run(compile_cmd, capture_output=True, text=True)
     if compilation.returncode != 0:
         print("Compilation failed:")
@@ -88,9 +88,9 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
             print("Compilation successful.")
 
         # Step 2: Run the compiled program with arguments
-        run_cmd = ["./program"]
+        run_cmd = ["oracleTemp/program"]
         process = subprocess.Popen(
-            ["./program"],          # Or use ["input_program.exe"] on Windows
+            ["oracleTemp/program"],          # Or use ["input_program.exe"] on Windows
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -132,7 +132,7 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     # exit()
     harnessFun = getHarness(solver, cbFunctions)
     # print(harnessFun)
-    with open("harness.cpp", "w") as f:
+    with open("oracleTemp/harness.cpp", "w") as f:
         f.write(harnessFun)
 
     # compilation = subprocess.run(["g++", "-c", "harness.cpp", "-o", "harness.o"], capture_output=True, text=True)
@@ -142,7 +142,7 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     #     exit()
     #     return False
     # # print(objectFile)
-    compile_cmd = ["g++",  "harness.cpp", "-o", "program", objectFile]
+    compile_cmd = ["g++",  "oracleTemp/harness.cpp", "-o", "oracleTemp/program", objectFile]
     compilation = subprocess.run(compile_cmd, capture_output=True, text=True)
     if compilation.returncode != 0:
         print("Compilation failed: g++ harness.cpp objectFile -o program")
@@ -154,9 +154,9 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
             print("Compilation successful.")
 
         # Step 2: Run the compiled program with arguments
-        run_cmd = ["./program"]
+        run_cmd = ["oracleTemp/program"]
         process = subprocess.Popen(
-            ["./program"],          # Or use ["input_program.exe"] on Windows
+            ["oracleTemp/program"],          # Or use ["input_program.exe"] on Windows
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
