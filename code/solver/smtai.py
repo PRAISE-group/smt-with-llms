@@ -3,6 +3,7 @@ from code.solver.modelCheck import *
 from code.lemma.actions import *
 from code.unsatmodule.driver import *
 from code.models import exampleSet, ExampleSet
+from code.models import AlgoVerdict
 
 class smtAI(object):
     """docstring for smtAI.
@@ -341,8 +342,8 @@ class smtAI(object):
         self.iteration +=1
         self.push()
         # lemmaStrings = genLemma(args)
-        lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
-        # lemmaStrings = lemmasDict.getLemmasforSolver()
+        # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
+        lemmaStrings = lemmasDict.getLemmasforSolver()
         if args.verbose:
             print(lemmaStrings)
         # exit()
@@ -384,7 +385,7 @@ class smtAI(object):
                 print("Done")
                 print("="*50)
                 print("\n"*4)
-                return sat
+                return AlgoVerdict.SAT
             else:
                 self.pop()
                 lemmasDict.setIncrementalCall(True)
@@ -392,7 +393,7 @@ class smtAI(object):
                 print("Need new lemma", inconsistency) # TODO: Sumit
                 exampleSet.createExampleFromDict(inconsistency)
                 # exit()
-                return 1
+                return AlgoVerdict.UNKNOWN
         elif result == unsat:
             unsatCore = self.s.unsat_core()
             self.unsatCores[self.iteration] = unsatCore
@@ -408,12 +409,14 @@ class smtAI(object):
             # print(self.lemmasUsed)
             # print(varmap)
             # exit()
+            if len(unsatCore)==0:
+                return AlgoVerdict.UNSAT
             res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
             self.pop()
             return res
         else:
             print("UNKNOWN")
-            return -1
+            return AlgoVerdict.UNKNOWN
 
 
     def __del__(self):

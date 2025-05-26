@@ -3,6 +3,7 @@
 
 # files created for unsat_modules
 fuzz_temp/
+oracleTemp/
 logging_unsat.txt
 
 ### JetBrains ###
