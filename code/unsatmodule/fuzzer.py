@@ -2,12 +2,13 @@ import os
 import code.utils.unsatUtil as pu
 from py_console import console
 from code.models import LemmaStatus
+from code.solver.modelCheck import typenameConversion
 
 # TODO: make is an object for parallel computing of the getVerdict
 
 
-def createHeader():
-    return '''
+def createHeader(funs):
+    head = '''
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
@@ -22,9 +23,19 @@ __AFL_FUZZ_INIT();
 #pragma clang optimize off
 #pragma GCC optimize("O0")
 
-// TODO FIX IT
-extern "C" {int foo1_cb(int, int);}
 '''
+
+    proto = "\nextern \"C\"{\n"
+    for name in funs:
+        args = ""
+        out = ""
+        for i in range(funs[name].arity()):
+            args += typenameConversion(funs[name].domain(i))+","
+        out = typenameConversion(funs[name].range())
+        proto += f"\t{out}  {name}({args[:-1]});\n"
+    proto += "}\n\n"
+
+    return head + proto
 
 def createRest(filepath, lemma, varMap, id):
     content = '''int main(void) {
@@ -41,7 +52,7 @@ def createRest(filepath, lemma, varMap, id):
         tcount += 1
     
     content += f"{(tcount-1) * 4 *' '}{{\n"
-    content += f"{tcount*4*' '}std::ofstream resultFile(\"{filepath}lemma_check_cex_{str(id)}.txt\");\n"#%(filepath, str(id))
+    content += f"{tcount*4*' '}std::ofstream resultFile(\"{filepath}lemma_check_cex_{str(id)}.txt\");\n"
 
     for i in varMap:
         content += f"{tcount*4*' '}resultFile << \"{str(i)}: \" << {str(i)} << std::endl;\n"
@@ -59,7 +70,7 @@ def createFuzzFile(id, lemma, varMap, funcMap):
     fuzzd = pwd + "/fuzz_temp/"
     pu.createDirectory(fuzzd)
     with open(f"{fuzzd}lemma_check_{id}.cc", "w") as ffuzz:
-        ffuzz.write(createHeader())
+        ffuzz.write(createHeader(funcMap))
         rest = createRest(fuzzd, lemma, varMap, id)
         ffuzz.write(rest)
         ffuzz.flush()
@@ -67,8 +78,8 @@ def createFuzzFile(id, lemma, varMap, funcMap):
 
 def fuzzIt(path, file, argObj, id):
     """
-    This function fuzz the lemma and returns VALID if fuzzer timeouts
-    or returns INVALID with counterexample
+        This function fuzz the lemma and returns VALID if fuzzer timeouts
+        or returns INVALID with counterexample
     """
 
     # compile first
