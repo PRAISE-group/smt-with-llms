@@ -86,7 +86,7 @@ if __name__ == '__main__':
         # This is a call that Solver/SAT module checks.
         # TODO: @Gourav, What all will this function return.
         # self.iteration +=1
-        solverai.run(commandLineArgs, data, lemmaDict, functionsList)
+        resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList)
         # resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
 
         # if (resultVerdict == AlgoVerdict.SAT):

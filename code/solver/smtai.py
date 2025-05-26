@@ -3,6 +3,7 @@ from code.solver.modelCheck import *
 from code.lemma.actions import *
 from code.unsatmodule.driver import *
 from code.models import exampleSet, ExampleSet
+from code.models import AlgoVerdict
 
 class smtAI(object):
     """docstring for smtAI.
@@ -384,7 +385,7 @@ class smtAI(object):
                 print("Done")
                 print("="*50)
                 print("\n"*4)
-                return sat
+                return AlgoVerdict.SAT
             else:
                 self.pop()
                 lemmasDict.setIncrementalCall(True)
@@ -392,7 +393,7 @@ class smtAI(object):
                 print("Need new lemma", inconsistency) # TODO: Sumit
                 exampleSet.createExampleFromDict(inconsistency)
                 # exit()
-                return 1
+                return AlgoVerdict.UNKNOWN
         elif result == unsat:
             unsatCore = self.s.unsat_core()
             self.unsatCores[self.iteration] = unsatCore
@@ -408,12 +409,14 @@ class smtAI(object):
             # print(self.lemmasUsed)
             # print(varmap)
             # exit()
+            if len(unsatCore)==0:
+                return AlgoVerdict.UNSAT
             res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
             self.pop()
             return res
         else:
             print("UNKNOWN")
-            return -1
+            return AlgoVerdict.UNKNOWN
 
 
     def __del__(self):
