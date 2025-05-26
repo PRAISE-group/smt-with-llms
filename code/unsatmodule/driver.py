@@ -51,17 +51,15 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
             console.success(f"Lemma verified: {lemma}")
             pu.LOG(f"Lemma verified: {lemma}")
             lemmasDict[id].setValid()
-            someValid = True
 
         elif verdict == LemmaStatus.INVALID:
             console.error(f"Cex found: {cex}")
             pu.LOG(f"Cex found: {cex}")
-
             lemmasDict[id].setInvalid(cex)
-            lemmasDict.setRefinementCall(True)
             someInvalid = True
 
     if someInvalid == True:
+        lemmasDict.setRefinementCall(True)
         return AlgoVerdict.UNKNOWN
     else:
         return AlgoVerdict.UNSAT
