@@ -15,8 +15,9 @@ def getHarness(solver, funs):
 #include <stdlib.h>
 #include <assert.h>
 """
+    s+= "extern \"C\"{\n"
     for name in funs:
-        s+= "extern "
+        # s+= "extern "
         args = ""
         out = ""
         for i in range(funs[name].arity()):
@@ -25,6 +26,7 @@ def getHarness(solver, funs):
         out = typenameConversion(funs[name].range())
         # print("out ", out)
         s+= out + " " + name + f"({args[:-1]});\n"
+    s+= "}\n"
     s+= solver.mainFun
 #     s+= """
 # int main(int argc, char *argv[]) {
@@ -62,17 +64,17 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
     print("fun in getCBInputOutput", cbFunctions)
     harnessFun = solver.harnessForOutput(cbFunctions)
     # print(harnessFun)
-    with open("oracle.c", "w") as f:
+    with open("oracle.cpp", "w") as f:
         f.write(harnessFun)
 
-    compilation = subprocess.run(["gcc", "-c", "oracle.c"], capture_output=True, text=True)
-    if compilation.returncode != 0:
-        print("Compilation failed:")
-        print(compilation.stderr)
-        exit()
-        return False
-    # print(objectFile)
-    compile_cmd = ["gcc", objectFile,  "oracle.o", "-o", "program"]
+    # compilation = subprocess.run(["g++", "-c", "oracle.c"], capture_output=True, text=True)
+    # if compilation.returncode != 0:
+    #     print("Compilation failed:")
+    #     print(compilation.stderr)
+    #     exit()
+    #     return False
+    # # print(objectFile)
+    compile_cmd = ["g++",  "oracle.cpp", "-o", "program", objectFile]
     compilation = subprocess.run(compile_cmd, capture_output=True, text=True)
     if compilation.returncode != 0:
         print("Compilation failed:")
@@ -124,20 +126,20 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     # exit()
     harnessFun = getHarness(solver, cbFunctions)
     # print(harnessFun)
-    with open("harness.c", "w") as f:
+    with open("harness.cpp", "w") as f:
         f.write(harnessFun)
 
-    compilation = subprocess.run(["gcc", "-c", "harness.c"], capture_output=True, text=True)
-    if compilation.returncode != 0:
-        print("Compilation failed:")
-        print(compilation.stderr)
-        exit()
-        return False
-    # print(objectFile)
-    compile_cmd = ["gcc", objectFile,  "harness.o", "-o", "program"]
+    # compilation = subprocess.run(["g++", "-c", "harness.cpp", "-o", "harness.o"], capture_output=True, text=True)
+    # if compilation.returncode != 0:
+    #     print("Compilation failed: g++ -c harness.cpp")
+    #     print(compilation.stderr)
+    #     exit()
+    #     return False
+    # # print(objectFile)
+    compile_cmd = ["g++",  "harness.cpp", "-o", "program", objectFile]
     compilation = subprocess.run(compile_cmd, capture_output=True, text=True)
     if compilation.returncode != 0:
-        print("Compilation failed:")
+        print("Compilation failed: g++ harness.cpp objectFile -o program")
         print(compilation.stderr)
         exit()
         return False

@@ -178,8 +178,9 @@ class smtAI(object):
     #include <stdlib.h>
     #include <assert.h>
     """
+        s+= "extern \"C\"{\n"
         for name in self.cbFunctions:
-            s+= "extern "
+            # s+= "extern "
             args = ""
             out = ""
             for i in range(self.cbFunctions[name].arity()):
@@ -188,6 +189,7 @@ class smtAI(object):
             out = typenameConversion(self.cbFunctions[name].range())
             # print("out ", out)
             s+= out + " " + name + f"({args[:-1]});\n"
+        s+= "}\n"
         formulas = self.formulas
         vars = self.vars
         vardecl = ""
@@ -208,7 +210,7 @@ class smtAI(object):
                 a+= "%d "
                 b+= ", &" + str(var.decl().name())
                 vardecl += "int "+ str(var.decl().name())+ ";\n"
-        s += "void main(){" + "\n"
+        s += "int main(){" + "\n"
         s+= vardecl + "\n"
         s+= f"scanf(\"{a}\" {b});" + "\n"
         a = ""
@@ -245,7 +247,7 @@ class smtAI(object):
                 a+= "%d "
                 b+= ", &" + str(var.decl().name())
                 vardecl += "int "+ str(var.decl().name())+ ";\n"
-        prog = "void main(){" + "\n"
+        prog = "int main(){" + "\n"
         prog+= vardecl + "\n"
         prog+= f"scanf(\"{a}\" {b});" + "\n"
         prog+= ifconds + "\n"
@@ -286,7 +288,7 @@ class smtAI(object):
                 initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
                 if args.verbose:
                     print("string lemma", initialLemmasFormula, cbFunctions)
-                label = Bool(f'L{self.labelsUsed}')
+                label = Bool(f'U{self.labelsUsed}')
                 self.s.assert_and_track(initialLemmasFormula[0],label)
                 self.lemmasData[label] = initialLemmasFormula[0]
                 self.labelsUsed += 1
@@ -302,17 +304,18 @@ class smtAI(object):
         self.iteration +=1
         self.push()
         # lemmaStrings = genLemma(args)
-        lemmaStrings = ["(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))", "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"] # get from sumit as a list of assertions
-        # lemmaStrings = lemmasDict.getLemmasforSolver()
+        # lemmaStrings = {"L10": "(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
+        lemmaStrings = lemmasDict.getLemmasforSolver()
         print(lemmaStrings)
         # exit()
-        for lemmaString in lemmaStrings:  # add lemmas from sumit
+        for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
             lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
             if args.verbose:
                 print("lemmaString", lemmaString, self.cbFunctions)
-            label = Bool(f'L{self.labelsUsed}')
+            label = Bool(lemmaKey)
+            print(label, str(label))
             self.s.assert_and_track(lemmaFormula[0],label)
-            self.labelsUsed += 1
+            # self.labelsUsed += 1
             self.lemmasData[label] = lemmaFormula[0]
             if self.iteration not in self.lemmasUsed:
                 self.lemmasUsed[self.iteration] = [label]
