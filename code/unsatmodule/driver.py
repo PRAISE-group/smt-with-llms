@@ -14,6 +14,12 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
                 funcMap     # map for function as varMap
                 ):
 
+    """
+    print("lemma list: ", lemmaList)
+    print("lemma map: ", lemmaMap)
+    print("varmap: ", varMap)
+    print("funcmap: ", funcMap)
+    """
 
     pu.initLogger()
 
