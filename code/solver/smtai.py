@@ -314,26 +314,26 @@ class smtAI(object):
         if args.verbose:
             print("pushed")
         self.cbFunctions = cbFunctions
-        if args.verbose:
-            print(self.cbFunctions)
+        # if args.verbose:
+        #     print(self.cbFunctions)
         # exit()
-        for name in cbFunctions: # add user provided lemmas from json
-            for initLemma in bench["functions"][name]["userLemmas"]:
-                # if args.verbose:
-                #     print("initLemma", initLemma)
-                initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
-                # if args.verbose:
-                #     print("string lemma", initialLemmasFormula, cbFunctions)
-                label = Bool(f'U{self.labelsUsed}')
-                self.s.assert_and_track(initialLemmasFormula[0],label)
-                self.lemmasData[label] = initialLemmasFormula[0]
-                self.labelsUsed += 1
-                if self.iteration not in self.lemmasUsed:
-                    self.lemmasUsed[self.iteration] = [label]
-                else:
-                    self.lemmasUsed[self.iteration].append(label)
-                # self.add(initialLemmasFormula)
-            self.push()
+        # for name in cbFunctions: # add user provided lemmas from json
+        #     for initLemma in bench["functions"][name]["userLemmas"]:
+        #         # if args.verbose:
+        #         #     print("initLemma", initLemma)
+        #         initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
+        #         # if args.verbose:
+        #         #     print("string lemma", initialLemmasFormula, cbFunctions)
+        #         label = Bool(f'U{self.labelsUsed}')
+        #         self.s.assert_and_track(initialLemmasFormula[0],label)
+        #         self.lemmasData[label] = initialLemmasFormula[0]
+        #         self.labelsUsed += 1
+        #         if self.iteration not in self.lemmasUsed:
+        #             self.lemmasUsed[self.iteration] = [label]
+        #         else:
+        #             self.lemmasUsed[self.iteration].append(label)
+        #         # self.add(initialLemmasFormula)
+        #     self.push()
             # if args.verbose:
             #     print("pushed")
 
