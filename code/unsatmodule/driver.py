@@ -3,7 +3,7 @@ import code.utils.unsatUtil as pu
 import code.utils.z3utils as zu
 import z3
 from py_console import console
-from code.models import LemmaStatus
+from code.models import LemmaStatus, AlgoVerdict
 
 
 def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
@@ -21,10 +21,14 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
     print("funcmap: ", funcMap)
     """
 
+    assert(len(lemmaList) > 0, "Empty unsat core")
+
     pu.initLogger()
 
     # get constraints for each fuzz instance/lemma
     fuzz_cons = {} # planning to use this for parallelising fuzzer call
+
+    someInvalid = False
 
     #for id, lemma in lemmas.items():
     for id in lemmaList:
@@ -46,8 +50,8 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
         if verdict == LemmaStatus.VALID:
             console.success(f"Lemma verified: {lemma}")
             pu.LOG(f"Lemma verified: {lemma}")
-
             lemmasDict[id].setValid()
+            someValid = True
 
         elif verdict == LemmaStatus.INVALID:
             console.error(f"Cex found: {cex}")
@@ -55,3 +59,9 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
 
             lemmasDict[id].setInvalid(cex)
             lemmasDict.setRefinementCall(True)
+            someInvalid = True
+
+    if someInvalid == True:
+        return AlgoVerdict.UNKNOWN
+    else:
+        return AlgoVerdict.UNSAT
