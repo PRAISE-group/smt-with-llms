@@ -38,8 +38,8 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
         verdict, cex = fuzz.getVerdict(id, fuzz_cons[id], varMap, funcMap, argsObj)
 
         if verdict == LemmaStatus.VALID:
-            console.success(f"This lemma got verified: {lemma}")
-            pu.LOG(f"This lemma got verified: {lemma}")
+            console.success(f"Lemma verified: {lemma}")
+            pu.LOG(f"Lemma verified: {lemma}")
 
             lemmasDict[id].setValid()
 
