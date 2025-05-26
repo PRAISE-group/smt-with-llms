@@ -59,9 +59,11 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
     m = solver.model()
     input_tuple = []
     for d in solver.vars:
-        print(f"{d} = {m[d]}")
+        if args.verbose:
+            print(f"{d} = {m[d]}")
         input_tuple.append(m[d])
-    print("fun in getCBInputOutput", cbFunctions)
+    if args.verbose:
+        print("fun in getCBInputOutput", cbFunctions)
     harnessFun = solver.harnessForOutput(cbFunctions)
     # print(harnessFun)
     with open("oracle.cpp", "w") as f:
@@ -82,7 +84,8 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
         exit()
         return False
     else:
-        print("Compilation successful.")
+        if args.verbose:
+            print("Compilation successful.")
 
         # Step 2: Run the compiled program with arguments
         run_cmd = ["./program"]
@@ -110,7 +113,8 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     m = solver.model()
     input_tuple = []
     for d in solver.vars:
-        print(f"{d} = {m[d]}")
+        if args.verbose:
+            print(f"{d} = {m[d]}")
         input_tuple.append(m[d])
     # exit()
     # interp = m[cbFunctions[name]]
@@ -146,7 +150,8 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
         exit()
         return False
     else:
-        print("Compilation successful.")
+        if args.verbose:
+            print("Compilation successful.")
 
         # Step 2: Run the compiled program with arguments
         run_cmd = ["./program"]
@@ -161,8 +166,9 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
         for value in input_tuple:
             input_data += str(value)+ " "
         stdout, stderr = process.communicate(input=input_data)
-        print(stdout)
-        print(stderr)
+        if args.verbose:
+            print(stdout)
+            print(stderr)
         # print(input_tuple)
         # for value in input_tuple:
         #     run_cmd.append(str(value))

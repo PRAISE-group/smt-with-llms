@@ -25,13 +25,15 @@ class smtAI(object):
         self.cbFunctions = None # Map of close box functions z3 object
 
     def readSMTfile(self, inputfilepath):
-        print(inputfilepath)
+        # if args.verbose:
+        #     print(inputfilepath)
         f = parse_smt2_file(inputfilepath)
         self.formulas = f
         return f
 
     def readSMTstring(self, s, declarations):
-        print(s)
+        # if args.verbose:
+        #     print(s)
         f = parse_smt2_string(s, decls=declarations)
         return f
 
@@ -43,6 +45,22 @@ class smtAI(object):
         for child in expr.children():
             self.collect_vars(child, seen)
         return seen
+
+
+    def collectBoundVars(self, e, bound_vars=None):
+        # print(e)
+        if is_quantifier(e):
+            for i in range(e.num_vars()):
+                name = e.var_name(i)
+                sort = e.var_sort(i)
+                bound_vars.add(name)
+            # Recurse into the quantifier body
+            self.collectBoundVars(e.body(), bound_vars)
+        elif is_app(e):
+            if e.num_args() > 0:
+                for arg in e.children():
+                    self.collectBoundVars(arg, bound_vars)
+
 
     def collect_functions(self, expr, seen=None):
         # print(expr, seen)
@@ -235,8 +253,9 @@ class smtAI(object):
             b+= f", ({arg})"
         s += f"printf(\"{a}%d\"{b}, {f}); \n"
         s+="}"
-        print(f)
-        print(s)
+        # if args.verbose:
+        #     print(f)
+        #     print(s)
         return s
 
 
@@ -291,17 +310,19 @@ class smtAI(object):
         if args.verbose:
             print("\nSMT file formulas",formulas)
         self.push()
-        print("pushed")
+        if args.verbose:
+            print("pushed")
         self.cbFunctions = cbFunctions
-        print(self.cbFunctions)
+        if args.verbose:
+            print(self.cbFunctions)
         # exit()
         for name in cbFunctions: # add user provided lemmas from json
             for initLemma in bench["functions"][name]["userLemmas"]:
-                if args.verbose:
-                    print("initLemma", initLemma)
+                # if args.verbose:
+                #     print("initLemma", initLemma)
                 initialLemmasFormula = self.readSMTstring(initLemma, cbFunctions)
-                if args.verbose:
-                    print("string lemma", initialLemmasFormula, cbFunctions)
+                # if args.verbose:
+                #     print("string lemma", initialLemmasFormula, cbFunctions)
                 label = Bool(f'U{self.labelsUsed}')
                 self.s.assert_and_track(initialLemmasFormula[0],label)
                 self.lemmasData[label] = initialLemmasFormula[0]
@@ -312,16 +333,18 @@ class smtAI(object):
                     self.lemmasUsed[self.iteration].append(label)
                 # self.add(initialLemmasFormula)
             self.push()
-            print("pushed")
+            # if args.verbose:
+            #     print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
-        input()
+        input("Enter an input to continue")
         self.iteration +=1
         self.push()
         # lemmaStrings = genLemma(args)
-        # lemmaStrings = {"L10": "(assert (forall ((x Int) (y Int)) (= (foo1_cb x y) (foo1_cb y x))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
-        lemmaStrings = lemmasDict.getLemmasforSolver()
-        print(lemmaStrings)
+        lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
+        # lemmaStrings = lemmasDict.getLemmasforSolver()
+        if args.verbose:
+            print(lemmaStrings)
         # exit()
         for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
             try:
@@ -333,8 +356,13 @@ class smtAI(object):
             if args.verbose:
                 print("lemmaString", lemmaString, self.cbFunctions)
             label = Bool(lemmaKey)
-            print(label, str(label))
+            if args.verbose:
+                print(label, str(label))
             self.s.assert_and_track(lemmaFormula[0],label)
+            bound_vars = set()
+            # self.collectBoundVars(lemmaFormula[0], bound_vars)
+            # print(self.vars, bound_vars)
+            # exit()
             # self.labelsUsed += 1
             self.lemmasData[label] = lemmaFormula[0]
             if self.iteration not in self.lemmasUsed:
@@ -369,11 +397,18 @@ class smtAI(object):
             unsatCore = self.s.unsat_core()
             self.unsatCores[self.iteration] = unsatCore
             print("UnsatCore:", unsatCore)  # TODO: Pankaj
+            varmap = set()
+            for key in self.vars:
+                varmap.add(str(key))
+            print(varmap)
             for core in unsatCore:
                 print(core, self.lemmasData[core])
-            print(self.vars)
-            print(self.lemmasUsed)
-            res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, self.vars, self.cbFunctions)
+                self.collectBoundVars(self.lemmasData[core], varmap)
+            # print(self.vars)
+            # print(self.lemmasUsed)
+            # print(varmap)
+            # exit()
+            res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
             self.pop()
             return res
         else:
