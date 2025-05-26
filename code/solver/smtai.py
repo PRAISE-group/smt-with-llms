@@ -341,8 +341,8 @@ class smtAI(object):
         self.iteration +=1
         self.push()
         # lemmaStrings = genLemma(args)
-        lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
-        # lemmaStrings = lemmasDict.getLemmasforSolver()
+        # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
+        lemmaStrings = lemmasDict.getLemmasforSolver()
         if args.verbose:
             print(lemmaStrings)
         # exit()
