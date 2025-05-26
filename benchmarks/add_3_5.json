@@ -6,7 +6,9 @@
       "desc": "Verifies that foo_cb always returns positive output for integer inputs.",
       "tests": [[1,3], [7,9]],
       "userLemmas": [
-        "(assert (forall ((var_x Int) (var_y Int)) (= (foo_cb var_x var_y) (foo_cb var_y var_x))))"
+        "(assert (forall ((var_x Int) (var_y Int)) (= (foo_cb var_x var_y) (foo_cb var_y var_x))))",
+        "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))",
+        "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"
       ]
     },
     "foo1_cb": {
