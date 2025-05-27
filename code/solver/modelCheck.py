@@ -1,5 +1,7 @@
 import subprocess
 import os
+from code.utils.unsatUtil import *
+
 
 def typenameConversion(type):
     if str(type) == "Int":
@@ -66,7 +68,8 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
         print("fun in getCBInputOutput", cbFunctions)
     harnessFun = solver.harnessForOutput(cbFunctions)
     # print(harnessFun)
-    with open("oracleTemp/oracle.cpp", "w") as f:
+    createDirectory("oracleTemp")
+    with open("oracleTemp/oracle.cpp", "w+") as f:
         f.write(harnessFun)
 
     # compilation = subprocess.run(["g++", "-c", "oracle.c"], capture_output=True, text=True)
@@ -132,7 +135,8 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     # exit()
     harnessFun = getHarness(solver, cbFunctions)
     # print(harnessFun)
-    with open("oracleTemp/harness.cpp", "w") as f:
+    createDirectory("oracleTemp")
+    with open("oracleTemp/harness.cpp", "w+") as f:
         f.write(harnessFun)
 
     # compilation = subprocess.run(["g++", "-c", "harness.cpp", "-o", "harness.o"], capture_output=True, text=True)
