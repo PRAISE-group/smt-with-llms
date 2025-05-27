@@ -91,7 +91,7 @@ class LemmaDict(BaseModel):
         with self.lock:
             return list(self.values.values())
 
-    def getLemmasforSolver(self) -> List[Lemmas]:
+    def getLemmasforSolver(self) -> Dict[str, str]:
         with self.lock:
             lms = {}
             for key, values in self.values.items():
