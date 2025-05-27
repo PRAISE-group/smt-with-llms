@@ -16,8 +16,8 @@ LEMMA_GENERATION_START_TEMPLATE = """
 BASE_TEMPLATE = """
     Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text. Please use the following rules strictly.
     
-    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. Eg: 'var_1', 'var_2' ... 
-    2) Variables in each assumption must be numbered independently, where the variables indices are numbered sequentially from left to right, starting from 1.
+    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var' in them. Eg: 'var1', 'var2' so on ... 
+    2) Variables in each <LEMMA> must be numbered independently, where the variables indices are numbered sequentially from left to right, starting from 1.
     3) Try to use variables in the <LEMMA>, avoid using constants.
     4) Make sure the <LEMMA> is in correct SMTLIB format. 
 """
