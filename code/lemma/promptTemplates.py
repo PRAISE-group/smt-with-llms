@@ -12,6 +12,16 @@ LEMMA_GENERATION_START_TEMPLATE = """
     <LEMMA> generation. Please wait!
 """
 
+# Base template to be added on each propmt.
+BASE_TEMPLATE = """
+    Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text. Please use the following rules strictly.
+    
+    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. Eg: 'var_1', 'var_2' ... 
+    2) Variables in each assumption must be numbered independently, where the variables indices are numbered sequentially from left to right, starting from 1.
+    3) Try to use variables in the <LEMMA>, avoid using constants.
+    4) Make sure the <LEMMA> is in correct SMTLIB format. 
+"""
+
 # GenLemma call with objectives.
 LEMMA_OBJECTIVE_TEMPLATE = """
     Generate <LEMMA> for <FUNCTION>. I have provided some supporting information about <FUNCTION>.
@@ -27,12 +37,7 @@ LEMMA_OBJECTIVE_TEMPLATE = """
     SAMPLES_LIST: <SAMPLES_LIST>
     OUTPUT_FORMAT: List of lemmas in <FORMAT>.
     LEMMA_SAMPLE: <LEMMA_SAMPLE>
-    
-    Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text.
-    
-    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
-    2) Try to use variables in the <LEMMA>, avoid using constants.
-"""
+""" + BASE_TEMPLATE
 
 # Additional feedbacks if required.
 FEEDBACK_TEMPLATE = """
@@ -40,7 +45,7 @@ FEEDBACK_TEMPLATE = """
     Please perform the following, <NEXT_ACTION>.
 """
 
-# Additional feedbacks if required.
+# Additional feedbacks if required. New lemmas required.
 INCREMENTAL_ACTION_TEMPLATE = """
     I need new <LEMMA>. 
     Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA> in <FORMAT>. 
@@ -49,10 +54,7 @@ INCREMENTAL_ACTION_TEMPLATE = """
     Use those to generate new <LEMMA>.
     
     <PAIRS>
-    
-    1) If you are using variables in the lemma for <FUNCTION> formula, prefix 'var_' in them. 
-    2) Try to use variables in the <LEMMA>, avoid using constants.
-"""
+""" + BASE_TEMPLATE
 
 # Sync LLMs calls with lemma refinement.
 LEMMA_REFINEMENT_TEMPLATE = """
@@ -63,4 +65,4 @@ LEMMA_REFINEMENT_TEMPLATE = """
     
     <LEMMA_TEXT>
     <INPUT_TEXT>
-"""
+""" + BASE_TEMPLATE
