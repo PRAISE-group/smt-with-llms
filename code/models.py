@@ -81,6 +81,7 @@ class LemmaStatus(Enum):
     UNKNOWN = 404
     INVALID = 502
     SYNTAXERROR = 512
+    SOFTDELETE = 304
 
 class Lemmas(BaseModel):
     """
@@ -104,6 +105,10 @@ class Lemmas(BaseModel):
     # Raw string from LLM in SMTLIB Format
     # Needed by the Fuzzer and Solver Module.
     smtFormat: Optional[str] = None
+
+    # How many times should a lemma be refined.
+    # Default is 3.
+    refineDepth: int = 3
 
     # Internal: Compute Hash
     hash: Optional[str] = None
@@ -136,6 +141,18 @@ class Lemmas(BaseModel):
     def getStatus(self) -> LemmaStatus:
         with self.lock:
             return self.status
+
+    def setDelete(self) -> None:
+        with self.lock:
+            self.status = LemmaStatus.SOFTDELETE
+
+    def decrementRefineDepth(self) -> None:
+        with self.lock:
+            self.refineDepth -= 1
+
+    def getRefineDepth(self) -> int:
+        with self.lock:
+            return self.refineDepth
 
     def setCounterExample(self, counterExample: Dict[str, int]) -> None:
         with self.lock:

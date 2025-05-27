@@ -100,6 +100,12 @@ def incrementalLemma(func: Function, formatting: str, minLimit: int, maxLimit: i
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[Lemmas]:
+
+    if lemma.getRefineDepth() <= 0:
+        console.log(f"[bold red] No refinement available for lemma {lemma.name}")
+        lemma.setDelete()
+        return [lemma]
+
     # Extract the counterexample.
     counterExample = str(lemma.counterExample)
 
@@ -110,6 +116,7 @@ def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[L
     user_prompt = user_prompt.replace("<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'")
 
     response = callLLMforResponse(user_prompt, lemma.associatedFunction)
+    lemma.decreaseRefineDepth()
     return get_lemmas_from_llm_response(response, lemma.associatedFunction, generation)
 
 def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], formatting: Optional[str], funcName: str) -> List[Lemmas]:
@@ -124,9 +131,12 @@ def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], formatting: Opt
     newLemmas = []
     for lemmaKey, lemma in lemmaDict.items():
         if lemma.status == LemmaStatus.INVALID and lemma.associatedFunction == funcName:
-            newLemmas.append(
-                refineSingleLemma(lemma, formatting, generation)
-            )
+            lemmaList = refineSingleLemma(lemma, formatting, generation)
+            for lemma in lemmaList:
+                if lemma.status == LemmaStatus.SOFTDELETE:
+                    lemmaDict.remove(lemma)
+                else:
+                    newLemmas.append(lemma)
 
     return list(chain.from_iterable(newLemmas))
 
