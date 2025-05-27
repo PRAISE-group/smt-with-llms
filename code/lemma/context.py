@@ -52,7 +52,7 @@ class LemmaDict(BaseModel):
         with self.lock:
             return len(self.values)
 
-    def removeLemma(self, key: str) -> int:
+    def removeLemma(self, key: str) -> None:
         with self.lock:
             del self.values[key]
 
