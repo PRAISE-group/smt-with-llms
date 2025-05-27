@@ -108,7 +108,7 @@ class Lemmas(BaseModel):
 
     # How many times should a lemma be refined.
     # Default is 3.
-    refineDepth: int = 2
+    refineDepth: int = 3
 
     # Internal: Compute Hash
     hash: Optional[str] = None
