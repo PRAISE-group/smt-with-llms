@@ -133,6 +133,10 @@ class Lemmas(BaseModel):
         with self.lock:
             self.status = LemmaStatus.VALID
 
+    def setSyntaxError(self) -> None:
+        with self.lock:
+            self.status = LemmaStatus.SYNTAXERROR
+
     def setInvalid(self, counterExample: Dict[str, int]) -> None:
         with self.lock:
             self.counterExample = counterExample

@@ -133,7 +133,7 @@ def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], formatting: Opt
         if lemma.status == LemmaStatus.INVALID and lemma.associatedFunction == funcName:
             lemmaList = refineSingleLemma(lemma, formatting, generation)
             for lemma in lemmaList:
-                if lemma.status == LemmaStatus.SOFTDELETE:
+                if lemma.getStatus() == LemmaStatus.SOFTDELETE:
                     lemmaDict.remove(lemma)
                 else:
                     newLemmas.append(lemma)
