@@ -17,6 +17,7 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
     """
     print("lemma list: ", lemmaList)
     print("lemma map: ", lemmaMap)
+    print("lemma dict: ", lemmasDict)
     print("varmap: ", varMap)
     print("funcmap: ", funcMap)
     """
@@ -50,12 +51,12 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
         if verdict == LemmaStatus.VALID:
             console.success(f"Lemma verified: {lemma}")
             pu.LOG(f"Lemma verified: {lemma}")
-            lemmasDict[id].setValid()
+            lemmasDict[str(id)].setValid()
 
         elif verdict == LemmaStatus.INVALID:
             console.error(f"Cex found: {cex}")
             pu.LOG(f"Cex found: {cex}")
-            lemmasDict[id].setInvalid(cex)
+            lemmasDict[str(id)].setInvalid(cex)
             someInvalid = True
 
     if someInvalid == True:

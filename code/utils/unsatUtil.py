@@ -64,7 +64,7 @@ def print_msg_from_child(process):
 
 def execute_command(command, child_name = "child",
                          print_msg = False, need_live_output = False,
-                         env = None, shell = False, timeout=10):
+                         env = None, shell = False, timeout=10, crash=False):
 
     LOG(msg=f"creating and running '{child_name}' process",
          what=logger_level.debug,
@@ -89,7 +89,7 @@ def execute_command(command, child_name = "child",
          severe=False)
         return None, None
 
-    if (process.returncode != 0):
+    if (process.returncode != 0 and crash):
         LOG(msg=f"error occured in '{child_name}' process",
          what=logger_level.error,
          severe=False)
