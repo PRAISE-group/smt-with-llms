@@ -348,7 +348,7 @@ class smtAI(object):
         console.info("Getting lemmas from LLM")
         lemmaStrings = lemmasDict.getLemmasforSolver()
         if args.verbose:
-            print(lemmaStrings)
+            print("lemmas from sumit:", lemmaStrings)
         # exit()
         console.info("Pasrsing lemmas using Z3 api")
         for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
@@ -405,6 +405,8 @@ class smtAI(object):
                 console.info("received a model, not consistent so give feedback to LLM")
                 lemmasDict.setIncrementalCall(True)
                 inconsistency = self.getOutputForCBFunctions(args, bench)
+                if args.verbose:
+                    print(inconsistency)
                 # print("Need new lemma", inconsistency) # TODO: Sumit
                 exampleSet.createExampleFromDict(inconsistency)
                 # exit()
