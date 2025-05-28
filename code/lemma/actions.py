@@ -117,7 +117,7 @@ def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[L
     user_prompt = user_prompt.replace("<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'")
 
     response = callLLMforResponse(user_prompt, lemma.associatedFunction)
-    lemma.decreaseRefineDepth()
+    lemma.decrementRefineDepth()
     return get_lemmas_from_llm_response(response, lemma.associatedFunction, generation)
 
 def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], formatting: Optional[str], funcName: str) -> List[Lemmas]:
