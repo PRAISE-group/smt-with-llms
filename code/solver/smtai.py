@@ -340,7 +340,7 @@ class smtAI(object):
             #     print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
-        # input("Enter an input to continue")
+        input("Enter an input to continue")
 
         self.iteration +=1
         console.info(f"starting iteration {self.iteration}")
@@ -354,12 +354,20 @@ class smtAI(object):
         # exit()
         console.info("Pasrsing lemmas using Z3 api")
         for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
+            # if "assert" not in lemmaString:
+            #     print("no assert in lemma")
+            #     lemmasDict.removeLemma(lemmaKey)
+            #     return
             try:
                 lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
             except Exception as e:
+                print("incorrect lemma syntax error", e)
                 lemmasDict.removeLemma(lemmaKey)
                 # exit()
                 continue
+            if len(lemmaFormula)==0:
+                print("lemmaFormula is empty")
+                return
             if args.verbose:
                 print("lemmaString", lemmaString, self.cbFunctions)
             label = Bool(lemmaKey)
