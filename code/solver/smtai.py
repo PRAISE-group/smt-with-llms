@@ -15,6 +15,7 @@ class smtAI(object):
 
     def __init__(self):
         super(smtAI, self).__init__()
+        set_param("timeout", 20000)
         self.s = Solver()
         self.formulas = None
         self.vars = None
@@ -339,7 +340,8 @@ class smtAI(object):
             #     print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
-        input("Enter an input to continue")
+        # input("Enter an input to continue")
+
         self.iteration +=1
         console.info(f"starting iteration {self.iteration}")
         self.push()
@@ -431,6 +433,9 @@ class smtAI(object):
                 return AlgoVerdict.UNSAT
             console.info("calling checkUnsat")
             res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
+            print("result: ",res)
+            for core in unsatCore:
+                print("lemma status after pankaj call",lemmasDict[str(core)])
             self.pop()
             return res
         else:
