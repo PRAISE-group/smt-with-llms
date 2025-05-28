@@ -61,7 +61,8 @@ def generateIntialLemmas(func: Function,
     user_prompt = user_prompt.replace("<MIN_LIMIT>", str(minLimit))
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
-    callLLMforResponse(user_prompt, func.name)
+    response = callLLMforResponse(user_prompt, func.name)
+    console.log(response)
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
