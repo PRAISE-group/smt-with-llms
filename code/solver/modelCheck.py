@@ -171,8 +171,10 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
             input_data += str(value)+ " "
         stdout, stderr = process.communicate(input=input_data)
         if args.verbose:
-            print(stdout)
-            print(stderr)
+            print("stdout:", stdout)
+            print("stderr:", stderr)
+        if "Assertion `0' failed" in stderr:
+            return True
         # print(input_tuple)
         # for value in input_tuple:
         #     run_cmd.append(str(value))
