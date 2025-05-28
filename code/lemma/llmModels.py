@@ -38,7 +38,7 @@ conversation = RunnableWithMessageHistory(
     get_session_history,
     input_messages_key="input",
     history_messages_key="history",
-    verbose=False,
+    verbose=True,
 )
 
 def callLLMforResponse(prompt: str, funcName: str):

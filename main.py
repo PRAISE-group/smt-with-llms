@@ -79,7 +79,7 @@ if __name__ == '__main__':
     solverai.readSMTfile(data["smt_file"])
     solverai.initialize(commandLineArgs, data)
 
-    while not resultVerdict == AlgoVerdict.SAT or resultVerdict == AlgoVerdict.UNSAT:
+    while not (resultVerdict == AlgoVerdict.SAT or resultVerdict == AlgoVerdict.UNSAT):
         # Sync_Solve() -> generate_lemmas_background already running
         # No need to call Sync_Solve()
 

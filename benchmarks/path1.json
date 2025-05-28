@@ -6,7 +6,7 @@
       "desc": "takes an integer as input and returns input-3 if input is greater than 6 else it returns input-1",
       "tests": [[1], [7]],
       "userLemmas": [
-        "(assert (= 1 1))"
+        ""
       ]
     }
   }
