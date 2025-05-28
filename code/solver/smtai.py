@@ -4,6 +4,7 @@ from code.lemma.actions import *
 from code.unsatmodule.driver import *
 from code.models import exampleSet, ExampleSet
 from code.models import AlgoVerdict
+from py_console import console
 
 class smtAI(object):
     """docstring for smtAI.
@@ -338,15 +339,18 @@ class smtAI(object):
             #     print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
-        input("Enter an input to continue")
+        # input("Enter an input to continue")
         self.iteration +=1
+        console.info(f"starting iteration {self.iteration}")
         self.push()
         # lemmaStrings = genLemma(args)
         # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
+        console.info("Getting lemmas from LLM")
         lemmaStrings = lemmasDict.getLemmasforSolver()
         if args.verbose:
             print(lemmaStrings)
         # exit()
+        console.info("Pasrsing lemmas using Z3 api")
         for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
             try:
                 lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
@@ -376,25 +380,37 @@ class smtAI(object):
         # while iterations > 0:
         # iterations -= 1
         failedLemmas = []
+        console.info("Calling Z3 check()")
+        createDirectory("oracleTemp")
+        with open("oracleTemp/assertions", "w+") as f:
+            f.write(str(self.s.assertions()))
         result = self.check()
         if result == sat:
+            createDirectory("oracleTemp")
+            with open("oracleTemp/model", "w+") as f:
+                f.write(str(self.s.assertions()))
+                f.write(str(self.model()))
             # print("testing 2")
+            console.info("received a model, calling modelCheck() to check is model is consistent")
             if modelCheck(self,args, self.cbFunctions, bench["object_file"], failedLemmas):
                 print("satisfiable")
                 print(self.model())
                 print("Done")
                 print("="*50)
                 print("\n"*4)
+                # exit()
                 return AlgoVerdict.SAT
             else:
                 self.pop()
+                console.info("received a model, not consistent so give feedback to LLM")
                 lemmasDict.setIncrementalCall(True)
                 inconsistency = self.getOutputForCBFunctions(args, bench)
-                print("Need new lemma", inconsistency) # TODO: Sumit
+                # print("Need new lemma", inconsistency) # TODO: Sumit
                 exampleSet.createExampleFromDict(inconsistency)
                 # exit()
                 return AlgoVerdict.UNKNOWN
         elif result == unsat:
+            console.info("Getting unsatcore")
             unsatCore = self.s.unsat_core()
             self.unsatCores[self.iteration] = unsatCore
             print("UnsatCore:", unsatCore)  # TODO: Pankaj
@@ -411,6 +427,7 @@ class smtAI(object):
             # exit()
             if len(unsatCore)==0:
                 return AlgoVerdict.UNSAT
+            console.info("calling checkUnsat")
             res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
             self.pop()
             return res
