@@ -30,6 +30,20 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '-C', '--usegpt',
+    action='store_true',
+    help='Use ChatGPT models.'
+)
+
+parser.add_argument(
+    '-M', '--model',
+    required=True,
+    type=str,
+    default="llama3:latest",
+    help='Specify model name to use.'
+)
+
+parser.add_argument(
     '-V', '--fuzztime',
     type=int,
     help='Specify Fuzzer timeout in seconds. (Default 20s)',

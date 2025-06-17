@@ -1,21 +1,41 @@
+from os import environ
 from typing import Dict
+from dotenv import load_dotenv
+from pathlib import Path
 from langchain_ollama import OllamaLLM
+from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnableWithMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.chat_history import InMemoryChatMessageHistory
 
 from rich.console import Console
+from code.utils.commandline import commandLineArgs
 from code.lemma.callbacks import TokenTrackingHandler
 from code.lemma.promptTemplates import SYSTEM_PROMPT_TEMPLATE
 
 console = Console()
+# TODO: Keep ChatGPT API key in .env file, do not commit.
+env_path = Path(__file__).resolve().parents[2] / ".env"
+load_dotenv(dotenv_path=env_path)
+
 SYSTEM_PROMPT_TEMPLATE = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
 
-# Connect to remote Ollama instance
-llm = OllamaLLM(
-    model="llama3:latest",
-    base_url="http://172.27.21.160:11434"
-)
+if commandLineArgs.usegpt:
+    # Connect to ChatGPT instance
+    llm = ChatOpenAI(
+        model=commandLineArgs.model,
+        temperature=0,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2,
+        api_key=environ.get("CHAT_OPENAI_API_KEY"),
+    )
+else:
+    # Connect to remote Ollama instance
+    llm = OllamaLLM(
+        model=commandLineArgs.model,
+        base_url=environ.get("BASE_URL")
+    )
 
 # Define the chat prompt
 prompt = ChatPromptTemplate.from_messages([
