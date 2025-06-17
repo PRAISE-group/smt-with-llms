@@ -1,12 +1,12 @@
-# TODO: Sumit
 from time import sleep
-from typing import List, Optional
+from typing import List, Optional, Any
 from rich.console import Console
 from itertools import chain
 
 from code.lemma.llmModels import callLLMforResponse
 from code.lemma.context import LemmaDict
 from code.models import Function, Lemmas, LemmaStatus
+from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
 from code.models import exampleSet, ExampleSet
 
@@ -17,11 +17,18 @@ def process_format(fragment: str) -> str:
         fragment = fragment.replace("int", "Int")
     return fragment
 
+def process_response(response: Any) -> str:
+    if commandLineArgs.usegpt:
+        return response.content
+    else:
+        return response
+
 def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) -> List[Lemmas]:
     lemmas: List[Lemmas] = []
+    formattedResponse = process_response(response)
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
-    for index, fragments in enumerate(response.strip().split("\n"), 0):
+    for index, fragments in enumerate(formattedResponse.strip().split("\n"), 0):
         fragments = fragments.strip().lower()
         if (fragments is not None
                 and len(fragments) > 2

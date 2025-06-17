@@ -24,9 +24,6 @@ if commandLineArgs.usegpt:
     # Connect to ChatGPT instance
     llm = ChatOpenAI(
         model=commandLineArgs.model,
-        temperature=0,
-        max_tokens=None,
-        timeout=None,
         max_retries=2,
         api_key=environ.get("CHAT_OPENAI_API_KEY"),
     )
