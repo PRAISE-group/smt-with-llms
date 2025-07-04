@@ -2,6 +2,7 @@ from time import sleep
 from typing import List, Optional, Any
 from rich.console import Console
 from itertools import chain
+from z3 import *
 
 from code.lemma.llmModels import callLLMforResponse
 from code.lemma.context import LemmaDict
@@ -39,6 +40,8 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
                 and "var_" in fragments
         ):
             fragments = process_format(fragments)
+            # TODO: Check if lemma is syntactically correct with Z3.
+            # TODO: Incase the lemma is wrong. Need to generate new lemmas.
             lemmas.append(
                 Lemmas(
                     id=f"{funcName}_gen{generation}_l{index}",
