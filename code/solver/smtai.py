@@ -349,6 +349,7 @@ class smtAI(object):
         # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
         console.info("Getting lemmas from LLM")
         lemmaStrings = lemmasDict.getLemmasforSolver()
+        # print("sumit ", lemmaStrings)
         if args.verbose:
             print("lemmas from sumit:", lemmaStrings)
         # exit()
@@ -367,7 +368,7 @@ class smtAI(object):
                 continue
             if len(lemmaFormula)==0:
                 print("lemmaFormula is empty")
-                return
+                continue
             if args.verbose:
                 print("lemmaString", lemmaString, self.cbFunctions)
             label = Bool(lemmaKey)

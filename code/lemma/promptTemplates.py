@@ -20,6 +20,7 @@ BASE_TEMPLATE = """
     2) Variables in each <LEMMA> must be numbered independently, where the variables indices are numbered sequentially from left to right, starting from 1.
     3) Try to use variables in the <LEMMA>, avoid using constants.
     4) Make sure the <LEMMA> is in correct SMTLIB format. 
+    5) A lemma looks like this '(assert <formula>)', where <formula> is a first order predicate in correct SMTLIB format.
 """
 
 # GenLemma call with objectives.
