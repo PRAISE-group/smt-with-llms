@@ -12,6 +12,16 @@ LEMMA_GENERATION_START_TEMPLATE = """
     <LEMMA> generation. Please wait!
 """
 
+FEW_SHOTS = """
+    A lemma with forall constraint typically looks like the ones given below.
+    
+    (assert (forall ((var_a Int) (var_b Int)) (= (+ var_a var_b) (+ var_a var_a))))
+    (assert (forall ((var_a Int) (var_a Int) (var_a Int)) (= (+ (+ var_a var_b) var_c) (+ var_a (+ var_b var_c)))))
+    (assert (forall ((var_a Int)) (= (+ var_a (- var_a)) 0)))
+    
+    Generate similar lemmas for the given closed box <FUNCTION> with foralls.
+"""
+
 # Base template to be added on each propmt.
 BASE_TEMPLATE = """
     Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text. Please use the following rules strictly.
@@ -21,17 +31,22 @@ BASE_TEMPLATE = """
     2) Variables in each <LEMMA> must be numbered independently, where the variables indices are numbered sequentially from left to right, starting from 1.
     3) Try to use variables in the <LEMMA>, avoid using constants.
     4) Make sure the <LEMMA> is in correct SMTLIB format. 
-    5) A <LEMMA> looks like this '(assert <formula>)', where <formula> is a first order predicate in correct SMTLIB format.
+    5) A <LEMMA> looks like this '(assert <formula>)', where <formula> is a first order predicate with `forall` in correct SMTLIB format.
+    6) It is necessary that you create lemmas with `forall` constructs.
 """
 
 # GenLemma call with objectives.
-LEMMA_OBJECTIVE_TEMPLATE = """
+LEMMA_OBJECTIVE_TEMPLATE = f"""
     Generate <LEMMA> for <FUNCTION>. I have provided some supporting information about <FUNCTION>.
     I have provide you an initial set of input examples in SAMPLES_LIST with SAMPLES_FORMAT describing 
     the format for reading the inputs. Also a <LEMMA> sample format has been provided in LEMMA_SAMPLE,
-    use it for creating the lemmas. Give me each <LEMMA> in a seperate line so that I can parse it back.
+    use it for creating the lemmas. 
+    
+    {FEW_SHOTS}
+    
+    Give me each <LEMMA> in a seperate line so that I can parse it back.
     Strictly adhere to LEMMA_SAMPLE format, starting with 'assert'. Please generate syntatically correct 
-    <LEMMA> in <FORMAT> syntax.
+    <LEMMA> in <FORMAT> syntax. Please create lemmas with forall constraints.
     
     FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
     FUNCTION_PARAMETERS: <FUNCTION_PARAMETERS>

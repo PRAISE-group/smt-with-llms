@@ -38,6 +38,7 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
                 and "end" not in fragments
                 and "assert" in fragments
                 and "var_" in fragments
+                and "forall" in fragments
         ):
             fragments = process_format(fragments)
             # TODO: Check if lemma is syntactically correct with Z3.
