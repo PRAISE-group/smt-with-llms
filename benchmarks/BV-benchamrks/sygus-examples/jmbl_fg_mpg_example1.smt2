@@ -1,0 +1,48 @@
+(set-logic QF_UFBV)
+
+(declare-fun ex ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+
+(define-fun im ((b1 Bool) (b2 Bool) (b3 Bool)) Bool
+    (or (and b1 b2) (and (not b1) b3)))
+(define-fun plus_2 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd b1 b2))
+(define-fun plus_3 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32)) (b3 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd (bvadd b1 b2) b3))
+(define-fun plus_4 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32)) (b3 (_ BitVec 32)) (b4 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd (plus_3 b1 b2 b3) b4))
+(define-fun plus_5 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32)) (b3 (_ BitVec 32)) (b4 (_ BitVec 32)) (b5 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd (plus_4 b1 b2 b3 b4) b5))
+(define-fun plus_6 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32)) (b3 (_ BitVec 32)) (b4 (_ BitVec 32)) (b5 (_ BitVec 32)) (b6 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd (plus_5 b1 b2 b3 b4 b5) b6))
+(define-fun plus_7 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32)) (b3 (_ BitVec 32)) (b4 (_ BitVec 32)) (b5 (_ BitVec 32)) (b6 (_ BitVec 32)) (b7 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd (plus_6 b1 b2 b3 b4 b5 b6) b7))
+(define-fun plus_8 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32)) (b3 (_ BitVec 32)) (b4 (_ BitVec 32)) (b5 (_ BitVec 32)) (b6 (_ BitVec 32)) (b7 (_ BitVec 32)) (b8 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd (plus_7 b1 b2 b3 b4 b5 b6 b7) b8))
+(define-fun plus_9 ((b1 (_ BitVec 32)) (b2 (_ BitVec 32)) (b3 (_ BitVec 32)) (b4 (_ BitVec 32)) (b5 (_ BitVec 32)) (b6 (_ BitVec 32)) (b7 (_ BitVec 32)) (b8 (_ BitVec 32)) (b9 (_ BitVec 32))) (_ BitVec 32)
+    (bvadd (plus_8 b1 b2 b3 b4 b5 b6 b7 b8) b9))
+(define-fun or3 ((b1 Bool) (b2 Bool) (b3 Bool)) Bool
+    (or (or b1 b2) b3))
+(define-fun one_times ((b1 (_ BitVec 32))) (_ BitVec 32)
+    b1)
+(define-fun two_times ((b1 (_ BitVec 32))) (_ BitVec 32)
+    (plus_2 b1 b1))
+(define-fun three_times ((b1 (_ BitVec 32))) (_ BitVec 32)
+    (plus_3 b1 b1 b1))
+(define-fun five_times ((b1 (_ BitVec 32))) (_ BitVec 32)
+    (plus_5 b1 b1 b1 b1 b1))
+(define-fun six_times ((b1 (_ BitVec 32))) (_ BitVec 32)
+    (plus_6 b1 b1 b1 b1 b1 b1))
+(define-fun seven_times ((b1 (_ BitVec 32))) (_ BitVec 32)
+    (plus_7 b1 b1 b1 b1 b1 b1 b1))
+(define-fun nine_times ((b1 (_ BitVec 32))) (_ BitVec 32)
+    (plus_9 b1 b1 b1 b1 b1 b1 b1 b1 b1))
+(define-fun minus ((b1 (_ BitVec 32))) (_ BitVec 32)
+    (bvsub (_ bv0 32) b1))
+
+(declare-const x (_ BitVec 32))
+(declare-const y (_ BitVec 32))
+
+(assert (im (bvsge x (_ bv5 32)) (= (ex x y) (plus_3 (five_times x) (three_times y) (_ bv17 32))) (= (ex x y) (plus_2 (three_times x) (_ bv1 32)))))
+
+(check-sat)
+
