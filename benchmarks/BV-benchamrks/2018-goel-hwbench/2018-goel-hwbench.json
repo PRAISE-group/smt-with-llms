@@ -5,7 +5,7 @@
     "Le_1_3_3_cb": {
       "desc": "takes two unsigned integers and returns true if the first argument is less than second argument",
       "tests": [[1, 2], [2, 1]],
-      "userLemmas": [
+      "userLemmas": [ ""
       ]
     }
   }

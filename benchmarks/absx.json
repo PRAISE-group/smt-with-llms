@@ -5,7 +5,7 @@
     "absx_cb": {
       "desc": "takes an integer and returns its absolute value",
       "tests": [[1], [-7]],
-      "userLemmas": [
+      "userLemmas": [ ""
       ],
       "extern": "int absx_cb(int val);"
     }
