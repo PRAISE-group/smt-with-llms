@@ -144,6 +144,8 @@ class smtAI(object):
             return f'({self.z3_to_c(expr.arg(0))} >= {self.z3_to_c(expr.arg(1))})'
         elif is_gt(expr):
             return f'({self.z3_to_c(expr.arg(0))} > {self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvugt':
+            return f'({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})'
         elif is_const(expr):
             return str(expr)
         elif is_int_value(expr) or is_rational_value(expr):
@@ -173,6 +175,8 @@ class smtAI(object):
             return f'({self.getFunctions(expr.arg(0), funs)} >= {self.getFunctions(expr.arg(1), funs)})'
         elif is_gt(expr):
             return f'({self.getFunctions(expr.arg(0), funs)} > {self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvugt':
+            return f'({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})'
         elif is_const(expr):
             return str(expr)
         elif is_int_value(expr) or is_rational_value(expr):
@@ -240,7 +244,7 @@ class smtAI(object):
         a = ""
         b = ""
         for var in vars:
-            if str(var.sort())=="Int":
+            if str(var.sort())=="Int" or is_bv(var):
                 # print("int", var.decl().name(), ";")
                 a+= "%d "
                 b+= ", &" + str(var.decl().name())
@@ -278,7 +282,7 @@ class smtAI(object):
         a = ""
         b = ""
         for var in vars:
-            if str(var.sort())=="Int":
+            if str(var.sort())=="Int" or is_bv(var):
                 # print("int", var.decl().name(), ";")
                 a+= "%d "
                 b+= ", &" + str(var.decl().name())
@@ -354,6 +358,9 @@ class smtAI(object):
             print("lemmas from sumit:", lemmaStrings)
         # exit()
         console.info("Pasrsing lemmas using Z3 api")
+        console.info("functions:", self.cbFunctions)
+        for v in self.vars:
+            console.info(v,v.sort())
         for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
             # if "assert" not in lemmaString:
             #     print("no assert in lemma")

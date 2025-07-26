@@ -1,7 +1,7 @@
 import subprocess
 import os
 from code.utils.unsatUtil import *
-
+import z3
 
 def typenameConversion(type):
     if str(type) == "Int":
@@ -10,6 +10,8 @@ def typenameConversion(type):
         return "bool"
     if str(type) == "Real":
         return "float"
+    if str(type).startswith("BitVec("):
+        return "int"
 
 def getHarness(solver, funs):
     s = """
