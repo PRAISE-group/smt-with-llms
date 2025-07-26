@@ -146,6 +146,15 @@ class smtAI(object):
             return f'({self.z3_to_c(expr.arg(0))} > {self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvugt':
             return f'({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvule':
+            return f'({self.z3_to_c(expr.arg(0))}) <= ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().kind() == Z3_OP_ITE:
+            cond, then_expr, else_expr = expr.children()
+            return f'(({self.z3_to_c(cond)}) ? ({self.z3_to_c(then_expr)}) : ({self.z3_to_c(else_expr)}))'
+        elif is_false(expr):
+            return "0"
+        elif is_true(expr):
+            return "1"
         elif is_const(expr):
             return str(expr)
         elif is_int_value(expr) or is_rational_value(expr):
@@ -158,7 +167,7 @@ class smtAI(object):
     def getFunctions(self, expr, funs):
         if expr.decl().kind() == Z3_OP_IMPLIES:
                 a, b = expr.children()
-                return f"{self.getFunctions(a, funs)}) || ({self.getFunctions(b)}))"
+                return f"{self.getFunctions(a, funs)}) || ({self.getFunctions(b, funs)}))"
         elif is_and(expr):
             return ' && '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
         elif is_or(expr):
@@ -176,7 +185,16 @@ class smtAI(object):
         elif is_gt(expr):
             return f'({self.getFunctions(expr.arg(0), funs)} > {self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().name() == 'bvugt':
-            return f'({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})'
+            return f'({self.getFunctions(expr.arg(0), funs)}) > ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvule':
+            return f'({self.getFunctions(expr.arg(0), funs)}) <= ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().kind() == Z3_OP_ITE:
+            cond, then_expr, else_expr = expr.children()
+            return f'(({self.getFunctions(cond, funs)}) ? ({self.getFunctions(then_expr, funs)}) : ({self.getFunctions(else_expr, funs)}))'
+        elif is_false(expr):
+            return "0"
+        elif is_true(expr):
+            return "1"
         elif is_const(expr):
             return str(expr)
         elif is_int_value(expr) or is_rational_value(expr):
@@ -282,7 +300,7 @@ class smtAI(object):
         a = ""
         b = ""
         for var in vars:
-            if str(var.sort())=="Int" or is_bv(var):
+            if str(var.sort())=="Int" or is_bv(var) or is_bool(var):
                 # print("int", var.decl().name(), ";")
                 a+= "%d "
                 b+= ", &" + str(var.decl().name())
