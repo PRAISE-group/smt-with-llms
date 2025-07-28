@@ -221,6 +221,7 @@ class smtAI(object):
             out = getCBInputOutput(self,args, f, bench["object_file"]).split(" ")
             outlist = []
             # print(temp[f], len(temp[f].split(" ")))
+            print("Printing output of getCBInputOutput()")
             for i in range(len(out)):
                 print(i, out[i])
                 outlist.append(int(out[i]))
