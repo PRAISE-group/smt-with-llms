@@ -2,7 +2,7 @@
 (set-option :produce-models true)
 
 ;  a number with four prime factors and a multiple of 2 and 7. is unsat
-(declare-fun isPrimeLUT ((_ BitVec 8) ) Bool)
+(declare-fun isPrimeLUT_cb  ((_ BitVec 8) ) Bool)
 
 (declare-fun n () (_ BitVec 8))
 (assert (or (= n (_ bv12 8))(= n  (_ bv8 8))(= n  (_ bv13 8)) (= n  (_ bv17 8))
@@ -18,12 +18,11 @@
 
 (assert (= (bvmul  (_ bv2 8) multiplier) n))
 (assert (= (bvmul  (_ bv7 8) multiplier2) n))
-(assert (isPrimeLUT factor1))
-(assert (isPrimeLUT factor2))
-(assert (isPrimeLUT factor3))
-(assert (isPrimeLUT factor4))
+(assert (isPrimeLUT_cb  factor1))
+(assert (isPrimeLUT_cb  factor2))
+(assert (isPrimeLUT_cb  factor3))
+(assert (isPrimeLUT_cb  factor4))
 
 (assert (= (bvmul factor1 factor2 factor3 factor4) n))
-(check-sat) 
+(check-sat)
 (get-model)
-

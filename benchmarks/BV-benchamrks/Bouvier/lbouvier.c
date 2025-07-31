@@ -1,6 +1,6 @@
 #include "lbouvier.h"
 
-uint16_t u_vlsat3_d57(uint8_t x0) {
+uint16_t u_vlsat3_d57_cb(uint8_t x0) {
 
   uint16_t a1, a2, a3, a4;
 
@@ -38,7 +38,7 @@ uint16_t u_vlsat3_d57(uint8_t x0) {
     if (x0 == 11 || x0 == 12) a4 = 128;
     else a4 = a3;
   }
-  
+
 
   if ( x0 == 19 || x0 == 20) return 256;
   else {
@@ -51,7 +51,7 @@ uint16_t u_vlsat3_d57(uint8_t x0) {
 }
 
 
-uint32_t u_vlsat3_j02(uint8_t x0) {
+uint32_t u_vlsat3_j02_cb(uint8_t x0) {
 
   uint32_t a1, a2, a3, a4;
 
@@ -89,7 +89,7 @@ uint32_t u_vlsat3_j02(uint8_t x0) {
     if (x0 == 11 || x0 == 12) a4 = 128;
     else a4 = a3;
   }
-  
+
 
   if ( x0 == 19 || x0 == 20) return 256;
   else {

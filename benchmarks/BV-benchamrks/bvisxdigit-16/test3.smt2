@@ -3,19 +3,19 @@
 
 
 (declare-fun ndx () (_ BitVec 16))
-(declare-fun isxdigit_ ((_ BitVec 16)) (_ BitVec 16))
+(declare-fun isxdigit__cb ((_ BitVec 16)) (_ BitVec 16))
 
 (declare-fun retval () (_ BitVec 16) )
 (declare-fun retval_1 () (_ BitVec 16) )
 (declare-fun retval_2 () (_ BitVec 16) )
 (declare-fun retval_3 () (_ BitVec 16) )
 
-(assert (= retval (isxdigit_ ndx)))
-(assert (= retval_1 (isxdigit_ (bvadd ndx (_ bv1 16)))))
-(assert (= retval_2 (isxdigit_ (bvadd ndx (_ bv2 16)))))
-(assert (= retval_3 (isxdigit_ (bvadd ndx (_ bv3 16)))))
+(assert (= retval (isxdigit__cb ndx)))
+(assert (= retval_1 (isxdigit__cb (bvadd ndx (_ bv1 16)))))
+(assert (= retval_2 (isxdigit__cb (bvadd ndx (_ bv2 16)))))
+(assert (= retval_3 (isxdigit__cb (bvadd ndx (_ bv3 16)))))
 
-(assert (and  (and  (and  (and  (and  (and 
+(assert (and  (and  (and  (and  (and  (and
 
 (bvule  ndx (_ bv32767 16) )
 

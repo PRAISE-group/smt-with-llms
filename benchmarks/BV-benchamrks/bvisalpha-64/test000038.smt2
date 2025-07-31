@@ -24,18 +24,18 @@
 (declare-fun isalpha_ret_8 () (_ BitVec 64) )
 (declare-fun isalpha_ret_9 () (_ BitVec 64) )
 
-(declare-fun isalpha_ ((_ BitVec 64)) (_ BitVec 64))
+(declare-fun isalpha__cb ((_ BitVec 64)) (_ BitVec 64))
 
-(assert (= isalpha_ret (isalpha_ buffer_0_3)))
-(assert (= isalpha_ret_1 (isalpha_ buffer_4_7)))
-(assert (= isalpha_ret_2 (isalpha_ buffer_8_11)))
-(assert (= isalpha_ret_3 (isalpha_ buffer_12_15)))
-(assert (= isalpha_ret_4 (isalpha_ buffer_16_19)))
-(assert (= isalpha_ret_5 (isalpha_ buffer_20_23)))
-(assert (= isalpha_ret_6 (isalpha_ buffer_23_26)))
-(assert (= isalpha_ret_7 (isalpha_ buffer_7)))
-(assert (= isalpha_ret_8 (isalpha_ buffer_8)))
-(assert (= isalpha_ret_9 (isalpha_ buffer_9)))
+(assert (= isalpha_ret (isalpha__cb buffer_0_3)))
+(assert (= isalpha_ret_1 (isalpha__cb buffer_4_7)))
+(assert (= isalpha_ret_2 (isalpha__cb buffer_8_11)))
+(assert (= isalpha_ret_3 (isalpha__cb buffer_12_15)))
+(assert (= isalpha_ret_4 (isalpha__cb buffer_16_19)))
+(assert (= isalpha_ret_5 (isalpha__cb buffer_20_23)))
+(assert (= isalpha_ret_6 (isalpha__cb buffer_23_26)))
+(assert (= isalpha_ret_7 (isalpha__cb buffer_7)))
+(assert (= isalpha_ret_8 (isalpha__cb buffer_8)))
+(assert (= isalpha_ret_9 (isalpha__cb buffer_9)))
 
 (assert (and  (and  (and  (and  (and  (and  (and (and ( and ( and ( and ( and ( and
 
@@ -55,25 +55,25 @@
 
 (= true (=  (_ bv0 64) isalpha_ret_3 ) ) )
 
-(=  false (=  (_ bv0 64) buffer_16_19 ) ) 
+(=  false (=  (_ bv0 64) buffer_16_19 ) )
 
 (=  (_ bv0 64) isalpha_ret_4 ) )
 
-(=  false (=  (_ bv0 64) buffer_20_23 ) ) 
+(=  false (=  (_ bv0 64) buffer_20_23 ) )
 
 (=  (_ bv0 64) isalpha_ret_5 ) )
 
-(=  false (=  (_ bv0 64) buffer_23_26 ) ) 
+(=  false (=  (_ bv0 64) buffer_23_26 ) )
 
 (=  (_ bv0 64) isalpha_ret_6 ) )
 
-(=  false (=  (_ bv0 64) buffer_7 ) ) 
+(=  false (=  (_ bv0 64) buffer_7 ) )
 (=  true (= (_ bv0 64) isalpha_ret_7 ) ) )
 
-(=  false (=  (_ bv0 64) buffer_8 ) ) 
+(=  false (=  (_ bv0 64) buffer_8 ) )
 (=  true (= (_ bv0 64) isalpha_ret_8 ) ) )
 
-(=  false (=  (_ bv0 64) buffer_9 ) ) 
+(=  false (=  (_ bv0 64) buffer_9 ) )
 (=  true (= (_ bv0 64) isalpha_ret_9 ) ) )
 )
 

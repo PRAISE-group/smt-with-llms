@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/bvisxdigit-64/test4.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/bvisxdigit-64/isxdigit.o",
+  "functions": {
+    "isxdigit__cb": {
+      "desc": "returns 1 (as BitVec of 64 size) if input integer (as BitVec of 64 size) represents ascii value either from 0-9 or alphabet between 'a' and 'f' or between 'A' and 'F' else returns 0.",
+      "tests": [[45], [67]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

@@ -1,0 +1,3 @@
+Following files are unsat: I added assertions about blackbox functions like (assert (= (foo arg1 arg2 ...) output)) for some concrete input outputs. It resulted in z3 giving unsat for these benchmarks.
+benchmarks/BV-benchamrks/Bouvier/vlsat3_d57.smt2
+benchmarks/BV-benchamrks/Bouvier/vlsat3_j02.smt2

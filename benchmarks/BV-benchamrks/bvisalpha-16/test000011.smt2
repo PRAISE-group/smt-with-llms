@@ -8,12 +8,12 @@
 (declare-fun isalpha_ret () (_ BitVec 16) )
 (declare-fun isalpha_ret_1 () (_ BitVec 16) )
 
-(declare-fun isalpha ((_ BitVec 16)) (_ BitVec 16))
+(declare-fun isalpha_cb ((_ BitVec 16)) (_ BitVec 16))
 
-(assert (= isalpha_ret (isalpha buffer_0_3)))
-(assert (= isalpha_ret_1 (isalpha buffer_4_7)))
+(assert (= isalpha_ret (isalpha_cb buffer_0_3)))
+(assert (= isalpha_ret_1 (isalpha_cb buffer_4_7)))
 
-(assert (and  (and  (and 
+(assert (and  (and  (and
 (=  false (=  (_ bv0 16) buffer_0_3 ) )
 (= false ( = (_ bv0 16) isalpha_ret ) ) )
 (= false (=  (_ bv0 16) buffer_4_7 ) ) )

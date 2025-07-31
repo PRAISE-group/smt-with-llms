@@ -61,7 +61,7 @@ def getHarness(solver, funs):
 def getCBInputOutput(solver, args, cbFunctions, objectFile):
     mainFun = solver.harnessForModelCheck()
     m = solver.model()
-    print("model:", m)
+    # print("model:", m)
     input_tuple = []
     for d in solver.vars:
         val = m[d]
@@ -125,9 +125,16 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     m = solver.model()
     input_tuple = []
     for d in solver.vars:
+        val = m[d]
         if args.verbose:
             print(f"{d} = {m[d]}")
-        input_tuple.append(m[d])
+        if val.sort().name() == "Bool":
+            input_tuple.append(int(z3.is_true(val)))  # True → 1, False → 0
+        else:
+            input_tuple.append(int(val.as_long()))
+        # if args.verbose:
+        #     print(f"{d} = {m[d]}")
+        # input_tuple.append(m[d])
     # exit()
     # interp = m[cbFunctions[name]]
     # print("Function interpretation:")

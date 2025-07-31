@@ -4,8 +4,8 @@
 (set-option :produce-models true)
 
 ;  a prime number that is one more than a square number
-(declare-fun isSquare ((_ BitVec 8) ) Bool)
-(declare-fun isPrimeLUT ((_ BitVec 8) ) Bool)
+(declare-fun isSquare_cb  ((_ BitVec 8) ) Bool)
+(declare-fun isPrimeLUT_cb  ((_ BitVec 8) ) Bool)
 
 
 (declare-fun n () (_ BitVec 8))
@@ -13,12 +13,12 @@
 	    (= n (_ bv9 8))(= n (_ bv10 8))(= n (_ bv18 8))(= n (_ bv14 8))(= n (_ bv16 8))(= n (_ bv6 8)) ))
 
 (declare-fun m () (_ BitVec 8))
-(assert (isPrimeLUT n))
-(assert (isSquare m))
+(assert (isPrimeLUT_cb  n))
+(assert (isSquare_cb  m))
 (assert (= (bvadd m (_ bv1 8)) n))
 
 
-(check-sat) 
+(check-sat)
 (get-model)
 
 ; a. a multiple of 3 and a multiple of 4

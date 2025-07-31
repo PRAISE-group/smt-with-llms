@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/bvisalpha-64/test000010.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/bvisalpha-64/lisalpha.o",
+  "functions": {
+    "isalpha_cb": {
+      "desc": "returns 1 (as BitVec of 64 size) if input integer (as BitVec of 64 size) represents an alphabet (either small or big) else returns 0.",
+      "tests": [[45], [67]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

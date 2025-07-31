@@ -2,7 +2,7 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
 
-(declare-fun isPrimeLUT ((_ BitVec 8) ) Bool)
+(declare-fun isPrimeLUT_cb  ((_ BitVec 8) ) Bool)
 
 ; a prime number and a factor of 39
 
@@ -18,7 +18,7 @@
 (declare-fun multiplier () (_ BitVec 8))
 
 (assert (= (bvmul n multiplier) (_ bv39 8)))
-(assert (isPrimeLUT n))
+(assert (isPrimeLUT_cb  n))
 
-(check-sat) 
+(check-sat)
 (get-model)

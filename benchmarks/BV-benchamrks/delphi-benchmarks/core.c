@@ -1,20 +1,20 @@
 #include "core.h"
 
-uint32_t add_(uint32_t a, uint32_t b) {
+uint32_t add__cb(uint32_t a, uint32_t b) {
   return a + b;
 }
 
-uint32_t uremtotal4 (uint32_t a, uint32_t b) {
+uint32_t uremtotal4_cb (uint32_t a, uint32_t b) {
   if (b == 0) return a;
 
   return a % b;
 }
 
-int mul4(int a, int b, int c, int d) {
+int mul4_cb(int a, int b, int c, int d) {
   return a * b * c * d;
 }
 
-long int isPrimeLUT (long int num) {
+long int isPrimeLUT_cb (long int num) {
   if (num == 2) return 1;
   if (num == 3) return 1;
   if (num == 5) return 1;
@@ -75,9 +75,9 @@ long int isPrimeLUT (long int num) {
 
 
 
-uint32_t isTriangular(uint32_t num)
+uint32_t isTriangular_cb(uint32_t num)
 {
- 
+
     // A Triangular number must be sum of first n
     // natural numbers
     uint32_t sum = 0;
@@ -87,11 +87,11 @@ uint32_t isTriangular(uint32_t num)
         if (sum==num)
             return 1;
     }
- 
+
     return 0;
 }
 
-uint32_t isSquare(uint32_t n)
+uint32_t isSquare_cb(uint32_t n)
 {
     for (uint32_t i = 1; i * i <= n; i++) {
         // If (i * i = n)
@@ -101,4 +101,3 @@ uint32_t isSquare(uint32_t n)
     }
     return 0;
 }
- 

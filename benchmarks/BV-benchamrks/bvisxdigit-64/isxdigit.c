@@ -1,6 +1,6 @@
 #include "isxdigit.h"
 
-uint64_t isxdigit_(uint64_t c)
+uint64_t isxdigit__cb (uint64_t c)
 {
   if (c >= '0') {
     if (c <= '9') {

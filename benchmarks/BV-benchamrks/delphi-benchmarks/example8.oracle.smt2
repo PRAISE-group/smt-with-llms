@@ -1,7 +1,7 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
 
-(declare-fun isPrimeLUT ((_ BitVec 8) ) Bool)
+(declare-fun isPrimeLUT_cb ((_ BitVec 8) ) Bool)
 
 
 (declare-fun factor1 () (_ BitVec 8))
@@ -11,12 +11,12 @@
 (declare-fun factor5 () (_ BitVec 8))
 (declare-fun factor6 () (_ BitVec 8))
 
-(assert (isPrimeLUT factor1))
-(assert (isPrimeLUT factor2))
-(assert (isPrimeLUT factor3))
-(assert (isPrimeLUT factor4))
-(assert (isPrimeLUT factor5))
-(assert (isPrimeLUT factor6))
+(assert (isPrimeLUT_cb factor1))
+(assert (isPrimeLUT_cb factor2))
+(assert (isPrimeLUT_cb factor3))
+(assert (isPrimeLUT_cb factor4))
+(assert (isPrimeLUT_cb factor5))
+(assert (isPrimeLUT_cb factor6))
 (assert (= (bvmul factor1 factor2 factor3 factor4 factor5 factor6) (_ bv96 8)))
 
 (check-sat)

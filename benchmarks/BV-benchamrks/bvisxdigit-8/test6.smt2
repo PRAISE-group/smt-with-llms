@@ -3,7 +3,7 @@
 
 
 (declare-fun ndx () (_ BitVec 32))
-(declare-fun isxdigit_ ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun isxdigit__cb ((_ BitVec 32)) (_ BitVec 32))
 
 (declare-fun retval () (_ BitVec 32) )
 (declare-fun retval_1 () (_ BitVec 32) )
@@ -12,12 +12,12 @@
 (declare-fun retval_4 () (_ BitVec 32) )
 (declare-fun retval_5 () (_ BitVec 32) )
 
-(assert (= retval (isxdigit_ ndx)))
-(assert (= retval_1 (isxdigit_ (bvadd ndx (_ bv1 32)))))
-(assert (= retval_2 (isxdigit_ (bvadd ndx (_ bv2 32)))))
-(assert (= retval_3 (isxdigit_ (bvadd ndx (_ bv3 32)))))
-(assert (= retval_4 (isxdigit_ (bvadd ndx (_ bv4 32)))))
-(assert (= retval_5 (isxdigit_ (bvadd ndx (_ bv5 32)))))
+(assert (= retval (isxdigit__cb ndx)))
+(assert (= retval_1 (isxdigit__cb (bvadd ndx (_ bv1 32)))))
+(assert (= retval_2 (isxdigit__cb (bvadd ndx (_ bv2 32)))))
+(assert (= retval_3 (isxdigit__cb (bvadd ndx (_ bv3 32)))))
+(assert (= retval_4 (isxdigit__cb (bvadd ndx (_ bv4 32)))))
+(assert (= retval_5 (isxdigit__cb (bvadd ndx (_ bv5 32)))))
 
 
 (assert
@@ -35,7 +35,7 @@
 (=  true (=  (_ bv0 32)  retval_4 ) ) )
 (bvule  (bvadd  (_ bv5 32)  ndx ) (_ bv255 32)  ) )
 (=  true (=  (_ bv0 32)  retval_5 ) ) )
-(bvule  (bvadd  (_ bv6 32)  ndx ) (_ bv255 32)  ) ) ) 
+(bvule  (bvadd  (_ bv6 32)  ndx ) (_ bv255 32)  ) ) )
 
 
 (check-sat)

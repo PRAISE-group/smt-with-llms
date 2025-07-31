@@ -5,7 +5,7 @@
 
 
 ;  an odd triangular number that is a multiple of 9
-(declare-fun isTriangular ((_ BitVec 16) ) Bool)
+(declare-fun isTriangular_cb  ((_ BitVec 16) ) Bool)
 (declare-fun n () (_ BitVec 16))
 
 (assert (or (= n (_ bv12 16))(= n (_ bv8 16))(= n (_ bv13 16)) (= n (_ bv17 16)) (= n (_ bv15 16)) (= n (_ bv21 16))
@@ -17,11 +17,11 @@
 (declare-fun m () (_ BitVec 16))
 
 (assert (= (bvsmod n (_ bv2 16)) (_ bv1 16)))
-(assert (isTriangular n))
+(assert (isTriangular_cb  n))
 (assert (= (bvmul m (_ bv9 16)) n))
 
 
-(check-sat) 
+(check-sat)
 (get-model)
 
 ; a. a multiple of 3 and a multiple of 4

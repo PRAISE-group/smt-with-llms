@@ -1,6 +1,6 @@
 
 
-int isalpha(int c) {
+int isalpha_cb(int c) {
 	int res = 0;
 	switch (c) {
 	case 'a':

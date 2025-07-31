@@ -26,6 +26,7 @@ class smtAI(object):
         self.iteration = 0
         self.lemmasUsed = {} # key is the iteration number starts from 1
         self.cbFunctions = None # Map of close box functions z3 object
+        self.inputoutputassertions = [] # input output constraints obtained from modelcheck inconsistency
 
     def readSMTfile(self, inputfilepath):
         # if args.verbose:
@@ -123,6 +124,9 @@ class smtAI(object):
     def pop(self):
         return self.s.pop()
 
+    def to_smtlib_bv_bin(self, value, width):
+        return "#b" + format(value, f'0{width}b')
+
     def z3_to_c(self, expr):
         # print("expr",expr)
         if expr.decl().kind() == Z3_OP_IMPLIES:
@@ -165,14 +169,15 @@ class smtAI(object):
             return str(expr)  # fallback
 
     def getFunctions(self, expr, funs):
+        # print(expr,expr.decl().kind(),Z3_OP_UNINTERPRETED, is_and(expr), Z3_OP_BAND)
         if expr.decl().kind() == Z3_OP_IMPLIES:
                 a, b = expr.children()
                 return f"{self.getFunctions(a, funs)}) || ({self.getFunctions(b, funs)}))"
-        elif is_and(expr):
+        elif is_and(expr) or expr.decl().kind() == Z3_OP_BAND:
             return ' && '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
-        elif is_or(expr):
+        elif is_or(expr) or expr.decl().kind() == Z3_OP_BOR:
             return ' || '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
-        elif is_not(expr):
+        elif is_not(expr) or expr.decl().kind() == Z3_OP_BNOT:
             return f'!({self.getFunctions(expr.arg(0), funs)})'
         elif is_eq(expr):
             return f'({self.getFunctions(expr.arg(0), funs)} == {self.getFunctions(expr.arg(1), funs)})'
@@ -210,6 +215,8 @@ class smtAI(object):
         funs = []
         for f in self.formulas:
             self.getFunctions(f, funs)
+        # print("funs:", funs)
+        # print("self.formulas:", self.formulas)
         inputOutput = [] # maps functions to input outputs
         for f in funs:
             # print(f)
@@ -270,7 +277,7 @@ class smtAI(object):
                 vardecl += "int "+ str(var.decl().name())+ ";\n"
         s += "int main(){" + "\n"
         s+= vardecl + "\n"
-        s+= f"scanf(\"{a}\" {b});" + "\n"
+        s+= f"scanf(\"{a[:-1]}\" {b});" + "\n"
         a = ""
         b = ""
         for i in range(f.num_args()):
@@ -308,7 +315,7 @@ class smtAI(object):
                 vardecl += "int "+ str(var.decl().name())+ ";\n"
         prog = "int main(){" + "\n"
         prog+= vardecl + "\n"
-        prog+= f"scanf(\"{a}\" {b});" + "\n"
+        prog+= f"scanf(\"{a[:-1]}\" {b});" + "\n"
         prog+= ifconds + "\n"
         prog+="}"
         self.mainFun = prog
@@ -368,6 +375,10 @@ class smtAI(object):
         self.iteration +=1
         console.info(f"starting iteration {self.iteration}")
         self.push()
+        for v in self.inputoutputassertions:
+            print(v)
+            assertion = self.readSMTstring(v, self.cbFunctions)
+            self.add(assertion)
         # lemmaStrings = genLemma(args)
         # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
         console.info("Getting lemmas from LLM")
@@ -444,6 +455,28 @@ class smtAI(object):
                 inconsistency = self.getOutputForCBFunctions(args, bench)
                 if args.verbose:
                     print(inconsistency)
+                for val in inconsistency:
+                    tmpassert = "(assert "
+                    for k in val:
+                        for decl in self.model().decls():
+                            # print("Function:", decl.name())
+                            if decl.name() == k:
+                                tmpassert += "(= ("+k + " "
+                                index = 0
+                                for inp in val[k][:-1]:
+                                    domain = decl.domain(index)
+                                    if is_bv_sort(domain):
+                                        tmpassert += str(self.to_smtlib_bv_bin(inp, domain.size())) + " "
+                                        # print(BitVecVal(inp, domain.size()))
+                                    else:
+                                        print("Unknown type, line 468 smt.py")
+                                        exit()
+                                    index += 1
+                                if is_bv_sort(decl.range()):
+                                    tmpassert += ") " + str(self.to_smtlib_bv_bin(val[k][-1], decl.range().size())) + "))"
+                    # print(tmpassert)
+                    if tmpassert not in self.inputoutputassertions:
+                        self.inputoutputassertions.append(tmpassert)
                 # print("Need new lemma", inconsistency) # TODO: Sumit
                 exampleSet.createExampleFromDict(inconsistency)
                 # exit()

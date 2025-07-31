@@ -26,21 +26,21 @@
 (declare-fun isalpha_ret_9 () (_ BitVec 16) )
 (declare-fun isalpha_ret_10 () (_ BitVec 16) )
 
-(declare-fun isalpha ((_ BitVec 16)) (_ BitVec 16))
+(declare-fun isalpha_cb ((_ BitVec 16)) (_ BitVec 16))
 
-(assert (= isalpha_ret (isalpha buffer_0_3)))
-(assert (= isalpha_ret_1 (isalpha buffer_4_7)))
-(assert (= isalpha_ret_2 (isalpha buffer_8_11)))
-(assert (= isalpha_ret_3 (isalpha buffer_12_15)))
-(assert (= isalpha_ret_4 (isalpha buffer_16_19)))
-(assert (= isalpha_ret_5 (isalpha buffer_20_23)))
-(assert (= isalpha_ret_6 (isalpha buffer_23_26)))
-(assert (= isalpha_ret_7 (isalpha buffer_7)))
-(assert (= isalpha_ret_8 (isalpha buffer_8)))
-(assert (= isalpha_ret_9 (isalpha buffer_9)))
-(assert (= isalpha_ret_10 (isalpha buffer_10)))
+(assert (= isalpha_ret (isalpha_cb buffer_0_3)))
+(assert (= isalpha_ret_1 (isalpha_cb buffer_4_7)))
+(assert (= isalpha_ret_2 (isalpha_cb buffer_8_11)))
+(assert (= isalpha_ret_3 (isalpha_cb buffer_12_15)))
+(assert (= isalpha_ret_4 (isalpha_cb buffer_16_19)))
+(assert (= isalpha_ret_5 (isalpha_cb buffer_20_23)))
+(assert (= isalpha_ret_6 (isalpha_cb buffer_23_26)))
+(assert (= isalpha_ret_7 (isalpha_cb buffer_7)))
+(assert (= isalpha_ret_8 (isalpha_cb buffer_8)))
+(assert (= isalpha_ret_9 (isalpha_cb buffer_9)))
+(assert (= isalpha_ret_10 (isalpha_cb buffer_10)))
 
-(assert (and  (and  (and  (and  (and  (and  (and (and ( and ( and ( and ( and ( and ( and 
+(assert (and  (and  (and  (and  (and  (and  (and (and ( and ( and ( and ( and ( and ( and
 
 (=  false (=  (_ bv0 16) buffer_0_3 ) )
 
@@ -58,28 +58,28 @@
 
 (= true (=  (_ bv0 16) isalpha_ret_3 ) ) )
 
-(=  false (=  (_ bv0 16) buffer_16_19 ) ) 
+(=  false (=  (_ bv0 16) buffer_16_19 ) )
 
 (=  (_ bv0 16) isalpha_ret_4 ) )
 
-(=  false (=  (_ bv0 16) buffer_20_23 ) ) 
+(=  false (=  (_ bv0 16) buffer_20_23 ) )
 
 (=  (_ bv0 16) isalpha_ret_5 ) )
 
-(=  false (=  (_ bv0 16) buffer_23_26 ) ) 
+(=  false (=  (_ bv0 16) buffer_23_26 ) )
 
 (=  (_ bv0 16) isalpha_ret_6 ) )
 
-(=  false (=  (_ bv0 16) buffer_7 ) ) 
+(=  false (=  (_ bv0 16) buffer_7 ) )
 (=  true (= (_ bv0 16) isalpha_ret_7 ) ) )
 
-(=  false (=  (_ bv0 16) buffer_8 ) ) 
+(=  false (=  (_ bv0 16) buffer_8 ) )
 (=  true (= (_ bv0 16) isalpha_ret_8 ) ) )
 
-(=  false (=  (_ bv0 16) buffer_9 ) ) 
+(=  false (=  (_ bv0 16) buffer_9 ) )
 (=  true (= (_ bv0 16) isalpha_ret_9 ) ) )
 
-(=  false (=  (_ bv0 16) buffer_10 ) ) 
+(=  false (=  (_ bv0 16) buffer_10 ) )
 (=  false (= (_ bv0 16) isalpha_ret_10 ) ) )
 
 )

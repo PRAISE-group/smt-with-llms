@@ -4,7 +4,7 @@
 (set-option :produce-models true)
 
 ;  a triangular number and a factor of 20
-(declare-fun isTriangular ((_ BitVec 8) ) Bool)
+(declare-fun isTriangular_cb  ((_ BitVec 8) ) Bool)
 
 (declare-fun n () (_ BitVec 8))
 (assert (or (= n (_ bv12 8))(= n (_ bv8 8))(= n (_ bv13 8)) (= n (_ bv17 8)) (= n (_ bv15 8)) (= n (_ bv21 8)) (= n (_ bv9 8))(= n (_ bv10 8))
@@ -13,8 +13,8 @@
 (declare-fun multiplier () (_ BitVec 8))
 
 (assert (= (bvmul n multiplier) (_ bv20 8)))
-(assert (isTriangular n))
-(check-sat) 
+(assert (isTriangular_cb  n))
+(check-sat)
 (get-model)
 
 ; a. a multiple of 3 and a multiple of 4

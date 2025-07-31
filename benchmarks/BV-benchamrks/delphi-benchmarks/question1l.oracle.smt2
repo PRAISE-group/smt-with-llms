@@ -4,7 +4,7 @@
 (set-option :produce-models true)
 
 ;  an odd triangular number that is a multiple of 7
-(declare-fun isTriangular ((_ BitVec 8) ) Bool)
+(declare-fun isTriangular_cb  ((_ BitVec 8) ) Bool)
 
 
 (declare-fun n () (_ BitVec 8))
@@ -14,11 +14,11 @@
 (declare-fun m () (_ BitVec 8))
 
 (assert (= (bvsmod n (_ bv2 8)) (_ bv1 8)))
-(assert (isTriangular n))
+(assert (isTriangular_cb  n))
 (assert (= (bvmul m (_ bv7 8)) n))
 
 
-(check-sat) 
+(check-sat)
 (get-model)
 
 ; a. a multiple of 3 and a multiple of 4
