@@ -101,3 +101,6 @@ if __name__ == '__main__':
 
     for t in running_llm_threads:
         t.join()
+
+    # TODO: Sumit Check.
+    # Stop LLM responses here after exiting the while loop
