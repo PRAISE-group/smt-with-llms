@@ -6,18 +6,17 @@
 (declare-const x1 (_ BitVec 32))
 (declare-const x2 (_ BitVec 32))
 
-(declare-fun max3 ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+(declare-fun max3_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 
-(assert (bvuge (max3 x0 x1 x2) x0))
-(assert (bvuge (max3 x0 x1 x2) x1))
-(assert (bvuge (max3 x0 x1 x2) x2))
+(assert (bvuge (max3_cb  x0 x1 x2) x0))
+(assert (bvuge (max3_cb  x0 x1 x2) x1))
+(assert (bvuge (max3_cb  x0 x1 x2) x2))
 (assert
-    (or (= (max3 x0 x1 x2) x0)
-    (or (= (max3 x0 x1 x2) x1)
-        (= (max3 x0 x1 x2) x2))))
+    (or (= (max3_cb  x0 x1 x2) x0)
+    (or (= (max3_cb  x0 x1 x2) x1)
+        (= (max3_cb  x0 x1 x2) x2))))
 
 
 (check-sat)
 (get-value (x0 x1 x2))
 (exit)
-

@@ -3,22 +3,22 @@
 (set-option :simplification none)
 
 
-(declare-fun ipow ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+(declare-fun ipow_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 (declare-fun ipow_ret () (_ BitVec 32))
 (declare-const x (_ BitVec 32))
 (declare-const y (_ BitVec 32))
 
-(assert (= (ipow x (_ bv2 32)) ipow_ret ))
+(assert (= (ipow_cb x (_ bv2 32)) ipow_ret ))
 
 (assert
      (and
 	(and
-		(bvult (_ bv0 32) x )		
+		(bvult (_ bv0 32) x )
 		(=  false (=  y ipow_ret ) ) )
-		
+
 	    (bvult  (_ bv8 32) y ) )
-) 
-	    
+)
+
 (check-sat)
 (get-model)
 (exit)

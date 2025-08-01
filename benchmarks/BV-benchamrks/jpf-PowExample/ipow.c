@@ -1,11 +1,11 @@
 
 #include "ipow.h"
 
-int64_t ipow2(int64_t exp) {
+int64_t ipow2_cb (int64_t exp) {
   return 1 << exp;
 }
 
-int64_t ipow(int64_t base, uint8_t exp) {
+int64_t ipow_cb (int64_t base, uint8_t exp) {
   static const uint8_t highest_bit_set[] = {
     0, 1, 2, 2, 3, 3, 3, 3,
     4, 4, 4, 4, 4, 4, 4, 4,
@@ -48,11 +48,11 @@ int64_t ipow(int64_t base, uint8_t exp) {
     if (base == 1) {
       return 1;
     }
-        
+
     if (base == -1) {
       return 1 - 2 * (exp & 1);
     }
-        
+
     return 0;
   case 6:
     if (exp & 1) result *= base;

@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/iabs/iabs.8.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/iabs/iabs.o",
+  "functions": {
+    "iabs_cb": {
+      "desc": "Returns the absolute value of the input integer; if the input is negative, returns its negation; otherwise returns the input unchanged.",
+      "tests": [[13], [-2]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

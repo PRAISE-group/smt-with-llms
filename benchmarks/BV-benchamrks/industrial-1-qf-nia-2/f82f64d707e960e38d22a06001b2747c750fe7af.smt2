@@ -23,22 +23,22 @@
 ;; 	    (=> (or (= kitten_5 true) (<= 0 999)) (spoon_2 kitten_4))
 ;; )
 
-(declare-fun spoon_4 ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun spoon_4_cb  ((_ BitVec 32)) (_ BitVec 32))
 (declare-fun spoon_5 ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
-(declare-fun spoon_6 ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun spoon_6_cb  ((_ BitVec 32)) (_ BitVec 32))
 
-;; (define-fun spoon_4 ((kitten_9 (_ BitVec 32))) Bool (and (<= 0 kitten_9) (<= kitten_9 99900)))
-;; (define-fun spoon_5 ((kitten_10 (_ BitVec 32)) (kitten_11 Bool) (kitten_12 Bool) (kitten_13 Bool) (kitten_14 Bool)) Bool (=> (or (= kitten_11 true) (<= 0 99900)) (spoon_4 kitten_10)))
-;; (define-fun spoon_6 ((kitten_15 (_ BitVec 32))) Bool (and (<= (- 32768) kitten_15) (<= kitten_15 32767)))
+;; (define-fun spoon_4_cb  ((kitten_9 (_ BitVec 32))) Bool (and (<= 0 kitten_9) (<= kitten_9 99900)))
+;; (define-fun spoon_5 ((kitten_10 (_ BitVec 32)) (kitten_11 Bool) (kitten_12 Bool) (kitten_13 Bool) (kitten_14 Bool)) Bool (=> (or (= kitten_11 true) (<= 0 99900)) (spoon_4_cb  kitten_10)))
+;; (define-fun spoon_6_cb  ((kitten_15 (_ BitVec 32))) Bool (and (<= (- 32768) kitten_15) (<= kitten_15 32767)))
 
 (declare-const cat_7 (_ BitVec 32))
 (declare-const cat_8 (_ BitVec 32))
 
-(declare-fun spoon_9 ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun spoon_9_cb  ((_ BitVec 32)) (_ BitVec 32))
 (declare-fun spoon_10 ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 
-;; (define-fun spoon_9 ((kitten_16 (_ BitVec 32))) Bool (and (<= 0 kitten_16) (<= kitten_16 1000)))
-;; (define-fun spoon_10 ((kitten_17 (_ BitVec 32)) (kitten_18 Bool) (kitten_19 Bool) (kitten_20 Bool) (kitten_21 Bool)) Bool (=> (or (= kitten_18 true) (<= 0 1000)) (spoon_9 kitten_17)))
+;; (define-fun spoon_9_cb  ((kitten_16 (_ BitVec 32))) Bool (and (<= 0 kitten_16) (<= kitten_16 1000)))
+;; (define-fun spoon_10 ((kitten_17 (_ BitVec 32)) (kitten_18 Bool) (kitten_19 Bool) (kitten_20 Bool) (kitten_21 Bool)) Bool (=> (or (= kitten_18 true) (<= 0 1000)) (spoon_9_cb  kitten_17)))
 
 (declare-const cat_11 (_ BitVec 32))
 (declare-const cat_12 (_ BitVec 32))
@@ -76,9 +76,9 @@
 (declare-const cat_44 (_ BitVec 32))
 (declare-const cat_45 (_ BitVec 32))
 
-(assert (= (_ bv1 32) (spoon_4 cat_7)))
+(assert (= (_ bv1 32) (spoon_4_cb  cat_7)))
 (assert (= (_ bv1 32) (spoon_2 cat_13)))
-(assert (= (_ bv1 32) (spoon_9 cat_14)))
+(assert (= (_ bv1 32) (spoon_9_cb  cat_14)))
 (declare-const cat_47 (_ BitVec 32))
 (declare-const cat_48 (_ BitVec 32))
 (assert (and (= cat_16 cat_48) (and (= (_ bv1 32) (spoon_2 cat_16)) (= cat_16 cat_47))))
@@ -86,8 +86,8 @@
 (declare-const cat_49 (_ BitVec 32))
 (assert (= cat_18 cat_49))
 (assert (= cat_19 (bvmul cat_18 (_ bv10 32))))
-(assert (and (= cat_20 cat_19) (= (_ bv1 32) (spoon_6 cat_19))))
-(assert (and (= cat_21 cat_20) (= (_ bv1 32) (spoon_9 cat_20))))
+(assert (and (= cat_20 cat_19) (= (_ bv1 32) (spoon_6_cb  cat_19))))
+(assert (and (= cat_21 cat_20) (= (_ bv1 32) (spoon_9_cb  cat_20))))
 (assert (= cat_31 cat_21))
 (assert (=> (bvult (_ bv990 32) cat_31) (= cat_33 (_ bv990 32))))
 (assert (=> (not (bvult (_ bv990 32) cat_31)) (and (= cat_22 cat_31) (= (_ bv1 32) (spoon_2 cat_31)))))

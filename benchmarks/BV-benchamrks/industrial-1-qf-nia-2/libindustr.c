@@ -22,7 +22,7 @@ int spoon_3(int k4, int k5, int k6, int k7, int k8) {
   return 0;
 }
 
-int spoon_4(int k9) {
+int spoon_4_cb (int k9) {
   if (0 <= k9)
     if (k9 <= 99900)
       return 1;
@@ -32,13 +32,13 @@ int spoon_4(int k9) {
 
 int spoon_5 (int k10, int k11, int k12, int k13, int k14) {
   if (k11 == 1)
-    return spoon_4(k10);
+    return spoon_4_cb (k10);
 
   return 0;
 }
 
-  
-int spoon_6 (int k15) {
+
+int spoon_6_cb  (int k15) {
   if (-32768 <= k15)
     if (k15 <= 32767)
       return 1;
@@ -46,7 +46,7 @@ int spoon_6 (int k15) {
   return 0;
 }
 
-int spoon_9 (int k16) {
+int spoon_9_cb  (int k16) {
   if (0 <= k16)
     if (k16 <= 1000)
       return 1;
@@ -56,7 +56,7 @@ int spoon_9 (int k16) {
 
 int spoon_10 (int k17, int k18, int k19, int k20, int k21) {
   if (k18 == 1)
-    return spoon_9(k17);
+    return spoon_9_cb (k17);
 
   return 0;
 }

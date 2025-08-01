@@ -1,7 +1,7 @@
 #include "lhsat.h"
 
 
-int hash_1_03_03(int x0) {
+int hash_1_03_03_cb (int x0) {
   if (x0 == 2) return 1;
   else { if (x0 == 0) return 0;
     else { if (x0 == 1) return 2;
@@ -16,14 +16,14 @@ int hash_1_03_03(int x0) {
 
 
 
-int hash_2_03_03 (int x0) {
+int hash_2_03_03_cb  (int x0) {
   if (x0 == 0) return 0;
   else { if (x0 == 1) return 2;
     else { return 1; }
   }
 }
 
-int hash_3_03_03 (int x0) {
+int hash_3_03_03_cb  (int x0) {
   if (x0 == 0) return 0;
   else { if (x0 == 1) return 2;
     else { if (x0 == 4) return 5;
@@ -35,7 +35,7 @@ int hash_3_03_03 (int x0) {
 }
 
 
-int ite_lt(int cond, int c1, int c2) {
+int ite_lt_cb (int cond, int c1, int c2) {
   if (cond < 0) return c1;
   else return c2;
 }
@@ -85,7 +85,7 @@ int hash_1_04_05 (int x0) {
   if (x0 == 2) return 1;
   else { if (x0 == 1) return 2;
     else { if (x0 == 4) return 3;
-      else { return 4; 
+      else { return 4;
       }
     }
   }

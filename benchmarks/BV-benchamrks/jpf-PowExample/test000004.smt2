@@ -3,14 +3,14 @@
 (set-option :simplification none)
 
 
-(declare-fun ipow ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+(declare-fun ipow_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 
 (declare-fun ipow_ret () (_ BitVec 32))
 (declare-const x (_ BitVec 32))
 (declare-const y (_ BitVec 32))
 
 
-(assert (= (ipow x y) ipow_ret ))
+(assert (= (ipow_cb x y) ipow_ret ))
 
 
 (assert
@@ -19,6 +19,6 @@
            (=  false (bvult  (_ bv8 32) y ) )
 	)
 )
-	   
+
 (check-sat)
 (exit)
