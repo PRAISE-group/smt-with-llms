@@ -33,6 +33,17 @@ __AFL_FUZZ_INIT();
             args += typenameConversion(funs[name].domain(i))+","
         out = typenameConversion(funs[name].range())
         proto += f"\t{out}  {name}({args[:-1]});\n"
+
+    aux_fn = """
+bool Or(uint8_t a, uint8_t b){
+    return a || b;
+}
+
+bool And(uint8_t a, uint8_t b){
+    return a && b;
+}
+"""
+    proto += aux_fn
     proto += "}\n\n"
 
     return head + proto
