@@ -35,13 +35,13 @@ __AFL_FUZZ_INIT();
         proto += f"\t{out}  {name}({args[:-1]});\n"
 
     aux_fn = """
-bool Or(uint8_t a, uint8_t b){
-    return a || b;
-}
+    bool Or(uint16_t a, uint16_t b){
+        return a || b;
+    }
 
-bool And(uint8_t a, uint8_t b){
-    return a && b;
-}
+    bool And(uint16_t a, uint16_t b){
+        return a && b;
+    }
 """
     proto += aux_fn
     proto += "}\n\n"
