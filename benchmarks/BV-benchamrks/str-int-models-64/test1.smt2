@@ -9,12 +9,12 @@
 (declare-const s3 (_ BitVec 64))
 
 
-(declare-fun numvowels_str4 ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
+(declare-fun numvowels_str4_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
 
-(assert (= numvowels_ret (numvowels_str4 s0 s1 s2 s3 )))
+(assert (= numvowels_ret (numvowels_str4_cb s0 s1 s2 s3 )))
 (assert (bvugt (_ bv6 64) numvowels_ret))
 
-(assert 
+(assert
 
 (and  (and  (and  (and
       (=  false (=  (_ bv0 64)  numvowels_ret ) )
@@ -22,7 +22,7 @@
       (=  false (=  (_ bv2 64)  numvowels_ret ) ) )
       (=  false (=  (_ bv3 64)  numvowels_ret ) ) )
       (=  false (=  (_ bv4 64)  numvowels_ret ) ) ) )
-      
+
 (check-sat)
 (get-model)
 (exit)

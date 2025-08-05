@@ -1,6 +1,6 @@
 (set-logic QF_UFBV)
 
-(declare-fun ex ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+(declare-fun ex_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 
 (define-fun im ((b1 Bool) (b2 Bool) (b3 Bool)) Bool
     (or (and b1 b2) (and (not b1) b3)))
@@ -42,7 +42,6 @@
 (declare-const x (_ BitVec 32))
 (declare-const y (_ BitVec 32))
 
-(assert (im (bvsge x (_ bv5 32)) (= (ex x y) (plus_3 (five_times x) (three_times y) (_ bv17 32))) (= (ex x y) (plus_2 (three_times x) (_ bv1 32)))))
+(assert (im (bvsge x (_ bv5 32)) (= (ex_cb x y) (plus_3 (five_times x) (three_times y) (_ bv17 32))) (= (ex_cb x y) (plus_2 (three_times x) (_ bv1 32)))))
 
 (check-sat)
-

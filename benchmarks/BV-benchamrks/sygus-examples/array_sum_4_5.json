@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/sygus-examples/array_sum_4_5.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
+  "functions": {
+    "findSum4_cb": {
+      "desc": "Takes four numbers and returns the first pairwise sum greater than 5. Checks (first+second), then (second+third), then (third+fourth). If none exceed 5, returns 0.",
+      "tests": [[1, 2, 3, 4], [1, 2, 3, 4]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

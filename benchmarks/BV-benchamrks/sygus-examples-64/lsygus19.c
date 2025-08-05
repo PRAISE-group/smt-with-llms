@@ -23,7 +23,7 @@ uint64_t fg_array_search_4 (uint64_t y1, uint64_t y2, uint64_t y3, uint64_t y4, 
     uint64_t _let_1 = -k1;
     uint64_t _let_2 = y2 + _let_1;
     uint64_t _let_3 = (_let_2 >= 1);
-    uint64_t _let_4 = (y1 + _let_1); 
+    uint64_t _let_4 = (y1 + _let_1);
     uint64_t _let_5 = (_let_4 >= 0);
     uint64_t _let_6 = (_let_5 || (! _let_3));
     uint64_t _let_7 = (y4 + _let_1);
@@ -37,7 +37,7 @@ uint64_t fg_array_search_4 (uint64_t y1, uint64_t y2, uint64_t y3, uint64_t y4, 
     uint64_t _let_15 = (!(_let_4 >= 1));
     uint64_t _let_16 = (_let_7 >= 0);
 
-    
+
     if ((! (( y1 - y2) >= 0)) &&
         (! ((y2 - y3) >= 0)) &&
         (! ((y3 - y4) >= 0) &&
@@ -52,7 +52,7 @@ uint64_t fg_array_search_4 (uint64_t y1, uint64_t y2, uint64_t y3, uint64_t y4, 
                     if (_let_15 && _let_14 && _let_11 && _let_6) return 4; else return 3;
                 }
             }
-        }    
+        }
     }
     else return 0;
 }
@@ -63,7 +63,7 @@ uint64_t fg_array_sum_2_15(uint64_t y1, uint64_t y2) {
   else return 0;
 }
 
-uint64_t findSum4 (uint64_t y1, uint64_t y2, uint64_t y3, uint64_t y4) {
+uint64_t findSum4_cb (uint64_t y1, uint64_t y2, uint64_t y3, uint64_t y4) {
   if (y1 + y2 > 5) return y1 + y2;
   else {
     if (y2 + y3 > 5) return y2 + y3;
@@ -74,12 +74,12 @@ uint64_t findSum4 (uint64_t y1, uint64_t y2, uint64_t y3, uint64_t y4) {
   }
 }
 
-uint64_t f_jmbl_fg_VC22_a(uint64_t x1, uint64_t x2) {
+uint64_t f_jmbl_fg_VC22_a_cb(uint64_t x1, uint64_t x2) {
   if (x1 == x2) return 0;
   else return 1;
 }
 
-uint64_t InV1 (uint64_t v, uint64_t V_min, uint64_t V_mux_) {
+uint64_t InV1_cb (uint64_t v, uint64_t V_min, uint64_t V_mux_) {
   if (v >= V_min)
     if (v <= V_mux_)
       return 1;
@@ -88,7 +88,7 @@ uint64_t InV1 (uint64_t v, uint64_t V_min, uint64_t V_mux_) {
 }
 
 
-uint64_t InV2 (uint64_t v1, uint64_t v2, uint64_t V_min, uint64_t V_mux_) {
+uint64_t InV2_cb (uint64_t v1, uint64_t v2, uint64_t V_min, uint64_t V_mux_) {
   if (v1 >= V_min)
     if (v1 <= V_mux_)
       if (v2 >= V_min)
@@ -125,7 +125,7 @@ int64_t ex_fg_mpg_example1 (int64_t x, int64_t y) {
     return 5 *x + 3 * y + 17;
 }
 
-uint64_t LinExpr1_eq1ex(uint64_t x, uint64_t y, uint64_t z) {
+uint64_t LinExpr1_eq1ex_cb(uint64_t x, uint64_t y, uint64_t z) {
   if ((y + 1) == x) return z;
   else return x;
 }

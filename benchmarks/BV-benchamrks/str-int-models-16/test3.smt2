@@ -10,19 +10,19 @@
 (declare-const s5 (_ BitVec 16))
 
 
-(declare-fun numvowels_str6 ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+(declare-fun numvowels_str6_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
-(assert (= numvowels_ret (numvowels_str6 s0 s1 s2 s3 s4 s5)))
+(assert (= numvowels_ret (numvowels_str6_cb s0 s1 s2 s3 s4 s5)))
 (assert (bvugt (_ bv6 16) numvowels_ret))
 
-(assert 
+(assert
 
-(and  (and  (and 
+(and  (and  (and
       (=  false (=  (_ bv0 16)  numvowels_ret ) )
       (=  false (=  (_ bv1 16)  numvowels_ret ) ) )
       (=  false (=  (_ bv2 16)  numvowels_ret ) ) )
       (=  true  (=  (_ bv3 16)  numvowels_ret ) ) ) )
-      
+
 (check-sat)
 (get-model)
 (exit)

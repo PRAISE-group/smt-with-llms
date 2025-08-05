@@ -7,29 +7,27 @@
 (set-info :source |Original benchmark form Florian Schanda, modified by Sujit Muduli for fuzz-solver|)
 (set-info :category crafted)
 
-(declare-fun in_natural_bv32 ((_ BitVec 16)) (_ BitVec 16))
-(declare-fun get_hword ((_ BitVec 16)) (_ BitVec 16))
-(declare-fun get_lword ((_ BitVec 16)) (_ BitVec 16))
-(declare-fun bvshl_int ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
-(declare-fun bvshr_int ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
-(declare-fun bvlshr_int ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
-(declare-fun bvuaddo_64 ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+(declare-fun in_natural_bv32_cb ((_ BitVec 16)) (_ BitVec 16))
+(declare-fun get_hword_cb ((_ BitVec 16)) (_ BitVec 16))
+(declare-fun get_lword_cb ((_ BitVec 16)) (_ BitVec 16))
+(declare-fun bvshl_int_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+(declare-fun bvlshr_int_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
 (declare-const v_initial (_ BitVec 16))
-(assert (bvule v_initial (bvshl_int (_ bv1 16) (_ bv15 16))))
+(assert (bvule v_initial (bvshl_int_cb (_ bv1 16) (_ bv15 16))))
 (declare-const m_initial (_ BitVec 16))
-(assert (= (_ bv1 16) (in_natural_bv32 m_initial)))
+(assert (= (_ bv1 16) (in_natural_bv32_cb m_initial)))
 (declare-const d_initial (_ BitVec 16))
-(assert (= (_ bv1 16) (in_natural_bv32 d_initial)))
+(assert (= (_ bv1 16) (in_natural_bv32_cb d_initial)))
 (assert (not (= d_initial (_ bv0 16))))
 
 ;; V_Hi : Uint_64 := V / 2 ** 32;
 (declare-const v_hi__0 (_ BitVec 16))
-(assert(= v_hi__0  (get_hword v_initial)))
+(assert(= v_hi__0  (get_hword_cb v_initial)))
 
 ;; V_Lo : Uint_64 := V rem 2 ** 32;
 (define-const v_lo__0 (_ BitVec 16)
-  (get_lword v_initial))
+  (get_lword_cb v_initial))
 
 ;; V_Hi := V_Hi * Uint_64 (M);
 ;; (can't overflow; 32x32 -> 64)
@@ -44,12 +42,12 @@
 ;; V_Hi := V_Hi bvadd V_Lo / 2 ** 32;
 
 (declare-const v_hi__2 (_ BitVec 16))
-;; (assert (= v_hi__2  (bvadd v_hi__1 (get_hword v_lo__1))))
+;; (assert (= v_hi__2  (bvadd v_hi__1 (get_hword_cb v_lo__1))))
 
 ;; V_Lo := V_Lo rem 2 ** 32;
 ;; (can't overflow)
 (declare-const v_lo__2 (_ BitVec 16))
-(assert (= v_lo__2  (get_lword v_lo__1)))
+(assert (= v_lo__2  (get_lword_cb v_lo__1)))
 
 ;; Result_Hi := V_Hi / Uint_64 (D);
 ;; (can't overflow)
@@ -67,11 +65,11 @@
 ;; Result_Hi := Result_Hi * 2 ** 32;
 
 (declare-const result_hi__1 (_ BitVec 16))
-(assert (= result_hi__1  (bvshl_int result_hi__0 (_ bv8 16))))
+(assert (= result_hi__1  (bvshl_int_cb result_hi__0 (_ bv8 16))))
 
 (declare-const result_lo__0 (_ BitVec 16))
-(assert (= result_lo__0  (bvsub (bvadd (bvadd v_lo__2 (bvshl_int remainder__0 (_ bv8 16)))
-                 (bvlshr_int d_initial (_ bv1 16))) d_initial)))
+(assert (= result_lo__0  (bvsub (bvadd (bvadd v_lo__2 (bvshl_int_cb remainder__0 (_ bv8 16)))
+                 (bvlshr_int_cb d_initial (_ bv1 16))) d_initial)))
 
 (declare-const exception_1 Bool)
 (declare-const spec_result__0 (_ BitVec 16))

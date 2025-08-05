@@ -8,7 +8,7 @@
 (declare-const r2 (_ BitVec 16))
 (declare-const r3 (_ BitVec 16))
 
-(declare-fun cbf_bvrem ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+(declare-fun cbf_bvrem_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
 (define-const m (_ BitVec 16) (_ bv200 16))
 
@@ -22,10 +22,10 @@
 
 ;; (x + y) mod 250  <without casting>
 (assert (= r3 (bvadd x y)))
-(assert (= r1  (cbf_bvrem r3 m) ) )
+(assert (= r1  (cbf_bvrem_cb r3 m) ) )
 
 ;; (x + y) mod 250  <with casting>
-(assert (= r2 (cbf_bvrem (bvsub x y) m)))
+(assert (= r2 (cbf_bvrem_cb (bvsub x y) m)))
 
 (assert (not (= r1 r2)))
 

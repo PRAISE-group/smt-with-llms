@@ -14,7 +14,7 @@
 (declare-const t3 (_ BitVec 32))
 
 
-(declare-fun strcmp_int ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)
+(declare-fun strcmp_int_cb ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)
 	     		   (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 
 
@@ -25,12 +25,12 @@
 (assert  (= t0  (_ bv1 32)))
 
 
-(assert (= retval (strcmp_int s0 s1 s2 s3 t0 t1 t2 t3)))
+(assert (= retval (strcmp_int_cb s0 s1 s2 s3 t0 t1 t2 t3)))
 (assert (= retval (_ bv3 32)))
 
 (assert (bvugt (_ bv5 32) retval))
 
-      
+
 (check-sat)
 (get-model)
 (exit)

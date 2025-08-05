@@ -1,7 +1,7 @@
 
 #include "cbf_tolower.h"
 
-uint8_t cbf_tolower(uint8_t c)
+uint8_t cbf_tolower_cb(uint8_t c)
 {
   if (c >= 'A' && c <= 'Z')
     c += 32;

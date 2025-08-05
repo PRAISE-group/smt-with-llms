@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/sygus-examples/LinExpr1_eq1ex.derived.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
+  "functions": {
+    "LinExpr1_eq1ex_cb": {
+      "desc": "If the second argument plus 1 equals the first argument, returns the third argument. Otherwise, returns the first.",
+      "tests": [[1, 2, 3], [5, 4, 10]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

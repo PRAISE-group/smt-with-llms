@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/tolower-64/test000001.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/tolower-64/cbf_tolower.o",
+  "functions": {
+    "cbf_tolower_cb": {
+      "desc": "If the input character is in the range 'A' to 'Z', add 32 to convert to lowercase. Else, return as is.",
+      "tests": [[13], [67]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}
