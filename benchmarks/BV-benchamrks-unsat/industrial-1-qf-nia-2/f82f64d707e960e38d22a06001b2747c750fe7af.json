@@ -1,0 +1,24 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/industrial-1-qf-nia-2/f82f64d707e960e38d22a06001b2747c750fe7af.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/industrial-1-qf-nia-2/libindustr.o",
+  "functions": {
+    "spoon_4_cb": {
+      "desc": "returns 1 (as Bool) if input (as BitVec of 8 size) is a prime number else returns 0.",
+      "tests": [[13], [67]],
+      "userLemmas": [ ""
+      ]
+    },
+    "spoon_6_cb": {
+      "desc": "returns 1 (as Bool) if input (as BitVec of 8 size) is a prime number else returns 0.",
+      "tests": [[13], [67]],
+      "userLemmas": [ ""
+      ]
+    },
+    "spoon_9_cb": {
+      "desc": "returns 1 (as Bool) if input (as BitVec of 8 size) is a prime number else returns 0.",
+      "tests": [[13], [67]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

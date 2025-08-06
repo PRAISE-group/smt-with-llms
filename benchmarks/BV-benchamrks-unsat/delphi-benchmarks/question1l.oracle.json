@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/delphi-benchmarks/question1l.oracle.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/delphi-benchmarks/core.o",
+  "functions": {
+    "isTriangular_cb": {
+      "desc": "returns 1 (as Bool) if input (as BitVec of 8 size) is a sum of some <n> natural numbers else returns 0.",
+      "tests": [[13], [3]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

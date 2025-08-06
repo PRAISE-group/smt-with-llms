@@ -111,8 +111,9 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
         for value in input_tuple:
             input_data += str(value)+ " "
         stdout, stderr = process.communicate(input=input_data)
-        print(stderr)
-        print("input:", input_data)
+        if args.verbose:
+            print(stderr)
+            print("input:", input_data)
         out = {}
         out[cbFunctions] = stdout
         # print(stdout, type(stdout))

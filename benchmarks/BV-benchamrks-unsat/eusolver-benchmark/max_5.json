@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/max_5.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
+  "functions": {
+    "max5_cb": {
+      "desc": "Returns the greater of the four input unsigned integers.",
+      "tests": [[13, 14, 23, 11, 3], [18, 67, 34, 234, 5]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

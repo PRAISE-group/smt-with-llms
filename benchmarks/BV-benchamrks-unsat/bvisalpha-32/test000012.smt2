@@ -1,0 +1,28 @@
+(set-logic QF_UFBV)
+(set-option :produce-models true)
+
+
+(declare-fun buffer_0_3 () (_ BitVec 32) )
+(declare-fun buffer_4_7 () (_ BitVec 32) )
+(declare-fun buffer_8_11 () (_ BitVec 32) )
+
+(declare-fun isalpha_ret () (_ BitVec 32) )
+(declare-fun isalpha_ret_1 () (_ BitVec 32) )
+
+(declare-fun isalpha_cb ((_ BitVec 32)) (_ BitVec 32))
+
+(assert (= isalpha_ret (isalpha_cb buffer_0_3)))
+(assert (= isalpha_ret_1 (isalpha_cb buffer_4_7)))
+
+(assert (and  (and  (and  (and
+(=  false (=  (_ bv0 32) buffer_0_3 ) )
+(= (_ bv0 32) isalpha_ret ) )
+(= false (=  (_ bv0 32) buffer_4_7 ) ) )
+(= (_ bv0 32) isalpha_ret_1 ) )
+(= false (=  (_ bv0 32) buffer_8_11 ) ) )
+
+)
+
+(check-sat)
+(get-model)
+(exit)

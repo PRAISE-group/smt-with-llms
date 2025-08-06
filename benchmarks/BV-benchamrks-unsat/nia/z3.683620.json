@@ -1,0 +1,18 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/nia/z3.683620.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/nia/lnia.o",
+  "functions": {
+    "_lt_cb": {
+      "desc": "Returns 1 if the first input is less than the second input (unsigned comparison of BitVec<32>); otherwise, returns 0.",
+      "tests": [[10, 3], [3, 4]],
+      "userLemmas": [ ""
+      ]
+    },
+    "_mul_cb": {
+      "desc": "Returns the multiplication of the two inputs (both BitVec<32>).",
+      "tests": [[3, 4], [3, 5]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

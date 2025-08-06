@@ -1,0 +1,36 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/realtime-xi/realtime_xi_muldiv_v1_32.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/realtime-xi/realtime-xi-muldiv.o",
+  "functions": {
+    "in_natural_bv32_cb": {
+      "desc": "Returns 1 if the input is within 0 to 127 (inclusive); otherwise returns 0.",
+      "tests": [[13], [67]],
+      "userLemmas": [ ""
+      ]
+    },
+    "get_hword_cb": {
+      "desc": "Returns the result of shifting the input left by 8 bits (i.e., multiplying by 256)..",
+      "tests": [[13], [67]],
+      "userLemmas": [ ""
+      ]
+    },
+    "get_lword_cb": {
+      "desc": "Returns the lower 8 bits of the input.",
+      "tests": [[13], [67]],
+      "userLemmas": [ ""
+      ]
+    },
+    "bvshl_int_cb": {
+      "desc": "Returns the result of shifting the first input left by the number of bits specified by the second input.",
+      "tests": [[2 2], [1 1]],
+      "userLemmas": [ ""
+      ]
+    },
+    "bvlshr_int_cb": {
+      "desc": "Returns the result of shifting the first input right by the number of bits specified by the second input.",
+      "tests": [[100 5], [0 0]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

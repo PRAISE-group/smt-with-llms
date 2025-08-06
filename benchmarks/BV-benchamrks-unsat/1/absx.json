@@ -1,0 +1,13 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/1/absx.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/1/absx.o",
+  "functions": {
+    "absx_cb": {
+      "desc": "takes an integer and returns its absolute value",
+      "tests": [[1], [-7]],
+      "userLemmas": [ ""
+      ],
+      "extern": "int absx_cb(int val);"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/sygus-examples/jmbl_fg_VC22_a.modified.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
+  "functions": {
+    "f_jmbl_fg_VC22_a_cb": {
+      "desc": "Compares two integers. Returns 0 if equal, 1 otherwise.",
+      "tests": [[1, 4], [1, 1]],
+      "userLemmas": [ ""
+      ]
+    },
+    "InV1_cb": {
+      "desc": "Checks if a value is within a closed interval [V_min, V_max]. Returns 1 if true, 0 otherwise",
+      "tests": [[1, 4, 3], [1, 12, 4]],
+      "userLemmas": [ ""
+      ]
+    },
+    "InV2_cb": {
+      "desc": "Checks if two values are within a closed interval [V_min, V_max]. Returns 1 if both are in the range, 0 otherwise.",
+      "tests": [[1, 4, 3, 5], [1, 12, 4, 2]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/jpf-PowExample/test000005.json",
+  "object_file": "./benchmarks/BV-benchamrks/jpf-PowExample/ipow.o",
+  "functions": {
+    "ipow_cb": {
+      "desc": "Computes base^exp with overflow protection. For large exp where overflow is possible (indicated by highest_bit_set[exp] == 255), it returns:\n- 1 if base is 1\n- 1 or -1 depending on parity of exp if base is -1\n- 0 otherwise",
+      "tests": [[13, 3], [67, 4]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}
