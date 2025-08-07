@@ -99,7 +99,7 @@ uint32_t InV2_cb (uint32_t v1, uint32_t v2, uint32_t V_min, uint32_t V_mux_) {
 }
 
 
-uint32_t UnsafeSame(uint32_t x1, uint32_t x2, uint32_t v1, uint32_t v2) {
+uint32_t UnsafeSame_cb(uint32_t x1, uint32_t x2, uint32_t v1, uint32_t v2) {
   uint32_t t0 = x1 + v1;
   uint32_t t1 = x2 + v2;
 

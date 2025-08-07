@@ -55,13 +55,13 @@ Publications: "Towards Bit-Width-Independent Proofs in SMT Solvers " by A. Nieme
 (assert (or_ax k))
 (assert (xor_ax k))
 
-(declare-fun %b() (_ BitVec 32))
-(assert (= (_ bv1 32) (in_range_cb  k %b)))
+(declare-fun percentb() (_ BitVec 32))
+(assert (= (_ bv1 32) (in_range_cb  k percentb)))
 
-(declare-fun %a() (_ BitVec 32))
-(assert (= (_ bv1 32) (in_range_cb  k %a)))
+(declare-fun percenta() (_ BitVec 32))
+(assert (= (_ bv1 32) (in_range_cb  k percenta)))
 
-(assert (not (= (intadd k (intand_cb  k %a %b) (intxor_cb  k %a %b)) (intor_cb  k %a %b))))
+(assert (not (= (intadd k (intand_cb  k percenta percentb) (intxor_cb  k percenta percentb)) (intor_cb  k percenta percentb))))
 (assert true)
 (check-sat)
 (get-model)

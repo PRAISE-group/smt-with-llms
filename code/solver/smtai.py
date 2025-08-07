@@ -125,7 +125,10 @@ class smtAI(object):
         return self.s.pop()
 
     def to_smtlib_bv_bin(self, value, width):
-        return "#b" + format(value, f'0{width}b')
+        # return "#b" + format(value, f'0{width}b')
+        mask = (1 << width) - 1
+        twos_complement = value & mask
+        return "#b" + format(twos_complement, f'0{width}b')
 
     def z3_to_c(self, expr):
         # print("expr",expr)
@@ -150,8 +153,16 @@ class smtAI(object):
             return f'({self.z3_to_c(expr.arg(0))} > {self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvugt':
             return f'({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvuge':
+            return f'({self.z3_to_c(expr.arg(0))}) >= ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvult':
+            return f'({self.z3_to_c(expr.arg(0))}) < ({self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvule':
             return f'({self.z3_to_c(expr.arg(0))}) <= ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvmul':
+            return f'({self.z3_to_c(expr.arg(0))}) * ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvurem':
+            return f'({self.z3_to_c(expr.arg(0))}) % ({self.z3_to_c(expr.arg(1))})'
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
             return f'(({self.z3_to_c(cond)}) ? ({self.z3_to_c(then_expr)}) : ({self.z3_to_c(else_expr)}))'
@@ -191,8 +202,16 @@ class smtAI(object):
             return f'({self.getFunctions(expr.arg(0), funs)} > {self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().name() == 'bvugt':
             return f'({self.getFunctions(expr.arg(0), funs)}) > ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvuge':
+            return f'({self.getFunctions(expr.arg(0), funs)}) >= ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvult':
+            return f'({self.getFunctions(expr.arg(0), funs)}) < ({self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().name() == 'bvule':
             return f'({self.getFunctions(expr.arg(0), funs)}) <= ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvmul':
+            return f'({self.getFunctions(expr.arg(0), funs)}) * ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvurem':
+            return f'({self.getFunctions(expr.arg(0), funs)}) % ({self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
             return f'(({self.getFunctions(cond, funs)}) ? ({self.getFunctions(then_expr, funs)}) : ({self.getFunctions(else_expr, funs)}))'
@@ -480,12 +499,17 @@ class smtAI(object):
                                     if is_bv_sort(domain):
                                         tmpassert += str(self.to_smtlib_bv_bin(inp, domain.size())) + " "
                                         # print(BitVecVal(inp, domain.size()))
+                                    elif domain == IntSort():
+                                        tmpassert += str(inp) + " "
                                     else:
                                         print("Unknown type, line 477 smt.py")
                                         exit()
                                     index += 1
+                                # print(tmpassert)
                                 if is_bv_sort(decl.range()):
                                     tmpassert += ") " + str(self.to_smtlib_bv_bin(val[k][-1], decl.range().size())) + "))"
+                                else:
+                                    tmpassert += ") " + str(val[k][-1]) + "))"
                     # print(tmpassert)
                     if tmpassert not in self.inputoutputassertions:
                         self.inputoutputassertions.append(tmpassert)

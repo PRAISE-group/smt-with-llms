@@ -4,9 +4,9 @@
 (set-option :simplification none)
 
 
-(declare-fun _mul ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+(declare-fun _mul_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 
-(define-fun ispow2 ((x (_ BitVec 32))) Bool 
+(define-fun ispow2 ((x (_ BitVec 32))) Bool
   (= (_ bv0 32) (bvand x (bvsub x (_ bv1 32)))))
 
 
@@ -22,7 +22,7 @@
 (assert (bvult (_ bv255 32) z))
 (assert (bvult z (_ bv65536 32)))
 (assert (bvugt x y))
-(assert (= z (_mul x y)))
+(assert (= z (_mul_cb x y)))
 
 (assert (and (ispow2 p) (ispow2 q) (ispow2 r)))
 (assert (and (bvugt p (_ bv1 32)) (bvugt q (_ bv1 32)) (bvugt r (_ bv1 32)) ) )

@@ -26,7 +26,7 @@
       "userLemmas": [ ""
       ]
     },
-    "intxor3_cb": {
+    "intxor_cb": {
       "desc": "Returns XOR of second and third inputs (BitVec<64>). The first input is ignored.",
       "tests": [[0, 6, 3], [0, 6, 4]],
       "userLemmas": [ ""

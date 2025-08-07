@@ -57,16 +57,16 @@ Publications: "Towards Bit-Width-Independent Proofs in SMT Solvers " by A. Nieme
 (declare-fun C1() (_ BitVec 32))
 (assert (= (_ bv1 32) (in_range_cb  k C1)))
 
-(declare-fun %Z() (_ BitVec 32))
-(assert (= (_ bv1 32) (in_range_cb  k %Z)))
+(declare-fun percentZ() (_ BitVec 32))
+(assert (= (_ bv1 32) (in_range_cb  k percentZ)))
 
-(declare-fun %RHS() (_ BitVec 32))
-(assert (= (_ bv1 32) (in_range_cb  k %RHS)))
+(declare-fun percentRHS() (_ BitVec 32))
+(assert (= (_ bv1 32) (in_range_cb  k percentRHS)))
 
 (declare-fun C2() (_ BitVec 32))
 (assert (= (_ bv1 32) (in_range_cb  k C2)))
 
-(assert (and (= C2 (intnot k C1)) (not (= (intadd k (intadd k (intxor_cb  k (intor_cb  k %Z C2) C1) (_ bv1 32)) %RHS) (intsub k %RHS (intand_cb  k %Z C1))))))
+(assert (and (= C2 (intnot k C1)) (not (= (intadd k (intadd k (intxor_cb  k (intor_cb  k percentZ C2) C1) (_ bv1 32)) percentRHS) (intsub k percentRHS (intand_cb  k percentZ C1))))))
 (assert true)
 (check-sat)
 (exit)

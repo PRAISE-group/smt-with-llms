@@ -1,6 +1,6 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
-(set-option :simplification none)
+;(set-option :simplification none)
 
 (declare-fun isxdigit__cb ((_ BitVec 32)) (_ BitVec 32))
 (declare-fun ndx () (_ BitVec 32) )

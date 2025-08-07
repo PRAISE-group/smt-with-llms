@@ -99,7 +99,7 @@ uint64_t InV2_cb (uint64_t v1, uint64_t v2, uint64_t V_min, uint64_t V_mux_) {
 }
 
 
-uint64_t UnsafeSame(uint64_t x1, uint64_t x2, uint64_t v1, uint64_t v2) {
+uint64_t UnsafeSame_cb (uint64_t x1, uint64_t x2, uint64_t v1, uint64_t v2) {
   uint64_t t0 = x1 + v1;
   uint64_t t1 = x2 + v2;
 

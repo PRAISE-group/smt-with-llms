@@ -1,6 +1,6 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
-(set-option :simplification none)
+;(set-option :simplification none)
 
 (declare-fun ipow_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 (declare-fun ipow_ret () (_ BitVec 32))

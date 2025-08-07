@@ -22,7 +22,7 @@ uint32_t intmodtotal_cb(uint32_t k, uint32_t a, uint32_t b) {
 }
 
 uint32_t in_range_cb(uint32_t k, uint32_t x) {
-  if (x >= 0 && x <= pow2(k))
+  if (x >= 0 && x <= pow2_cb(k))
     return 1;
 
   return 0;

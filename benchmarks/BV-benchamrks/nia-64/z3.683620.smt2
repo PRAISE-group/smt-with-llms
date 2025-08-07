@@ -7,13 +7,13 @@
 (declare-fun f2 () (_ BitVec 64))
 (declare-fun f3 () (_ BitVec 64))
 
-(declare-fun _lt ((_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
-(declare-fun _mul ((_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
+(declare-fun _lt_cb  ((_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
+(declare-fun _mul_cb  ((_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
 
 (assert (= f1 f2))
-(assert (= (_ bv0 64) (_lt (bvadd (_mul (_ bv4 64) f3) (_ bv1 64)) (_ bv2 64))))
-(assert (let ((?v_0 (bvadd (_mul (_ bv4 64) f3) (_ bv1 64)))) (let ((?v_1 (_mul ?v_0 (bvsub ?v_0 (_ bv1 64))))) (= (_ bv1 64) (_lt ?v_1 (bvadd (bvsub ?v_1 ?v_0) (_ bv2 64)))))))
-(assert (let ((?v_0 (bvadd (_mul (_ bv4 64) f3) (_ bv1 64)))) (let ((?v_1 (_mul ?v_0 (bvsub ?v_0 (_ bv1 64))))) (= (_ bv1 64) (_lt ?v_1 (bvadd (bvsub ?v_1 ?v_0) (_ bv2 64)))))))
+(assert (= (_ bv0 64) (_lt_cb  (bvadd (_mul_cb  (_ bv4 64) f3) (_ bv1 64)) (_ bv2 64))))
+(assert (let ((?v_0 (bvadd (_mul_cb  (_ bv4 64) f3) (_ bv1 64)))) (let ((?v_1 (_mul_cb  ?v_0 (bvsub ?v_0 (_ bv1 64))))) (= (_ bv1 64) (_lt_cb  ?v_1 (bvadd (bvsub ?v_1 ?v_0) (_ bv2 64)))))))
+(assert (let ((?v_0 (bvadd (_mul_cb  (_ bv4 64) f3) (_ bv1 64)))) (let ((?v_1 (_mul_cb  ?v_0 (bvsub ?v_0 (_ bv1 64))))) (= (_ bv1 64) (_lt_cb  ?v_1 (bvadd (bvsub ?v_1 ?v_0) (_ bv2 64)))))))
 
 (check-sat)
 (exit)

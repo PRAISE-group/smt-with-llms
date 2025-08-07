@@ -7,15 +7,18 @@ if [ $# -ne 1 ]; then
 fi
 
 input_file="$1"
+i=1  # initialize counter
 
 # Loop through each line in the input file
 while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   # Skip empty lines
   [[ -z "$json_path" ]] && continue
 
-  # Construct and run the command
-  echo "\n\n"
-  echo "Running: uv run main.py -i \"$json_path\" -t 1 -v --model llama3:latest"
-  timeout 30s uv run main.py -i "$json_path" -t 1 --model llama3:latest
-  echo "Finished"
+  filename=$(basename "$json_path")
+  log_file="logFiles/${i}_${filename}"  # prepend counter to filename
+
+  echo "Running: uv run main.py -i \"$json_path\" -t 1 -v --model llama3:latest" > "$log_file" 2>&1
+  timeout 5m uv run main.py -i "$json_path" -t 1 --model llama3:latest >> "$log_file" 2>&1
+
+  ((i++))  # increment counter
 done < "$input_file"
