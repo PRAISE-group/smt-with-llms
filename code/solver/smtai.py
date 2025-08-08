@@ -125,7 +125,10 @@ class smtAI(object):
         return self.s.pop()
 
     def to_smtlib_bv_bin(self, value, width):
-        return "#b" + format(value, f'0{width}b')
+        # return "#b" + format(value, f'0{width}b')
+        mask = (1 << width) - 1
+        twos_complement = value & mask
+        return "#b" + format(twos_complement, f'0{width}b')
 
     def z3_to_c(self, expr):
         # print("expr",expr)
@@ -150,8 +153,16 @@ class smtAI(object):
             return f'({self.z3_to_c(expr.arg(0))} > {self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvugt':
             return f'({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvuge':
+            return f'({self.z3_to_c(expr.arg(0))}) >= ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvult':
+            return f'({self.z3_to_c(expr.arg(0))}) < ({self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvule':
             return f'({self.z3_to_c(expr.arg(0))}) <= ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvmul':
+            return f'({self.z3_to_c(expr.arg(0))}) * ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvurem':
+            return f'({self.z3_to_c(expr.arg(0))}) % ({self.z3_to_c(expr.arg(1))})'
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
             return f'(({self.z3_to_c(cond)}) ? ({self.z3_to_c(then_expr)}) : ({self.z3_to_c(else_expr)}))'
@@ -191,8 +202,16 @@ class smtAI(object):
             return f'({self.getFunctions(expr.arg(0), funs)} > {self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().name() == 'bvugt':
             return f'({self.getFunctions(expr.arg(0), funs)}) > ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvuge':
+            return f'({self.getFunctions(expr.arg(0), funs)}) >= ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvult':
+            return f'({self.getFunctions(expr.arg(0), funs)}) < ({self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().name() == 'bvule':
             return f'({self.getFunctions(expr.arg(0), funs)}) <= ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvmul':
+            return f'({self.getFunctions(expr.arg(0), funs)}) * ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvurem':
+            return f'({self.getFunctions(expr.arg(0), funs)}) % ({self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
             return f'(({self.getFunctions(cond, funs)}) ? ({self.getFunctions(then_expr, funs)}) : ({self.getFunctions(else_expr, funs)}))'
@@ -228,9 +247,11 @@ class smtAI(object):
             out = getCBInputOutput(self,args, f, bench["object_file"]).split(" ")
             outlist = []
             # print(temp[f], len(temp[f].split(" ")))
-            print("Printing output of getCBInputOutput()")
+            if args.verbose:
+                print("Printing output of getCBInputOutput()")
             for i in range(len(out)):
-                print(i, out[i])
+                if args.verbose:
+                    print(i, out[i])
                 outlist.append(int(out[i]))
             # exit()
             temp[funName] = outlist
@@ -370,14 +391,20 @@ class smtAI(object):
             #     print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
-        input("Enter an input to continue")
+        # input("Enter an input to continue")
 
         self.iteration +=1
         console.info(f"starting iteration {self.iteration}")
         self.push()
         for v in self.inputoutputassertions:
-            print(v)
-            assertion = self.readSMTstring(v, self.cbFunctions)
+            if args.verbose:
+                print(v)
+            try:
+                assertion = self.readSMTstring(v, self.cbFunctions)
+            except Exception as e:
+                print(e)
+                print("assertion failed:", v)
+                exit()
             self.add(assertion)
         # lemmaStrings = genLemma(args)
         # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
@@ -388,9 +415,11 @@ class smtAI(object):
             print("lemmas from sumit:", lemmaStrings)
         # exit()
         console.info("Pasrsing lemmas using Z3 api")
-        console.info("functions:", self.cbFunctions)
+        if args.verbose:
+            console.info("functions:", self.cbFunctions)
         for v in self.vars:
-            console.info(v,v.sort())
+            if args.verbose:
+                console.info(v,v.sort())
         for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
             # if "assert" not in lemmaString:
             #     print("no assert in lemma")
@@ -399,12 +428,14 @@ class smtAI(object):
             try:
                 lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
             except Exception as e:
-                print("incorrect lemma syntax error", e)
+                if args.verbose:
+                    print("incorrect lemma syntax error", e)
                 lemmasDict.removeLemma(lemmaKey)
                 # exit()
                 continue
             if len(lemmaFormula)==0:
-                print("lemmaFormula is empty")
+                if args.verbose:
+                    print("lemmaFormula is empty")
                 continue
             if args.verbose:
                 print("lemmaString", lemmaString, self.cbFunctions)
@@ -468,12 +499,17 @@ class smtAI(object):
                                     if is_bv_sort(domain):
                                         tmpassert += str(self.to_smtlib_bv_bin(inp, domain.size())) + " "
                                         # print(BitVecVal(inp, domain.size()))
+                                    elif domain == IntSort():
+                                        tmpassert += str(inp) + " "
                                     else:
-                                        print("Unknown type, line 468 smt.py")
+                                        print("Unknown type, line 477 smt.py")
                                         exit()
                                     index += 1
+                                # print(tmpassert)
                                 if is_bv_sort(decl.range()):
                                     tmpassert += ") " + str(self.to_smtlib_bv_bin(val[k][-1], decl.range().size())) + "))"
+                                else:
+                                    tmpassert += ") " + str(val[k][-1]) + "))"
                     # print(tmpassert)
                     if tmpassert not in self.inputoutputassertions:
                         self.inputoutputassertions.append(tmpassert)
@@ -485,13 +521,16 @@ class smtAI(object):
             console.info("Getting unsatcore")
             unsatCore = self.s.unsat_core()
             self.unsatCores[self.iteration] = unsatCore
-            print("UnsatCore:", unsatCore)  # TODO: Pankaj
+            if args.verbose:
+                print("UnsatCore:", unsatCore)  # TODO: Pankaj
             varmap = set()
             for key in self.vars:
                 varmap.add(str(key))
-            print(varmap)
+            if args.verbose:
+                print(varmap)
             for core in unsatCore:
-                print(core, self.lemmasData[core])
+                if args.verbose:
+                    print(core, self.lemmasData[core])
                 self.collectBoundVars(self.lemmasData[core], varmap)
             # print(self.vars)
             # print(self.lemmasUsed)
@@ -501,13 +540,15 @@ class smtAI(object):
                 return AlgoVerdict.UNSAT
             console.info("calling checkUnsat")
             res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
-            print("result: ",res)
-            for core in unsatCore:
-                print("lemma status after pankaj call",lemmasDict[str(core)])
+            if args.verbose:
+                print("result: ",res)
+                for core in unsatCore:
+                    print("lemma status after pankaj call",lemmasDict[str(core)])
             self.pop()
             return res
         else:
-            print("UNKNOWN")
+            if args.verbose:
+                print("UNKNOWN")
             return AlgoVerdict.UNKNOWN
 
 

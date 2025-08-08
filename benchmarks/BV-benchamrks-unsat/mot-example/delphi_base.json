@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/mot-example/delphi_base.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/mot-example/libt.o",
+  "functions": {
+    "_mul_cb": {
+      "desc": "returns multiplication of two inputs as BitVec of 32 size",
+      "tests": [[13, 12], [67, 5]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/nia/qf_AddSub_1295_values_0.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/nia/lnia.o",
+  "functions": {
+    "_mod_cb": {
+      "desc": "Returns the remainder when the first input is divided by the second input (both BitVec<32>); if the second input is zero, returns zero.",
+      "tests": [[10, 3], [10, 4]],
+      "userLemmas": [ ""
+      ]
+    },
+    "pow2_cb": {
+      "desc": "Returns 2 raised to the power of the input (BitVec<32>), computed as 1 left-shifted by the input amount.",
+      "tests": [[13], [3]],
+      "userLemmas": [ ""
+      ]
+    },
+    "intand_cb": {
+      "desc": "Returns conjunction of second and third inputs (BitVec<32>). The first input is ignored.",
+      "tests": [[0, 6, 3], [0, 6, 4]],
+      "userLemmas": [ ""
+      ]
+    },
+    "intor_cb": {
+      "desc": "Returns disjunction of second and third inputs (BitVec<32>). The first input is ignored.",
+      "tests": [[0, 6, 3], [0, 6, 4]],
+      "userLemmas": [ ""
+      ]
+    },
+    "intxor3_cb": {
+      "desc": "Returns XOR of second and third inputs (BitVec<32>). The first input is ignored.",
+      "tests": [[0, 6, 3], [0, 6, 4]],
+      "userLemmas": [ ""
+      ]
+    },
+    "in_range_cb": {
+      "desc": "Returns 1 if the second input lies between 0 and 2 raised to the power of the first input (inclusive); otherwise, returns 0. All inputs are BitVec<32>",
+      "tests": [[13], [3]],
+      "userLemmas": [ ""
+      ]
+    },
+    "ite_zero_cb": {
+      "desc": "Returns the second input if the first input (BitVec<32>) is equal to zero; otherwise, returns the third input.",
+      "tests": [[3, 8], [3, 7]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}

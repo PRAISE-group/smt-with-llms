@@ -1,0 +1,12 @@
+{
+  "smt_file": "./benchmarks/BV-benchamrks/sygus-examples/fg_array_search_4.smt2",
+  "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
+  "functions": {
+    "fg_array_search_4_cb": {
+      "desc": "Takes four array values and a key, and performs a series of bounds and ordering checks to return a value from {0, 1, 2, 3, 4, -1}. Represents a pattern-matching search operation with priority based on the relationship between the values and the key.",
+      "tests": [[1, 2, 3, 4, 2], [1, 2, 3, 4, 2]],
+      "userLemmas": [ ""
+      ]
+    }
+  }
+}
