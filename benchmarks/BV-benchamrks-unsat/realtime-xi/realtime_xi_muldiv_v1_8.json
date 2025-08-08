@@ -22,13 +22,13 @@
     },
     "bvshl_int_cb": {
       "desc": "Returns the result of shifting the first input left by the number of bits specified by the second input.",
-      "tests": [[2 2], [1 1]],
+      "tests": [[2, 2], [1, 1]],
       "userLemmas": [ ""
       ]
     },
     "bvlshr_int_cb": {
       "desc": "Returns the result of shifting the first input right by the number of bits specified by the second input.",
-      "tests": [[100 5], [0 0]],
+      "tests": [[100, 5], [0, 0]],
       "userLemmas": [ ""
       ]
     }

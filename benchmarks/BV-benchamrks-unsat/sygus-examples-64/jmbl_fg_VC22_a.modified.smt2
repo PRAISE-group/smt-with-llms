@@ -19,11 +19,11 @@
 (define-fun InVorZero ((v (_ BitVec 32))) Bool
     (or (= (_ bv1 32) (InV1_cb v V_min V_mux_)) (Zero v)))
 
-(declare-fun UnsafeSame ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+(declare-fun UnsafeSame_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 ;;    (or (and (bvugt x1 x2) (bvugt (bvadd x2 v2) (bvadd x1 v1))) (and (bvugt x2 x1) (bvugt (bvadd x1 v1) (bvadd x2 v2)))))
 
 (define-fun Unsafe ((x1 (_ BitVec 32)) (x2 (_ BitVec 32)) (v1 (_ BitVec 32)) (v2 (_ BitVec 32))) Bool
-    (= (_ bv1 32) (UnsafeSame x1 x2 v1 v2)))
+    (= (_ bv1 32) (UnsafeSame_cb  x1 x2 v1 v2)))
 
 (define-fun Mad_Same ((x1 (_ BitVec 32)) (x2 (_ BitVec 32))) Bool
     (= x1 x2))

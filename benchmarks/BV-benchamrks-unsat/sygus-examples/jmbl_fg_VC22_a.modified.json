@@ -19,6 +19,12 @@
       "tests": [[1, 4, 3, 5], [1, 12, 4, 2]],
       "userLemmas": [ ""
       ]
+    },
+    "UnsafeSame_cb": {
+      "desc": "The function returns 1 if the sum of the second and fourth arguments is greater than or equal to the sum of the first and third arguments; otherwise, it returns 0.",
+      "tests": [[1, 4, 3, 5], [1, 12, 4, 2]],
+      "userLemmas": [ ""
+      ]
     }
   }
 }
