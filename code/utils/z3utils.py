@@ -5,6 +5,47 @@
 import z3
 import re
 
+def z3_to_c(expr):
+    if expr.decl().kind() == z3.Z3_OP_IMPLIES:
+            a, b = expr.children()
+            return f"(!({z3_to_c(a)}) || ({z3_to_c(b)}))"
+    elif z3.is_and(expr):
+        return ' && '.join(f'({z3_to_c(c)})' for c in expr.children())
+    elif z3.is_or(expr):
+        return ' || '.join(f'({z3_to_c(c)})' for c in expr.children())
+    elif z3.is_not(expr):
+        return f'!({z3_to_c(expr.arg(0))})'
+    elif z3.is_eq(expr):
+        return f'({z3_to_c(expr.arg(0))} == {z3_to_c(expr.arg(1))})'
+    elif z3.is_le(expr):
+        return f'({z3_to_c(expr.arg(0))} <= {z3_to_c(expr.arg(1))})'
+    elif z3.is_lt(expr):
+        return f'({z3_to_c(expr.arg(0))} < {z3_to_c(expr.arg(1))})'
+    elif z3.is_ge(expr):
+        return f'({z3_to_c(expr.arg(0))} >= {z3_to_c(expr.arg(1))})'
+    elif z3.is_gt(expr):
+        return f'({z3_to_c(expr.arg(0))} > {z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvugt':
+        return f'({z3_to_c(expr.arg(0))}) > ({z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvule':
+        return f'({z3_to_c(expr.arg(0))}) <= ({z3_to_c(expr.arg(1))})'
+    elif expr.decl().kind() == z3.Z3_OP_ITE:
+        cond, then_expr, else_expr = expr.children()
+        return f'(({z3_to_c(cond)}) ? ({z3_to_c(then_expr)}) : ({z3_to_c(else_expr)}))'
+    elif z3.is_false(expr):
+        return "0"
+    elif z3.is_true(expr):
+        return "1"
+    elif z3.is_const(expr):
+        return str(expr)
+    elif z3.is_int_value(expr) or z3.is_rational_value(expr):
+        return str(expr.as_long())
+    else:
+        return str(expr)  # fallback
+
+
+
+
 def getCNF(phi):
     '''
         This function takes a formula and returns its CNF conversion
@@ -33,7 +74,8 @@ def removeQuantifier(expr):
     res = nc(goal)
     f = []
     for l in res[0]:
-        f.append(removeZ3Suffixes(str(l)))
+        f.append(z3_to_c(l))
+        # f.append(removeZ3Suffixes(str(l)))
     return f
 
 def containsQuantifier(expr):
