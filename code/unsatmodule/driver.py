@@ -6,6 +6,7 @@ from py_console import console
 from code.models import LemmaStatus, AlgoVerdict
 
 
+
 def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
                 lemmaMap,   # Map from id to lemma appeared in unsat core as z3 object
                 lemmasDict, # Main lemma dictionary containing all the meta-data
@@ -31,15 +32,22 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
 
     someInvalid = False
 
+    varMap = {} # TODO: fix this
+
     #for id, lemma in lemmas.items():
     for id in lemmaList:
         lemma = lemmaMap[id]
         # first check if quantifier is present
+        notnot = z3.Not(lemma)
+        tempVars = z3.z3util.get_vars(notnot)
+        for var in tempVars:
+            varMap[str(var)] = var
+
         if zu.containsQuantifier(lemma):
-            phi = zu.removeQuantifier(z3.Not(lemma))
+            phi = zu.removeQuantifier(notnot)
 
         else:
-            phi = zu.getCNF(z3.Not(lemma))
+            phi = zu.getCNF(notnot)
 
         fuzz_cons[id] = phi
 
