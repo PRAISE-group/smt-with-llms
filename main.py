@@ -90,8 +90,6 @@ if __name__ == '__main__':
         # self.iteration +=1
         resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList)
         # resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
-
-        # if (resultVerdict == AlgoVerdict.SAT):
         #     # Check SAT call, I think Gourav calls this.
         #     # TODO: @Gourav, What all will this function return.
         #     resultVerdict = checkSat(lemmaDict, functionsList, commandLineArgs)
@@ -104,3 +102,5 @@ if __name__ == '__main__':
 
     # TODO: Sumit Check.
     # Stop LLM responses here after exiting the while loop
+    console.log("[bold red]All threads exit stage.")
+    sys.exit(0)
