@@ -13,13 +13,19 @@ LEMMA_GENERATION_START_TEMPLATE = """
 """
 
 FEW_SHOTS = """
-    A lemma with forall constraint typically looks like the ones given below.
+    A lemma with bit-vector constraint typically looks like the ones given below.
     
-    (assert (forall ((var_a Int) (var_b Int)) (= (+ var_a var_b) (+ var_a var_a))))
-    (assert (forall ((var_a Int) (var_a Int) (var_a Int)) (= (+ (+ var_a var_b) var_c) (+ var_a (+ var_b var_c)))))
-    (assert (forall ((var_a Int)) (= (+ var_a (- var_a)) 0)))
+    (assert (= (absx_cb var_10) var_x))
+    (assert (bvugt var_x (_ bv0 32)))
+    (assert (= var_34 (bvmul (_ bv2 32) var_y)))
+    (assert (bvugt var_10 var_34))
     
-    Generate similar lemmas for the given closed box <FUNCTION> with foralls.
+    (assert (and
+        (= false (=  (_ bv0 16) var_45 ) )
+        (= false ( = (_ bv0 16) isalpha_ret ) ) )
+    )
+
+    Generate similar lemmas for the given closed box <FUNCTION> with forall constraint over bit-vectors.
 """
 
 # Base template to be added on each propmt.
@@ -32,7 +38,7 @@ BASE_TEMPLATE = """
     3) Try to use variables in the <LEMMA>, avoid using constants.
     4) Make sure the <LEMMA> is in correct SMTLIB format. 
     5) A <LEMMA> looks like this '(assert <formula>)', where <formula> is a first order predicate with `forall` in correct SMTLIB format.
-    6) It is necessary that you create lemmas with `forall` constructs.
+    6) It is necessary that you create lemmas with `forall` constructs over bit-vector theory.
 """
 
 # GenLemma call with objectives.
@@ -40,7 +46,7 @@ LEMMA_OBJECTIVE_TEMPLATE = f"""
     Generate <LEMMA> for <FUNCTION>. I have provided some supporting information about <FUNCTION>.
     I have provide you an initial set of input examples in SAMPLES_LIST with SAMPLES_FORMAT describing 
     the format for reading the inputs. Also a <LEMMA> sample format has been provided in LEMMA_SAMPLE,
-    use it for creating the lemmas. 
+    use it for creating the lemmas. Use bit-vector theory.
     
     {FEW_SHOTS}
     
