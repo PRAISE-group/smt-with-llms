@@ -42,19 +42,20 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
         tempVars = z3.z3util.get_vars(notnot)
         for var in tempVars:
             varMap[str(var)] = var
-
+        lemma_vars = None
         if zu.containsQuantifier(lemma):
-            phi = zu.removeQuantifier(notnot)
+            phi, lemma_vars = zu.removeQuantifier(notnot)
 
         else:
             phi = zu.getCNF(notnot)
+            lemma_vars = get_vars(phi)
 
         fuzz_cons[id] = phi
 
         console.info(f"Invoking fuzzer for lemma: {lemma}")
         pu.LOG(f"Invoking fuzzer for lemma: {lemma}")
 
-        verdict, cex = fuzz.getVerdict(id, fuzz_cons[id], varMap, funcMap, argsObj)
+        verdict, cex = fuzz.getVerdict(id, fuzz_cons[id], varMap, funcMap, argsObj, lemma_vars)
 
         if verdict == LemmaStatus.VALID:
             console.success(f"Lemma verified: {lemma}")

@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+(set-logic UFBV)
 (set-option :produce-models true)
 
 
@@ -8,12 +8,14 @@
 
 (declare-fun isalpha_cb ((_ BitVec 16)) (_ BitVec 16))
 
+
 (assert (= isalpha_ret (isalpha_cb buffer_0_3)))
 
 (assert (and
 (= false (=  (_ bv0 16) buffer_0_3 ) )
 (= false ( = (_ bv0 16) isalpha_ret ) ) )
 )
+
 
 (check-sat)
 (get-model)

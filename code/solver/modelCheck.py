@@ -13,6 +13,17 @@ def typenameConversion(type):
     if str(type).startswith("BitVec("):
         return "int"
 
+def get_vars(expr):
+    """Return a set of Z3 variables (constants) in expr."""
+    vars_found = set()
+    def visit(e):
+        if z3.is_const(e) and e.decl().kind() == z3.Z3_OP_UNINTERPRETED:
+            vars_found.add(e)
+        for child in e.children():
+            visit(child)
+    visit(expr)
+    return vars_found
+
 def getHarness(solver, funs):
     s = """
 #include <stdio.h>

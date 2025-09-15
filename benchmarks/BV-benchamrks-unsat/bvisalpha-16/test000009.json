@@ -1,11 +1,13 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/bvisalpha-16/test000009.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/bvisalpha-16/lisalpha.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-16/test000009.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-16/lisalpha.o",
   "functions": {
     "isalpha_cb": {
-      "desc": "returns 1 if input represents an alphabet (either small or big) else returns 0.",
+      "desc": "for any nonzero input, the return value is always zero else returns one.",
       "tests": [[45], [67]],
-      "userLemmas": [ ""
+      "userLemmas": [ "(assert (forall ((z (_ BitVec 16)))    (=> (not (= z (_ bv0 16)))        (= (isalpha_cb z) (_ bv0 16)))))",
+      "(assert (= (isalpha_cb (_ bv0 16)) (_ bv1 16)))",
+      "(assert (forall ((z (_ BitVec 16)))    (or (= (isalpha_cb z) (_ bv0 16))        (= (isalpha_cb z) (_ bv1 16)))))"
       ]
     }
   }

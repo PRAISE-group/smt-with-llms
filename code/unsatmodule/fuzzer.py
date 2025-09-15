@@ -2,7 +2,7 @@ import os
 import code.utils.unsatUtil as pu
 from py_console import console
 from code.models import LemmaStatus
-from code.solver.modelCheck import typenameConversion
+from code.solver.modelCheck import typenameConversion, get_vars
 
 # TODO: make is an object for parallel computing of the getVerdict
 
@@ -48,20 +48,31 @@ __AFL_FUZZ_INIT();
 
     return head + proto
 
-def createRest(filepath, lemma, varMap, id):
+
+
+def createRest(filepath, lemma, varMap, id, lemma_vars):
     content = '''int main(void) {
     __AFL_INIT();
     uint8_t *buff = (uint8_t *)__AFL_FUZZ_TESTCASE_BUF;\n\n'''
-    
+    varlist = []
+    print("lemma:", lemma, type(lemma))
     for i in varMap:
+        varlist.append(str(i))
         content += f"    uint16_t {str(i)} = *((uint16_t *)buff);\n"
         content += f"    buff += 2;\n\n"
+
+
+    for i in lemma_vars:
+        i = str(i).replace("!","_")
+        if str(i) not in varlist:
+            content += f"    uint16_t {str(i)} = *((uint16_t *)buff);\n"
+            content += f"    buff += 2;\n\n"
 
     tcount = 1
     for l in lemma:
         content += f"{tcount*4*' '}if({str(l).replace('Not', '!')})\n"
         tcount += 1
-    
+
     content += f"{(tcount-1) * 4 *' '}{{\n"
     content += f"{tcount*4*' '}std::ofstream resultFile(\"{filepath}lemma_check_cex_{str(id)}.txt\");\n"
 
@@ -73,16 +84,16 @@ def createRest(filepath, lemma, varMap, id):
     content += f"{tcount*4*' '}assert(0);\n"
     content += f"{(tcount-1) * 4 *' '}}}\n"
     content += "\n} // end of main\n"
-    return content 
+    return content
 
 
-def createFuzzFile(id, lemma, varMap, funcMap):
+def createFuzzFile(id, lemma, varMap, funcMap, lemma_vars):
     pwd = os.getcwd()
     fuzzd = pwd + "/fuzz_temp/"
     pu.createDirectory(fuzzd)
     with open(f"{fuzzd}lemma_check_{id}.cc", "w") as ffuzz:
         ffuzz.write(createHeader(funcMap))
-        rest = createRest(fuzzd, lemma, varMap, id)
+        rest = createRest(fuzzd, lemma, varMap, id, lemma_vars)
         ffuzz.write(rest)
         ffuzz.flush()
     return fuzzd, f"lemma_check_{id}.cc"
@@ -116,12 +127,12 @@ def fuzzIt(path, file, argObj, id):
 
     console.info(f"Fuzzing started")
     fuzzCommand = [f"{aflEnv} afl-fuzz -i {seedDir} -o {fuzzOutDir} -V {str(fuzzTimeout)} {path + objFile} > /dev/null"]
-    
+
     """
     # FIXME: somehow using folllowing environment giving afl-fuzz not found error
-    env = {'AFL_BENCH_UNTIL_CRASH': '1', 
-           'AFL_SKIP_CPUFREQ': '1', 
-           'AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES' : '1', 
+    env = {'AFL_BENCH_UNTIL_CRASH': '1',
+           'AFL_SKIP_CPUFREQ': '1',
+           'AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES' : '1',
            "AFL_NO_UI" : '1',
            "AFL_QUIET":"1"}
     """
@@ -144,8 +155,8 @@ def fuzzIt(path, file, argObj, id):
 
 
 
-def getVerdict(id, lemma, varMap, funcMap, argObj):
-    path, file = createFuzzFile(id, lemma, varMap, funcMap)
+def getVerdict(id, lemma, varMap, funcMap, argObj, lemma_vars):
+    path, file = createFuzzFile(id, lemma, varMap, funcMap, lemma_vars)
     verdict, cex = fuzzIt(path, file, argObj, id) # this shared variable is from argument regarding the shared object
     return verdict, cex
 

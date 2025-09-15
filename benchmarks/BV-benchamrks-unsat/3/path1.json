@@ -1,12 +1,16 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/3/path1.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/3/test3lib.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/3/path1.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/3/test3lib.o",
   "functions": {
     "test3ext_cb": {
-      "desc": "takes an integer as input and returns input-3 if input is greater than 6 else it returns input-1",
+      "desc": "for input less than or equal to 4 the function return input after increasing by one, otherwise return input after subtracting 6",
       "tests": [[1], [7]],
       "userLemmas": [
-        ""
+        "(assert  (forall ((x (_ BitVec 32)))    (=> (bvule x (_ bv4 32))        (= (test3ext_cb x) (bvadd x (_ bv1 32))))))",
+        "(assert  (forall ((x (_ BitVec 32)))    (=> (bvugt x (_ bv4 32))        (= (test3ext_cb x) (bvsub x (_ bv6 32)))))) ",
+        "(assert  (forall ((x (_ BitVec 32)))    (=> (bvule x (_ bv4 32))        (and (bvuge (test3ext_cb x) (_ bv1 32))             (bvule (test3ext_cb x) (_ bv5 32)))))) ",
+        "(assert  (forall ((x (_ BitVec 32)))    (=> (bvule x (_ bv4 32))        (bvugt (test3ext_cb x) x)))) (assert  (forall ((x (_ BitVec 32)))    (=> (bvugt x (_ bv4 32))        (bvult (test3ext_cb x) x))))",
+        "(assert (= (test3ext_cb (_ bv0 32)) (_ bv1 32)))(assert (= (test3ext_cb (_ bv4 32)) (_ bv5 32)))(assert (= (test3ext_cb (_ bv5 32)) (_ bv4294967295 32))) "
       ]
     }
   }

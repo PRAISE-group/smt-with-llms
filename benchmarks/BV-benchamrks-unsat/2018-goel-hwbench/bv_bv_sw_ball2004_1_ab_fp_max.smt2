@@ -44,6 +44,8 @@ mode: abstract_bv
 (set-info :status sat)
 
 (declare-fun Le_1_3_3_cb ((_ BitVec 3) (_ BitVec 3)) (_ BitVec 1))
+;(define-fun Le_1_3_3_cb ((a (_ BitVec 3)) (b (_ BitVec 3))) (_ BitVec 1)  (ite (bvult a b) (_ bv1 1) (_ bv0 1)))
+
 
 (declare-fun L2 () (_ BitVec 1))
 (declare-fun z$4 () (_ BitVec 1))
@@ -110,6 +112,11 @@ mode: abstract_bv
  (let (($x695 (= L2$next (_ bv1 1))))
 (=> newvarReplace1 $x695)))
 (assert newvarReplace1)
+
+; UNSAT additional queries.
+(assert (= (Le_1_3_3_cb Z Y) (_ bv1 1)))
+(assert (= (Le_1_3_3_cb Y Z) (_ bv1 1)))
+
 (set-info :status sat)
 (check-sat)
 (exit)

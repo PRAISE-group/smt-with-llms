@@ -1,6 +1,7 @@
 """
     This file contains the utitlity function associated with Z3
 """
+from code.solver.modelCheck import get_vars
 
 import z3
 import re
@@ -37,11 +38,11 @@ def z3_to_c(expr):
     elif z3.is_true(expr):
         return "1"
     elif z3.is_const(expr):
-        return str(expr)
+        return str(expr).replace("!","_")
     elif z3.is_int_value(expr) or z3.is_rational_value(expr):
         return str(expr.as_long())
     else:
-        return str(expr)  # fallback
+        return str(expr).replace("!","_")  # fallback
 
 
 
@@ -59,7 +60,7 @@ def getCNF(phi):
 
 
 def removeZ3Suffixes(expr_str):
-    assert(type(expr_str) == str) 
+    assert(type(expr_str) == str)
     # This regex captures names like x!1, y!23, foo!999 and removes the !<digits> part
     return re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)!\d+', r'\1', expr_str)
 
@@ -73,10 +74,13 @@ def removeQuantifier(expr):
     goal.add(expr)
     res = nc(goal)
     f = []
+    lemma_vars = []
     for l in res[0]:
+        lemma_vars.extend(get_vars(l))
         f.append(z3_to_c(l))
         # f.append(removeZ3Suffixes(str(l)))
-    return f
+    lemma_vars = set(lemma_vars)
+    return f, lemma_vars
 
 def containsQuantifier(expr):
     """

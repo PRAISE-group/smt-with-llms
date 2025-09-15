@@ -1,9 +1,10 @@
 ;; status = SAT
 
-(set-logic QF_UFBV)
+(set-logic UFBV)
 (set-option :produce-models true)
 
 (declare-fun test3ext_cb ((_ BitVec 32)) (_ BitVec 32))
+
 (declare-fun x () (_ BitVec 32))
 (declare-fun retval () (_ BitVec 32))
 
@@ -16,6 +17,8 @@
 		(=  false (bvule retval (_ bv5 32) ) ) )
 
 )
+
+
 
 (check-sat)
 (get-model)

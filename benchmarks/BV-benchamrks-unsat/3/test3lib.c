@@ -7,10 +7,10 @@
 int test3ext_cb(int xarg)
 {
   int t = xarg;
-  if (t > 6)
-    t = t - 3;
+  if (t <= 4)
+    t = t + 1;
   else
-    t = t - 1;
+    t = t - 6;
 
   return t;
 }
