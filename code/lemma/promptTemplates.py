@@ -1,29 +1,27 @@
 SYSTEM_PROMPT_TEMPLATE = """
     You are an expert at <DOMAIN>. Let me test your capabilities.
-    I will give you a task in <DOMAIN> and you have to complete the task. 
-    Do not give any explanation or extra text. You will be told the 'exact' output format. 
+    I will give you a task in <DOMAIN> and you have to complete the task.
+    Do not give any explanation or extra text. You will be told the 'exact' output format.
 """
 
 # Start prompting.
 LEMMA_GENERATION_START_TEMPLATE = """
-    You objective is to generate a <LEMMA> in <FORMAT>. Please note that you need to 
-    generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>. You are forbidden from creating 
-    <LEMMA> that you have already created earlier in the conversation. I will now give the objective for 
+    You objective is to generate a <LEMMA> in <FORMAT>. Please note that you need to
+    generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>. You are forbidden from creating
+    <LEMMA> that you have already created earlier in the conversation. <LEMMA> should represent the given <FUNCTION>. I will now give the objective for
     <LEMMA> generation. Please wait!
 """
 
 FEW_SHOTS = """
     A lemma with bit-vector constraint typically looks like the ones given below.
-    
-    (assert (= (absx_cb var_10) var_x))
-    (assert (bvugt var_x (_ bv0 32)))
-    (assert (= var_34 (bvmul (_ bv2 32) var_y)))
-    (assert (bvugt var_10 var_34))
-    
-    (assert (and
-        (= false (=  (_ bv0 16) var_45 ) )
-        (= false ( = (_ bv0 16) isalpha_ret ) ) )
-    )
+
+    (assert (forall ((z (_ BitVec 32)))  (=> (bvugt z (_ bv0 32))      (= (foo_cb z) (_ bv0 32)))))
+    (assert (forall ((z (_ BitVec 16)))  (=> (bvugt z (_ bv0 32))      (= (foo_cb z) (_ bv0 32)))))
+    (assert (forall ((z (_ BitVec 32)))  (=> (not (bvugt z (_ bv0 32)))      (= (foo_cb z) z))))
+    (assert (= (foo_cb (_ bv0 32)) (_ bv0 32)))
+    (assert (forall ((z (_ BitVec 32)))  (= (foo_cb (foo_cb z)) (foo_cb z))))
+    (assert (forall ((z (_ BitVec 32)))  (or (= (foo_cb z) (_ bv0 32))      (= (foo_cb z) z))))
+    (assert (forall ((z (_ BitVec 32)))  (=> (not (bvugt z (_ bv0 32)))      (= (bvugt (foo_cb z) (_ bv0 32)) false))))
 
     Generate similar lemmas for the given closed box <FUNCTION> with forall constraint over bit-vectors.
 """
@@ -31,29 +29,27 @@ FEW_SHOTS = """
 # Base template to be added on each propmt.
 BASE_TEMPLATE = """
     Write the <LEMMA> in between LEMMA_START and LEMMA_END blocks. Do not give any explanation or extra text. Please use the following rules strictly.
-    
-    1) If you are using variables in the <LEMMA> for <FUNCTION> formula, prefix 'var_' in them. Eg: 'var_1', 'var_2' so on ... 
-    2) You must define/declare unknown variables and functions before using them in a <LEMMA> formula.
-    2) Variables in each <LEMMA> must be numbered independently, where the variables indices are numbered sequentially from left to right, starting from 1.
-    3) Try to use variables in the <LEMMA>, avoid using constants.
-    4) Make sure the <LEMMA> is in correct SMTLIB format. 
-    5) A <LEMMA> looks like this '(assert <formula>)', where <formula> is a first order predicate with `forall` in correct SMTLIB format.
+
+    1) The <LEMMA> for <FUNCTION> formula should be self contained.
+    2) The variables tha you can use are only quantifier variables that are in <Lemma>.
+    4) Make sure the <LEMMA> is in correct SMTLIB format.
+    5) A <LEMMA> looks like this '(assert <formula>)', where <formula> is a first order predicate with `forall` quantifier in correct SMTLIB format.
     6) It is necessary that you create lemmas with `forall` constructs over bit-vector theory.
 """
 
 # GenLemma call with objectives.
 LEMMA_OBJECTIVE_TEMPLATE = f"""
     Generate <LEMMA> for <FUNCTION>. I have provided some supporting information about <FUNCTION>.
-    I have provide you an initial set of input examples in SAMPLES_LIST with SAMPLES_FORMAT describing 
+    I have provide you an initial set of input examples in SAMPLES_LIST with SAMPLES_FORMAT describing
     the format for reading the inputs. Also a <LEMMA> sample format has been provided in LEMMA_SAMPLE,
     use it for creating the lemmas. Use bit-vector theory.
-    
+
     {FEW_SHOTS}
-    
+
     Give me each <LEMMA> in a seperate line so that I can parse it back.
-    Strictly adhere to LEMMA_SAMPLE format, starting with 'assert'. Please generate syntatically correct 
+    Strictly adhere to LEMMA_SAMPLE format, starting with 'assert'. Please generate syntatically correct
     <LEMMA> in <FORMAT> syntax. Please create lemmas with forall constraints.
-    
+
     FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
     FUNCTION_PARAMETERS: <FUNCTION_PARAMETERS>
     SAMPLES_FORMAT: <SAMPLES_FORMAT>
@@ -70,12 +66,12 @@ FEEDBACK_TEMPLATE = """
 
 # Additional feedbacks if required. New lemmas required.
 INCREMENTAL_ACTION_TEMPLATE = """
-    I need new <LEMMA>. 
-    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA> in <FORMAT>. 
-    I am providing you with a set of input (a list which forms the arguments to <FUNCTION>) 
+    I need new <LEMMA>.
+    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA> in <FORMAT>.
+    I am providing you with a set of input (a list which forms the arguments to <FUNCTION>)
     and output examples for the <FUNCTION>.
     Use those to generate new <LEMMA>.
-    
+
     <PAIRS>
 """ + BASE_TEMPLATE
 
@@ -83,9 +79,9 @@ INCREMENTAL_ACTION_TEMPLATE = """
 LEMMA_REFINEMENT_TEMPLATE = """
     The following lemma for <FUNCTION> is wrong. Please generate new lemma.
     LEMMA_TEXT: It is the lemma text in <FORMAT>
-    INPUT_TEXT: Values for the variables in the lemmas for which it is wrong. 
+    INPUT_TEXT: Values for the variables in the lemmas for which it is wrong.
     INPUT_TYPE: <INPUT_TYPE>
-    
+
     <LEMMA_TEXT>
     <INPUT_TEXT>
 """ + BASE_TEMPLATE

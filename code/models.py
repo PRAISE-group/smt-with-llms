@@ -209,5 +209,7 @@ class Function(BaseModel):
     # binaries of the closed box function in all benchmarks.
     object_file: Optional[str] = None
 
+    smtDecl: str
+
 
 exampleSet = ExampleSet(examples=[])

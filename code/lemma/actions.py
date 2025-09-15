@@ -27,20 +27,23 @@ def process_response(response: Any) -> str:
 def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) -> List[Lemmas]:
     lemmas: List[Lemmas] = []
     formattedResponse = process_response(response)
+    print("formattedResponse", formattedResponse)
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
     for index, fragments in enumerate(formattedResponse.strip().split("\n"), 0):
-        fragments = fragments.strip().lower()
+        # fragments = fragments.strip().lower()
+        fragments = fragments.strip()
+        print("fragments", fragments)
         if (fragments is not None
                 and len(fragments) > 2
                 and "here" not in fragments
                 and "start" not in fragments
                 and "end" not in fragments
                 and "assert" in fragments
-                and "var_" in fragments
                 and "forall" in fragments
         ):
             fragments = process_format(fragments)
+            print("fragments:46", fragments)
             # TODO: Check if lemma is syntactically correct with Z3.
             # TODO: Incase the lemma is wrong. Need to generate new lemmas.
             lemmas.append(
@@ -73,12 +76,14 @@ def generateIntialLemmas(func: Function,
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
     response = callLLMforResponse(user_prompt, func.name)
+    print("USER_PROMPT: generateIntialLemmas() ", user_prompt)
+    print(func)
     console.log(response)
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
     function_prompt = function_prompt.replace("<FORMAT>", formatting)
-    function_prompt = function_prompt.replace("<FUNCTION_DESCRIPTION>", func.description)
+    function_prompt = function_prompt.replace("<FUNCTION_DESCRIPTION>", func.smtDecl)
     function_prompt = function_prompt.replace("<FUNCTION_PARAMETERS>", f"{len(func.inputs[0].strip().split(','))} integer inputs.")
     function_prompt = function_prompt.replace("<SAMPLES_FORMAT>", f"List of examples, each of a tuple of {len(func.inputs[0].strip().split(','))} integer inputs.")
     function_prompt = function_prompt.replace("<SAMPLES_LIST>", str(func.inputs))
@@ -88,6 +93,8 @@ def generateIntialLemmas(func: Function,
         function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", "")
 
     response = callLLMforResponse(function_prompt, func.name)
+    print("USER_PROMPT: generateIntialLemmas() ", user_prompt)
+    print("response:", response)
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 
@@ -160,7 +167,7 @@ def generate_lemmas_background(
         formatting: str,
         minLimit: int,
         maxLimit: int,
-        lemmaDict: LemmaDict,
+        lemmaDict: LemmaDict, stop_event
 ):
     lemmaDict.setLatestGeneration(func.id, 1)
     generation = lemmaDict.getLatestGeneration(func.id)
@@ -175,11 +182,12 @@ def generate_lemmas_background(
     res = generateIntialLemmas(
         func=func, formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation
     )
+    print("lemmas: generate_lemmas_background()", res)
 
     for lms in res:
         lemmaDict[lms.id] = lms
 
-    while True:
+    while not stop_event.is_set():
         res = []
         if lemmaDict.checkIfRefinementCall():
             # We got new lemmas from the counterexample.

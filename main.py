@@ -52,16 +52,21 @@ if __name__ == '__main__':
                 ],
                 inputs=[str(c) for c in value.get('tests', [])],
                 object_file=commandLineArgs.sharedLib,
-                smt_file = value.get('smt_file', None)
+                smtDecl=data["functions"][key]["smtDecl"],
+                smt_file=data["smt_file"]
             )
         )
+        # print(data["functions"][key]["smtDecl"])
+    # print(functionsList)
+    # exit()
 
     # Run a background thread for generating lemmas.
     # One for each function.
+    stop_event = threading.Event()
     for f in functionsList:
         t = threading.Thread(
             target=generate_lemmas_background,
-            args=(f, "SMTLIB", commandLineArgs.minLemma, commandLineArgs.maxLemma, lemmaDict),
+            args=(f, "SMTLIB", commandLineArgs.minLemma, commandLineArgs.maxLemma, lemmaDict, stop_event),
             daemon=True
         )
         t.start()
@@ -97,6 +102,7 @@ if __name__ == '__main__':
         #     # Check UNSAT call, Pankaj will call this.
         #     resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
 
+    stop_event.set()
     for t in running_llm_threads:
         t.join()
 
