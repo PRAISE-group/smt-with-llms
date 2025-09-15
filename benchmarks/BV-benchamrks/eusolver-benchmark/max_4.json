@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
   "functions": {
     "max4_cb": {
+      "smtDecl": "(declare-fun max4_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns the greater of the four input unsigned integers.",
       "tests": [[13, 14, 23, 11], [18, 67, 34, 234]],
       "userLemmas": [ ""

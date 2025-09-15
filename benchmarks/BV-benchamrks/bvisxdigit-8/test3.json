@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/bvisxdigit-8/isxdigit.o",
   "functions": {
     "isxdigit__cb": {
+      "smtDecl": "(declare-fun isxdigit__cb ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "returns 1 (as BitVec of 32 size) if input integer (as BitVec of 32 size) represents ascii value either from 0-9 or alphabet between 'a' and 'f' or between 'A' and 'F' else returns 0.",
       "tests": [[45], [67]],
       "userLemmas": [ ""

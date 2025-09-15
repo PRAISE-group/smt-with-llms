@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/jpf-PowExample/ipow.o",
   "functions": {
     "ipow2_cb": {
+      "smtDecl": "(declare-fun ipow2_cb ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns 2 raised to the power of exp. Computed using left shift (1 << exp), equivalent to pow(2, exp) for non-negative integers.",
       "tests": [[13], [67]],
       "userLemmas": [ ""

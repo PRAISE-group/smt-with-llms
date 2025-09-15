@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/strcmp-models/lib.o",
   "functions": {
     "strcmp_int_cb": {
+      "smtDecl": "(declare-fun strcmp_int_cb ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Essentially, it's like a simplified integer-based version of strcmp that doesn't check lexicographic order but simply counts matching positions.",
       "tests": [[1, 2, 3, 4, 1, 2, 3, 4], [1, 2, 3, 4, 1, 2, 3, 4]],
       "userLemmas": [ ""

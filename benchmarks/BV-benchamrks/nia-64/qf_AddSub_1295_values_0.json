@@ -3,42 +3,49 @@
   "object_file": "./benchmarks/BV-benchamrks/nia-64/lnia.o",
   "functions": {
     "_mod_cb": {
+      "smtDecl": "(declare-fun _mod_cb ((_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))",
       "desc": "Returns the remainder when the first input is divided by the second input (both BitVec<64>); if the second input is zero, returns zero.",
       "tests": [[10, 3], [10, 4]],
       "userLemmas": [ ""
       ]
     },
     "pow2_cb": {
+      "smtDecl": "(declare-fun pow2_cb ((_ BitVec 64)) (_ BitVec 64))",
       "desc": "Returns 2 raised to the power of the input (BitVec<64>), computed as 1 left-shifted by the input amount.",
       "tests": [[13], [3]],
       "userLemmas": [ ""
       ]
     },
     "intand_cb": {
+      "smtDecl": "(declare-fun intand_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))",
       "desc": "Returns conjunction of second and third inputs (BitVec<64>). The first input is ignored.",
       "tests": [[0, 6, 3], [0, 6, 4]],
       "userLemmas": [ ""
       ]
     },
     "intor_cb": {
+      "smtDecl": "(declare-fun intor_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))",
       "desc": "Returns disjunction of second and third inputs (BitVec<64>). The first input is ignored.",
       "tests": [[0, 6, 3], [0, 6, 4]],
       "userLemmas": [ ""
       ]
     },
     "intxor_cb": {
+      "smtDecl": "(declare-fun intxor_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))",
       "desc": "Returns XOR of second and third inputs (BitVec<64>). The first input is ignored.",
       "tests": [[0, 6, 3], [0, 6, 4]],
       "userLemmas": [ ""
       ]
     },
     "in_range_cb": {
+      "smtDecl": "(declare-fun in_range_cb ((_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))",
       "desc": "Returns 1 if the second input lies between 0 and 2 raised to the power of the first input (inclusive); otherwise, returns 0. All inputs are BitVec<64>",
       "tests": [[13], [3]],
       "userLemmas": [ ""
       ]
     },
     "ite_zero_cb": {
+      "smtDecl": "(declare-fun ite_zero_cb  ( (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) ) (_ BitVec 64))",
       "desc": "Returns the second input if the first input (BitVec<64>) is equal to zero; otherwise, returns the third input.",
       "tests": [[3, 8], [3, 7]],
       "userLemmas": [ ""

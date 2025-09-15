@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
   "functions": {
     "max12_cb": {
+      "smtDecl": "(declare-fun max12_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns the greater of the twelve input unsigned integers.",
       "tests": [[13, 14, 23, 11, 13, 14, 23, 11, 3, 4, 4, 6], [13, 14, 23, 11, 3, 4, 18, 67, 34, 234, 1, 9]],
       "userLemmas": [ ""

@@ -12,10 +12,10 @@ int isalpha_cb(int c) {
 }
 
 int isalpha1_cb(int c) {
-	int res = 0;
+	int res = 1;
 	switch (c) {
 	case 0:
-	  res = 1;
+	  res = 0;
 	  break;
 	}
 

@@ -3,24 +3,28 @@
   "object_file": "./benchmarks/BV-benchamrks/hash_sat/lhsat.o",
   "functions": {
     "hash_1_03_03": {
+      "smtDecl": "(declare-fun hash_1_03_03_cb  ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns 1 if input equals 2; returns 0 if input equals 0; returns 2 if input equals 1; returns 6 if input equals 5; returns 9 if input equals 8; returns 10 for all other inputs.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "hash_2_03_03": {
+      "smtDecl": "(declare-fun hash_2_03_03_cb  ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns 0 if input equals 0; returns 2 if input equals 1; returns 1 for all other inputs.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "hash_3_03_03": {
+      "smtDecl": "(declare-fun hash_3_03_03_cb  ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns 0 if input equals 0; returns 2 if input equals 1; returns 5 if input equals 4; returns 8 if input equals 7; returns 1 for all other inputs.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "ite_lt": {
+      "smtDecl": "(declare-fun ite_lt_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns the second argument if the first argument is less than 0; otherwise returns the third argument.",
       "tests": [[13], [67]],
       "userLemmas": [ ""

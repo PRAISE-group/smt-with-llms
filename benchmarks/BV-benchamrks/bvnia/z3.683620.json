@@ -3,12 +3,14 @@
   "object_file": "./benchmarks/BV-benchamrks/bvnia/lnia.o",
   "functions": {
     "_lt_cb": {
+      "smtDecl": "(declare-fun _lt_cb  ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns 1 if the first input is less than the second input (unsigned comparison of BitVec<32>); otherwise, returns 0.",
       "tests": [[10, 3], [3, 4]],
       "userLemmas": [ ""
       ]
     },
     "_mul_cb": {
+      "smtDecl": "(declare-fun _mul_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns the multiplication of the two inputs (both BitVec<32>).",
       "tests": [[3, 4], [3, 5]],
       "userLemmas": [ ""

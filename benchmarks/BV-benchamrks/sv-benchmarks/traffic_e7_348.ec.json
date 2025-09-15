@@ -3,54 +3,63 @@
   "object_file": "./benchmarks/BV-benchamrks/sv-benchmarks/libtraffic.o",
   "functions": {
     "___z2z____cb": {
+      "smtDecl": "(declare-fun ___z2z____cb (Int) Int)",
       "desc": "Returns 21238 if input is -1, otherwise returns 38",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "___z3z____cb": {
+      "smtDecl": "(declare-fun ___z3z____cb (Int) Bool)",
       "desc": "Returns 1 if input is -1, otherwise returns 0. Equivalent to (x == -1).",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "___z4z____cb": {
+      "smtDecl": "(declare-fun ___z4z____cb (Int) Int)",
       "desc": "If x == -1: return 1. If x == -2: return 2. Otherwise: return -21240",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "___z5z____cb": {
+      "smtDecl": "(declare-fun ___z5z____cb (Int) Int)",
       "desc": "Returns 0 if input is -1, otherwise returns 1.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "___z6z____cb": {
+      "smtDecl": "(declare-fun ___z6z____cb (Int) Bool)",
       "desc": "Returns 0 if input is -2, otherwise returns 1.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "traffic_e7_temp1_cb": {
+      "smtDecl": "(declare-fun traffic_e7_temp1_cb (Int Int Int) Int)",
       "desc": "This function returns the third argument if both the first and second arguments are positive, or the first argument is less than 10 and the second argument is positive. In all other cases, it returns the first argument.",
       "tests": [[13, 1, 2], [67, 3, 2]],
       "userLemmas": [ ""
       ]
     },
     "traffic_e7_temp2_cb": {
+      "smtDecl": "(declare-fun traffic_e7_temp2_cb (Int Int Int) Int)",
       "desc": "If the first argument is zero, return the second argument; otherwise, return the third argument",
       "tests": [[0, 2, 3], [6, 7, 4]],
       "userLemmas": [ ""
       ]
     },
     "traffic_e7_temp3_cb": {
+      "smtDecl": "(declare-fun traffic_e7_temp3_cb (Int Int Int) Int)",
       "desc": "Return the second argument if both the first and second arguments are positive, or if the first argument is less than 10 and the second argument is positive. Otherwise, return the third argument.",
       "tests": [[1, 3, 3], [12, 3, 5]],
       "userLemmas": [ ""
       ]
     },
     "traffic_e7_temp4_cb": {
+      "smtDecl": "(declare-fun traffic_e7_temp4_cb (Int) Int)",
       "desc": "Return 0 if the first argument is zero; otherwise, return 1",
       "tests": [[13], [0]],
       "userLemmas": [ ""

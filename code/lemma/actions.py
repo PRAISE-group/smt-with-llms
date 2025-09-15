@@ -27,13 +27,11 @@ def process_response(response: Any) -> str:
 def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) -> List[Lemmas]:
     lemmas: List[Lemmas] = []
     formattedResponse = process_response(response)
-    print("formattedResponse", formattedResponse)
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
     for index, fragments in enumerate(formattedResponse.strip().split("\n"), 0):
         # fragments = fragments.strip().lower()
         fragments = fragments.strip()
-        print("fragments", fragments)
         if (fragments is not None
                 and len(fragments) > 2
                 and "here" not in fragments
@@ -43,7 +41,6 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
                 and "forall" in fragments
         ):
             fragments = process_format(fragments)
-            print("fragments:46", fragments)
             # TODO: Check if lemma is syntactically correct with Z3.
             # TODO: Incase the lemma is wrong. Need to generate new lemmas.
             lemmas.append(
@@ -76,8 +73,6 @@ def generateIntialLemmas(func: Function,
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
     response = callLLMforResponse(user_prompt, func.name)
-    print("USER_PROMPT: generateIntialLemmas() ", user_prompt)
-    print(func)
     console.log(response)
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
@@ -93,8 +88,6 @@ def generateIntialLemmas(func: Function,
         function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", "")
 
     response = callLLMforResponse(function_prompt, func.name)
-    print("USER_PROMPT: generateIntialLemmas() ", user_prompt)
-    print("response:", response)
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 
@@ -182,7 +175,6 @@ def generate_lemmas_background(
     res = generateIntialLemmas(
         func=func, formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation
     )
-    print("lemmas: generate_lemmas_background()", res)
 
     for lms in res:
         lemmaDict[lms.id] = lms

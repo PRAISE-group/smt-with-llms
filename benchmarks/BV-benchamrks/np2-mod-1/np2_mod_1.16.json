@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/np2-mod-1/bvlib.o",
   "functions": {
     "cbf_bvrem_cb": {
+      "smtDecl": "(declare-fun cbf_bvrem_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
       "desc": "Returns the remainder when the first input is divided by the second input (both BitVec<16>); if the second input is zero, returns zero.",
       "tests": [[10, 3], [10, 4]],
       "userLemmas": [ ""

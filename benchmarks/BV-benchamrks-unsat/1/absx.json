@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks-unsat/1/absx.o",
   "functions": {
     "absx_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "if input is greater than zero (unsigned comparison), then absx_cb(z) equals zero else returns the input",
       "tests": [[1], [-7]],
       "userLemmas": [ "(assert (forall ((z (_ BitVec 32)))  (=> (bvugt z (_ bv0 32))      (= (foo_cb z) (_ bv0 32)))))",

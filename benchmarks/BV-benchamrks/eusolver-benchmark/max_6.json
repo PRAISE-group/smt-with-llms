@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
   "functions": {
     "max6_cb": {
+      "smtDecl": "(declare-fun max6_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns the greater of the six input unsigned integers.",
       "tests": [[13, 14, 23, 11, 3, 4], [18, 67, 34, 234, 2, 7]],
       "userLemmas": [ ""

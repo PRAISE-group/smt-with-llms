@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/Bouvier/lbouvier.o",
   "functions": {
     "Le_1_3_3_cb": {
+      "smtDecl": "(declare-fun u_vlsat3_d57_cb ((_ BitVec 5)) (_ BitVec 10))",
       "desc": "It acts like a lookup table or decoder function that:1) Maps a small range of integer input values (x0) to specific output values. 2) Uses a series of conditionals to assign different weights or sizes (possibly for encoding, hardware settings, vector size selection, etc.). 3) Falls back through several levels (a1 → a2 → a3 → a4) to assign a default when no specific case matches.",
       "tests": [[1], [2]],
       "userLemmas": [ ""

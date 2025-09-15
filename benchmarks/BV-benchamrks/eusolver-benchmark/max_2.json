@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
   "functions": {
     "max2_cb": {
+      "smtDecl": "(declare-fun max2_cb  ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Returns the greater of the two input unsigned integers.",
       "tests": [[13, 14], [67, 34]],
       "userLemmas": [ ""

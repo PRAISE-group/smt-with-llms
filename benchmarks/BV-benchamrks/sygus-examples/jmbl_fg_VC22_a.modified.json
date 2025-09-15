@@ -3,24 +3,28 @@
   "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
   "functions": {
     "f_jmbl_fg_VC22_a_cb": {
+      "smtDecl": "(declare-fun f_jmbl_fg_VC22_a_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Compares two integers. Returns 0 if equal, 1 otherwise.",
       "tests": [[1, 4], [1, 1]],
       "userLemmas": [ ""
       ]
     },
     "InV1_cb": {
+      "smtDecl": "(declare-fun InV1_cb ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Checks if a value is within a closed interval [V_min, V_max]. Returns 1 if true, 0 otherwise",
       "tests": [[1, 4, 3], [1, 12, 4]],
       "userLemmas": [ ""
       ]
     },
     "InV2_cb": {
+      "smtDecl": "(declare-fun InV2_cb ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "Checks if two values are within a closed interval [V_min, V_max]. Returns 1 if both are in the range, 0 otherwise.",
       "tests": [[1, 4, 3, 5], [1, 12, 4, 2]],
       "userLemmas": [ ""
       ]
     },
     "UnsafeSame_cb": {
+      "smtDecl": "(declare-fun UnsafeSame_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "The function returns 1 if the sum of the second and fourth arguments is greater than or equal to the sum of the first and third arguments; otherwise, it returns 0.",
       "tests": [[1, 4, 3, 5], [1, 12, 4, 2]],
       "userLemmas": [ ""

@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/str-int-models-16/lstrmodels.o",
   "functions": {
     "numvowels_str6_cb": {
+      "smtDecl": "(declare-fun numvowels_str6_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
       "desc": "Counts number of uppercase vowels (A, E, I, O, U) in a 6-character input string (represented as 6 uint8_t arguments).",
       "tests": [[65, 66, 69, 73, 79, 85], [65, 66, 69, 73, 79, 85]],
       "userLemmas": [ ""

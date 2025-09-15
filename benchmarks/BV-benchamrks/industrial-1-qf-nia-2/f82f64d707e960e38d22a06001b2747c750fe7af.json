@@ -3,24 +3,28 @@
   "object_file": "./benchmarks/BV-benchamrks/industrial-1-qf-nia-2/libindustr.o",
   "functions": {
     "spoon_2_cb": {
+      "smtDecl": "(declare-fun spoon_2_cb ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "returns 1 if input is in range of 0 to 999 otherwise returns 0.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "spoon_4_cb": {
+      "smtDecl": "(declare-fun spoon_4_cb  ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "returns 1 if input is in range of 0 to 99900 otherwise returns 0.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "spoon_6_cb": {
+      "smtDecl": "(declare-fun spoon_6_cb  ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "returns 1 if input is in range of -32768 to 32767 otherwise returns 0.",
       "tests": [[13], [67]],
       "userLemmas": [ ""
       ]
     },
     "spoon_9_cb": {
+      "smtDecl": "(declare-fun spoon_9_cb  ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "returns 1 if input is in range of 0 to 1000 otherwise returns 0.",
       "tests": [[13], [67]],
       "userLemmas": [ ""

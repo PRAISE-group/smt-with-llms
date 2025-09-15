@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
   "functions": {
     "fg_array_sum_2_15_cb": {
+      "smtDecl": "(declare-fun fg_array_sum_2_15_cb  ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32) )",
       "desc": "Takes four numbers and returns the first pairwise sum greater than 5. Checks (first+second), then (second+third), then (third+fourth). If none exceed 5, returns 0.",
       "tests": [[1, 2, 3, 4], [1, 2, 3, 4]],
       "userLemmas": [ ""

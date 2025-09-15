@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
   "functions": {
     "LinExpr1_eq1ex_cb": {
+      "smtDecl": "(declare-fun LinExpr1_eq1ex_cb ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "If the second argument plus 1 equals the first argument, returns the third argument. Otherwise, returns the first.",
       "tests": [[1, 2, 3], [5, 4, 10]],
       "userLemmas": [ ""

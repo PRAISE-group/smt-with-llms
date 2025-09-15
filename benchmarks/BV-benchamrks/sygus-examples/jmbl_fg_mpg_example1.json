@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
   "functions": {
     "ex_cb": {
+      "smtDecl": "(declare-fun ex_cb ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
       "desc": "If first argument is less than 5 and 2*first != (-3 * second) - 16, returns 3*first + 1; otherwise returns 17 + 5*first + 3*second",
       "tests": [[1, 2], [3, 4]],
       "userLemmas": [ ""

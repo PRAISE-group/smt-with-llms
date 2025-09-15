@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/str-int-models-8/lstrmodels.o",
   "functions": {
     "numvowels_str4_cb": {
+      "smtDecl": "(declare-fun numvowels_str4_cb ((_ BitVec 8) (_ BitVec 8) (_ BitVec 8) (_ BitVec 8)) (_ BitVec 8))",
       "desc": "Returns the number of uppercase vowels in the 4-character input. Each character is checked individually for being a vowel and the count is returned.",
       "tests": [[65, 66, 67, 68], [65, 66, 67, 68]],
       "userLemmas": [ ""

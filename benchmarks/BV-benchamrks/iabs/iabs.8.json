@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/iabs/iabs.o",
   "functions": {
     "iabs_cb": {
+      "smtDecl": "(declare-fun iabs_cb  ((_ BitVec 8)) (_ BitVec 8))",
       "desc": "Returns the absolute value of the input integer; if the input is negative, returns its negation; otherwise returns the input unchanged.",
       "tests": [[13], [-2]],
       "userLemmas": [ ""

@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/delphi-benchmarks/core.o",
   "functions": {
     "isTriangular_cb": {
+      "smtDecl": "(declare-fun isTriangular_cb  ((_ BitVec 8) ) Bool)",
       "desc": "returns 1 (as Bool) if input (as BitVec of 8 size) is a sum of some <n> natural numbers else returns 0.",
       "tests": [[13], [3]],
       "userLemmas": [ ""

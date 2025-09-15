@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/bvisalpha-16/lisalpha.o",
   "functions": {
     "isalpha_cb": {
+      "smtDecl": "(declare-fun isalpha_cb ((_ BitVec 16)) (_ BitVec 16))",
       "desc": "returns 1 if input represents an alphabet (either small or big) else returns 0.",
       "tests": [[45], [67]],
       "userLemmas": [ ""

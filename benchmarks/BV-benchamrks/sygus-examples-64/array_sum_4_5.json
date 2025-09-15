@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/sygus-examples/lsygus19.o",
   "functions": {
     "findSum4_cb": {
+      "smtDecl": "(declare-fun findSum4_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64)) ",
       "desc": "Takes four numbers and returns the first pairwise sum greater than 5. Checks (first+second), then (second+third), then (third+fourth). If none exceed 5, returns 0.",
       "tests": [[1, 2, 3, 4], [1, 2, 3, 4]],
       "userLemmas": [ ""

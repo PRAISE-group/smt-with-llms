@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/delphi-benchmarks/core.o",
   "functions": {
     "isPrimeLUT_cb": {
+      "smtDecl": "(declare-fun isPrimeLUT_cb  ((_ BitVec 8) ) Bool)",
       "desc": "returns 1 (as Bool) if input (as BitVec of 8 size) is a prime number else returns 0.",
       "tests": [[13], [67]],
       "userLemmas": [ ""

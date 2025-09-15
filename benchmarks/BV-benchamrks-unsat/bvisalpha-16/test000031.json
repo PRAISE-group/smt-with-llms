@@ -3,6 +3,7 @@
   "object_file": "./benchmarks/BV-benchamrks/bvisalpha-16/lisalpha.o",
   "functions": {
     "isalpha1_cb": {
+      "smtDecl": "(declare-fun isalpha1_cb ((_ BitVec 16)) (_ BitVec 16))",
       "desc": "for any nonzero input, the return value is always 1 else returns zero.",
       "tests": [[45], [67]],
       "userLemmas": [ "(assert (forall ((z (_ BitVec 16)))    (=> (not (= z (_ bv0 16)))        (= (isalpha1_cb z) (_ bv1 16)))))",
