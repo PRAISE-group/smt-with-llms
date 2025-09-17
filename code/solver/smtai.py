@@ -15,7 +15,7 @@ class smtAI(object):
 
     def __init__(self):
         super(smtAI, self).__init__()
-        set_param("timeout", 20000)
+        # set_param("timeout", 200000) # timeout for z3
         self.s = Solver()
         self.formulas = None
         self.vars = None
@@ -549,6 +549,7 @@ class smtAI(object):
         else:
             if args.verbose:
                 print("UNKNOWN")
+            self.pop()
             return AlgoVerdict.UNKNOWN
 
 

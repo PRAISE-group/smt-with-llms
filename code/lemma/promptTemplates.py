@@ -7,7 +7,7 @@ SYSTEM_PROMPT_TEMPLATE = """
 # Start prompting.
 LEMMA_GENERATION_START_TEMPLATE = """
     You objective is to generate a <LEMMA> in <FORMAT>. Please note that you need to
-    generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>. You are forbidden from creating
+    generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>. Conjunction of lemmas shoud be equivalent to the function description provided in natural language. You are forbidden from creating
     <LEMMA> that you have already created earlier in the conversation. <LEMMA> should represent the given <FUNCTION>. I will now give the objective for
     <LEMMA> generation. Please wait!
 """
