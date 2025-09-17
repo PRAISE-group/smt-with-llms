@@ -427,6 +427,8 @@ class smtAI(object):
             #     return
             try:
                 lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
+                if "Extract" in lemmaString:
+                    continue
             except Exception as e:
                 if args.verbose:
                     print("incorrect lemma syntax error", e)

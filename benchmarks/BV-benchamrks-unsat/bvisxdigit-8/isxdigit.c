@@ -18,3 +18,9 @@ uint8_t isxdigit__cb(uint8_t c)
 
   return 0;
 }
+
+uint8_t foo_cb(uint8_t c)
+{
+
+  return c & 1u;
+}

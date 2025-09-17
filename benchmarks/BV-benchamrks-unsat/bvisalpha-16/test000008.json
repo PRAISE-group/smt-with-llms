@@ -2,8 +2,8 @@
   "smt_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-16/test000008.smt2",
   "object_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-16/lisalpha.o",
   "functions": {
-    "isalpha_cb": {
-      "smtDecl": "(declare-fun isalpha_cb ((_ BitVec 16)) (_ BitVec 16))",
+    "foo_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16)) (_ BitVec 16))",
       "desc": "for any nonzero input, the return value is always zero else returns one.",
       "tests": [[45], [67]],
       "userLemmas": [ ""

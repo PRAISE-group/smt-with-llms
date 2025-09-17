@@ -2,13 +2,14 @@
   "smt_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-16/test000034.smt2",
   "object_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-16/lisalpha.o",
   "functions": {
-    "isalpha1_cb": {
-      "smtDecl": "(declare-fun isalpha1_cb ((_ BitVec 16)) (_ BitVec 16))",
+    "foo1_cb": {
+      "smtDecl": "(declare-fun foo1_cb ((_ BitVec 16)) (_ BitVec 16))",
       "desc": "for any nonzero input, the return value is always 1 else returns zero.",
       "tests": [[45], [67]],
-      "userLemmas": [ "(assert (forall ((z (_ BitVec 16)))    (=> (not (= z (_ bv0 16)))        (= (isalpha1_cb z) (_ bv1 16)))))",
-      "(assert (= (isalpha1_cb (_ bv0 16)) (_ bv0 16)))",
-      "(assert (forall ((z (_ BitVec 16)))    (or (= (isalpha1_cb z) (_ bv0 16))        (= (isalpha1_cb z) (_ bv1 16)))))"
+      "userLemmas": [""],
+      "gptChat": [ "(assert (forall ((z (_ BitVec 16)))    (=> (not (= z (_ bv0 16)))        (= (foo1_cb z) (_ bv1 16)))))",
+      "(assert (= (foo1_cb (_ bv0 16)) (_ bv0 16)))",
+      "(assert (forall ((z (_ BitVec 16)))    (or (= (foo1_cb z) (_ bv0 16))        (= (foo1_cb z) (_ bv1 16)))))"
       ]
     }
   }

@@ -30,6 +30,14 @@ def z3_to_c(expr):
         return f'({z3_to_c(expr.arg(0))}) > ({z3_to_c(expr.arg(1))})'
     elif expr.decl().name() == 'bvule':
         return f'({z3_to_c(expr.arg(0))}) <= ({z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvuge':
+        return f'({z3_to_c(expr.arg(0))}) >= ({z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvult':
+        return f'({z3_to_c(expr.arg(0))}) < ({z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvmul':
+        return f'({z3_to_c(expr.arg(0))}) * ({z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvurem':
+        return f'({z3_to_c(expr.arg(0))}) % ({z3_to_c(expr.arg(1))})'
     elif expr.decl().kind() == z3.Z3_OP_ITE:
         cond, then_expr, else_expr = expr.children()
         return f'(({z3_to_c(cond)}) ? ({z3_to_c(then_expr)}) : ({z3_to_c(else_expr)}))'

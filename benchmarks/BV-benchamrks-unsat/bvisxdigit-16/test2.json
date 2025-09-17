@@ -1,9 +1,10 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/bvisxdigit-16/test2.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/bvisxdigit-16/isxdigit.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/bvisxdigit-16/test2.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/bvisxdigit-16/isxdigit.o",
   "functions": {
-    "isxdigit__cb": {
-      "desc": "returns 1 (as BitVec of 16 size) if input integer (as BitVec of 16 size) represents ascii value either from 0-9 or alphabet between 'a' and 'f' or between 'A' and 'F' else returns 0.",
+    "foo_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "return the least significant bit of its input",
       "tests": [[45], [67]],
       "userLemmas": [ ""
       ]

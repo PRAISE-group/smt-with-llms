@@ -1,9 +1,10 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/max_3.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/eusolver-benchmark/max_3.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/eusolver-benchmark/lmax.o",
   "functions": {
-    "max3_cb": {
-      "desc": "Returns the greater of the three input unsigned integers.",
+    "foo3_cb": {
+      "smtDecl": "(declare-fun foo3_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
+      "desc": "returns the number obtained after adding one to the maximum of the three numbers.",
       "tests": [[13, 14, 23], [67, 34, 234]],
       "userLemmas": [ ""
       ]

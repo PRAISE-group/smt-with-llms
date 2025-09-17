@@ -94,6 +94,10 @@ if __name__ == '__main__':
         # TODO: @Gourav, What all will this function return.
         # self.iteration +=1
         resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList)
+        if resultVerdict == AlgoVerdict.UNSAT:
+            print("Program UNSAT")
+        if resultVerdict == AlgoVerdict.SAT:
+            print("Program SAT")
         # resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
         #     # Check SAT call, I think Gourav calls this.
         #     # TODO: @Gourav, What all will this function return.

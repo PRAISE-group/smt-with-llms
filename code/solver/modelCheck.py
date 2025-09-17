@@ -5,13 +5,13 @@ import z3
 
 def typenameConversion(type):
     if str(type) == "Int":
-        return "int"
+        return "uint"
     if str(type) == "Bool":
         return "bool"
     if str(type) == "Real":
         return "float"
     if str(type).startswith("BitVec("):
-        return "int"
+        return "uint"
 
 def get_vars(expr):
     """Return a set of Z3 variables (constants) in expr."""

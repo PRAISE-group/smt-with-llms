@@ -78,7 +78,8 @@ def generateIntialLemmas(func: Function,
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
     function_prompt = function_prompt.replace("<FORMAT>", formatting)
-    function_prompt = function_prompt.replace("<FUNCTION_DESCRIPTION>", func.smtDecl)
+    function_prompt = function_prompt.replace("<FUNCTION_DESCRIPTION>", func.description)
+    function_prompt = function_prompt.replace("<FUNCTION_DECLARATION>", func.smtDecl)
     function_prompt = function_prompt.replace("<FUNCTION_PARAMETERS>", f"{len(func.inputs[0].strip().split(','))} integer inputs.")
     function_prompt = function_prompt.replace("<SAMPLES_FORMAT>", f"List of examples, each of a tuple of {len(func.inputs[0].strip().split(','))} integer inputs.")
     function_prompt = function_prompt.replace("<SAMPLES_LIST>", str(func.inputs))
@@ -86,7 +87,7 @@ def generateIntialLemmas(func: Function,
         function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", func.userLemmas[0].smtFormat)
     else:
         function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", "")
-
+    # print("prompt:", function_prompt)
     response = callLLMforResponse(function_prompt, func.name)
     return get_lemmas_from_llm_response(response, func.name, generation)
 

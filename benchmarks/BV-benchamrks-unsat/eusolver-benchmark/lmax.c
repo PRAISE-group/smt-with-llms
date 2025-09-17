@@ -2,11 +2,37 @@
 
 
 uint32_t max2_cb  (uint32_t a, uint32_t b) { return a > b? a : b; }
+uint32_t foo2_cb  (uint32_t a, uint32_t b) {
+  if (a < b) {
+      return a;            // return smaller if a < b
+  } else if (b < a) {
+      return b;            // return smaller if b < a
+  } else {
+      return ~a;           // if equal, return bitwise NOT
+  }
+}
 
 uint32_t max3_cb  (uint32_t a, uint32_t b, uint32_t c) {
   uint32_t t2 = max2_cb (a,b);
   return t2 > c? t2: c;
 }
+
+uint32_t foo3_cb(uint32_t x0, uint32_t x1, uint32_t x2) {
+    uint32_t max_val;
+    if (x0 >= x1) {
+        if (x0 >= x2)
+            max_val = x0;
+        else
+            max_val = x2;
+    } else {
+        if (x1 >= x2)
+            max_val = x1;
+        else
+            max_val = x2;
+    }
+    return max_val + 1;
+}
+
 
 uint32_t max4_cb  (uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
   uint32_t t3 = max3_cb (a, b, c);

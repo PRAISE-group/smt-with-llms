@@ -1,9 +1,10 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/max_2.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/eusolver-benchmark/max_2.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/eusolver-benchmark/lmax.o",
   "functions": {
-    "max2_cb": {
-      "desc": "Returns the greater of the two input unsigned integers.",
+    "foo2_cb": {
+      "smtDecl": "(declare-fun foo2_cb  ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
+      "desc": "returns the minimum when the two inputs differ, and returns the bitwise complement of the input when the two inputs are equal.",
       "tests": [[13, 14], [67, 34]],
       "userLemmas": [ ""
       ]
