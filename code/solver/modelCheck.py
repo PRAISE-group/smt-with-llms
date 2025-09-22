@@ -28,6 +28,7 @@ def getHarness(solver, funs):
     s = """
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <assert.h>
 """
     s+= "extern \"C\"{\n"

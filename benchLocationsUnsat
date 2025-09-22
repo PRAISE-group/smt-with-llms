@@ -24,3 +24,7 @@ benchmarks/BV-benchamrks-unsat/bvisxdigit-16/test1.json
 benchmarks/BV-benchamrks-unsat/bvisxdigit-16/test2.json
 benchmarks/BV-benchamrks-unsat/eusolver-benchmark/max_2.json
 benchmarks/BV-benchamrks-unsat/eusolver-benchmark/max_3.json
+benchmarks/BV-benchamrks-unsat/delphi-benchmarks/prime.oracle.json
+benchmarks/BV-benchamrks/Bouvier/vlsat3_d57.json
+benchmarks/BV-benchamrks/Bouvier/vlsat3_j02.json
+benchmarks/BV-benchamrks-unsat/sv-benchmarks/traffic_e7_348.ec.json

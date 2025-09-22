@@ -160,7 +160,10 @@ class smtAI(object):
         elif expr.decl().name() == 'bvule':
             return f'({self.z3_to_c(expr.arg(0))}) <= ({self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvmul':
-            return f'({self.z3_to_c(expr.arg(0))}) * ({self.z3_to_c(expr.arg(1))})'
+            return ' * '.join(f'({self.z3_to_c(c)})' for c in expr.children())
+            # return f'({self.z3_to_c(expr.arg(0))}) * ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvadd':
+            return ' + '.join(f'({self.z3_to_c(c)})' for c in expr.children())
         elif expr.decl().name() == 'bvurem':
             return f'({self.z3_to_c(expr.arg(0))}) % ({self.z3_to_c(expr.arg(1))})'
         elif expr.decl().kind() == Z3_OP_ITE:
@@ -209,7 +212,10 @@ class smtAI(object):
         elif expr.decl().name() == 'bvule':
             return f'({self.getFunctions(expr.arg(0), funs)}) <= ({self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().name() == 'bvmul':
-            return f'({self.getFunctions(expr.arg(0), funs)}) * ({self.getFunctions(expr.arg(1), funs)})'
+            return ' * '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
+            # return f'({self.getFunctions(expr.arg(0), funs)}) * ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvadd':
+            return ' + '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
         elif expr.decl().name() == 'bvurem':
             return f'({self.getFunctions(expr.arg(0), funs)}) % ({self.getFunctions(expr.arg(1), funs)})'
         elif expr.decl().kind() == Z3_OP_ITE:
@@ -262,6 +268,7 @@ class smtAI(object):
         s = """
     #include <stdio.h>
     #include <stdlib.h>
+    #include <inttypes.h>
     #include <assert.h>
     """
         s+= "extern \"C\"{\n"
@@ -333,7 +340,7 @@ class smtAI(object):
                 # print("int", var.decl().name(), ";")
                 a+= "%d "
                 b+= ", &" + str(var.decl().name())
-                vardecl += "int "+ str(var.decl().name())+ ";\n"
+                vardecl += "uint "+ str(var.decl().name())+ ";\n"
         prog = "int main(){" + "\n"
         prog+= vardecl + "\n"
         prog+= f"scanf(\"{a[:-1]}\" {b});" + "\n"

@@ -5,24 +5,7 @@
 (set-info :category "industrial")
 ;(set-info :status sat)
 
-;(declare-fun u_vlsat3_j02_cb ((_ BitVec 6)) (_ BitVec 30))
-(define-fun u_vlsat3_j02_cb ((x (_ BitVec 6))) (_ BitVec 30)
-  (ite (or (= x #b010011) (= x #b010100)) (_ bv256 30)       ; x0 == 19 || 20
-  (ite (= x #b010000) (_ bv8 30)                             ; x0 == 16
-  (ite (= x #b000010) (_ bv2 30)                             ; x0 == 2
-  (ite (= x #b000001) (_ bv1 30)                             ; x0 == 1
-  (ite (or (= x #b001011) (= x #b001100)) (_ bv128 30)       ; x0 == 11 || 12
-  (ite (= x #b000111) (_ bv64 30)                            ; x0 == 7
-  (ite (= x #b001001) (_ bv128 30)                           ; x0 == 9
-  (ite (= x #b010010) (_ bv4 30)                             ; x0 == 18
-  (ite (= x #b010001) (_ bv16 30)                            ; x0 == 17
-  (ite (= x #b000011) (_ bv4 30)                             ; x0 == 3
-  (ite (= x #b001110) (_ bv512 30)                           ; x0 == 14
-  (ite (= x #b000100) (_ bv8 30)                             ; x0 == 4
-  (ite (= x #b001010) (_ bv128 30)                           ; x0 == 10
-  (ite (= x #b010110) (_ bv32 30)                            ; x0 == 22
-       (_ bv8 30)                                            ; default → 8
-  )))))))))))))))
+(declare-fun u_vlsat3_j02_cb ((_ BitVec 6)) (_ BitVec 30))
 
 
 (assert (distinct (bvand (u_vlsat3_j02_cb #b000000) #b000000000000000000000000000001) #b000000000000000000000000000000))
