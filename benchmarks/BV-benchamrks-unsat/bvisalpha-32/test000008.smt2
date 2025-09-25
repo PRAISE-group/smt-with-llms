@@ -6,9 +6,9 @@
 
 (declare-fun isalpha_ret () (_ BitVec 32) )
 
-(declare-fun isalpha_cb ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun foo_cb ((_ BitVec 32)) (_ BitVec 32))
 
-(assert (= isalpha_ret (isalpha_cb buffer_0_3)))
+(assert (= isalpha_ret (foo_cb buffer_0_3)))
 
 (assert (and
 (= false (=  (_ bv0 32) buffer_0_3 ) )

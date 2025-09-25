@@ -1,9 +1,10 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/str-int-models-64/test3.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/str-int-models-64/lstrmodels.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/str-int-models-64/test3.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/str-int-models-64/lstrmodels.o",
   "functions": {
-    "numvowels_str6_cb": {
-      "desc": "Counts number of uppercase vowels (A, E, I, O, U) in a 6-character input string (represented as 6 uint8_t arguments).",
+    "foo6_cb": {
+      "smtDecl": "(declare-fun foo6_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))",
+      "desc": "foo6_cb takes six 64-bit inputs, computes their sum modulo 7, and returns that value. If the result is 3, the function instead returns 5. Therefore, the function never outputs 3.",
       "tests": [[65, 66, 69, 73, 79, 85], [65, 66, 69, 73, 79, 85]],
       "userLemmas": [ ""
       ]

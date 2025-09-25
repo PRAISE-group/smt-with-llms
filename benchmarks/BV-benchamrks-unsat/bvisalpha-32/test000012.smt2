@@ -9,10 +9,10 @@
 (declare-fun isalpha_ret () (_ BitVec 32) )
 (declare-fun isalpha_ret_1 () (_ BitVec 32) )
 
-(declare-fun isalpha_cb ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun foo1_cb ((_ BitVec 32)) (_ BitVec 32))
 
-(assert (= isalpha_ret (isalpha_cb buffer_0_3)))
-(assert (= isalpha_ret_1 (isalpha_cb buffer_4_7)))
+(assert (= isalpha_ret (foo1_cb buffer_0_3)))
+(assert (= isalpha_ret_1 (foo1_cb buffer_4_7)))
 
 (assert (and  (and  (and  (and
 (=  false (=  (_ bv0 32) buffer_0_3 ) )

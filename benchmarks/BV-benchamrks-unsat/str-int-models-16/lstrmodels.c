@@ -109,3 +109,36 @@ uint16_t numvowels_str5 (uint16_t s0, uint16_t s1, uint16_t s2, uint16_t s3, uin
 
   return (vcount);
 }
+
+
+uint16_t foo4_cb(uint16_t x0, uint16_t x1, uint16_t x2, uint16_t x3) {
+    uint16_t result = (x0 + x1 + x2 + x3) & 0x07; // sum mod 8
+    if (result == 1)
+        return 2;
+    return result;
+}
+
+
+uint16_t foo5_cb(uint16_t x0, uint16_t x1, uint16_t x2, uint16_t x3) {
+    uint16_t result = (x0 + x1 + x2 + x3) & 0x07; // sum mod 8
+    if (result == 2)
+        return 6;
+    return result;
+}
+
+uint16_t foo6_cb(uint16_t x0, uint16_t x1, uint16_t x2,
+                uint16_t x3, uint16_t x4, uint16_t x5) {
+    uint16_t sum = x0 + x1 + x2 + x3 + x4 + x5;
+    uint16_t mod = sum % 7;  // values 0..6
+    if (mod == 3)
+        return 5;
+    return mod;
+}
+
+uint16_t foo7_cb(uint16_t x0, uint16_t x1, uint16_t x2, uint16_t x3) {
+    uint16_t sum = x0 + x1 + x2 + x3;
+    uint16_t mod = sum % 6;  // values 0..5
+    if (mod == 3)
+        return 4;
+    return mod;
+}

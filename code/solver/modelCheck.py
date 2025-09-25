@@ -3,15 +3,28 @@ import os
 from code.utils.unsatUtil import *
 import z3
 
-def typenameConversion(type):
-    if str(type) == "Int":
-        return "uint"
-    if str(type) == "Bool":
+def typenameConversion(domain):
+    print(domain, type(domain))
+    if isinstance(domain, z3.z3.ArithSortRef):
+        return "int"
+    elif isinstance(domain, z3.z3.BoolSortRef):
         return "bool"
-    if str(type) == "Real":
-        return "float"
-    if str(type).startswith("BitVec("):
-        return "uint"
+    elif isinstance(domain, z3.z3.BitVecSortRef):
+        size = domain.size()
+        if size <= 8:
+            return "uint8_t"
+        elif size <= 16:
+            return "uint16_t"
+        elif size <= 32:
+            return "uint32_t"
+        elif size <= 64:
+            return "uint64_t"
+        else:
+            print(f"/* unsupported bit-width {size} */ unsigned long long")
+            exit()
+    else:
+        print(f"/* unknown type {domain} */")
+        exit()
 
 def get_vars(expr):
     """Return a set of Z3 variables (constants) in expr."""

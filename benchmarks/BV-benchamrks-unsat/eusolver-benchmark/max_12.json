@@ -1,9 +1,10 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/max_12.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/eusolver-benchmark/lmax.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/eusolver-benchmark/max_12.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/eusolver-benchmark/lmax.o",
   "functions": {
-    "max12_cb": {
-      "desc": "Returns the greater of the twelve input unsigned integers.",
+    "foo12_cb": {
+      "smtDecl": "(declare-fun foo12_cb  ((_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))",
+      "desc": "returns the number obtained after adding one to the maximum of the twelve numbers.",
       "tests": [[13, 14, 23, 11, 13, 14, 23, 11, 3, 4, 4, 6], [13, 14, 23, 11, 3, 4, 18, 67, 34, 234, 1, 9]],
       "userLemmas": [ ""
       ]

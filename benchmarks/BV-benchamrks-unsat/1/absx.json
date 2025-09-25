@@ -2,7 +2,7 @@
   "smt_file": "./benchmarks/BV-benchamrks-unsat/1/absx.smt2",
   "object_file": "./benchmarks/BV-benchamrks-unsat/1/absx.o",
   "functions": {
-    "absx_cb": {
+    "foo_cb": {
       "smtDecl": "(declare-fun foo_cb ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "if input is greater than zero (unsigned comparison), then absx_cb(z) equals zero else returns the input",
       "tests": [[1], [-7]],

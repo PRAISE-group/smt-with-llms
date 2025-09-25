@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 int absx_cb(int val) {
   if (val > 0) {
@@ -7,7 +8,7 @@ int absx_cb(int val) {
   }
 }
 
-int foo_cb(int val) {
+int foo_cb(uint32_t val) {
   if (val > 0) {
       return 0;
   } else {

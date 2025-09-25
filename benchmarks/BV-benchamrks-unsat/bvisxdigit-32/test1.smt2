@@ -1,11 +1,11 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
 
-(declare-fun isxdigit__cb ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun foo_cb ((_ BitVec 32)) (_ BitVec 32))
 (declare-fun ndx () (_ BitVec 32))
 (declare-fun retval () (_ BitVec 32))
 
-(assert (= retval (isxdigit__cb ndx)))
+(assert (= retval (foo_cb ndx)))
 
 (assert
      (and

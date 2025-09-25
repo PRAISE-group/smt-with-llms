@@ -1,11 +1,15 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/bvisalpha-32/test000035.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/bvisalpha-32/lisalpha.o",
+  "smt_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-32/test000035.smt2",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-32/lisalpha.o",
   "functions": {
-    "isalpha_cb": {
-      "desc": "returns 1 (as BitVec of 32 size) if input integer (as BitVec of 32 size) represents an alphabet (either small or big) else returns 0.",
+    "foo1_cb": {
+      "smtDecl": "(declare-fun foo1_cb ((_ BitVec 32)) (_ BitVec 32))",
+      "desc": "for any nonzero input, the return value is always 1 else returns zero.",
       "tests": [[45], [67]],
-      "userLemmas": [ ""
+      "userLemmas": [""],
+      "gptChat": [ "(assert (forall ((z (_ BitVec 32)))    (=> (not (= z (_ bv0 32)))        (= (foo1_cb z) (_ bv1 32)))))",
+      "(assert (= (foo1_cb (_ bv0 32)) (_ bv0 32)))",
+      "(assert (forall ((z (_ BitVec 32)))    (or (= (foo1_cb z) (_ bv0 32))        (= (foo1_cb z) (_ bv1 32)))))"
       ]
     }
   }

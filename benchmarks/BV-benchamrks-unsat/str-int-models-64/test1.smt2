@@ -9,9 +9,9 @@
 (declare-const s3 (_ BitVec 64))
 
 
-(declare-fun numvowels_str4_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
+(declare-fun foo4_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
 
-(assert (= numvowels_ret (numvowels_str4_cb s0 s1 s2 s3 )))
+(assert (= numvowels_ret (foo4_cb s0 s1 s2 s3 )))
 (assert (bvugt (_ bv6 64) numvowels_ret))
 
 (assert

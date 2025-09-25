@@ -69,3 +69,37 @@ uint64_t numvowels_str4_cb (uint64_t s0, uint64_t s1, uint64_t s2, uint64_t s3)
 
   return (vcount);
 }
+
+
+
+uint64_t foo4_cb(uint64_t x0, uint64_t x1, uint64_t x2, uint64_t x3) {
+    uint64_t result = (x0 + x1 + x2 + x3) & 0x07; // sum mod 8
+    if (result == 1)
+        return 2;
+    return result;
+}
+
+
+uint64_t foo5_cb(uint64_t x0, uint64_t x1, uint64_t x2, uint64_t x3) {
+    uint64_t result = (x0 + x1 + x2 + x3) & 0x07; // sum mod 8
+    if (result == 2)
+        return 6;
+    return result;
+}
+
+uint64_t foo6_cb(uint64_t x0, uint64_t x1, uint64_t x2,
+                uint64_t x3, uint64_t x4, uint64_t x5) {
+    uint64_t sum = x0 + x1 + x2 + x3 + x4 + x5;
+    uint64_t mod = sum % 7;  // values 0..6
+    if (mod == 3)
+        return 5;
+    return mod;
+}
+
+uint64_t foo7_cb(uint64_t x0, uint64_t x1, uint64_t x2, uint64_t x3) {
+    uint64_t sum = x0 + x1 + x2 + x3;
+    uint64_t mod = sum % 6;  // values 0..5
+    if (mod == 3)
+        return 4;
+    return mod;
+}

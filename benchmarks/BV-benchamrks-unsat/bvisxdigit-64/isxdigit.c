@@ -18,3 +18,8 @@ uint64_t isxdigit__cb (uint64_t c)
 
   return 0;
 }
+
+uint64_t foo_cb(uint64_t c)
+{
+  return c & 1u;
+}

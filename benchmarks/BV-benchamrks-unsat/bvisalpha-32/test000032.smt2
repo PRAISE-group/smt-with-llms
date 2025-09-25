@@ -14,13 +14,13 @@
 (declare-fun isalpha_ret_3 () (_ BitVec 32) )
 (declare-fun isalpha_ret_4 () (_ BitVec 32) )
 
-(declare-fun isalpha_cb ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun foo1_cb ((_ BitVec 32)) (_ BitVec 32))
 
-(assert (= isalpha_ret (isalpha_cb buffer_0_3)))
-(assert (= isalpha_ret_1 (isalpha_cb buffer_4_7)))
-(assert (= isalpha_ret_2 (isalpha_cb buffer_8_11)))
-(assert (= isalpha_ret_3 (isalpha_cb buffer_12_15)))
-(assert (= isalpha_ret_4 (isalpha_cb buffer_16_19)))
+(assert (= isalpha_ret (foo1_cb buffer_0_3)))
+(assert (= isalpha_ret_1 (foo1_cb buffer_4_7)))
+(assert (= isalpha_ret_2 (foo1_cb buffer_8_11)))
+(assert (= isalpha_ret_3 (foo1_cb buffer_12_15)))
+(assert (= isalpha_ret_4 (foo1_cb buffer_16_19)))
 
 (assert (and  (and  (and  (and  (and  (and  (and (and
 

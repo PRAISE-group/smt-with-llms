@@ -336,11 +336,36 @@ class smtAI(object):
         a = ""
         b = ""
         for var in vars:
-            if str(var.sort())=="Int" or is_bv(var) or is_bool(var):
+            if str(var.sort())=="Int" or is_bool(var):
                 # print("int", var.decl().name(), ";")
                 a+= "%d "
                 b+= ", &" + str(var.decl().name())
-                vardecl += "uint "+ str(var.decl().name())+ ";\n"
+                vardecl += "int "+ str(var.decl().name())+ ";\n"
+            elif is_bv(var):
+                width = var.sort().size()  # extract bit width
+                if width == 8:
+                    ctype = "uint8_t"
+                    fmt   = "%hhu"
+                elif width == 16:
+                    ctype = "uint16_t"
+                    fmt   = "%hu"
+                elif width == 32:
+                    ctype = "uint32_t"
+                    fmt   = "%u"
+                elif width == 64:
+                    ctype = "uint64_t"
+                    fmt   = "%llu"
+                else:
+                    print("Unknown bitvector size", var)
+                    exit()
+
+                a += fmt + " "
+                b += ", &" + str(var.decl().name())
+                vardecl += ctype + " " + str(var.decl().name()) + ";\n"
+            else:
+                print("Unexpected input type encountered", var)
+                exit()
+
         prog = "int main(){" + "\n"
         prog+= vardecl + "\n"
         prog+= f"scanf(\"{a[:-1]}\" {b});" + "\n"
