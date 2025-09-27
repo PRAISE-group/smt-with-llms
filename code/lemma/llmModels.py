@@ -24,6 +24,14 @@ load_dotenv(dotenv_path=env_path)
 
 SYSTEM_PROMPT_TEMPLATE = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
 
+BASE_URL = environ.get("BASE_URL")
+
+if commandLineArgs.use156:
+    BASE_URL = environ.get("BASE_URL_156")
+
+if commandLineArgs.use160:
+    BASE_URL = environ.get("BASE_URL_160")
+
 if commandLineArgs.usegpt:
     # Connect to ChatGPT instance
     llm = ChatOpenAI(
@@ -58,7 +66,7 @@ else:
     # Connect to remote Ollama instance
     llm = OllamaLLM(
         model=commandLineArgs.model,
-        base_url=environ.get("BASE_URL")
+        base_url=BASE_URL
     )
 
 # Define the chat prompt

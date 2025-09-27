@@ -30,6 +30,18 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '-u1', '--use156',
+    action='store_true',
+    help='Use the 156 local server'
+)
+
+parser.add_argument(
+    '-u2', '--use160',
+    action='store_true',
+    help='Use the 160 local server'
+)
+
+parser.add_argument(
     '-C', '--usegpt',
     action='store_true',
     help='Use ChatGPT models from OPENAI. Set the .env file with CHAT_OPENAI_API_KEY'
