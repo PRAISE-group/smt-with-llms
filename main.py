@@ -74,6 +74,13 @@ if __name__ == '__main__':
 
     console.log("[bold red]Main Thread is running.")
 
+    if commandLineArgs.stop:
+        time.sleep(5)
+        stop_event.set()
+        for t in running_llm_threads:
+            t.join()
+        sys.exit(0)
+
     # @Pankaj, @Gourav. Write the main driver here or abstract it out into a function.
     # TODO: lemmaDict is a singleton, thread-safe dictionary of Lemmas.
     # TODO: functionsList is a list of function with all initial information for the function.

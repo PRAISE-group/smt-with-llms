@@ -36,6 +36,12 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '-W', '--stop',
+    action='store_true',
+    help='Stop running the framework.'
+)
+
+parser.add_argument(
     '-M', '--model',
     required=True,
     type=str,
