@@ -78,3 +78,35 @@ Refer to model names from below. The names used in the command may change.
 # Model gpt-5-mini-2025-08-07
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usegpt --model gpt-5-mini-2025-08-07 --stop;
 ```
+
+### Models from AWS Bedrock platform.
+
+Please set the following in the `.env` file. Example shows some bedrock models to try.
+
+- AWS_BEARER_TOKEN_BEDROCK
+- AWS_REGION
+
+```bash
+# Model openai.gpt-oss-120b-1:0
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
+
+# Model meta.llama4-maverick-17b-instruct-v1:0
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 --stop
+
+# Errors.
+botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the Converse operation: 
+Invocation of model ID meta.llama4-maverick-17b-instruct-v1:0 with on-demand throughput isn’t supported. 
+Retry your request with the ID or ARN of an inference profile that contains this model.
+
+# Model meta.llama4-maverick-17b-instruct-v1:0
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 --stop
+
+# Model openai.gpt-oss-120b-1:0
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop;
+
+# qwen.qwen3-coder-30b-a3b-v1:0
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0 --stop
+
+# qwen.qwen3-32b-v1:0
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model qwen.qwen3-32b-v1:0 --stop
+```

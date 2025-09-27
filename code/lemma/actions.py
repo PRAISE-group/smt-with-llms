@@ -18,9 +18,38 @@ def process_format(fragment: str) -> str:
         fragment = fragment.replace("int", "Int")
     return fragment
 
-def process_response(response: Any) -> str:
+def get_text_from_content(response) -> str | None:
+    """
+    If response.content is a list, return content[1]['text'] (when present).
+    Otherwise, return response.content as-is.
+    Works when `response` is an object with `.content` or a dict with 'content'.
+    """
+    # Pull `content` whether response is an object or a dict
+    content = None
+    if hasattr(response, "content"):
+        content = response.content
+    elif isinstance(response, dict):
+        content = response.get("content")
+
+    # If we didn't find content, just return whatever we have
+    if content is None:
+        return None
+
+    # If it's a list, try to return content[1]['text']
+    if isinstance(content, list):
+        if len(content) > 1 and isinstance(content[1], dict) and "text" in content[1]:
+            return content[1]["text"]
+        # If the exact slot/key isn't there, fall back to returning the list as-is
+        return content
+
+    # Otherwise return as-is
+    return content
+
+def process_response(response: Any) -> str | None:
     if commandLineArgs.usegpt:
         return response.content
+    if commandLineArgs.usebedrock:
+        return get_text_from_content(response)
     else:
         return response
 

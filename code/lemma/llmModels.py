@@ -1,7 +1,11 @@
+import boto3
 from os import environ
+from sys import exit
 from typing import Dict
 from dotenv import load_dotenv
 from pathlib import Path
+
+from langchain_aws import ChatBedrockConverse
 from langchain_ollama import OllamaLLM
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnableWithMessageHistory
@@ -27,6 +31,29 @@ if commandLineArgs.usegpt:
         max_retries=2,
         api_key=environ.get("CHAT_OPENAI_API_KEY"),
     )
+elif commandLineArgs.usebedrock:
+    REGION = environ.get("AWS_REGION", None)
+    TOKEN = environ.get("AWS_BEARER_TOKEN_BEDROCK", None)
+    if TOKEN is None:
+        console.log("[bold red] Please provide the token in AWS_BEARER_TOKEN_BEDROCK.")
+        exit(1)
+        
+    if REGION is None:
+        console.log("[bold red] Please provide the aws region name in AWS_REGION.")
+        exit(1)
+
+    client = boto3.client(
+        service_name="bedrock-runtime",
+        region_name=REGION
+    )
+    
+    llm = ChatBedrockConverse(
+        model=commandLineArgs.model,
+        region_name=environ.get("AWS_REGION"),
+        client=client,
+        temperature=0.35,
+        max_tokens=None
+    )
 else:
     # Connect to remote Ollama instance
     llm = OllamaLLM(
@@ -37,7 +64,7 @@ else:
 # Define the chat prompt
 prompt = ChatPromptTemplate.from_messages([
     ("system", SYSTEM_PROMPT_TEMPLATE),
-    MessagesPlaceholder(variable_name="history"),
+    MessagesPlaceholder(variable_name="history", optional=True),
     ("human", "{input}")
 ])
 

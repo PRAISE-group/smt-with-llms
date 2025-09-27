@@ -32,7 +32,13 @@ parser.add_argument(
 parser.add_argument(
     '-C', '--usegpt',
     action='store_true',
-    help='Use ChatGPT models.'
+    help='Use ChatGPT models from OPENAI. Set the .env file with CHAT_OPENAI_API_KEY'
+)
+
+parser.add_argument(
+    '-B', '--usebedrock',
+    action='store_true',
+    help='Use LLM models from AWS Bedrock. Set the .env file with AWS_BEARER_TOKEN_BEDROCK and AWS_REGION'
 )
 
 parser.add_argument(
