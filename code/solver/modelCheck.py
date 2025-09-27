@@ -4,7 +4,7 @@ from code.utils.unsatUtil import *
 import z3
 
 def typenameConversion(domain):
-    print(domain, type(domain))
+    # print(domain, type(domain))
     if isinstance(domain, z3.z3.ArithSortRef):
         return "int"
     elif isinstance(domain, z3.z3.BoolSortRef):
