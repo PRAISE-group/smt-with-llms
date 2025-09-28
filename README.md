@@ -5,10 +5,11 @@
 - Install `uv` package manager: [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 ```bash
-$ curl -LsSf https://astral.sh/uv/install.sh | sh
-$ uv sync --force-reinstall
-$ uv python install 3.12 3.13
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv sync --force-reinstall
+uv python install 3.12 3.13
 ```
+
 Create a `.env` file in the root folder of the repository and fill up these variable with appropriate values.
 
 ```aiignore
@@ -16,7 +17,8 @@ BASE_URL=..............................
 CHAT_OPENAI_API_KEY=...................
 AWS_BEARER_TOKEN_BEDROCK=..............
 ```
-## Options Available.
+
+## Options Available
 
 ```aiignore
 ❯ uv run main.py --help
@@ -47,7 +49,7 @@ options:
                         Maximum number of lemmas to ask LLM for at a time (Default 5)
 ```
 
-## Running different models. 
+## Running different models
 
 Remove the `--stop` flag if you want the full framework to run. Use the `--stop` flag just to see the first LLM response and stop.
 
@@ -62,7 +64,7 @@ Remove the `--stop` flag if you want the full framework to run. Use the `--stop`
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --model gpt-oss:20b --stop;
 ```
 
-### Models from ChatGPT (OpenAI API) 
+### Models from ChatGPT (OpenAI API)
 
 Refer to model names from below. The names used in the command may change.
 
@@ -79,7 +81,7 @@ Refer to model names from below. The names used in the command may change.
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usegpt --model gpt-5-mini-2025-08-07 --stop;
 ```
 
-### Models from AWS Bedrock platform.
+### Models from AWS Bedrock platform
 
 Please set the following in the `.env` file. Example shows some bedrock models to try.
 
@@ -94,19 +96,35 @@ Please set the following in the `.env` file. Example shows some bedrock models t
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 --stop
 
 # Errors.
-botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the Converse operation: 
-Invocation of model ID meta.llama4-maverick-17b-instruct-v1:0 with on-demand throughput isn’t supported. 
+botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the Converse operation:
+Invocation of model ID meta.llama4-maverick-17b-instruct-v1:0 with on-demand throughput isn’t supported.
 Retry your request with the ID or ARN of an inference profile that contains this model.
 
 # Model meta.llama4-maverick-17b-instruct-v1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 --stop
 
 # Model openai.gpt-oss-120b-1:0
-❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop;
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
 
 # qwen.qwen3-coder-30b-a3b-v1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0 --stop
 
 # qwen.qwen3-32b-v1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model qwen.qwen3-32b-v1:0 --stop
+```
+
+## Running Ubuntu Docker
+
+```powershell
+docker run -d --name dev1-clang-llvm --restart unless-stopped `
+  -p 8080:8080 -p 8081:80 -p 443:443 -p 2025:22 -p 5056:56 -p 8082:8081 -p 3000:3000 -p 2000:2000 -p 5000:5000 `
+  --hostname=5b3f3926b12d `
+  --env=FULLNAME=dev1-clang-llvm `
+  --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin `
+  --volume=C:\Users\lahir\Documents:/docs `
+  --volume=C:\Users\lahir\Documents\workdir:/workdir `
+  --volume=C:\Users\lahir\Downloads:/downloads `
+  --network=bridge --label='org.opencontainers.image.ref.name=ubuntu' `
+  --label='org.opencontainers.image.version=22.04' -it `
+  ubuntu:jammy bash
 ```

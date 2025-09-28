@@ -7,19 +7,23 @@ from typing import Optional, List, Dict
 
 console = Console()
 
+
 class AlgoVerdict(Enum):
     """
     List of all cases our algorithm can
     return. SAT_OK is SAT, UNSAT_OK is UNSAT
     """
+
     UNKNOWN = 9000
     SAT = 6000
     UNSAT = 7000
+
 
 class Example(BaseModel):
     funcName: str = None
     input: List[int] = []
     output: int = 0
+
 
 class ExampleSet(BaseModel):
     examples: List[Example] = Field(default_factory=list)
@@ -57,16 +61,14 @@ class ExampleSet(BaseModel):
         with self.lock:
             return len(self.examples)
 
-    def createExampleFromDict(self, exampleDictList: List[Dict[str, List[int]]]) -> None:
+    def createExampleFromDict(
+        self, exampleDictList: List[Dict[str, List[int]]]
+    ) -> None:
         with self.lock:
             for exampleItems in exampleDictList:
                 for key, value in exampleItems.items():
                     self.examples.append(
-                        Example(
-                            funcName=key,
-                            input=value[0:-1],
-                            output=value[-1]
-                        )
+                        Example(funcName=key, input=value[0:-1], output=value[-1])
                     )
 
 
@@ -77,16 +79,19 @@ class LemmaStatus(Enum):
     VALID: Tick (Fuzzer says correct)
     INVALID: Cross (Fuzzer says wrong)
     """
+
     VALID = 200
     UNKNOWN = 404
     INVALID = 502
     SYNTAXERROR = 512
     SOFTDELETE = 304
 
+
 class Lemmas(BaseModel):
     """
     Lemmas Object with id and current status
     """
+
     # Unique Identifier of Lemma
     id: str
 
@@ -174,13 +179,15 @@ class Lemmas(BaseModel):
         with self.lock:
             # Normalize text (strip + lowercase), then hash
             norm = self.smtFormat.strip().lower()
-            return hashlib.sha256(norm.encode('utf-8')).hexdigest()
+            return hashlib.sha256(norm.encode("utf-8")).hexdigest()
+
 
 class Function(BaseModel):
     """
     Function Object
     A benchmark consists of different function calls.
     """
+
     id: str
 
     # Function Name, This is also the

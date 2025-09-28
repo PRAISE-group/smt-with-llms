@@ -56,17 +56,14 @@ elif commandLineArgs.usebedrock:
         console.log("[bold red] Please provide the AWS region name in AWS_REGION.")
         exit(1)
 
-    client = boto3.client(
-        service_name="bedrock-runtime",
-        region_name=REGION
-    )
+    client = boto3.client(service_name="bedrock-runtime", region_name=REGION)
 
     llm = ChatBedrockConverse(
         model=commandLineArgs.model,
         region_name=environ.get("AWS_REGION"),
         client=client,
         temperature=0.35,
-        max_tokens=None
+        max_tokens=None,
     )
 else:
     # Connect to remote Ollama instance
@@ -78,25 +75,26 @@ else:
             "[bold green] Need the IP address and PORT of the local ollama serve running instance."
         )
         exit(1)
-    llm = OllamaLLM(
-        model=commandLineArgs.model,
-        base_url=BASE_URL
-    )
+    llm = OllamaLLM(model=commandLineArgs.model, base_url=BASE_URL)
 
 # Define the chat prompt
-prompt = ChatPromptTemplate.from_messages([
-    ("system", SYSTEM_PROMPT_TEMPLATE),
-    MessagesPlaceholder(variable_name="history", optional=True),
-    ("human", "{input}")
-])
+prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", SYSTEM_PROMPT_TEMPLATE),
+        MessagesPlaceholder(variable_name="history", optional=True),
+        ("human", "{input}"),
+    ]
+)
 
 chain = prompt | llm
 chat_histories: Dict[str, InMemoryChatMessageHistory] = {}
+
 
 def get_session_history(session_id: str) -> InMemoryChatMessageHistory:
     if session_id not in chat_histories:
         chat_histories[session_id] = InMemoryChatMessageHistory()
     return chat_histories[session_id]
+
 
 # Create a conversation chain
 conversation = RunnableWithMessageHistory(
@@ -107,12 +105,13 @@ conversation = RunnableWithMessageHistory(
     verbose=True,
 )
 
+
 def callLLMforResponse(prompt: str, funcName: str):
     response = conversation.invoke(
         {"input": prompt},
         config={
             "configurable": {"session_id": f"session_{funcName}"},
-            "callbacks": [TokenTrackingHandler()]
+            "callbacks": [TokenTrackingHandler()],
         },
     )
 
