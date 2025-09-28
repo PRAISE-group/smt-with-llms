@@ -1,17 +1,9 @@
 from code.models import exampleSet
 
 if __name__ == "__main__":
-    exampleSet.createExampleFromDict([
-        {
-            "foo_cb": [0, -1, -1]
-        },
-        {
-            "foo_cb": [-1, 0, -1]
-        },
-        {
-            "foo1_cb": [-1, 0, -1]
-        }
-    ])
+    exampleSet.createExampleFromDict(
+        [{"foo_cb": [0, -1, -1]}, {"foo_cb": [-1, 0, -1]}, {"foo1_cb": [-1, 0, -1]}]
+    )
 
     exp = []
     for examples in exampleSet:

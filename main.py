@@ -15,16 +15,20 @@ from code.satmodule.test.smttoc import *
 
 console = Console()
 
+
 def solverVerdict(a, b, c):
     pass
+
 
 def checkSat(a, b, c):
     pass
 
+
 def checkUnsat(a, b, c):
     pass
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     lemmaDict = LemmaDict()
     functionsList: List[Function] = []
     running_llm_threads: list[threading.Thread] = []
@@ -35,12 +39,12 @@ if __name__ == '__main__':
     # FIXME: can we do better here
     commandLineArgs.sharedLib = data["object_file"]
 
-    for key, value in data['functions'].items():
+    for key, value in data["functions"].items():
         functionsList.append(
             Function(
                 id=key,
                 name=key,
-                description=value.get('desc', "No description available."),
+                description=value.get("desc", "No description available."),
                 userLemmas=[
                     Lemmas(
                         id=f"{key}_gen0_l{index}",
@@ -48,12 +52,13 @@ if __name__ == '__main__':
                         associatedFunction=key,
                         smtFormat=lemmaInfo,
                         generation=0,
-                    ) for index, lemmaInfo in enumerate(value.get('userLemmas', []), 1)
+                    )
+                    for index, lemmaInfo in enumerate(value.get("userLemmas", []), 1)
                 ],
-                inputs=[str(c) for c in value.get('tests', [])],
+                inputs=[str(c) for c in value.get("tests", [])],
                 object_file=commandLineArgs.sharedLib,
                 smtDecl=data["functions"][key]["smtDecl"],
-                smt_file=data["smt_file"]
+                smt_file=data["smt_file"],
             )
         )
         # print(data["functions"][key]["smtDecl"])
@@ -66,8 +71,15 @@ if __name__ == '__main__':
     for f in functionsList:
         t = threading.Thread(
             target=generate_lemmas_background,
-            args=(f, "SMTLIB", commandLineArgs.minLemma, commandLineArgs.maxLemma, lemmaDict, stop_event),
-            daemon=True
+            args=(
+                f,
+                "SMTLIB",
+                commandLineArgs.minLemma,
+                commandLineArgs.maxLemma,
+                lemmaDict,
+                stop_event,
+            ),
+            daemon=True,
         )
         t.start()
         running_llm_threads.append(t)

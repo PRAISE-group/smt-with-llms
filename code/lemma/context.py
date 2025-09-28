@@ -3,7 +3,9 @@ from typing import List, Optional, Dict, Set, Tuple
 from code.models import Lemmas, LemmaStatus
 from threading import Lock
 from rich.console import Console
+
 console = Console()
+
 
 class LemmaDict(BaseModel):
     # This is the list of the lemmas across all functions.
@@ -36,10 +38,14 @@ class LemmaDict(BaseModel):
             func = value.associatedFunction
             text_hash = f"{func}_{text_hash}__lemma"
             if text_hash in self.hashes:
-                console.log(f"[bold violet]Lemma with text '{value.smtFormat}' already exists for {func}.")
+                console.log(
+                    f"[bold violet]Lemma with text '{value.smtFormat}' already exists for {func}."
+                )
             else:
                 value.setHash(text_hash)
-                console.log(f"[bold green]Lemma with text '{value.smtFormat}' added for {func}.")
+                console.log(
+                    f"[bold green]Lemma with text '{value.smtFormat}' added for {func}."
+                )
                 self.hashes.add(text_hash)
                 self.values[key] = value
             return None
@@ -95,7 +101,10 @@ class LemmaDict(BaseModel):
         with self.lock:
             lms = {}
             for key, values in self.values.items():
-                if values.status == LemmaStatus.VALID or values.status == LemmaStatus.UNKNOWN:
+                if (
+                    values.status == LemmaStatus.VALID
+                    or values.status == LemmaStatus.UNKNOWN
+                ):
                     lms[key] = values.smtFormat
             return lms
 

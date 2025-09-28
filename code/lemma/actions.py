@@ -13,10 +13,12 @@ from code.models import exampleSet, ExampleSet
 
 console = Console()
 
+
 def process_format(fragment: str) -> str:
     if "int" in fragment:
         fragment = fragment.replace("int", "Int")
     return fragment
+
 
 def get_text_from_content(response) -> str | None:
     """
@@ -45,6 +47,7 @@ def get_text_from_content(response) -> str | None:
     # Otherwise return as-is
     return content
 
+
 def process_response(response: Any) -> str | None:
     if commandLineArgs.usegpt:
         return response.content
@@ -53,7 +56,10 @@ def process_response(response: Any) -> str | None:
     else:
         return response
 
-def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) -> List[Lemmas]:
+
+def get_lemmas_from_llm_response(
+    response: str, funcName: str, generation: int
+) -> List[Lemmas]:
     lemmas: List[Lemmas] = []
     formattedResponse = process_response(response)
     # TODO: Hashing based check to see if lemma is already added.
@@ -61,13 +67,14 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
     for index, fragments in enumerate(formattedResponse.strip().split("\n"), 0):
         # fragments = fragments.strip().lower()
         fragments = fragments.strip()
-        if (fragments is not None
-                and len(fragments) > 2
-                and "here" not in fragments
-                and "start" not in fragments
-                and "end" not in fragments
-                and "assert" in fragments
-                and "forall" in fragments
+        if (
+            fragments is not None
+            and len(fragments) > 2
+            and "here" not in fragments
+            and "start" not in fragments
+            and "end" not in fragments
+            and "assert" in fragments
+            and "forall" in fragments
         ):
             fragments = process_format(fragments)
             # TODO: Check if lemma is syntactically correct with Z3.
@@ -84,11 +91,9 @@ def get_lemmas_from_llm_response(response: str, funcName: str, generation: int) 
 
     return lemmas
 
-def generateIntialLemmas(func: Function,
-                         formatting: str,
-                         minLimit: int,
-                         maxLimit: int,
-                         generation: int
+
+def generateIntialLemmas(
+    func: Function, formatting: str, minLimit: int, maxLimit: int, generation: int
 ) -> List[Lemmas]:
     """
     Descp: Take in an input of type Function and return a list of Lemmas
@@ -107,13 +112,23 @@ def generateIntialLemmas(func: Function,
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
     function_prompt = function_prompt.replace("<FORMAT>", formatting)
-    function_prompt = function_prompt.replace("<FUNCTION_DESCRIPTION>", func.description)
+    function_prompt = function_prompt.replace(
+        "<FUNCTION_DESCRIPTION>", func.description
+    )
     function_prompt = function_prompt.replace("<FUNCTION_DECLARATION>", func.smtDecl)
-    function_prompt = function_prompt.replace("<FUNCTION_PARAMETERS>", f"{len(func.inputs[0].strip().split(','))} integer inputs.")
-    function_prompt = function_prompt.replace("<SAMPLES_FORMAT>", f"List of examples, each of a tuple of {len(func.inputs[0].strip().split(','))} integer inputs.")
+    function_prompt = function_prompt.replace(
+        "<FUNCTION_PARAMETERS>",
+        f"{len(func.inputs[0].strip().split(','))} integer inputs.",
+    )
+    function_prompt = function_prompt.replace(
+        "<SAMPLES_FORMAT>",
+        f"List of examples, each of a tuple of {len(func.inputs[0].strip().split(','))} integer inputs.",
+    )
     function_prompt = function_prompt.replace("<SAMPLES_LIST>", str(func.inputs))
-    if (len(func.userLemmas) > 0):
-        function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", func.userLemmas[0].smtFormat)
+    if len(func.userLemmas) > 0:
+        function_prompt = function_prompt.replace(
+            "<LEMMA_SAMPLE>", func.userLemmas[0].smtFormat
+        )
     else:
         function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", "")
     # print("prompt:", function_prompt)
@@ -121,7 +136,14 @@ def generateIntialLemmas(func: Function,
     return get_lemmas_from_llm_response(response, func.name, generation)
 
 
-def incrementalLemma(func: Function, formatting: str, minLimit: int, maxLimit: int, generation: int, exampleSet: ExampleSet) -> List[Lemmas]:
+def incrementalLemma(
+    func: Function,
+    formatting: str,
+    minLimit: int,
+    maxLimit: int,
+    generation: int,
+    exampleSet: ExampleSet,
+) -> List[Lemmas]:
     """
     Descp: Take in an input of type Function and return a list of Lemmas
     We use the prompts as shown in code.lemma.promptTemplates
@@ -144,6 +166,7 @@ def incrementalLemma(func: Function, formatting: str, minLimit: int, maxLimit: i
     response = callLLMforResponse(user_prompt, func.name)
     return get_lemmas_from_llm_response(response, func.name, generation)
 
+
 def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[Lemmas]:
 
     if lemma.getRefineDepth() <= 0:
@@ -154,17 +177,27 @@ def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[L
     # Extract the counterexample.
     counterExample = str(lemma.counterExample)
 
-    user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace("<FUNCTION>", lemma.associatedFunction)
+    user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace(
+        "<FUNCTION>", lemma.associatedFunction
+    )
     user_prompt = user_prompt.replace("<FORMAT>", formatting)
     user_prompt = user_prompt.replace("<LEMMA_TEXT>", lemma.smtFormat)
     user_prompt = user_prompt.replace("<INPUT_TEXT>", counterExample)
-    user_prompt = user_prompt.replace("<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'")
+    user_prompt = user_prompt.replace(
+        "<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'"
+    )
 
     response = callLLMforResponse(user_prompt, lemma.associatedFunction)
     lemma.decrementRefineDepth()
     return get_lemmas_from_llm_response(response, lemma.associatedFunction, generation)
 
-def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], formatting: Optional[str], funcName: str) -> List[Lemmas]:
+
+def refineLemma(
+    lemmaDict: LemmaDict,
+    generation: Optional[int],
+    formatting: Optional[str],
+    funcName: str,
+) -> List[Lemmas]:
     """
     Descp: Take in a list of Lemmas that have INVALID lemma status
     and return a list of Lemmas after LLM refinement
@@ -185,12 +218,14 @@ def refineLemma(lemmaDict: LemmaDict, generation: Optional[int], formatting: Opt
 
     return list(chain.from_iterable(newLemmas))
 
+
 def generate_lemmas_background(
-        func: Function,
-        formatting: str,
-        minLimit: int,
-        maxLimit: int,
-        lemmaDict: LemmaDict, stop_event
+    func: Function,
+    formatting: str,
+    minLimit: int,
+    maxLimit: int,
+    lemmaDict: LemmaDict,
+    stop_event,
 ):
     lemmaDict.setLatestGeneration(func.id, 1)
     generation = lemmaDict.getLatestGeneration(func.id)
@@ -203,7 +238,11 @@ def generate_lemmas_background(
 
     # This gives you the list of Initial LEMMAs from LLM.
     res = generateIntialLemmas(
-        func=func, formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation
+        func=func,
+        formatting=formatting,
+        minLimit=minLimit,
+        maxLimit=maxLimit,
+        generation=generation,
     )
 
     for lms in res:
@@ -218,10 +257,17 @@ def generate_lemmas_background(
             lemmaDict.incrementLatestGeneration(func.id)
             generation = lemmaDict.getLatestGeneration(func.id)
 
-            console.log(f"[bold red]Generating more lemmas for: {func.name}, after CEX "
-                        f"T.Length: {len(lemmaDict)}, Generation: {generation}")
+            console.log(
+                f"[bold red]Generating more lemmas for: {func.name}, after CEX "
+                f"T.Length: {len(lemmaDict)}, Generation: {generation}"
+            )
 
-            res = refineLemma(lemmaDict=lemmaDict, generation=generation, formatting=formatting, funcName=func.name)
+            res = refineLemma(
+                lemmaDict=lemmaDict,
+                generation=generation,
+                formatting=formatting,
+                funcName=func.name,
+            )
             lemmaDict.setRefinementCall(False)
 
         if lemmaDict.checkIfIncrementalCall():
@@ -231,10 +277,19 @@ def generate_lemmas_background(
             lemmaDict.incrementLatestGeneration(func.id)
             generation = lemmaDict.getLatestGeneration(func.id)
 
-            console.log(f"[bold blue]Generating more lemmas for: {func.name}, after INCREMENTAL "
-                        f"T.Length: {len(lemmaDict)}, Generation: {generation}")
+            console.log(
+                f"[bold blue]Generating more lemmas for: {func.name}, after INCREMENTAL "
+                f"T.Length: {len(lemmaDict)}, Generation: {generation}"
+            )
 
-            res = incrementalLemma(func=func, formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, generation=generation, exampleSet=exampleSet)
+            res = incrementalLemma(
+                func=func,
+                formatting=formatting,
+                minLimit=minLimit,
+                maxLimit=maxLimit,
+                generation=generation,
+                exampleSet=exampleSet,
+            )
             lemmaDict.setIncrementalCall(False)
 
         for lms in res:
