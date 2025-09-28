@@ -3,6 +3,7 @@ import code.utils.unsatUtil as pu
 from py_console import console
 from code.models import LemmaStatus
 from code.solver.modelCheck import typenameConversion, get_vars
+import z3
 
 # TODO: make is an object for parallel computing of the getVerdict
 
@@ -35,11 +36,11 @@ __AFL_FUZZ_INIT();
         proto += f"\t{out}  {name}({args[:-1]});\n"
 
     aux_fn = """
-    bool Or(uint16_t a, uint16_t b){
+    bool Or(uint64_t a, uint64_t b){
         return a || b;
     }
 
-    bool And(uint16_t a, uint16_t b){
+    bool And(uint64_t a, uint64_t b){
         return a && b;
     }
 """
@@ -51,22 +52,49 @@ __AFL_FUZZ_INIT();
 
 
 def createRest(filepath, lemma, varMap, id, lemma_vars):
+    def get_offset(var):
+            # print(domain, type(domain))
+        if isinstance(var, z3.z3.ArithSortRef):
+            return 4
+        elif isinstance(var, z3.z3.BoolSortRef):
+            raise "BOOL should not come here :p"
+        elif isinstance(var, z3.z3.BitVecSortRef) or isinstance(var, z3.z3.BitVecRef):
+            size = var.size()
+            if size <= 8:
+                return 1
+            elif size <= 16:
+                return 2
+            elif size <= 32:
+                return 4
+            elif size <= 64:
+                return 8
+            else:
+                raise f"/* unsupported bit-width {size} */ unsigned long long"
+        else:
+            raise f"/* unknown type {var} */"
+
     content = '''int main(void) {
     __AFL_INIT();
     uint8_t *buff = (uint8_t *)__AFL_FUZZ_TESTCASE_BUF;\n\n'''
     varlist = []
     print("lemma:", lemma, type(lemma))
     for i in varMap:
-        varlist.append(str(i))
-        content += f"    uint16_t {str(i)} = *((uint16_t *)buff);\n"
-        content += f"    buff += 2;\n\n"
+        name_i = str(i).replace("!","_")
+        varlist.append(name_i)
+        type_i = typenameConversion(i)
+        offset = get_offset(i)
+        content += f"    {type_i} {name_i} = *(({type_i} *)buff);\n"
+        content += f"    buff += {offset};\n\n"
 
 
     for i in lemma_vars:
-        i = str(i).replace("!","_")
-        if str(i) not in varlist:
-            content += f"    uint16_t {str(i)} = *((uint16_t *)buff);\n"
-            content += f"    buff += 2;\n\n"
+        name_i = str(i).replace("!","_")
+        if name_i not in varlist:
+            type_i = typenameConversion(i)
+            offset = get_offset(i)
+            # content += f"    uint16_t {str(i)} = *((uint16_t *)buff);\n"
+            content += f"    {type_i} {name_i} = *(({type_i} *)buff);\n"
+            content += f"    buff += {offset};\n\n"
 
     tcount = 1
     for l in lemma:

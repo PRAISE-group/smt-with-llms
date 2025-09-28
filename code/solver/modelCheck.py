@@ -9,7 +9,7 @@ def typenameConversion(domain):
         return "int"
     elif isinstance(domain, z3.z3.BoolSortRef):
         return "bool"
-    elif isinstance(domain, z3.z3.BitVecSortRef):
+    elif isinstance(domain, z3.z3.BitVecSortRef) or isinstance(domain, z3.z3.BitVecRef):
         size = domain.size()
         if size <= 8:
             return "uint8_t"
