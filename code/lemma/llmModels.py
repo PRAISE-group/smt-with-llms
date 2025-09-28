@@ -24,37 +24,43 @@ load_dotenv(dotenv_path=env_path)
 
 SYSTEM_PROMPT_TEMPLATE = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
 
-BASE_URL = environ.get("BASE_URL")
+BASE_URL = environ.get("BASE_URL", None)
 
 if commandLineArgs.use156:
-    BASE_URL = environ.get("BASE_URL_156")
+    BASE_URL = environ.get("BASE_URL_156", None)
 
 if commandLineArgs.use160:
-    BASE_URL = environ.get("BASE_URL_160")
+    BASE_URL = environ.get("BASE_URL_160", None)
 
 if commandLineArgs.usegpt:
     # Connect to ChatGPT instance
+    API_KEY = environ.get("CHAT_OPENAI_API_KEY", None)
+    if API_KEY is None:
+        console.log("[bold red] Please provide the API Key in CHAT_OPENAI_API_KEY.")
+        exit(1)
     llm = ChatOpenAI(
         model=commandLineArgs.model,
         max_retries=2,
-        api_key=environ.get("CHAT_OPENAI_API_KEY"),
+        api_key=API_KEY,
     )
 elif commandLineArgs.usebedrock:
     REGION = environ.get("AWS_REGION", None)
     TOKEN = environ.get("AWS_BEARER_TOKEN_BEDROCK", None)
     if TOKEN is None:
-        console.log("[bold red] Please provide the token in AWS_BEARER_TOKEN_BEDROCK.")
+        console.log(
+            "[bold red] Please provide the AWS Bedrock token in AWS_BEARER_TOKEN_BEDROCK."
+        )
         exit(1)
-        
+
     if REGION is None:
-        console.log("[bold red] Please provide the aws region name in AWS_REGION.")
+        console.log("[bold red] Please provide the AWS region name in AWS_REGION.")
         exit(1)
 
     client = boto3.client(
         service_name="bedrock-runtime",
         region_name=REGION
     )
-    
+
     llm = ChatBedrockConverse(
         model=commandLineArgs.model,
         region_name=environ.get("AWS_REGION"),
@@ -64,6 +70,14 @@ elif commandLineArgs.usebedrock:
     )
 else:
     # Connect to remote Ollama instance
+    if BASE_URL is None:
+        console.log(
+            "[bold red] Please provide the BASE_URL or BASE_URL_160/BASE_URL_156."
+        )
+        console.log(
+            "[bold green] Need the IP address and PORT of the local ollama serve running instance."
+        )
+        exit(1)
     llm = OllamaLLM(
         model=commandLineArgs.model,
         base_url=BASE_URL
