@@ -100,8 +100,8 @@ botocore.errorfactory.ValidationException: An error occurred (ValidationExceptio
 Invocation of model ID meta.llama4-maverick-17b-instruct-v1:0 with on-demand throughput isn’t supported.
 Retry your request with the ID or ARN of an inference profile that contains this model.
 
-# Model meta.llama4-maverick-17b-instruct-v1:0
-❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 --stop
+# Model us.meta.llama4-maverick-17b-instruct-v1:0 (No errors now)
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0 --stop
 
 # Model openai.gpt-oss-120b-1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
@@ -116,15 +116,19 @@ Retry your request with the ID or ARN of an inference profile that contains this
 ## Running Ubuntu Docker
 
 ```powershell
+docker buildx build -t dev1-clang-llvm:25.10 -f .\windows.dockerfile .
+
 docker run -d --name dev1-clang-llvm --restart unless-stopped `
   -p 8080:8080 -p 8081:80 -p 443:443 -p 2025:22 -p 5056:56 -p 8082:8081 -p 3000:3000 -p 2000:2000 -p 5000:5000 `
   --hostname=5b3f3926b12d `
-  --env=FULLNAME=dev1-clang-llvm `
-  --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin `
-  --volume=C:\Users\lahir\Documents:/docs `
-  --volume=C:\Users\lahir\Documents\workdir:/workdir `
-  --volume=C:\Users\lahir\Downloads:/downloads `
-  --network=bridge --label='org.opencontainers.image.ref.name=ubuntu' `
-  --label='org.opencontainers.image.version=22.04' -it `
-  ubuntu:jammy bash
+  --env FULLNAME=dev1-clang-llvm `
+  --env PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" `
+  --volume "C:\Users\lahir\Documents:/docs" `
+  --volume "C:\Users\lahir\Documents\workdir:/workdir" `
+  --volume "C:\Users\lahir\Downloads:/downloads" `
+  --volume dev1-perstatnce:/persist `
+  --network=bridge `
+  --label "org.opencontainers.image.ref.name=ubuntu" `
+  --label "org.opencontainers.image.version=25.10" `
+  dev1-clang-llvm:25.10
 ```
