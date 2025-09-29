@@ -16,9 +16,10 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
 
   filename=$(basename "$json_path")
   log_file="logFilesUnsat/${i}_${filename}"  # prepend counter to filename
-
-  echo "Running: uv run main.py -i \"$json_path\" -t 1 -v --model gpt-oss:20b" > "$log_file" 2>&1
-  timeout 10m uv run main.py -i "$json_path" -t 1 --model gpt-oss:20b >> "$log_file" 2>&1
+  
+  rm -rf fuzz_temp/*
+  echo "Running: uv run main.py -i \"$json_path\" -t 1 -v --model gpt-oss:20b --use156" > "$log_file" 2>&1
+  timeout 10m uv run main.py -i "$json_path" -t 1 --model gpt-oss:20b --use156>> "$log_file" 2>&1
   rm -rf fuzz_temp/*
 
   ((i++))  # increment counter

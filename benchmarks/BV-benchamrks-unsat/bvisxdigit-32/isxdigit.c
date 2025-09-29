@@ -1,6 +1,6 @@
 #include "isxdigit.h"
 
-uint8_t isxdigit__cb(uint8_t c)
+uint32_t isxdigit__cb(uint32_t c)
 {
   if (c >= '0') {
     if (c <= '9') {
@@ -19,7 +19,7 @@ uint8_t isxdigit__cb(uint8_t c)
   return 0;
 }
 
-uint8_t foo_cb(uint8_t c)
+uint32_t foo_cb(uint32_t c)
 {
   return c & 1u;
 }

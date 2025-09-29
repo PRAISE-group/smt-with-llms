@@ -50,7 +50,7 @@ def z3_to_c(expr):
     elif z3.is_int_value(expr) or z3.is_rational_value(expr):
         return str(expr.as_long())
     else:
-        return str(expr).replace("!","_")  # fallback
+        return "("+ str(expr).replace("!","_") +")"  # fallback
 
 
 

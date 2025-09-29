@@ -423,7 +423,7 @@ class smtAI(object):
             #     print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList):
-        # input("Enter an input to continue")
+        input("Enter an input to continue")
 
         self.iteration +=1
         console.info(f"starting iteration {self.iteration}")

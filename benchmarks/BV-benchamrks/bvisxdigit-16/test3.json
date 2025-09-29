@@ -4,7 +4,7 @@
   "functions": {
     "isxdigit__cb": {
       "smtDecl": "(declare-fun isxdigit__cb ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "returns 1 (as BitVec of 16 size) if input integer (as BitVec of 16 size) represents ascii value either from 0-9 or alphabet between 'a' and 'f' or between 'A' and 'F' else returns 0.",
+      "desc": "returns 1 (as BitVec of 16 size) if input integer (as BitVec of 16 size) represents ascii value characters either from 0-9 or alphabet between 'a' and 'f' or between 'A' and 'F' else returns 0.",
       "tests": [[45], [67]],
       "userLemmas": [ ""
       ]
