@@ -5,6 +5,7 @@ from code.unsatmodule.driver import *
 from code.models import exampleSet, ExampleSet
 from code.models import AlgoVerdict
 from py_console import console
+import time
 
 class smtAI(object):
     """docstring for smtAI.
@@ -27,6 +28,7 @@ class smtAI(object):
         self.lemmasUsed = {} # key is the iteration number starts from 1
         self.cbFunctions = None # Map of close box functions z3 object
         self.inputoutputassertions = [] # input output constraints obtained from modelcheck inconsistency
+        self.prevlemma = {}
 
     def readSMTfile(self, inputfilepath):
         # if args.verbose:
@@ -422,8 +424,8 @@ class smtAI(object):
             # if args.verbose:
             #     print("pushed")
 
-    def run(self, args, bench, lemmasDict, functionsList):
-        input("Enter an input to continue")
+    def run(self, args, bench, lemmasDict, functionsList, executiontime):
+        # input("Enter an input to continue")
 
         self.iteration +=1
         console.info(f"starting iteration {self.iteration}")
@@ -441,7 +443,14 @@ class smtAI(object):
         # lemmaStrings = genLemma(args)
         # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
         console.info("Getting lemmas from LLM")
-        lemmaStrings = lemmasDict.getLemmasforSolver()
+        while True:
+            lemmaStrings = lemmasDict.getLemmasforSolver()
+            if lemmaStrings == self.prevlemma:
+                time.sleep(3)
+                continue
+            break
+        self.prevlemma = lemmaStrings
+        start = time.time()
         # print("sumit ", lemmaStrings)
         if args.verbose:
             print("lemmas from sumit:", lemmaStrings)
@@ -460,6 +469,7 @@ class smtAI(object):
             try:
                 lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
                 if "Extract" in lemmaString:
+                    lemmasDict.removeLemma(lemmaKey)
                     continue
             except Exception as e:
                 if args.verbose:
@@ -471,11 +481,11 @@ class smtAI(object):
                 if args.verbose:
                     print("lemmaFormula is empty")
                 continue
-            if args.verbose:
-                print("lemmaString", lemmaString, self.cbFunctions)
+            # if args.verbose:
+            #     print("lemmaString", lemmaString, self.cbFunctions)
             label = Bool(lemmaKey)
-            if args.verbose:
-                print(label, str(label))
+            # if args.verbose:
+            #     print(label, str(label))
             self.s.assert_and_track(lemmaFormula[0],label)
             bound_vars = set()
             # self.collectBoundVars(lemmaFormula[0], bound_vars)
@@ -489,16 +499,26 @@ class smtAI(object):
                 self.lemmasUsed[self.iteration].append(label)
             # self.add(lemmaFormula)
         # print("testing 3")
-        iterations = args.iterations
+        # iterations = args.iterations
         # while iterations > 0:
         # iterations -= 1
         failedLemmas = []
+        print("\n\n\n\nLemmas used",self.lemmasUsed)
+        if self.iteration in self.lemmasUsed:
+            for lem in self.lemmasUsed[self.iteration]:
+                print(lem, lemmaStrings[str(lem)])
+        else:
+            print(f"No lemmas found for iteration {self.iteration}")
         console.info("Calling Z3 check()")
         createDirectory("oracleTemp")
         with open("oracleTemp/assertions", "w+") as f:
             f.write(str(self.s.assertions()))
         result = self.check()
+        end = time.time()
+        executiontime["z3"]+=end-start
         if result == sat:
+            self.pop()
+            return AlgoVerdict.UNKNOWN
             createDirectory("oracleTemp")
             with open("oracleTemp/model", "w+") as f:
                 f.write(str(self.s.assertions()))
@@ -552,6 +572,7 @@ class smtAI(object):
                 # exit()
                 return AlgoVerdict.UNKNOWN
         elif result == unsat:
+            start = time.time()
             console.info("Getting unsatcore")
             unsatCore = self.s.unsat_core()
             self.unsatCores[self.iteration] = unsatCore
@@ -570,8 +591,11 @@ class smtAI(object):
             # print(self.lemmasUsed)
             # print(varmap)
             # exit()
+            end = time.time()
+            executiontime["z3"]+= end-start
             if len(unsatCore)==0:
                 return AlgoVerdict.UNSAT
+            start = time.time()
             console.info("calling checkUnsat")
             res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
             if args.verbose:
@@ -579,6 +603,9 @@ class smtAI(object):
                 for core in unsatCore:
                     print("lemma status after pankaj call",lemmasDict[str(core)])
             self.pop()
+            end = time.time()
+            executiontime["fuzzer"]+= end-start
+            print("Execution time", executiontime)
             return res
         else:
             if args.verbose:

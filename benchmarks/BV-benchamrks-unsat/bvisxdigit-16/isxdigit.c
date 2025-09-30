@@ -19,7 +19,7 @@ uint16_t isxdigit__cb(uint16_t c)
   return 0;
 }
 
-uint8_t foo_cb(uint16_t c)
+uint16_t foo_cb(uint16_t c)
 {
 
   return c & 1u;

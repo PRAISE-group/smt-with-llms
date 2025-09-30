@@ -15,6 +15,7 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   [[ -z "$json_path" ]] && continue
 
   filename=$(basename "$json_path")
+  echo "benchmark: $filename"
   log_file="logFilesUnsat/${i}_${filename}"  # prepend counter to filename
   
   rm -rf fuzz_temp/*

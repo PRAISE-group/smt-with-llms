@@ -18,7 +18,7 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   log_file="logFiles/${i}_${filename}"  # prepend counter to filename
 
   echo "Running: uv run main.py -i \"$json_path\" -t 1 -v --model llama3:latest" > "$log_file" 2>&1
-  timeout 10m uv run main.py -i "$json_path" -t 1 --model llama3:latest >> "$log_file" 2>&1
+  timeout 10m uv run main.py -i "$json_path" -t 1 -v --model llama3:latest >> "$log_file" 2>&1
   rm -rf fuzz_temp/*
 
   ((i++))  # increment counter

@@ -41,6 +41,22 @@ def z3_to_c(expr):
     elif expr.decl().kind() == z3.Z3_OP_ITE:
         cond, then_expr, else_expr = expr.children()
         return f'(({z3_to_c(cond)}) ? ({z3_to_c(then_expr)}) : ({z3_to_c(else_expr)}))'
+    elif expr.decl().kind() == z3.Z3_OP_EXTRACT:
+        i = expr.decl().params()[0]
+        j = expr.decl().params()[1]
+        # If they are z3 numerals, extract the int value
+        if hasattr(i, "as_long"):
+            i = i.as_long()
+        if hasattr(j, "as_long"):
+            j = j.as_long()
+        x = z3_to_c(expr.arg(0))
+        width = i - j + 1
+        return f"(({x} >> {j}) & ((1u << {width}) - 1u))"
+    elif expr.decl().kind() == z3.Z3_OP_CONCAT:
+        hi, lo = expr.arg(0), expr.arg(1)
+        lo_width = lo.size()
+        print("Extract",expr)
+        return f"(({z3_to_c(hi)} << {lo_width}) | {z3_to_c(lo)})"
     elif z3.is_false(expr):
         return "0"
     elif z3.is_true(expr):
@@ -77,10 +93,14 @@ def removeQuantifier(expr):
     """
         Removes ForAll from the formula and rename the auxillary variable names
     """
+    # goal = z3.Goal()
+    # goal.add(expr)
+    # res = z3.Tactic('nnf')(goal)
     nc = z3.Then(z3.Tactic('nnf'), z3.Tactic('tseitin-cnf'))
     goal = z3.Goal()
     goal.add(expr)
     res = nc(goal)
+    print(res)
     f = []
     lemma_vars = []
     for l in res[0]:

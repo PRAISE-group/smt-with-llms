@@ -104,7 +104,9 @@ if __name__ == "__main__":
     solverai = smtAI()
     solverai.readSMTfile(data["smt_file"])
     solverai.initialize(commandLineArgs, data)
-
+    executiontime = {}
+    executiontime["z3"] = 0
+    executiontime["fuzzer"] = 0
     while not (resultVerdict == AlgoVerdict.SAT or resultVerdict == AlgoVerdict.UNSAT):
         # Sync_Solve() -> generate_lemmas_background already running
         # No need to call Sync_Solve()
@@ -112,7 +114,7 @@ if __name__ == "__main__":
         # This is a call that Solver/SAT module checks.
         # TODO: @Gourav, What all will this function return.
         # self.iteration +=1
-        resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList)
+        resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList, executiontime)
         if resultVerdict == AlgoVerdict.UNSAT:
             print("Program UNSAT")
         if resultVerdict == AlgoVerdict.SAT:
@@ -124,7 +126,9 @@ if __name__ == "__main__":
         # else:
         #     # Check UNSAT call, Pankaj will call this.
         #     resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
-
+    print("Z3 Execution time", executiontime["z3"])
+    print("fuzzer Execution time", executiontime["fuzzer"])
+    print("Total Execution time except LLM", executiontime["z3"]+executiontime["fuzzer"])
     stop_event.set()
     for t in running_llm_threads:
         t.join()
