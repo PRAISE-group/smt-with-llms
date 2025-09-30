@@ -19,10 +19,10 @@ echo "Started program1 (PID=$pid1) and program2 (PID=$pid2)..."
 
 # Function to check if either file has SAT/UNSAT
 check_files() {
-    if grep -qE "SAT|UNSAT" "$file1"; then
+    if grep -qE "SAT" "$file1"; then
         return 0
     fi
-    if grep -qE "SAT|UNSAT" "$file2"; then
+    if grep -qE "UNSAT" "$file2"; then
         return 0
     fi
     return 1

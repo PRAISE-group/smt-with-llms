@@ -470,11 +470,15 @@ class smtAI(object):
                 lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
                 if "Extract" in lemmaString:
                     lemmasDict.removeLemma(lemmaKey)
+                    # lemmasDict[str(id)].setInvalid("lemma should not use Extract or concat")
+                    lemmasDict.setIncrementalCall(True)
                     continue
             except Exception as e:
                 if args.verbose:
-                    print("incorrect lemma syntax error", e)
+                    print("incorrect lemma syntax error", str(e))
                 lemmasDict.removeLemma(lemmaKey)
+                # lemmasDict[str(id)].setInvalid(str(e))
+                lemmasDict.setIncrementalCall(True)
                 # exit()
                 continue
             if len(lemmaFormula)==0:
