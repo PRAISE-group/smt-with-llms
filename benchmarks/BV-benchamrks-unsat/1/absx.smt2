@@ -1,4 +1,4 @@
-(set-logic UFBV)
+(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 (declare-fun foo_cb ((_ BitVec 32)) (_ BitVec 32))

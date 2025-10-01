@@ -16,7 +16,7 @@ class smtAI(object):
 
     def __init__(self):
         super(smtAI, self).__init__()
-        # set_param("timeout", 200000) # timeout for z3
+        # set_param("timeout", 600000) # timeout for z3
         self.s = Solver()
         self.formulas = None
         self.vars = None
@@ -521,6 +521,9 @@ class smtAI(object):
         end = time.time()
         executiontime["z3"]+=end-start
         if result == sat:
+            # print(result)
+            lemmasDict.setIncrementalCall(True)
+            print("sat model",str(self.model()))
             self.pop()
             return AlgoVerdict.UNKNOWN
             createDirectory("oracleTemp")

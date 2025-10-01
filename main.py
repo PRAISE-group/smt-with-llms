@@ -116,6 +116,8 @@ if __name__ == "__main__":
         # self.iteration +=1
         resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList, executiontime)
         if resultVerdict == AlgoVerdict.UNSAT:
+            with open("/home/out2.txt", "w") as f:
+                f.write("UNSAT")
             print("Program UNSAT")
         if resultVerdict == AlgoVerdict.SAT:
             print("Program SAT")

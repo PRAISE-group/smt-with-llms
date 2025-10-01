@@ -1,6 +1,6 @@
 {
   "smt_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-32/test000011.smt2",
-  "object_file": "./benchmarks/BV-benchamrks/bvisalpha-32/lisalpha.o",
+  "object_file": "./benchmarks/BV-benchamrks-unsat/bvisalpha-32/lisalpha.o",
   "functions": {
     "foo_cb": {
       "smtDecl": "(declare-fun foo_cb ((_ BitVec 32)) (_ BitVec 32))",

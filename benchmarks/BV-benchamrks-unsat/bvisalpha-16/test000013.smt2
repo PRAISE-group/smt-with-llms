@@ -1,4 +1,4 @@
-(set-logic UFBV)
+(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 

@@ -3,7 +3,6 @@
   "object_file": "./benchmarks/BV-benchamrks/3/test3lib.o",
   "functions": {
     "test3ext_cb": {
-      "ctype": ["int", "int"],
       "smtDecl": "(declare-fun test3ext_cb ((_ BitVec 32)) (_ BitVec 32))",
       "desc": "takes an integer as input and returns input-3 if input is greater than 6 else it returns input-1",
       "tests": [[1], [7]],
