@@ -106,11 +106,15 @@ Retry your request with the ID or ARN of an inference profile that contains this
 # Model openai.gpt-oss-120b-1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
 
-# qwen.qwen3-coder-30b-a3b-v1:0
+# Model qwen.qwen3-coder-30b-a3b-v1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0 --stop
 
-# qwen.qwen3-32b-v1:0
+# Model qwen.qwen3-32b-v1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model qwen.qwen3-32b-v1:0 --stop
+
+# Model anthropic.claude-sonnet-4-20250514-v1:0
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0 --stop
+❯ uv run main.py -i benchmarks/BV-benchamrks/2018-goel-hwbench/2018-goel-hwbench.json -t 1 -v --usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0 --stop
 ```
 
 ## Running Ubuntu Docker
