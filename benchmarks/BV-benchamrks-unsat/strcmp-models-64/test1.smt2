@@ -14,8 +14,7 @@
 (declare-const t3 (_ BitVec 64))
 
 
-(declare-fun strcmp_int ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)
-	     		   (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
+(declare-fun strcmp_int_cb ((_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64) (_ BitVec 64)) (_ BitVec 64))
 
 
 
@@ -25,7 +24,7 @@
 (assert  (bvugt s3  (_ bv0 64)))
 
 
-(assert (= retval (strcmp_int s0 s1 s2 s3 t0 t1 t2 t3)))
+(assert (= retval (strcmp_int_cb s0 s1 s2 s3 t0 t1 t2 t3)))
 (assert (or (= retval (_ bv0 64)) (= retval (_ bv1 64)) (= retval (_ bv2 64))
 	    (= retval (_ bv3 64)) (= retval (_ bv4 64))))
 

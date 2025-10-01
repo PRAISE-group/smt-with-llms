@@ -4,7 +4,7 @@
   "functions": {
     "_mul_cb": {
       "smtDecl": "(declare-fun _mul_cb ((_ BitVec 8) (_ BitVec 8)) (_ BitVec 8))",
-      "desc": "returns multiplication of two inputs as BitVec of 32 size",
+      "desc": "returns multiplication of two inputs as BitVec of 8 size",
       "tests": [[13, 12], [67, 5]],
       "userLemmas": [ ""
       ]

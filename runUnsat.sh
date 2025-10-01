@@ -25,6 +25,7 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   # echo "$smt2_file"
   # exit
   ./parallel.sh "$json_path" "$smt2_file" "$log_file"
+  wait
   rm -rf fuzz_temp/*
 
   ((i++))  # increment counter
@@ -47,6 +48,7 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   smt2_file="${json_path%.json}.smt2"
   # echo "$smt2_file"
   ./parallel.sh "$json_path" "$smt2_file" "$log_file"
+  wait
   rm -rf fuzz_temp/*
 
   ((i++))  # increment counter
