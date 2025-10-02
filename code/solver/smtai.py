@@ -445,6 +445,7 @@ class smtAI(object):
         console.info("Getting lemmas from LLM")
         while True:
             lemmaStrings = lemmasDict.getLemmasforSolver()
+            break
             if lemmaStrings == self.prevlemma:
                 time.sleep(3)
                 continue
@@ -522,10 +523,10 @@ class smtAI(object):
         executiontime["z3"]+=end-start
         if result == sat:
             # print(result)
-            lemmasDict.setIncrementalCall(True)
-            print("sat model",str(self.model()))
-            self.pop()
-            return AlgoVerdict.UNKNOWN
+            # lemmasDict.setIncrementalCall(True)
+            # print("sat model",str(self.model()))
+            # self.pop()
+            # return AlgoVerdict.UNKNOWN
             createDirectory("oracleTemp")
             with open("oracleTemp/model", "w+") as f:
                 f.write(str(self.s.assertions()))
