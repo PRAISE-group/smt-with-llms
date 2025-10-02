@@ -2,9 +2,7 @@ from pydantic import BaseModel, field_validator, Field, ConfigDict
 from typing import List, Optional, Dict, Set, Tuple
 from code.models import Lemmas, LemmaStatus
 from threading import Lock
-from rich.console import Console
-
-console = Console()
+from code.utils.printers import console
 
 
 class LemmaDict(BaseModel):

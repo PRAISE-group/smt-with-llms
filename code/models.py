@@ -1,12 +1,9 @@
 import hashlib
 from enum import Enum
 from threading import Lock
-from rich.console import Console
+from code.utils.printers import console
 from pydantic import field_validator, BaseModel, Field, ConfigDict
 from typing import Optional, List, Dict
-
-console = Console()
-
 
 class AlgoVerdict(Enum):
     """

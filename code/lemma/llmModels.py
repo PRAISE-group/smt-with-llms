@@ -12,12 +12,12 @@ from langchain_core.runnables import RunnableWithMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.chat_history import InMemoryChatMessageHistory
 
-from rich.console import Console
+from code.utils.printers import console
 from code.utils.commandline import commandLineArgs
 from code.lemma.callbacks import TokenTrackingHandler
 from code.lemma.promptTemplates import SYSTEM_PROMPT_TEMPLATE
 
-console = Console()
+
 # TODO: Keep ChatGPT API key in .env file, do not commit.
 env_path = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(dotenv_path=env_path)

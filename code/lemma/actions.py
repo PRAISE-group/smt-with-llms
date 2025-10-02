@@ -1,17 +1,16 @@
 from time import sleep
 from typing import List, Optional, Any
-from rich.console import Console
+from code.utils.printers import console
 from itertools import chain
 from z3 import *
 
+from code.lemma.checkers import check_lemma_smtlib
 from code.lemma.llmModels import callLLMforResponse
 from code.lemma.context import LemmaDict
 from code.models import Function, Lemmas, LemmaStatus
 from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
 from code.models import exampleSet, ExampleSet
-
-console = Console()
 
 
 def process_format(fragment: str) -> str:
@@ -56,7 +55,6 @@ def process_response(response: Any) -> str | None:
     else:
         return response
 
-
 def get_lemmas_from_llm_response(
     response: str, funcName: str, generation: int
 ) -> List[Lemmas]:
@@ -77,8 +75,11 @@ def get_lemmas_from_llm_response(
             and "forall" in fragments
         ):
             fragments = process_format(fragments)
-            # TODO: Check if lemma is syntactically correct with Z3.
-            # TODO: Incase the lemma is wrong. Need to generate new lemmas.
+            isSyntaxVal = check_lemma_smtlib(lemma_smt=fragments, func_name=funcName)
+            if not isSyntaxVal:
+                console.log(f"[bold blue]Syntax error: {fragments}")
+                continue
+
             lemmas.append(
                 Lemmas(
                     id=f"{funcName}_gen{generation}_l{index}",

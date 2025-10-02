@@ -1,12 +1,10 @@
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import LLMResult
 from pydantic import BaseModel
-from rich.console import Console
+from code.utils.printers import console
 from typing import Any, Dict, List, Union
 from time import perf_counter
 import uuid
-
-console = Console()
 
 
 class TokenTrackingHandler(BaseCallbackHandler):

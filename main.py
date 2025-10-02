@@ -3,7 +3,7 @@ import time
 import json
 import threading
 from time import sleep
-from rich.console import Console
+from code.utils.printers import console
 
 from code.lemma.context import LemmaDict
 from code.models import AlgoVerdict
@@ -12,8 +12,6 @@ from code.lemma.actions import generate_lemmas_background
 from code.models import Function, Lemmas, LemmaStatus
 from code.solver.smtai import *
 from code.satmodule.test.smttoc import *
-
-console = Console()
 
 
 def solverVerdict(a, b, c):
@@ -84,7 +82,7 @@ if __name__ == "__main__":
         t.start()
         running_llm_threads.append(t)
 
-    console.log("[bold red]Main Thread is running.")
+    console.log(f"[bold red]Main Thread is running.")
 
     if commandLineArgs.stop:
         time.sleep(5)
