@@ -20,7 +20,7 @@ pid1=$!
 
 # Run program2 in its own process group with timeout
 cd /home/
-setsid timeout 3m uv run main.py -i "$1" -t 1 -v --model gpt-oss:20b --use156 >> "$3" 2>&1 &
+setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model gpt-oss:20b --use156 >> "$3" 2>&1 &
 pid2=$!
 
 echo "Started program1 (PID=$pid1) and program2 (PID=$pid2)..."
@@ -49,6 +49,11 @@ while true; do
         # Wait for them and all their children
         wait $pid1 2>/dev/null
         wait $pid2 2>/dev/null
+        break
+    fi
+
+    if ! kill -0 "$pid1" 2>/dev/null && ! kill -0 "$pid2" 2>/dev/null; then
+        echo "Both processes finished without SAT/UNSAT."
         break
     fi
     sleep 1

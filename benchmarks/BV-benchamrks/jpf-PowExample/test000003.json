@@ -1,5 +1,5 @@
 {
-  "smt_file": "./benchmarks/BV-benchamrks/jpf-PowExample/test000003.json",
+  "smt_file": "./benchmarks/BV-benchamrks/jpf-PowExample/test000003.smt2",
   "object_file": "./benchmarks/BV-benchamrks/jpf-PowExample/ipow.o",
   "functions": {
     "ipow_cb": {
