@@ -472,7 +472,7 @@ class smtAI(object):
                 if "Extract" in lemmaString:
                     lemmasDict.removeLemma(lemmaKey)
                     # lemmasDict[str(id)].setInvalid("lemma should not use Extract or concat")
-                    lemmasDict.setIncrementalCall(True)
+                    # lemmasDict.setIncrementalCall(True)
                     continue
             except Exception as e:
                 if args.verbose:
