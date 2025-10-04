@@ -40,7 +40,7 @@ def check_lemma_smtlib(
         s.add(parse_smt2_string(smt2))
     except Exception as e:
         # Surface a clean error with the constructed SMT-LIB for quick debugging
-        console.print(e)
+        # console.print(e)
         return False
 
     return True
