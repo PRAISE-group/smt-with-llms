@@ -62,6 +62,7 @@ Remove the `--stop` flag if you want the full framework to run. Use the `--stop`
 
 # Model gpt-oss:20b
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --model gpt-oss:20b --stop;
+❯ uv run main.py -i benchmarks/BV-benchamrks/2018-goel-hwbench/2018-goel-hwbench.json -t 1 -v --model gpt-oss:20b --stop --use156
 ```
 
 ### Models from ChatGPT (OpenAI API)

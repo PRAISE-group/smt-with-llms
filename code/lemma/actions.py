@@ -305,4 +305,4 @@ def generate_lemmas_background(
             lemmaDict[lms.id] = lms
 
         # Rest and start again.
-        sleep(0.5)
+        sleep(1)
