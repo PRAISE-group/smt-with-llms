@@ -1,4 +1,5 @@
 from z3 import Solver, parse_smt2_string, BitVecSort, BitVecVal, Function
+from code.utils.commandline import commandLineArgs
 from code.utils.printers import console
 
 def _wrap_assert_if_needed(lemma: str) -> str:
@@ -16,18 +17,18 @@ def check_lemma_smtlib(
     lemma_smt: str,
     extra_decls: str = "",
     extra_asserts: str = "",
-    func_name: str = "",
+    funcDecl: str = "",
 ) -> bool:
     DEFAULT_DECLS = r"""
         (set-logic ALL)
         ; Declare any common symbols here (edit as you like)
-        (declare-fun FUNCNAME ((_ BitVec 16)) (_ BitVec 16))
+        FUNC_DECL
     """
 
-    DEFAULT_DECLS = DEFAULT_DECLS.replace("FUNCNAME", func_name)
+    DEFAULT_DECLS = DEFAULT_DECLS.replace("FUNC_DECL", funcDecl)
     prelude = DEFAULT_DECLS + "\n" + (extra_decls or "")
     lemma_block = _wrap_assert_if_needed(lemma_smt)
-    tail = "\n" + (extra_asserts or "")
+    tail = "\n" + (extra_asserts or "(check-sat)")
 
     smt2 = f"""
         {prelude}
@@ -37,10 +38,15 @@ def check_lemma_smtlib(
 
     try:
         s = Solver()
-        s.add(parse_smt2_string(smt2))
+        t = parse_smt2_string(smt2)
+        if commandLineArgs.debug:
+            console.print(t)
+        s.add(t)
+        s.check()
     except Exception as e:
         # Surface a clean error with the constructed SMT-LIB for quick debugging
-        # console.print(e)
+        if commandLineArgs.debug:
+            console.print(e)
         return False
 
     return True

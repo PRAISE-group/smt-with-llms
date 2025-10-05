@@ -14,18 +14,6 @@ from code.solver.smtai import *
 from code.satmodule.test.smttoc import *
 
 
-def solverVerdict(a, b, c):
-    pass
-
-
-def checkSat(a, b, c):
-    pass
-
-
-def checkUnsat(a, b, c):
-    pass
-
-
 if __name__ == "__main__":
     lemmaDict = LemmaDict()
     functionsList: List[Function] = []
@@ -59,9 +47,6 @@ if __name__ == "__main__":
                 smt_file=data["smt_file"],
             )
         )
-        # print(data["functions"][key]["smtDecl"])
-    # print(functionsList)
-    # exit()
 
     # Run a background thread for generating lemmas.
     # One for each function.
@@ -82,10 +67,8 @@ if __name__ == "__main__":
         t.start()
         running_llm_threads.append(t)
 
-    console.log(f"[bold red]Main Thread is running.")
-
     if commandLineArgs.stop:
-        time.sleep(5)
+        time.sleep(2)
         stop_event.set()
         for t in running_llm_threads:
             t.join()
@@ -102,9 +85,8 @@ if __name__ == "__main__":
     solverai = smtAI()
     solverai.readSMTfile(data["smt_file"])
     solverai.initialize(commandLineArgs, data)
-    executiontime = {}
-    executiontime["z3"] = 0
-    executiontime["fuzzer"] = 0
+    executiontime = {"z3": 0, "fuzzer": 0}
+
     while not (resultVerdict == AlgoVerdict.SAT or resultVerdict == AlgoVerdict.UNSAT):
         # Sync_Solve() -> generate_lemmas_background already running
         # No need to call Sync_Solve()
@@ -128,7 +110,8 @@ if __name__ == "__main__":
         #     resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
     print("Z3 Execution time", executiontime["z3"])
     print("fuzzer Execution time", executiontime["fuzzer"])
-    print("Total Execution time except LLM", executiontime["z3"]+executiontime["fuzzer"])
+    print("Total Execution time except LLM", executiontime["z3"] + executiontime["fuzzer"])
+
     stop_event.set()
     for t in running_llm_threads:
         t.join()

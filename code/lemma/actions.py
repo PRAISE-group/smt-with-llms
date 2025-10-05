@@ -56,10 +56,10 @@ def process_response(response: Any) -> str | None:
         return response
 
 def get_lemmas_from_llm_response(
-    response: str, funcName: str, generation: int
+    response: str, funcName: str, funcDecl: str, generation: int
 ) -> List[Lemmas]:
     lemmas: List[Lemmas] = []
-    formattedResponse = process_response(response)
+    formattedResponse: str | None = process_response(response)
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
     for index, fragments in enumerate(formattedResponse.strip().split("\n"), 0):
@@ -75,9 +75,14 @@ def get_lemmas_from_llm_response(
             and "forall" in fragments
         ):
             fragments = process_format(fragments)
-            isSyntaxVal = check_lemma_smtlib(lemma_smt=fragments, func_name=funcName)
+            isSyntaxVal: bool = check_lemma_smtlib(
+                lemma_smt=fragments,
+                extra_decls="",
+                extra_asserts="",
+                funcDecl=funcDecl
+            )
+
             if not isSyntaxVal:
-                console.log(f"[bold blue]Syntax error: {fragments}")
                 continue
 
             lemmas.append(
@@ -108,7 +113,8 @@ def generateIntialLemmas(
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
     response = callLLMforResponse(user_prompt, func.name)
-    console.log(response)
+    if commandLineArgs.debug:
+        console.log(response)
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
@@ -134,7 +140,7 @@ def generateIntialLemmas(
         function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", "")
     # print("prompt:", function_prompt)
     response = callLLMforResponse(function_prompt, func.name)
-    return get_lemmas_from_llm_response(response, func.name, generation)
+    return get_lemmas_from_llm_response(response, func.name, func.smtDecl, generation)
 
 
 def incrementalLemma(
@@ -165,10 +171,10 @@ def incrementalLemma(
     user_prompt = user_prompt.replace("<PAIRS>", "\n".join(exp))
 
     response = callLLMforResponse(user_prompt, func.name)
-    return get_lemmas_from_llm_response(response, func.name, generation)
+    return get_lemmas_from_llm_response(response, func.name, func.smtDecl, generation)
 
 
-def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[Lemmas]:
+def refineSingleLemma(lemma: Lemmas, formatting: str, funcDecl: str, generation: int) -> List[Lemmas]:
 
     if lemma.getRefineDepth() <= 0:
         console.log(f"[bold red] No refinement available for lemma {lemma.name}")
@@ -190,7 +196,7 @@ def refineSingleLemma(lemma: Lemmas, formatting: str, generation: int) -> List[L
 
     response = callLLMforResponse(user_prompt, lemma.associatedFunction)
     lemma.decrementRefineDepth()
-    return get_lemmas_from_llm_response(response, lemma.associatedFunction, generation)
+    return get_lemmas_from_llm_response(response, lemma.associatedFunction, funcDecl, generation)
 
 
 def refineLemma(
@@ -198,6 +204,7 @@ def refineLemma(
     generation: Optional[int],
     formatting: Optional[str],
     funcName: str,
+    funcDecl: str
 ) -> List[Lemmas]:
     """
     Descp: Take in a list of Lemmas that have INVALID lemma status
@@ -210,7 +217,7 @@ def refineLemma(
     newLemmas = []
     for lemmaKey, lemma in lemmaDict.items():
         if lemma.status == LemmaStatus.INVALID and lemma.associatedFunction == funcName:
-            lemmaList = refineSingleLemma(lemma, formatting, generation)
+            lemmaList = refineSingleLemma(lemma, formatting, funcDecl, generation)
             for lemma in lemmaList:
                 if lemma.getStatus() == LemmaStatus.SOFTDELETE:
                     lemmaDict.remove(lemma)
@@ -268,6 +275,7 @@ def generate_lemmas_background(
                 generation=generation,
                 formatting=formatting,
                 funcName=func.name,
+                funcDecl=func.smtDecl
             )
             lemmaDict.setRefinementCall(False)
 

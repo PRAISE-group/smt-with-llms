@@ -14,31 +14,37 @@ parser.add_argument(
     '-bench', '--benchName',
     type=str,
     default="None",
-    help='name of the benchmark file'
+    help='Name of the benchmark file.'
 )
 parser.add_argument(
     '-t', '--iterations',
     type=int,
-    help='number of iterations made to LLM',
+    help='Number of iterations made to LLM.',
     required=True
 )
 
 parser.add_argument(
     '-v', '--verbose',
     action='store_true',
-    help='Enable verbose output'
+    help='Enable verbose output.'
+)
+
+parser.add_argument(
+    '-dbg', '--debug',
+    action='store_true',
+    help='Enable Debug wrapped logs or information.'
 )
 
 parser.add_argument(
     '-u1', '--use156',
     action='store_true',
-    help='Use the 156 local server'
+    help='Use the 156 local server.'
 )
 
 parser.add_argument(
     '-u2', '--use160',
     action='store_true',
-    help='Use the 160 local server'
+    help='Use the 160 local server.'
 )
 
 parser.add_argument(

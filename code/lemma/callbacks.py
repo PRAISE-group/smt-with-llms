@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Union
 from time import perf_counter
 import uuid
 
-
+from code.utils.commandline import commandLineArgs
 class TokenTrackingHandler(BaseCallbackHandler):
     def __init__(self) -> None:
         self.total_tokens = 0
@@ -28,16 +28,16 @@ class TokenTrackingHandler(BaseCallbackHandler):
     def on_llm_end(self, response: LLMResult, run_id: uuid.UUID, **kwargs: Any) -> None:
         duration = perf_counter() - self.start_time
         console.log(f"[bold white]Ending LLM run, took {duration:1f}s")
-        if response.llm_output is not None:
+        if response.llm_output is not None and commandLineArgs.debug:
             self.prompt_tokens += response.llm_output["token_usage"]["prompt_tokens"]
             self.completion_tokens += response.llm_output["token_usage"][
                 "completion_tokens"
             ]
             self.total_tokens += response.llm_output["token_usage"]["total_tokens"]
-            print("Ending LLM run")
-            print(f"Total Tokens: {self.total_tokens}")
-            print(f"Prompt Tokens: {self.prompt_tokens}")
-            print(f"Completion Tokens: {self.completion_tokens}")
+            console.log("[bold blue]Ending LLM run")
+            console.log(f"[bold blue] Total Tokens: {self.total_tokens}")
+            console.log(f"[bold blue] Prompt Tokens: {self.prompt_tokens}")
+            console.log(f"[bold blue] Completion Tokens: {self.completion_tokens}")
 
     def on_llm_error(
         self,
