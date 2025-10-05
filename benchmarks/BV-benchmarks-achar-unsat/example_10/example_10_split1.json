@@ -1,0 +1,23 @@
+{
+  "smt_file": "./unsat_examples/example_10/example_10_split1_initiation_bv16.smt2",
+  "object_file": "./unsat_examples/example_10/example_10.o",
+  "functions": {
+    "foo_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `pthread_mutex_lock` used to abstract lock/asm updates; opaque semantics wired in trans-f.",
+      "tests": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "userLemmas": [
+        ""
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "smt_file": "./unsat_examples/example_6/example_6_split3_safety_bv16.smt2",
+  "object_file": "./unsat_examples/example_6/example_6.o",
+  "functions": {
+    "foo_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `if(a,b)` from the binary-exponentiation spec; opaque semantics used in trans-f.",
+      "tests": [
+        [
+          2,
+          3
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "userLemmas": [
+        ""
+      ]
+    }
+  }
+}
