@@ -1,4 +1,0 @@
-array re[12] : w32 -> w8 = symbolic
-(query [(Eq 94 (Read w8 0 re))
-         (Eq 0 (Read w8 1 re))]
-        false)
