@@ -1,0 +1,21 @@
+{
+  "smt_file": "./unsat_examples/example_11/example_11_split2_consecution_bv16.smt2",
+  "object_file": "./unsat_examples/example_11/example_11.o",
+  "functions": {
+    "foo_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `if(x)` (cube helper) abstracted in trans-f; opaque semantics.",
+      "tests": [
+        [
+          2
+        ],
+        [
+          7
+        ]
+      ],
+      "userLemmas": [
+        ""
+      ]
+    }
+  }
+}

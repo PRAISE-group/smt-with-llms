@@ -1,0 +1,4 @@
+/snap/klee/16/usr/local/bin/klee --write-smt2s --write-kqueries --write-sym-paths --output-dir=outdir --libc=klee bin/regex.bc
+PID: 111701
+Using monotonic steady clock with 1/1000000000s resolution
+Started: 2025-09-24 20:30:31

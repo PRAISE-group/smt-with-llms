@@ -1,0 +1,3 @@
+array re[12] : w32 -> w8 = symbolic
+(query [(Eq 0 (Read w8 0 re))]
+        false)

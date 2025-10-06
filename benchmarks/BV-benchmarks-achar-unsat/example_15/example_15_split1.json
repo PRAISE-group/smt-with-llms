@@ -1,0 +1,27 @@
+{
+  "smt_file": "./unsat_examples/example_15/example_15_split1_initiation_bv16.smt2",
+  "object_file": "./unsat_examples/example_15/example_15.o",
+  "functions": {
+    "foo_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `foo(sum,i)` from sum-of-cubes loop; returns (sum + i^3) modulo 2^16, abstracted in trans-f.",
+      "tests": [
+        [
+          0,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          255,
+          3
+        ]
+      ],
+      "userLemmas": [
+        ""
+      ]
+    }
+  }
+}
