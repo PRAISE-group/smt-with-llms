@@ -1,0 +1,12 @@
+
+sat
+((v_initial #b00000000) (m_initial #b00000000) (d_initial #b01000000))
+((v_hi__0 #b00000000) (v_lo__0 #b00000000))
+((v_hi__1 #b00000000) (v_lo__1 #b00000000))
+((v_hi__2 #b00000000) (v_lo__2 #b00000000))
+((result_hi__0 #b11000000))
+((exception_0 true))
+((remainder__0 #b00000000))
+((result_hi__1 #b00000000))
+((result_lo__0 #b11000001))
+((exception_1 false))

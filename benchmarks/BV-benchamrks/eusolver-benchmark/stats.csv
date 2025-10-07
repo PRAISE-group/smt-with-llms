@@ -1,0 +1,12 @@
+PHINode should have one entry for each predecessor of its parent basic block!
+  %6 = phi i32 [ %load3, %load4 ]
+PHINode should have one entry for each predecessor of its parent basic block!
+  %7 = phi i32 [ %load7, %load8 ]
+PHINode should have one entry for each predecessor of its parent basic block!
+  %8 = phi i32 [ %load9, %load10 ]
+PHINode should have one entry for each predecessor of its parent basic block!
+  %9 = phi i32 [ %load11, %load12 ]
+PHINode should have one entry for each predecessor of its parent basic block!
+  %10 = phi i32 [ %load13, %load14 ]
+cvc4: /root/Orax/src/fuzzer/aufbv-utils.cpp:370: bool cvc5::cgen::copyLLVMFunctionToModuleInternal(llvm::Function*, llvm::Module*, std::map<std::__cxx11::basic_string<char>, llvm::Function*>&): Assertion `funcMap[calleeName] == M->getFunction(calleeName)' failed.
+/home/benchmarks/BV-benchamrks/eusolver-benchmark/run_test_orax.sh: line 14: 3909051 Aborted                 (core dumped) $ORAX_BIN --stats --simplification=none --theoryof-mode=term --incremental --fuzz-solve ${OPT_FLAGS} --target-header=./${LIB}.h --target-lib=./${LIB}.a ${FILE}

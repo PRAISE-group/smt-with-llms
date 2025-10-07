@@ -1,0 +1,7 @@
+
+sat
+(
+(define-fun buffer_0_3 () (_ BitVec 16) #b0000000001111000)
+(define-fun isalpha_ret () (_ BitVec 16) #b0000000000000001)
+(define-fun isalpha_cb ((BOUND_VARIABLE_332 (_ BitVec 16))) (_ BitVec 16) #b0000000000000001)
+)

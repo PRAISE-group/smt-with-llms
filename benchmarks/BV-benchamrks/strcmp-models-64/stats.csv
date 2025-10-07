@@ -1,0 +1,8 @@
+JIT session error: Symbols not found: [ strcmp_int ]
+Failed to materialize symbols: { (<main>, { t1, targetFunction0, geqLoss, dataCopy, dataInit, s0, t0, dataStore, s1, s2, eqLoss, t2, s3, gtLoss, t3 }) }
+Fatal failure within void cvc5::prop::PropEngine::pop() at /root/Orax/src/prop/prop_engine.cpp:501
+Check failure
+
+ !d_inCheckSat
+Sat solver in solve()!
+/home/benchmarks/BV-benchamrks/strcmp-models-64/run_test_orax.sh: line 14: 3450620 Aborted                 (core dumped) $ORAX_BIN --stats --simplification=none --theoryof-mode=term --incremental --fuzz-solve ${OPT_FLAGS} --target-header=./${LIB}.h --target-lib=./${LIB}.a ${FILE}

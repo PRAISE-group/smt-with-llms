@@ -1,0 +1,15 @@
+
+sat
+(
+(define-fun c () (_ BitVec 8) #b00000000)
+(define-fun c1 () (_ BitVec 8) #b00000000)
+(define-fun c2 () (_ BitVec 8) #b00000000)
+(define-fun c3 () (_ BitVec 8) #b00000000)
+(define-fun c4 () (_ BitVec 8) #b01000101)
+(define-fun cbf_tolower_cb ((BOUND_VARIABLE_416 (_ BitVec 8))) (_ BitVec 8) (ite (= BOUND_VARIABLE_416 #b01000101) #b01100101 #b00000000))
+(define-fun chr_ret () (_ BitVec 8) #b00000000)
+(define-fun chr_ret_1 () (_ BitVec 8) #b00000000)
+(define-fun chr_ret_2 () (_ BitVec 8) #b00000000)
+(define-fun chr_ret_3 () (_ BitVec 8) #b00000000)
+(define-fun chr_ret_4 () (_ BitVec 8) #b01100101)
+)

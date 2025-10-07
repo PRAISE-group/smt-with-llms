@@ -1,0 +1,9 @@
+
+sat
+(
+(define-fun iabs_cb ((BOUND_VARIABLE_729 (_ BitVec 8))) (_ BitVec 8) #b01000000)
+(define-fun x10 () (_ BitVec 8) #b01000000)
+(define-fun x34 () (_ BitVec 8) #b00000000)
+(define-fun y () (_ BitVec 8) #b00000000)
+(define-fun tempx () (_ BitVec 8) #b01000000)
+)

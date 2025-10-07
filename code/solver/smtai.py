@@ -523,14 +523,14 @@ class smtAI(object):
         executiontime["z3"]+=end-start
         if result == sat:
             # print(result)
-            # lemmasDict.setIncrementalCall(True)
+            lemmasDict.setIncrementalCall(True)
             # print("sat model",str(self.model()))
             # self.pop()
             # return AlgoVerdict.UNKNOWN
             createDirectory("oracleTemp")
-            with open("oracleTemp/model", "w+") as f:
-                f.write(str(self.s.assertions()))
-                f.write(str(self.model()))
+            # with open("oracleTemp/model", "w+") as f:
+            #     f.write(str(self.s.assertions()))
+            #     f.write(str(self.model()))
             # print("testing 2")
             console.info("received a model, calling modelCheck() to check is model is consistent")
             if modelCheck(self,args, self.cbFunctions, bench["object_file"], failedLemmas):

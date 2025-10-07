@@ -54,6 +54,12 @@ def process_directory(input_dir, output_csv):
     results = []
 
     for root, _, files in os.walk(input_dir):
+        # Filter out non-.json files if needed
+        files = [f for f in files if f.endswith(".json")]
+
+        # Sort files numerically based on prefix before underscore
+        files.sort(key=lambda f: int(f.split('_')[0]) if f.split('_')[0].isdigit() else float('inf'))
+
         for fname in files:
             filepath = os.path.join(root, fname)
             category, z3_time, fuzzer_time = parse_file(filepath)
@@ -65,7 +71,7 @@ def process_directory(input_dir, output_csv):
         writer.writerow(["filename", "category", "z3_time", "fuzzer_time"])
         writer.writerows(results)
 
-    print(f"Statistics written to {output_csv}")
+    print(f"✅ Statistics written to {output_csv} (sorted numerically by filename prefix)")
 
 
 if __name__ == "__main__":

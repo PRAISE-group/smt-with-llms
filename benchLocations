@@ -75,8 +75,6 @@
 /home/benchmarks/BV-benchamrks/eusolver-benchmark/max_12.json
 /home/benchmarks/BV-benchamrks/np2-mod-1/np2_mod_1.json
 /home/benchmarks/BV-benchamrks/np2-mod-1/np2_mod_1.16.json
-/home/benchmarks/BV-benchamrks/Bouvier/vlsat3_d57.json
-/home/benchmarks/BV-benchamrks/Bouvier/vlsat3_j02.json
 /home/benchmarks/BV-benchamrks/3/path1.json
 /home/benchmarks/BV-benchamrks/str-int-models-16/test2.json
 /home/benchmarks/BV-benchamrks/str-int-models-16/test4.json
@@ -100,7 +98,6 @@
 /home/benchmarks/BV-benchamrks/delphi-benchmarks/question1h.oracle.json
 /home/benchmarks/BV-benchamrks/delphi-benchmarks/example9.oracle.json
 /home/benchmarks/BV-benchamrks/delphi-benchmarks/question1l.oracle.json
-/home/benchmarks/BV-benchamrks/delphi-benchmarks/prime.oracle.json
 /home/benchmarks/BV-benchamrks/delphi-benchmarks/question1f.oracle.json
 /home/benchmarks/BV-benchamrks/str-int-models-8/test2.json
 /home/benchmarks/BV-benchamrks/str-int-models-8/test4.json
@@ -129,7 +126,6 @@
 /home/benchmarks/BV-benchamrks/tolower-64/test000002.json
 /home/benchmarks/BV-benchamrks/tolower-64/test000031.json
 /home/benchmarks/BV-benchamrks/tolower-64/test000001.json
-/home/benchmarks/BV-benchamrks/2018-goel-hwbench/2018-goel-hwbench.json
 /home/benchmarks/BV-benchamrks/str-int-models-64/test2.json
 /home/benchmarks/BV-benchamrks/str-int-models-64/test3.json
 /home/benchmarks/BV-benchamrks/str-int-models-64/test1.json
@@ -143,7 +139,7 @@
 /home/benchmarks/BV-benchamrks/bvisxdigit-32/test6.json
 /home/benchmarks/BV-benchamrks/bvisxdigit-32/test3.json
 /home/benchmarks/BV-benchamrks/bvisxdigit-32/test1.json
-/home/benchmarks/BV-benchamrks/sv-benchmarks/traffic_e7_348.ec.json
+/home/benchmarks/BV-benchamrks/sygus-examples/jmbl_fg_mpg_example1.json
 /home/benchmarks/BV-benchamrks/nia/z3.683620.json
 /home/benchmarks/BV-benchamrks/nia/qf_AddSub_1295_values_0.json
 /home/benchmarks/BV-benchamrks/nia-64/z3.683620.json

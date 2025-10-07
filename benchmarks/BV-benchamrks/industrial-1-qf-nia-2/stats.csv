@@ -1,0 +1,3 @@
+SMT-LIB version 2.5 unsupported, defaulting to language (and semantics of) SMT-LIB 2.6
+cvc4: /root/Orax/src/fuzzer/aufbv-utils.cpp:370: bool cvc5::cgen::copyLLVMFunctionToModuleInternal(llvm::Function*, llvm::Module*, std::map<std::__cxx11::basic_string<char>, llvm::Function*>&): Assertion `funcMap[calleeName] == M->getFunction(calleeName)' failed.
+/home/benchmarks/BV-benchamrks/industrial-1-qf-nia-2/run_test_orax.sh: line 14: 1474056 Aborted                 (core dumped) $ORAX_BIN --stats --simplification=none --theoryof-mode=term --incremental --fuzz-solve ${OPT_FLAGS} --target-header=./${LIB}.h --target-lib=./${LIB}.a ${FILE}

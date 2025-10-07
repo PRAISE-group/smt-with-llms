@@ -1,0 +1,10 @@
+
+sat
+(
+(define-fun numvowels_ret () (_ BitVec 16) #b0000000000000001)
+(define-fun s0 () (_ BitVec 16) #b0000000000000000)
+(define-fun s1 () (_ BitVec 16) #b0000000000000000)
+(define-fun s2 () (_ BitVec 16) #b0000000000000000)
+(define-fun s3 () (_ BitVec 16) #b0000000001010101)
+(define-fun numvowels_str4_cb ((BOUND_VARIABLE_977 (_ BitVec 16)) (BOUND_VARIABLE_978 (_ BitVec 16)) (BOUND_VARIABLE_979 (_ BitVec 16)) (BOUND_VARIABLE_980 (_ BitVec 16))) (_ BitVec 16) #b0000000000000001)
+)

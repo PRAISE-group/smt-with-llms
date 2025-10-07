@@ -1,0 +1,2 @@
+cvc4: /root/Orax/fsolver/lib/seed.cpp:172: void fuzz_seed::update_loss(): Assertion `loss_data != nullptr && oracle_info_data != nullptr' failed.
+/home/benchmarks/BV-benchamrks/mot-example/run_test_orax.sh: line 14: 3452658 Aborted                 (core dumped) $ORAX_BIN --stats --simplification=none --theoryof-mode=term --incremental --fuzz-solve ${OPT_FLAGS} --target-header=./${LIB}.h --target-lib=./${LIB}.a ${FILE}

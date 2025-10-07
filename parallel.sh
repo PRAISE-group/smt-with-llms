@@ -20,8 +20,8 @@ pid1=$!
 
 # Run program2 in its own process group with timeout
 cd /home/
-#setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model gpt-oss:20b --use156 >> "$3" 2>&1 &
-setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 >> "$3" 2>&1 &
+#setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 >> "$3" 2>&1 &
+setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model gpt-oss:20b --use156 >> "$3" 2>&1 &
 pid2=$!
 
 echo "Started program1 (PID=$pid1) and program2 (PID=$pid2)..."
