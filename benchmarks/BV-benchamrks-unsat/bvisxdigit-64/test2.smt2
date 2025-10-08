@@ -1,6 +1,6 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
-(set-option :simplification none)
+;(set-option :simplification none)
 
 (declare-fun foo_cb ((_ BitVec 64)) (_ BitVec 64))
 (declare-fun ndx () (_ BitVec 64) )

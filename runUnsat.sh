@@ -24,11 +24,14 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   smt2_file="${json_path%.json}.smt2"
   # echo "$smt2_file"
   # exit
-  ./parallel.sh "$json_path" "$smt2_file" "$log_file"
-  wait
+  setsid ./parallel.sh "$json_path" "$smt2_file" "$log_file" &
+  pid1=$!
+  wait $pid1
+  sleep 2
   rm -rf fuzz_temp/*
 
   ((i++))  # increment counter
+  wait
 done < "$input_file"
 
 input_file="$2"
@@ -43,13 +46,16 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   log_file="logFilesAll/${i}_${filename}"  # prepend counter to filename
   
   rm -rf fuzz_temp/*
-  echo "Running: uv run main.py -i \"$json_path\" -t 1 -v --model gpt-oss:20b --use156" > "$log_file" 2>&1
+  # echo "Running: uv run main.py -i \"$json_path\" -t 1 -v --model gpt-oss:20b --use156" > "$log_file" 2>&1
   # uv run main.py -i "$json_path" -t 1 -v --model gpt-oss:20b --use156>> "$log_file" 2>&1
   smt2_file="${json_path%.json}.smt2"
   # echo "$smt2_file"
-  ./parallel.sh "$json_path" "$smt2_file" "$log_file"
-  wait
+  setsid ./parallel.sh "$json_path" "$smt2_file" "$log_file" &
+  pid1=$!
+  wait $pid1
+  sleep 2
   rm -rf fuzz_temp/*
 
   ((i++))  # increment counter
+  wait
 done < "$input_file"

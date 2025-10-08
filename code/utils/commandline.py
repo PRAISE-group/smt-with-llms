@@ -20,7 +20,8 @@ parser.add_argument(
     '-t', '--iterations',
     type=int,
     help='Number of iterations made to LLM.',
-    required=True
+    required=False,
+    default=1
 )
 
 parser.add_argument(
@@ -112,5 +113,22 @@ parser.add_argument(
     required=False,
     default=5
 )
+
+parser.add_argument(
+    '-g', '--addGamma',
+    type=int,
+    help='If set zero then does not add input output of functions to the z3 solver',
+    required=False,
+    default=1
+)
+
+parser.add_argument(
+    '-l', '--addLemma',
+    type=int,
+    help='If set zero then does not add LLM generated lemmas to the z3 solver',
+    required=False,
+    default=1
+)
+
 
 commandLineArgs = parser.parse_args()

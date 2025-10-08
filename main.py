@@ -94,13 +94,19 @@ if __name__ == "__main__":
         # This is a call that Solver/SAT module checks.
         # TODO: @Gourav, What all will this function return.
         # self.iteration +=1
-        resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList, executiontime)
+        try:
+            resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList, executiontime)
+        except Exception as e:
+            print("Error on execution:", str(e))
+            break
         if resultVerdict == AlgoVerdict.UNSAT:
             with open("/home/out2.txt", "w") as f:
                 f.write("UNSAT")
             print("Program UNSAT")
         if resultVerdict == AlgoVerdict.SAT:
             print("Program SAT")
+            with open("/home/out2.txt", "w") as f:
+                f.write("SAT")
         # resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
         #     # Check SAT call, I think Gourav calls this.
         #     # TODO: @Gourav, What all will this function return.
@@ -112,6 +118,7 @@ if __name__ == "__main__":
     print("fuzzer Execution time", executiontime["fuzzer"])
     print("Total Execution time except LLM", executiontime["z3"] + executiontime["fuzzer"])
 
+    exit()
     stop_event.set()
     for t in running_llm_threads:
         t.join()

@@ -29,6 +29,7 @@ class smtAI(object):
         self.cbFunctions = None # Map of close box functions z3 object
         self.inputoutputassertions = [] # input output constraints obtained from modelcheck inconsistency
         self.prevlemma = {}
+        self.addedOnce = False # if llm generated lemmas has been added at least once.
 
     def readSMTfile(self, inputfilepath):
         # if args.verbose:
@@ -430,16 +431,17 @@ class smtAI(object):
         self.iteration +=1
         console.info(f"starting iteration {self.iteration}")
         self.push()
-        for v in self.inputoutputassertions:
-            if args.verbose:
-                print(v)
-            try:
-                assertion = self.readSMTstring(v, self.cbFunctions)
-            except Exception as e:
-                print(e)
-                print("assertion failed:", v)
-                exit()
-            self.add(assertion)
+        if not args.addGamma == 0:
+            for v in self.inputoutputassertions:
+                if args.verbose:
+                    print(v)
+                try:
+                    assertion = self.readSMTstring(v, self.cbFunctions)
+                except Exception as e:
+                    print(e)
+                    print("assertion failed:", v)
+                    exit()
+                self.add(assertion)
         # lemmaStrings = genLemma(args)
         # lemmaStrings = {"L10": "(assert (forall ((varx Int) (vary Int)) (= (foo1_cb varx vary) (foo1_cb vary varx))))", "L11": "(assert (forall ((x Int) (y Int)) (not (= (foo1_cb x y) (foo1_cb y x)))))"} # get from sumit as a list of assertions
         console.info("Getting lemmas from LLM")
@@ -462,47 +464,49 @@ class smtAI(object):
         for v in self.vars:
             if args.verbose:
                 console.info(v,v.sort())
-        for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
-            # if "assert" not in lemmaString:
-            #     print("no assert in lemma")
-            #     lemmasDict.removeLemma(lemmaKey)
-            #     return
-            try:
-                lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
-                if "Extract" in lemmaString:
+        if (not args.addLemma == 0):
+            for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
+                # if "assert" not in lemmaString:
+                #     print("no assert in lemma")
+                #     lemmasDict.removeLemma(lemmaKey)
+                #     return
+                try:
+                    lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
+                    if "Extract" in lemmaString:
+                        lemmasDict.removeLemma(lemmaKey)
+                        # lemmasDict[str(id)].setInvalid("lemma should not use Extract or concat")
+                        # lemmasDict.setIncrementalCall(True)
+                        continue
+                except Exception as e:
+                    if args.verbose:
+                        print("incorrect lemma syntax error", str(e))
                     lemmasDict.removeLemma(lemmaKey)
-                    # lemmasDict[str(id)].setInvalid("lemma should not use Extract or concat")
-                    # lemmasDict.setIncrementalCall(True)
+                    # lemmasDict[str(id)].setInvalid(str(e))
+                    lemmasDict.setIncrementalCall(True)
+                    # exit()
                     continue
-            except Exception as e:
-                if args.verbose:
-                    print("incorrect lemma syntax error", str(e))
-                lemmasDict.removeLemma(lemmaKey)
-                # lemmasDict[str(id)].setInvalid(str(e))
-                lemmasDict.setIncrementalCall(True)
+                if len(lemmaFormula)==0:
+                    if args.verbose:
+                        print("lemmaFormula is empty")
+                    continue
+                # if args.verbose:
+                #     print("lemmaString", lemmaString, self.cbFunctions)
+                label = Bool(lemmaKey)
+                # if args.verbose:
+                #     print(label, str(label))
+                self.s.assert_and_track(lemmaFormula[0],label)
+                self.addedOnce = True
+                bound_vars = set()
+                # self.collectBoundVars(lemmaFormula[0], bound_vars)
+                # print(self.vars, bound_vars)
                 # exit()
-                continue
-            if len(lemmaFormula)==0:
-                if args.verbose:
-                    print("lemmaFormula is empty")
-                continue
-            # if args.verbose:
-            #     print("lemmaString", lemmaString, self.cbFunctions)
-            label = Bool(lemmaKey)
-            # if args.verbose:
-            #     print(label, str(label))
-            self.s.assert_and_track(lemmaFormula[0],label)
-            bound_vars = set()
-            # self.collectBoundVars(lemmaFormula[0], bound_vars)
-            # print(self.vars, bound_vars)
-            # exit()
-            # self.labelsUsed += 1
-            self.lemmasData[label] = lemmaFormula[0]
-            if self.iteration not in self.lemmasUsed:
-                self.lemmasUsed[self.iteration] = [label]
-            else:
-                self.lemmasUsed[self.iteration].append(label)
-            # self.add(lemmaFormula)
+                # self.labelsUsed += 1
+                self.lemmasData[label] = lemmaFormula[0]
+                if self.iteration not in self.lemmasUsed:
+                    self.lemmasUsed[self.iteration] = [label]
+                else:
+                    self.lemmasUsed[self.iteration].append(label)
+                # self.add(lemmaFormula)
         # print("testing 3")
         # iterations = args.iterations
         # while iterations > 0:
