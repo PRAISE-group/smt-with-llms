@@ -4,6 +4,7 @@ from sys import exit
 from typing import Dict
 from dotenv import load_dotenv
 from pathlib import Path
+from botocore.config import Config
 
 from langchain_aws import ChatBedrockConverse
 from langchain_ollama import OllamaLLM
@@ -16,7 +17,6 @@ from code.utils.printers import console
 from code.utils.commandline import commandLineArgs
 from code.lemma.callbacks import TokenTrackingHandler
 from code.lemma.promptTemplates import SYSTEM_PROMPT_TEMPLATE
-
 
 # TODO: Keep ChatGPT API key in .env file, do not commit.
 env_path = Path(__file__).resolve().parents[2] / ".env"
@@ -56,7 +56,14 @@ elif commandLineArgs.usebedrock:
         console.log("[bold red] Please provide the AWS region name in AWS_REGION.")
         exit(1)
 
-    client = boto3.client(service_name="bedrock-runtime", region_name=REGION)
+    cfg = Config(
+        region_name=REGION,
+        retries={"max_attempts": 5, "mode": "standard"},
+        connect_timeout=10,
+        read_timeout=120  # allow longer server generation/streaming
+    )
+    
+    client = boto3.client(service_name="bedrock-runtime", config=cfg)
 
     llm = ChatBedrockConverse(
         model=commandLineArgs.model,
@@ -82,7 +89,7 @@ prompt = ChatPromptTemplate.from_messages(
     [
         ("system", SYSTEM_PROMPT_TEMPLATE),
         MessagesPlaceholder(variable_name="history", optional=True),
-        ("human", "{input}"),
+        ("human", "Please read the input: {input}"),
     ]
 )
 
