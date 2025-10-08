@@ -21,3 +21,6 @@ uv run main.py -i benchmarks/BV-benchamrks/2018-goel-hwbench/2018-goel-hwbench.j
 
 # Test 8
 uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0 --stop
+
+# Test 9
+uv run main.py -i /home/benchmarks/BV-benchamrks-unsat/eusolver-benchmark/max_3.json -t 1 -v --usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0 --stop
