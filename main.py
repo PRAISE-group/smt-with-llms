@@ -68,7 +68,7 @@ if __name__ == "__main__":
         running_llm_threads.append(t)
 
     if commandLineArgs.stop:
-        time.sleep(2)
+        time.sleep(10)
         stop_event.set()
         for t in running_llm_threads:
             t.join()
@@ -80,6 +80,13 @@ if __name__ == "__main__":
     # TODO: commandLineArgs is a class dictonary of all the attributes presented via the command line.
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
+
+
+    if commandLineArgs.usebedrock:
+        time.sleep(10)
+
+    if commandLineArgs.usegpt:
+        time.sleep(10)
 
     resultVerdict = AlgoVerdict.UNKNOWN
     solverai = smtAI()

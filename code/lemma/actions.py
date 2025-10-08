@@ -305,4 +305,14 @@ def generate_lemmas_background(
             lemmaDict[lms.id] = lms
 
         # Rest and start again.
-        sleep(1)
+        # Local Run results are not affected.
+        sleep(2)
+
+        # Bedrock has a rate-limit.
+        if commandLineArgs.usebedrock:
+            sleep(10)
+
+        # ChatGPT has not rate-limit but will incurr
+        # much higher cost.
+        if commandLineArgs.usegpt:
+            sleep(10)
