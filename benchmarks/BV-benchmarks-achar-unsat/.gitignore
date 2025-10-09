@@ -1,0 +1,17 @@
+*.log
+*.o
+*.so
+*.ar
+*.lib
+*.dll
+*.exe
+*.out
+*.class
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.DS_Store
+.idea/
+.vscode/
+*.swp
