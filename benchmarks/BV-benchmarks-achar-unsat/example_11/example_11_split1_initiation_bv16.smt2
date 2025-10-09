@@ -26,7 +26,14 @@
 ( declare-fun cube_cb ((_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16)) ) Bool
-	true
+	; INVARIANT
+  (and
+    (= res
+       (bvmul
+         (bvmul (bvadd (bvadd a b) i)
+                (bvadd (bvadd a b) i))
+         (bvadd (bvadd a b) i)))
+    (bvule i n))
 )
 
 ( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16)) ) Bool

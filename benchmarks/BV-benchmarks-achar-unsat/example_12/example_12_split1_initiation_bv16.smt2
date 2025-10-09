@@ -36,7 +36,9 @@
 ( declare-fun setPowerValue_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( power (_ BitVec 16) )( result (_ BitVec 16) )( x (_ BitVec 16) )( x_0 (_ BitVec 16) )( y (_ BitVec 16) )( y_power (_ BitVec 16) ) ) Bool
-    true
+  (and
+    (= x_0 (bvadd x (bvmul y result)))
+    (bvuge x x))
 )
 
 ( define-fun pre-f ( ( power (_ BitVec 16) )( result (_ BitVec 16) )( x (_ BitVec 16) )( x_0 (_ BitVec 16) )( y (_ BitVec 16) )( y_power (_ BitVec 16) )( power_0 (_ BitVec 16) )( power_1 (_ BitVec 16) )( power_2 (_ BitVec 16) )( power_3 (_ BitVec 16) )( result_0 (_ BitVec 16) )( result_1 (_ BitVec 16) )( result_2 (_ BitVec 16) )( result_3 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( x_2 (_ BitVec 16) )( x_0_0 (_ BitVec 16) )( x_0_1 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_power_0 (_ BitVec 16) )( y_power_1 (_ BitVec 16) ) ) Bool

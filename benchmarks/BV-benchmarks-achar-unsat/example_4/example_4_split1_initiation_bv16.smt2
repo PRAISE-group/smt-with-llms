@@ -35,7 +35,12 @@
 ( declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( c (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
-	true
+; INVARIANT
+ (and
+    (bvuge n (_ bv0 16))
+    (bvule i n)
+    (= y (fib_cb (bvadd i (_ bv1 16))))
+    (= x (fib_cb i)))
 )
 
 ( define-fun pre-f ( ( c (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( c_0 (_ BitVec 16))( c_1 (_ BitVec 16))( c_2 (_ BitVec 16))( c_3 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16)) ) Bool

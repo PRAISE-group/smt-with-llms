@@ -25,7 +25,10 @@
 ( declare-fun factorial_cb ((_ BitVec 16)) (_ BitVec 16))
 
 ( define-fun inv-f( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) ) ) Bool
-	true
+  (and
+    (= res (factorial_cb k))
+    (bvule k n)
+    (bvuge n (_ bv0 16)))
 )
 
 ( define-fun pre-f ( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( k_0 (_ BitVec 16) )( k_1 (_ BitVec 16) )( k_2 (_ BitVec 16) )( k_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) )( res_3 (_ BitVec 16) ) ) Bool

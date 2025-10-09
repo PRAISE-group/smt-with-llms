@@ -32,7 +32,11 @@
 (declare-const res_5 (_ BitVec 16))
 
 (define-fun inv-f ((bit (_ BitVec 16)) (num (_ BitVec 16)) (num_orig (_ BitVec 16)) (res (_ BitVec 16))) Bool
- true
+  (or
+    (and
+      (= bit (_ bv0 16))
+      (bvule (bvmul res res) num_orig))
+    (not (= bit (_ bv0 16))))
 )
 
 (define-fun pre-f

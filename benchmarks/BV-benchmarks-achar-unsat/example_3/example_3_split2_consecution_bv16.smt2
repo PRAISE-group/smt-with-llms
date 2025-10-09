@@ -34,7 +34,8 @@
 
 
 ( define-fun inv-f (( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
-	true
+	; INVARIANT:
+	( = (gcd_cb a b) (gcd_cb x y))
 )
 
 ( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( result_2 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool

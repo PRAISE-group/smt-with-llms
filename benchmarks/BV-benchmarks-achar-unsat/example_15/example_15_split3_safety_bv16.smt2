@@ -27,9 +27,19 @@
 ; Closed Box Function: retuns the multiplication cube of its two arguments
 ( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
+
 ( define-fun inv-f( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
-    true
+  (and
+    (= sum
+       (bvudiv
+         (bvmul
+           (bvmul (bvadd (bvmul (_ bv1 16) i) (_ bv1 16))
+                  (bvadd (bvmul (_ bv1 16) i) (_ bv1 16)))
+           (bvmul (bvadd (bvmul (_ bv1 16) i) (_ bv0 16))
+                  (bvadd (bvmul (_ bv1 16) i) (_ bv0 16))))
+         (_ bv4 16)))
+    (bvule i n))
 )
 
 ( define-fun pre-f ( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( i_2 (_ BitVec 16) )( i_3 (_ BitVec 16) )( lin_sum_0 (_ BitVec 16) )( lin_sum_1 (_ BitVec 16) )( lin_sum_2 (_ BitVec 16) )( lin_sum_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool

@@ -35,8 +35,14 @@
 ; Closed Box Function: Shift input 'x' by 's' bits to the right
 ( declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
+; Closed Box Function: Integer Cube Root of input 'x'
+( declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16) )
+
+
 ( define-fun inv-f( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
-	true
+ (and
+    (bvuge orig_x (bvmul y (bvmul y y)))
+    (bvuge (icbrt_cb orig_x) y))
 )
 
 ( define-fun pre-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( orig_x_0 (_ BitVec 16))( orig_x_1 (_ BitVec 16))( s_0 (_ BitVec 16))( s_1 (_ BitVec 16))( s_2 (_ BitVec 16))( s_3 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16))( y_4 (_ BitVec 16))( y_5 (_ BitVec 16)) ) Bool

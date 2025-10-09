@@ -21,7 +21,16 @@
 
 ; invariant predicate (here trivially true)
 (define-fun inv-f ((i (_ BitVec 16)) (n (_ BitVec 16)) (sum (_ BitVec 16))) Bool
-  true
+  ; INVARIANT
+  (and
+    (bvule i n)
+    (= sum
+       (bvudiv
+         (bvmul
+           (bvmul i
+                 (bvadd (bvmul (_ bv1 16) i) (_ bv1 16)))
+           (bvadd (bvmul (_ bv2 16) i) (_ bv1 16)))
+         (_ bv6 16))))
 )
 
 ( define-fun pre-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( sum (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( sum_0 (_ BitVec 16))( sum_1 (_ BitVec 16))( sum_2 (_ BitVec 16)) ) Bool

@@ -44,8 +44,10 @@
 ( declare-fun __builtin_ctz_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) ) ) Bool
-; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
-	true
+	(and
+		(bvuge y (_ bv0 16))
+		(bvuge b (_ bv0 16))
+		(= r (bvmul (bvsub y b) a)))
 )
 
 ( define-fun pre-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( a_0 (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( b_3 (_ BitVec 16) )( b_4 (_ BitVec 16) )( r_0 (_ BitVec 16) )( r_1 (_ BitVec 16) )( r_2 (_ BitVec 16) )( r_3 (_ BitVec 16) )( r_4 (_ BitVec 16) )( r_5 (_ BitVec 16) )( shift_0 (_ BitVec 16) )( shift_1 (_ BitVec 16) )( shift_2 (_ BitVec 16) )( shift_3 (_ BitVec 16) )( shift_4 (_ BitVec 16) )( shift_5 (_ BitVec 16) )( supported_0 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) ) ) Bool

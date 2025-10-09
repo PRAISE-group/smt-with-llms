@@ -26,8 +26,17 @@
 (declare-fun isprime_cb ((_ BitVec 16)) Bool)
 
 ( define-fun inv-f( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16)) ) Bool
-    true
+; INVARIANT:
+  (and
+    (bvugt n (_ bv2 16))
+    (bvule i i)
+    (or
+      (and (isprime_cb n)
+           (= out (bvmul (_ bv1 16) i)))
+      (and (not (isprime_cb n))
+           (= out (bvmul (_ bv2 16) i)))))
 )
+
 
 ( define-fun pre-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
 	( and
