@@ -1,45 +1,45 @@
-(set-logic QF_BV)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
+( declare-const a (_ BitVec 16))
+( declare-const a! (_ BitVec 16))
+( declare-const b (_ BitVec 16))
+( declare-const b! (_ BitVec 16))
+( declare-const i (_ BitVec 16))
+( declare-const i! (_ BitVec 16))
+( declare-const n (_ BitVec 16))
+( declare-const n! (_ BitVec 16))
+( declare-const res (_ BitVec 16))
+( declare-const res! (_ BitVec 16))
 
-; closed-box (uninterpreted) if for cube helper
-( declare-fun if ((_ BitVec 16)) (_ BitVec 16) )
-( declare-const a (_ BitVec 16) )
-( declare-const a! (_ BitVec 16) )
-( declare-const b (_ BitVec 16) )
-( declare-const b! (_ BitVec 16) )
-( declare-const i (_ BitVec 16) )
-( declare-const i! (_ BitVec 16) )
-( declare-const n (_ BitVec 16) )
-( declare-const n! (_ BitVec 16) )
-( declare-const res (_ BitVec 16) )
-( declare-const res! (_ BitVec 16) )
+( declare-const a_0 (_ BitVec 16))
+( declare-const b_0 (_ BitVec 16))
+( declare-const i_0 (_ BitVec 16))
+( declare-const i_1 (_ BitVec 16))
+( declare-const i_2 (_ BitVec 16))
+( declare-const n_0 (_ BitVec 16))
+( declare-const res_0 (_ BitVec 16))
+( declare-const res_1 (_ BitVec 16))
+( declare-const res_2 (_ BitVec 16))
 
-( declare-const a_0 (_ BitVec 16) )
-( declare-const b_0 (_ BitVec 16) )
-( declare-const i_0 (_ BitVec 16) )
-( declare-const i_1 (_ BitVec 16) )
-( declare-const i_2 (_ BitVec 16) )
-( declare-const n_0 (_ BitVec 16) )
-( declare-const res_0 (_ BitVec 16) )
-( declare-const res_1 (_ BitVec 16) )
-( declare-const res_2 (_ BitVec 16) )
+; Closed Box Function: Compute the cube of input 'x'
+( declare-fun cube_cb ((_ BitVec 16)) (_ BitVec 16) )
 
-( define-fun inv-f( ( a (_ BitVec 16) )( b (_ BitVec 16) )( i (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) ) ) Bool
-__INV__
-
+( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16)) ) Bool
+	true
 )
 
-( define-fun pre-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( i (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( a_0 (_ BitVec 16) )( b_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( i_2 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) ) ) Bool
+( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16)) ) Bool
 	( and
 		( = a a_0 )
 		( = b b_0 )
 		( = n n_0 )
-		( >= n_0 0 )
-		( < ( + ( + a_0 b_0 ) n_0 ) 10000 )
+		( bvuge n_0 (_ bv0 16))
+		( bvult ( bvadd ( bvadd a_0 b_0 ) n_0 ) (_ bv10000 16) )
 	)
 )
 
-( define-fun trans-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( i (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( a! (_ BitVec 16) )( b! (_ BitVec 16) )( i! (_ BitVec 16) )( n! (_ BitVec 16) )( res! (_ BitVec 16) )( a_0 (_ BitVec 16) )( b_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( i_2 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) ) ) Bool
+( define-fun trans-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16))( a! (_ BitVec 16))( b! (_ BitVec 16))( i! (_ BitVec 16))( n! (_ BitVec 16))( res! (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = i_1 i )
@@ -55,9 +55,9 @@ __INV__
 		( and
 			( = i_1 i )
 			( = res_1 res )
-			( <= i_1 n_0 )
-			( = res_2 ( + ( + ( + ( + ( + ( + ( + ( + ( +   )  ) ( * ( * 3 ( * a_0 a_0 ) ) b_0 ) ) ( * ( * 3 a_0 ) ( * b_0 b_0 ) ) ) ( * ( * ( * 3 a_0 ) a_0 ) i_1 ) ) ( * ( * ( * 3 a_0 ) i_1 ) i_1 ) ) ( * ( * ( * 3 b_0 ) b_0 ) i_1 ) ) ( * ( * ( * 3 b_0 ) i_1 ) i_1 ) ) ( * ( * ( * 6 a_0 ) b_0 ) i_1 ) ) )
-			( = i_2 ( + i_1 1 ) )
+			( bvule i_1 n_0 )
+			( = res_2 ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( cube_cb a_0 ) ( cube_cb b_0 ) ) ( cube_cb i_1 ) ) ( bvmul  ( bvmul (_ bv3 16) ( bvmul  a_0 a_0 ) ) b_0 ) ) ( bvmul  ( bvmul (_ bv3 16) a_0 ) ( bvmul  b_0 b_0 ) ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) a_0 ) a_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) a_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) b_0 ) b_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) b_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv6 16) a_0 ) b_0 ) i_1 ) ) )
+			( = i_2 ( bvadd  i_1 (_ bv1 16)) )
 			( = i_2 i! )
 			( = res_2 res! )
 			(= a a_0 )
@@ -70,7 +70,7 @@ __INV__
 	)
 )
 
-( define-fun post-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( i (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( a_0 (_ BitVec 16) )( b_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( i_2 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) ) ) Bool
+( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16)) ) Bool
 	( or
 		( not
 			( and
@@ -83,15 +83,16 @@ __INV__
 		)
 		( not
 			( and
-				( not ( <= i_1 n_0 ) )
-				( not ( = res_1 ( * ( * ( + ( + a_0 b_0 ) n_0 ) ( + ( + a_0 b_0 ) n_0 ) ) ( + ( + a_0 b_0 ) n_0 ) ) ) )
+				( not ( bvule i_1 n_0 ) )
+				( not ( = res_1 ( bvmul  ( bvmul  ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ( bvadd ( bvadd  a_0 b_0 ) n_0 ) ) ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ) ) )
 			)
 		)
 	)
 )
 
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( and
 			( inv-f a b i n res )
 			( trans-f a b i n res a! b! i! n! res! a_0 b_0 i_0 i_1 i_2 n_0 res_0 res_1 res_2 )
@@ -100,3 +101,7 @@ __INV__
 	)
 ))
 
+
+(check-sat)
+(get-model)
+(exit)

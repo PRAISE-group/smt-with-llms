@@ -1,58 +1,58 @@
-(set-logic QF_BV)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
+( declare-const b (_ BitVec 16))
+( declare-const b! (_ BitVec 16))
+( declare-const orig_x (_ BitVec 16))
+( declare-const orig_x! (_ BitVec 16))
+( declare-const s (_ BitVec 16))
+( declare-const s! (_ BitVec 16))
+( declare-const x (_ BitVec 16))
+( declare-const x! (_ BitVec 16))
+( declare-const y (_ BitVec 16))
+( declare-const y! (_ BitVec 16))
 
-; closed-box (uninterpreted) if for cube-root loop/spec
-( declare-fun if ((_ BitVec 16)) (_ BitVec 16) )
-( declare-const b (_ BitVec 16) )
-( declare-const b! (_ BitVec 16) )
-( declare-const orig_x (_ BitVec 16) )
-( declare-const orig_x! (_ BitVec 16) )
-( declare-const s (_ BitVec 16) )
-( declare-const s! (_ BitVec 16) )
-( declare-const x (_ BitVec 16) )
-( declare-const x! (_ BitVec 16) )
-( declare-const y (_ BitVec 16) )
-( declare-const y! (_ BitVec 16) )
+( declare-const b_0 (_ BitVec 16))
+( declare-const b_1 (_ BitVec 16))
+( declare-const b_2 (_ BitVec 16))
+( declare-const orig_x_0 (_ BitVec 16))
+( declare-const orig_x_1 (_ BitVec 16))
+( declare-const s_0 (_ BitVec 16))
+( declare-const s_1 (_ BitVec 16))
+( declare-const s_2 (_ BitVec 16))
+( declare-const s_3 (_ BitVec 16))
+( declare-const x_0 (_ BitVec 16))
+( declare-const x_1 (_ BitVec 16))
+( declare-const x_2 (_ BitVec 16))
+( declare-const x_3 (_ BitVec 16))
+( declare-const y_0 (_ BitVec 16))
+( declare-const y_1 (_ BitVec 16))
+( declare-const y_2 (_ BitVec 16))
+( declare-const y_3 (_ BitVec 16))
+( declare-const y_4 (_ BitVec 16))
+( declare-const y_5 (_ BitVec 16))
 
-( declare-const b_0 (_ BitVec 16) )
-( declare-const b_1 (_ BitVec 16) )
-( declare-const b_2 (_ BitVec 16) )
-( declare-const orig_x_0 (_ BitVec 16) )
-( declare-const orig_x_1 (_ BitVec 16) )
-( declare-const s_0 (_ BitVec 16) )
-( declare-const s_1 (_ BitVec 16) )
-( declare-const s_2 (_ BitVec 16) )
-( declare-const s_3 (_ BitVec 16) )
-( declare-const x_0 (_ BitVec 16) )
-( declare-const x_1 (_ BitVec 16) )
-( declare-const x_2 (_ BitVec 16) )
-( declare-const x_3 (_ BitVec 16) )
-( declare-const y_0 (_ BitVec 16) )
-( declare-const y_1 (_ BitVec 16) )
-( declare-const y_2 (_ BitVec 16) )
-( declare-const y_3 (_ BitVec 16) )
-( declare-const y_4 (_ BitVec 16) )
-( declare-const y_5 (_ BitVec 16) )
+; Closed Box Function: Shift input 'x' by 's' bits to the right
+( declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
-( define-fun inv-f( ( b (_ BitVec 16) )( orig_x (_ BitVec 16) )( s (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) ) ) Bool
-__INV__
-
+( define-fun inv-f( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
+	true
 )
 
-( define-fun pre-f ( ( b (_ BitVec 16) )( orig_x (_ BitVec 16) )( s (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( orig_x_0 (_ BitVec 16) )( orig_x_1 (_ BitVec 16) )( s_0 (_ BitVec 16) )( s_1 (_ BitVec 16) )( s_2 (_ BitVec 16) )( s_3 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( x_2 (_ BitVec 16) )( x_3 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) )( y_2 (_ BitVec 16) )( y_3 (_ BitVec 16) )( y_4 (_ BitVec 16) )( y_5 (_ BitVec 16) ) ) Bool
+( define-fun pre-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( orig_x_0 (_ BitVec 16))( orig_x_1 (_ BitVec 16))( s_0 (_ BitVec 16))( s_1 (_ BitVec 16))( s_2 (_ BitVec 16))( s_3 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16))( y_4 (_ BitVec 16))( y_5 (_ BitVec 16)) ) Bool
 	( and
 		( = orig_x orig_x_1 )
 		( = s s_1 )
 		( = x x_0 )
 		( = y y_1 )
-		( >= x_0 0 )
-		( = y_1 0 )
-		( = s_1 30 )
+		( bvuge x_0 (_ bv0 16))
+		( = y_1 (_ bv0 16))
+		( = s_1 (_ bv30 16) )
 		( = orig_x_1 x_0 )
 	)
 )
 
-( define-fun trans-f ( ( b (_ BitVec 16) )( orig_x (_ BitVec 16) )( s (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( b! (_ BitVec 16) )( orig_x! (_ BitVec 16) )( s! (_ BitVec 16) )( x! (_ BitVec 16) )( y! (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( orig_x_0 (_ BitVec 16) )( orig_x_1 (_ BitVec 16) )( s_0 (_ BitVec 16) )( s_1 (_ BitVec 16) )( s_2 (_ BitVec 16) )( s_3 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( x_2 (_ BitVec 16) )( x_3 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) )( y_2 (_ BitVec 16) )( y_3 (_ BitVec 16) )( y_4 (_ BitVec 16) )( y_5 (_ BitVec 16) ) ) Bool
+( define-fun trans-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( b! (_ BitVec 16))( orig_x! (_ BitVec 16))( s! (_ BitVec 16))( x! (_ BitVec 16))( y! (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( orig_x_0 (_ BitVec 16))( orig_x_1 (_ BitVec 16))( s_0 (_ BitVec 16))( s_1 (_ BitVec 16))( s_2 (_ BitVec 16))( s_3 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16))( y_4 (_ BitVec 16))( y_5 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = b_1 b )
@@ -73,13 +73,13 @@ __INV__
 			( = s_2 s )
 			( = x_1 x )
 			( = y_2 y )
-			( >= s_2 0 )
-			( = y_3 ( * 2 y_2 ) )
-			( = b_2 ( << ( + ( * ( * 3 y_3 ) ( + y_3 1 ) ) 1 ) s_2 ) )
-			( = s_3 ( - s_2 3 ) )
-			( >= x_1 b_2 )
-			( = x_2 ( - x_1 b_2 ) )
-			( = y_4 ( + y_3 1 ) )
+			( bvuge s_2 (_ bv0 16))
+			( = y_3 ( bvmul (_ bv2 16) y_2 ) )
+			( = b_2 ( shift_cb ( bvadd ( bvmul ( bvmul (_ bv3 16) y_3 ) ( bvadd y_3 (_ bv1 16)) ) (_ bv1 16)) s_2 ) )
+			( = s_3 ( bvsub s_2 (_ bv3 16) ) )
+			( bvuge x_1 b_2 )
+			( = x_2 ( bvsub x_1 b_2 ) )
+			( = y_4 ( bvadd  y_3 (_ bv1 16)) )
 			( = x_3 x_2 )
 			( = y_5 y_4 )
 			( = b_2 b! )
@@ -94,11 +94,11 @@ __INV__
 			( = s_2 s )
 			( = x_1 x )
 			( = y_2 y )
-			( >= s_2 0 )
-			( = y_3 ( * 2 y_2 ) )
-			( = b_2 ( << ( + ( * ( * 3 y_3 ) ( + y_3 1 ) ) 1 ) s_2 ) )
-			( = s_3 ( - s_2 3 ) )
-			( not ( >= x_1 b_2 ) )
+			( bvuge s_2 (_ bv0 16))
+			( = y_3 ( bvmul (_ bv2 16) y_2 ) )
+			( = b_2 ( shift_cb ( bvadd  ( bvmul  ( bvmul  (_ bv3 16) y_3 ) ( bvadd  y_3 (_ bv1 16)) ) (_ bv1 16)) s_2 ) )
+			( = s_3 ( bvsub s_2 (_ bv3 16) ) )
+			( not ( bvuge x_1 b_2 ) )
 			( = x_3 x_1 )
 			( = y_5 y_3 )
 			( = b_2 b! )
@@ -111,7 +111,7 @@ __INV__
 	)
 )
 
-( define-fun post-f ( ( b (_ BitVec 16) )( orig_x (_ BitVec 16) )( s (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( orig_x_0 (_ BitVec 16) )( orig_x_1 (_ BitVec 16) )( s_0 (_ BitVec 16) )( s_1 (_ BitVec 16) )( s_2 (_ BitVec 16) )( s_3 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( x_2 (_ BitVec 16) )( x_3 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) )( y_2 (_ BitVec 16) )( y_3 (_ BitVec 16) )( y_4 (_ BitVec 16) )( y_5 (_ BitVec 16) ) ) Bool
+( define-fun post-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( orig_x_0 (_ BitVec 16))( orig_x_1 (_ BitVec 16))( s_0 (_ BitVec 16))( s_1 (_ BitVec 16))( s_2 (_ BitVec 16))( s_3 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16))( y_4 (_ BitVec 16))( y_5 (_ BitVec 16)) ) Bool
 	( or
 		( not
 			( and
@@ -124,17 +124,21 @@ __INV__
 		)
 		( not
 			( and
-				( not ( >= s_2 0 ) )
-				( not ( >= orig_x_1 ( * ( * y_2 y_2 ) y_2 ) ) )
+				( not ( bvuge s_2 (_ bv0 16)) )
+				( not ( bvuge orig_x_1 ( bvmul ( bvmul  y_2 y_2 ) y_2 ) ) )
 			)
 		)
 	)
 )
 
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( inv-f b orig_x s x y  )
 		( post-f b orig_x s x y b_0 b_1 b_2 orig_x_0 orig_x_1 s_0 s_1 s_2 s_3 x_0 x_1 x_2 x_3 y_0 y_1 y_2 y_3 y_4 y_5 )
 	)
 ))
 
+(check-sat)
+(get-model)
+(exit)

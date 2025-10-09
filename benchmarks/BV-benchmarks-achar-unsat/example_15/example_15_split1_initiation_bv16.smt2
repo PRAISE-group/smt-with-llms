@@ -1,8 +1,6 @@
-(set-logic QF_BV)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
-
-; closed-box (uninterpreted) Example for sum-of-cubes helper
-( declare-fun Example ((_ BitVec 16)) (_ BitVec 16) )
 ( declare-const i (_ BitVec 16) )
 ( declare-const i! (_ BitVec 16) )
 ( declare-const lin_sum (_ BitVec 16) )
@@ -26,9 +24,12 @@
 ( declare-const sum_2 (_ BitVec 16) )
 ( declare-const sum_3 (_ BitVec 16) )
 
-( define-fun inv-f( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
-__INV__
+; Closed Box Function: retuns the multiplication cube of its two arguments
+( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
+( define-fun inv-f( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+    true
 )
 
 ( define-fun pre-f ( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( i_2 (_ BitVec 16) )( i_3 (_ BitVec 16) )( lin_sum_0 (_ BitVec 16) )( lin_sum_1 (_ BitVec 16) )( lin_sum_2 (_ BitVec 16) )( lin_sum_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
@@ -37,10 +38,10 @@ __INV__
 		( = lin_sum lin_sum_1 )
 		( = n n_0 )
 		( = sum sum_1 )
-		( = i_1 0 )
-		( = sum_1 0 )
-		( = lin_sum_1 0 )
-		( >= n_0 0 )
+		( = i_1 (_ bv0 16) )
+		( = sum_1 (_ bv0 16) )
+		( = lin_sum_1 (_ bv0 16) )
+		( bvuge n_0 (_ bv0 16) )
 	)
 )
 
@@ -62,10 +63,10 @@ __INV__
 			( = i_2 i )
 			( = lin_sum_2 lin_sum )
 			( = sum_2 sum )
-			( < i_2 n_0 )
-			( = i_3 ( + i_2 1 ) )
-			( = lin_sum_3 ( + lin_sum_2 i_3 ) )
-			( = sum_3  )
+			( bvult i_2 n_0 )
+			( = i_3 ( bvadd i_2 (_ bv1 16) ) )
+			( = lin_sum_3 ( bvadd lin_sum_2 i_3 ) )
+			( = sum_3 ( foo_cb sum_2 i_3 ) )
 			( = i_3 i! )
 			( = lin_sum_3 lin_sum! )
 			( = sum_3 sum! )
@@ -87,13 +88,13 @@ __INV__
 		)
 		( not
 			( and
-				( not ( < i_2 n_0 ) )
-				( not ( = sum_2 ( * lin_sum_2 lin_sum_2 ) ) )
+				( not ( bvult i_2 n_0 ) )
+				( not ( = sum_2 ( bvmul lin_sum_2 lin_sum_2 ) ) )
 			)
 		)
 	)
 )
-
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( =>
 		( pre-f i lin_sum n sum i_0 i_1 i_2 i_3 lin_sum_0 lin_sum_1 lin_sum_2 lin_sum_3 n_0 sum_0 sum_1 sum_2 sum_3  )
@@ -101,3 +102,8 @@ __INV__
 	)
 ))
 
+
+
+(check-sat)
+(get-model)
+(exit)
