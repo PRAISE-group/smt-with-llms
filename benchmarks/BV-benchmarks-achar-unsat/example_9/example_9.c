@@ -15,37 +15,3 @@ int icbrt(unsigned x) {
     }
     return y;
 }
-
-// // Positive Integer Cube Root Algorithm
-// // Shift operators are not supported for Learner
-// int main() {
-//     // variable declarations
-//     int s;
-//     unsigned int x;
-//     unsigned int orig_x;
-//     unsigned int y;
-//     unsigned b;
-//     // pre-conditions
-//     // scanf("%d", &x);
-//     assume((x >= 0));
-//     (y = 0);
-//     (s = 30);
-//     (orig_x = x);
-//     // precheck
-//     // loopcond : (s >= 0)
-//     // loopstart
-//     while ((s >= 0)) {
-//         // loop body
-//         y = 2 * y;
-//         b = (3 * y * (y + 1) + 1) << s;
-//         s = s - 3;
-//         if (x >= b) {
-//             x = x - b;
-//             y = y + 1;
-//         }
-//     }
-//     // loopend
-//     // postcheck
-//     // post-condition
-//     assert((orig_x >= (y * y * y)));
-// }
