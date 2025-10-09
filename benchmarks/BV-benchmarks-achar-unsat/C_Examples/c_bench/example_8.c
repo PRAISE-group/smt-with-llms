@@ -22,7 +22,7 @@ int main() {
     while ((b != 0)) {
         // loop body
         if (supported) {
-            shift = b % 1;
+            shift = __builtin_ctz(b);
         } else {
             shift = 0;
         }

@@ -22,6 +22,8 @@
 ( declare-const res_1 (_ BitVec 16))
 ( declare-const res_2 (_ BitVec 16))
 
+( declare-fun cube_cb ((_ BitVec 16)) (_ BitVec 16) )
+
 ( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16)) ) Bool
 	true
 )
@@ -31,8 +33,8 @@
 		( = a a_0 )
 		( = b b_0 )
 		( = n n_0 )
-		( bvugt = n_0 (_ bv0 16))
-		( bvult  ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) 10000 )
+		( bvuge n_0 (_ bv0 16))
+		( bvult ( bvadd ( bvadd a_0 b_0 ) n_0 ) (_ bv10000 16) )
 	)
 )
 
@@ -52,8 +54,8 @@
 		( and
 			( = i_1 i )
 			( = res_1 res )
-			( bvult = i_1 n_0 )
-			( = res_2 ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvurem a_0 6 ) ( bvurem b_0 6 ) ) ( bvurem i_1 6 ) ) ( bvmul  ( bvmul  3 ( bvmul  a_0 a_0 ) ) b_0 ) ) ( bvmul  ( bvmul  3 a_0 ) ( bvmul  b_0 b_0 ) ) ) ( bvmul  ( bvmul  ( bvmul  3 a_0 ) a_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  3 a_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  3 b_0 ) b_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  3 b_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  6 a_0 ) b_0 ) i_1 ) ) )
+			( bvule i_1 n_0 )
+			( = res_2 ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( cube_cb a_0 ) ( cube_cb b_0 ) ) ( cube_cb i_1 ) ) ( bvmul  ( bvmul (_ bv3 16) ( bvmul  a_0 a_0 ) ) b_0 ) ) ( bvmul  ( bvmul (_ bv3 16) a_0 ) ( bvmul  b_0 b_0 ) ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) a_0 ) a_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) a_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) b_0 ) b_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv3 16) b_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul (_ bv6 16) a_0 ) b_0 ) i_1 ) ) )
 			( = i_2 ( bvadd  i_1 (_ bv1 16)) )
 			( = i_2 i! )
 			( = res_2 res! )
@@ -80,8 +82,8 @@
 		)
 		( not
 			( and
-				( not ( bvult = i_1 n_0 ) )
-				( not ( = res_1 ( bvmul  ( bvmul  ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ) ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ) ) )
+				( not ( bvule i_1 n_0 ) )
+				( not ( = res_1 ( bvmul  ( bvmul  ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ( bvadd ( bvadd  a_0 b_0 ) n_0 ) ) ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ) ) )
 			)
 		)
 	)

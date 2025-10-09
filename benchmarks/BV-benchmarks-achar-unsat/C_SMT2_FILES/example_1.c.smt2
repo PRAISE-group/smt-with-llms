@@ -1,4 +1,5 @@
-(set-logic LIA)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16))
 ( declare-const i! (_ BitVec 16))
