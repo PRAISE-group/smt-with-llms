@@ -1,41 +1,42 @@
-(set-logic LIA)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
-( declare-const a Int )
-( declare-const a! Int )
-( declare-const b Int )
-( declare-const b! Int )
-( declare-const i Int )
-( declare-const i! Int )
-( declare-const n Int )
-( declare-const n! Int )
-( declare-const res Int )
-( declare-const res! Int )
+( declare-const a (_ BitVec 16))
+( declare-const a! (_ BitVec 16))
+( declare-const b (_ BitVec 16))
+( declare-const b! (_ BitVec 16))
+( declare-const i (_ BitVec 16))
+( declare-const i! (_ BitVec 16))
+( declare-const n (_ BitVec 16))
+( declare-const n! (_ BitVec 16))
+( declare-const res (_ BitVec 16))
+( declare-const res! (_ BitVec 16))
 
-( declare-const a_0 Int )
-( declare-const b_0 Int )
-( declare-const i_0 Int )
-( declare-const i_1 Int )
-( declare-const i_2 Int )
-( declare-const n_0 Int )
-( declare-const res_0 Int )
-( declare-const res_1 Int )
-( declare-const res_2 Int )
+( declare-const a_0 (_ BitVec 16))
+( declare-const b_0 (_ BitVec 16))
+( declare-const i_0 (_ BitVec 16))
+( declare-const i_1 (_ BitVec 16))
+( declare-const i_2 (_ BitVec 16))
+( declare-const n_0 (_ BitVec 16))
+( declare-const res_0 (_ BitVec 16))
+( declare-const res_1 (_ BitVec 16))
+( declare-const res_2 (_ BitVec 16))
 
-( define-fun inv-f( ( a Int )( b Int )( i Int )( n Int )( res Int ) ) Bool
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16)) ) Bool
+	true
 )
 
-( define-fun pre-f ( ( a Int )( b Int )( i Int )( n Int )( res Int )( a_0 Int )( b_0 Int )( i_0 Int )( i_1 Int )( i_2 Int )( n_0 Int )( res_0 Int )( res_1 Int )( res_2 Int ) ) Bool
+( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16)) ) Bool
 	( and
 		( = a a_0 )
 		( = b b_0 )
 		( = n n_0 )
-		( >= n_0 0 )
-		( < ( + ( + a_0 b_0 ) n_0 ) 10000 )
+		( bvugt = n_0 (_ bv0 16))
+		( bvult  ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) 10000 )
 	)
 )
 
-( define-fun trans-f ( ( a Int )( b Int )( i Int )( n Int )( res Int )( a! Int )( b! Int )( i! Int )( n! Int )( res! Int )( a_0 Int )( b_0 Int )( i_0 Int )( i_1 Int )( i_2 Int )( n_0 Int )( res_0 Int )( res_1 Int )( res_2 Int ) ) Bool
+( define-fun trans-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16))( a! (_ BitVec 16))( b! (_ BitVec 16))( i! (_ BitVec 16))( n! (_ BitVec 16))( res! (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = i_1 i )
@@ -51,9 +52,9 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		( and
 			( = i_1 i )
 			( = res_1 res )
-			( <= i_1 n_0 )
-			( = res_2 ( + ( + ( + ( + ( + ( + ( + ( + ( + ( mod a_0 6 ) ( mod b_0 6 ) ) ( mod i_1 6 ) ) ( * ( * 3 ( * a_0 a_0 ) ) b_0 ) ) ( * ( * 3 a_0 ) ( * b_0 b_0 ) ) ) ( * ( * ( * 3 a_0 ) a_0 ) i_1 ) ) ( * ( * ( * 3 a_0 ) i_1 ) i_1 ) ) ( * ( * ( * 3 b_0 ) b_0 ) i_1 ) ) ( * ( * ( * 3 b_0 ) i_1 ) i_1 ) ) ( * ( * ( * 6 a_0 ) b_0 ) i_1 ) ) )
-			( = i_2 ( + i_1 1 ) )
+			( bvult = i_1 n_0 )
+			( = res_2 ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvadd  ( bvurem a_0 6 ) ( bvurem b_0 6 ) ) ( bvurem i_1 6 ) ) ( bvmul  ( bvmul  3 ( bvmul  a_0 a_0 ) ) b_0 ) ) ( bvmul  ( bvmul  3 a_0 ) ( bvmul  b_0 b_0 ) ) ) ( bvmul  ( bvmul  ( bvmul  3 a_0 ) a_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  3 a_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  3 b_0 ) b_0 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  3 b_0 ) i_1 ) i_1 ) ) ( bvmul  ( bvmul  ( bvmul  6 a_0 ) b_0 ) i_1 ) ) )
+			( = i_2 ( bvadd  i_1 (_ bv1 16)) )
 			( = i_2 i! )
 			( = res_2 res! )
 			(= a a_0 )
@@ -66,7 +67,7 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 )
 
-( define-fun post-f ( ( a Int )( b Int )( i Int )( n Int )( res Int )( a_0 Int )( b_0 Int )( i_0 Int )( i_1 Int )( i_2 Int )( n_0 Int )( res_0 Int )( res_1 Int )( res_2 Int ) ) Bool
+( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16)) ) Bool
 	( or
 		( not
 			( and
@@ -79,23 +80,23 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		)
 		( not
 			( and
-				( not ( <= i_1 n_0 ) )
-				( not ( = res_1 ( * ( * ( + ( + a_0 b_0 ) n_0 ) ( + ( + a_0 b_0 ) n_0 ) ) ( + ( + a_0 b_0 ) n_0 ) ) ) )
+				( not ( bvult = i_1 n_0 ) )
+				( not ( = res_1 ( bvmul  ( bvmul  ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ) ( bvadd  ( bvadd  a_0 b_0 ) n_0 ) ) ) )
 			)
 		)
 	)
 )
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( pre-f a b i n res a_0 b_0 i_0 i_1 i_2 n_0 res_0 res_1 res_2  )
 		( inv-f a b i n res )
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( and
 			( inv-f a b i n res )
 			( trans-f a b i n res a! b! i! n! res! a_0 b_0 i_0 i_1 i_2 n_0 res_0 res_1 res_2 )
@@ -104,11 +105,14 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( inv-f a b i n res  )
 		( post-f a b i n res a_0 b_0 i_0 i_1 i_2 n_0 res_0 res_1 res_2 )
 	)
 ))
 
+(check-sat)
+(get-model)
+(exit)

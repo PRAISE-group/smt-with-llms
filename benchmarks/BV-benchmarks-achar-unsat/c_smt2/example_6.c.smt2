@@ -1,50 +1,53 @@
-(set-logic LIA)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
-( declare-const a Int )
-( declare-const a! Int )
-( declare-const b Int )
-( declare-const b! Int )
-( declare-const res Int )
-( declare-const res! Int )
-( declare-const x Int )
-( declare-const x! Int )
-( declare-const y Int )
-( declare-const y! Int )
+( declare-const a (_ BitVec 16))
+( declare-const a! (_ BitVec 16))
+( declare-const b (_ BitVec 16))
+( declare-const b! (_ BitVec 16))
+( declare-const res (_ BitVec 16))
+( declare-const res! (_ BitVec 16))
+( declare-const x (_ BitVec 16))
+( declare-const x! (_ BitVec 16))
+( declare-const y (_ BitVec 16))
+( declare-const y! (_ BitVec 16))
 
-( declare-const a_0 Int )
-( declare-const a_1 Int )
-( declare-const a_2 Int )
-( declare-const b_0 Int )
-( declare-const b_1 Int )
-( declare-const res_0 Int )
-( declare-const res_1 Int )
-( declare-const res_2 Int )
-( declare-const res_3 Int )
-( declare-const res_4 Int )
-( declare-const x_0 Int )
-( declare-const x_1 Int )
-( declare-const y_0 Int )
-( declare-const y_1 Int )
+( declare-const a_0 (_ BitVec 16))
+( declare-const a_1 (_ BitVec 16))
+( declare-const a_2 (_ BitVec 16))
+( declare-const b_0 (_ BitVec 16))
+( declare-const b_1 (_ BitVec 16))
+( declare-const res_0 (_ BitVec 16))
+( declare-const res_1 (_ BitVec 16))
+( declare-const res_2 (_ BitVec 16))
+( declare-const res_3 (_ BitVec 16))
+( declare-const res_4 (_ BitVec 16))
+( declare-const x_0 (_ BitVec 16))
+( declare-const x_1 (_ BitVec 16))
+( declare-const y_0 (_ BitVec 16))
+( declare-const y_1 (_ BitVec 16))
 
-( define-fun inv-f( ( a Int )( b Int )( res Int )( x Int )( y Int ) ) Bool
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+( declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+
+( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
+	true
 )
 
-( define-fun pre-f ( ( a Int )( b Int )( res Int )( x Int )( y Int )( a_0 Int )( a_1 Int )( a_2 Int )( b_0 Int )( b_1 Int )( res_0 Int )( res_1 Int )( res_2 Int )( res_3 Int )( res_4 Int )( x_0 Int )( x_1 Int )( y_0 Int )( y_1 Int ) ) Bool
+( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16))( res_3 (_ BitVec 16))( res_4 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( and
 		( = a a_0 )
 		( = b b_0 )
 		( = res res_1 )
 		( = x x_1 )
 		( = y y_1 )
-		( > b_0 0 )
+		( bvugt b_0 (_ bv0 16))
 		( = x_1 a_0 )
 		( = y_1 b_0 )
-		( = res_1 1 )
+		( = res_1 (_ bv1 16))
 	)
 )
 
-( define-fun trans-f ( ( a Int )( b Int )( res Int )( x Int )( y Int )( a! Int )( b! Int )( res! Int )( x! Int )( y! Int )( a_0 Int )( a_1 Int )( a_2 Int )( b_0 Int )( b_1 Int )( res_0 Int )( res_1 Int )( res_2 Int )( res_3 Int )( res_4 Int )( x_0 Int )( x_1 Int )( y_0 Int )( y_1 Int ) ) Bool
+( define-fun trans-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a! (_ BitVec 16))( b! (_ BitVec 16))( res! (_ BitVec 16))( x! (_ BitVec 16))( y! (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16))( res_3 (_ BitVec 16))( res_4 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = a_1 a )
@@ -61,11 +64,11 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		( and
 			( = a_1 a )
 			( = res_2 res )
-			( > b_0 0 )
-			( & b_0 1 )
-			( = res_3 ( * ( * res_2 1 ) a_1 ) )
+			( bvugt  b_0 (_ bv0 16))
+			( = ( bvand b_0 (_ bv1 16)) (_ bv1 16))
+			( = res_3 ( bvmul  ( bvmul  res_2 (_ bv1 16)) a_1 ) )
 			( = res_4 res_3 )
-			( = a_2 ( * ( * a_1 1 ) a_1 ) )
+			( = a_2 ( bvmul  ( bvmul  a_1 (_ bv1 16)) a_1 ) )
 			( = a_2 a! )
 			( = res_4 res! )
 			(= b b_0 )
@@ -78,10 +81,10 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		( and
 			( = a_1 a )
 			( = res_2 res )
-			( > b_0 0 )
-			( not ( & b_0 1 ) )
+			( bvugt  b_0 (_ bv0 16))
+			( not ( = ( bvand b_0 (_ bv1 16)) (_ bv1 16)) )
 			( = res_4 res_2 )
-			( = a_2 ( * ( * a_1 1 ) a_1 ) )
+			( = a_2 ( bvmul  ( bvmul  a_1 (_ bv1 16)) a_1 ) )
 			( = a_2 a! )
 			( = res_4 res! )
 			(= b b_0 )
@@ -94,7 +97,7 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 )
 
-( define-fun post-f ( ( a Int )( b Int )( res Int )( x Int )( y Int )( a_0 Int )( a_1 Int )( a_2 Int )( b_0 Int )( b_1 Int )( res_0 Int )( res_1 Int )( res_2 Int )( res_3 Int )( res_4 Int )( x_0 Int )( x_1 Int )( y_0 Int )( y_1 Int ) ) Bool
+( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16))( res_3 (_ BitVec 16))( res_4 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( or
 		( not
 			( and
@@ -107,23 +110,23 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		)
 		( not
 			( and
-				( not ( > b_0 0 ) )
-				( not ( = res_2 ( mod x_1 y_1 ) ) )
+				( not ( bvugt  b_0 (_ bv0 16)) )
+				( not ( = res_2 ( binpow_cb x_1 y_1 ) ) )
 			)
 		)
 	)
 )
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( pre-f a b res x y a_0 a_1 a_2 b_0 b_1 res_0 res_1 res_2 res_3 res_4 x_0 x_1 y_0 y_1  )
 		( inv-f a b res x y )
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( and
 			( inv-f a b res x y )
 			( trans-f a b res x y a! b! res! x! y! a_0 a_1 a_2 b_0 b_1 res_0 res_1 res_2 res_3 res_4 x_0 x_1 y_0 y_1 )
@@ -132,11 +135,14 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( inv-f a b res x y  )
 		( post-f a b res x y a_0 a_1 a_2 b_0 b_1 res_0 res_1 res_2 res_3 res_4 x_0 x_1 y_0 y_1 )
 	)
 ))
 
+(check-sat)
+(get-model)
+(exit)

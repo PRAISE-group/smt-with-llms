@@ -1,47 +1,50 @@
-(set-logic LIA)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
-( declare-const a Int )
-( declare-const a! Int )
-( declare-const b Int )
-( declare-const b! Int )
-( declare-const r Int )
-( declare-const r! Int )
-( declare-const shift Int )
-( declare-const shift! Int )
-( declare-const supported Int )
-( declare-const supported! Int )
-( declare-const x Int )
-( declare-const x! Int )
-( declare-const y Int )
-( declare-const y! Int )
+( declare-const a (_ BitVec 16))
+( declare-const a! (_ BitVec 16))
+( declare-const b (_ BitVec 16))
+( declare-const b! (_ BitVec 16))
+( declare-const r (_ BitVec 16))
+( declare-const r! (_ BitVec 16))
+( declare-const shift (_ BitVec 16))
+( declare-const shift! (_ BitVec 16))
+( declare-const supported (_ BitVec 16))
+( declare-const supported! (_ BitVec 16))
+( declare-const x (_ BitVec 16))
+( declare-const x! (_ BitVec 16))
+( declare-const y (_ BitVec 16))
+( declare-const y! (_ BitVec 16))
 
-( declare-const a_0 Int )
-( declare-const b_0 Int )
-( declare-const b_1 Int )
-( declare-const b_2 Int )
-( declare-const b_3 Int )
-( declare-const r_0 Int )
-( declare-const r_1 Int )
-( declare-const r_2 Int )
-( declare-const r_3 Int )
-( declare-const r_4 Int )
-( declare-const shift_0 Int )
-( declare-const shift_1 Int )
-( declare-const shift_2 Int )
-( declare-const shift_3 Int )
-( declare-const shift_4 Int )
-( declare-const shift_5 Int )
-( declare-const supported_0 Int )
-( declare-const x_0 Int )
-( declare-const x_1 Int )
-( declare-const y_0 Int )
-( declare-const y_1 Int )
+( declare-const a_0 (_ BitVec 16))
+( declare-const b_0 (_ BitVec 16))
+( declare-const b_1 (_ BitVec 16))
+( declare-const b_2 (_ BitVec 16))
+( declare-const b_3 (_ BitVec 16))
+( declare-const r_0 (_ BitVec 16))
+( declare-const r_1 (_ BitVec 16))
+( declare-const r_2 (_ BitVec 16))
+( declare-const r_3 (_ BitVec 16))
+( declare-const r_4 (_ BitVec 16))
+( declare-const shift_0 (_ BitVec 16))
+( declare-const shift_1 (_ BitVec 16))
+( declare-const shift_2 (_ BitVec 16))
+( declare-const shift_3 (_ BitVec 16))
+( declare-const shift_4 (_ BitVec 16))
+( declare-const shift_5 (_ BitVec 16))
+( declare-const supported_0 (_ BitVec 16))
+( declare-const x_0 (_ BitVec 16))
+( declare-const x_1 (_ BitVec 16))
+( declare-const y_0 (_ BitVec 16))
+( declare-const y_1 (_ BitVec 16))
 
-( define-fun inv-f( ( a Int )( b Int )( r Int )( shift Int )( supported Int )( x Int )( y Int ) ) Bool
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+( declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16) )
+
+( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( r (_ BitVec 16))( shift (_ BitVec 16))( supported (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
+	true
 )
 
-( define-fun pre-f ( ( a Int )( b Int )( r Int )( shift Int )( supported Int )( x Int )( y Int )( a_0 Int )( b_0 Int )( b_1 Int )( b_2 Int )( b_3 Int )( r_0 Int )( r_1 Int )( r_2 Int )( r_3 Int )( r_4 Int )( shift_0 Int )( shift_1 Int )( shift_2 Int )( shift_3 Int )( shift_4 Int )( shift_5 Int )( supported_0 Int )( x_0 Int )( x_1 Int )( y_0 Int )( y_1 Int ) ) Bool
+( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( r (_ BitVec 16))( shift (_ BitVec 16))( supported (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( b_3 (_ BitVec 16))( r_0 (_ BitVec 16))( r_1 (_ BitVec 16))( r_2 (_ BitVec 16))( r_3 (_ BitVec 16))( r_4 (_ BitVec 16))( shift_0 (_ BitVec 16))( shift_1 (_ BitVec 16))( shift_2 (_ BitVec 16))( shift_3 (_ BitVec 16))( shift_4 (_ BitVec 16))( shift_5 (_ BitVec 16))( supported_0 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( and
 		( = a a_0 )
 		( = b b_0 )
@@ -51,12 +54,12 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		( = y y_1 )
 		( = x_1 a_0 )
 		( = y_1 b_0 )
-		( = r_1 0 )
-		( = shift_1 0 )
+		( = r_1 (_ bv0 16))
+		( = shift_1 (_ bv0 16))
 	)
 )
 
-( define-fun trans-f ( ( a Int )( b Int )( r Int )( shift Int )( supported Int )( x Int )( y Int )( a! Int )( b! Int )( r! Int )( shift! Int )( supported! Int )( x! Int )( y! Int )( a_0 Int )( b_0 Int )( b_1 Int )( b_2 Int )( b_3 Int )( r_0 Int )( r_1 Int )( r_2 Int )( r_3 Int )( r_4 Int )( shift_0 Int )( shift_1 Int )( shift_2 Int )( shift_3 Int )( shift_4 Int )( shift_5 Int )( supported_0 Int )( x_0 Int )( x_1 Int )( y_0 Int )( y_1 Int ) ) Bool
+( define-fun trans-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( r (_ BitVec 16))( shift (_ BitVec 16))( supported (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a! (_ BitVec 16))( b! (_ BitVec 16))( r! (_ BitVec 16))( shift! (_ BitVec 16))( supported! (_ BitVec 16))( x! (_ BitVec 16))( y! (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( b_3 (_ BitVec 16))( r_0 (_ BitVec 16))( r_1 (_ BitVec 16))( r_2 (_ BitVec 16))( r_3 (_ BitVec 16))( r_4 (_ BitVec 16))( shift_0 (_ BitVec 16))( shift_1 (_ BitVec 16))( shift_2 (_ BitVec 16))( shift_3 (_ BitVec 16))( shift_4 (_ BitVec 16))( shift_5 (_ BitVec 16))( supported_0 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = b_1 b )
@@ -76,9 +79,9 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 			( = b_1 b )
 			( = r_2 r )
 			( = shift_2 shift )
-			( not ( = b_1 0 ) )
+			( not ( = b_1 (_ bv0 16)) )
 			supported_0
-			( = shift_3 ( mod b_1 1 ) )
+			( = shift_3 ( builtin_ctz_cb b_1 (_ bv1 16)) )
 			( = shift_4 shift_3 )
 			shift_4
 			( = b_2 b_1 )
@@ -99,13 +102,13 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 			( = b_1 b )
 			( = r_2 r )
 			( = shift_2 shift )
-			( not ( = b_1 0 ) )
+			( not ( = b_1 (_ bv0 16)) )
 			supported_0
-			( = shift_3 ( mod b_1 1 ) )
+			( = shift_3 ( builtin_ctz_cb b_1 (_ bv1 16)) )
 			( = shift_4 shift_3 )
 			( not shift_4 )
-			( = r_4 ( + r_2 a_0 ) )
-			( = b_3 ( - b_1 1 ) )
+			( = r_4 ( bvadd  r_2 a_0 ) )
+			( = b_3 ( - b_1 (_ bv1 16)) )
 			( = b_2 b_3 )
 			( = r_3 r_4 )
 			( = b_2 b! )
@@ -124,9 +127,9 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 			( = b_1 b )
 			( = r_2 r )
 			( = shift_2 shift )
-			( not ( = b_1 0 ) )
+			( not ( = b_1 (_ bv0 16)) )
 			( not supported_0 )
-			( = shift_5 0 )
+			( = shift_5 (_ bv0 16))
 			( = shift_4 shift_5 )
 			shift_4
 			( = b_2 b_1 )
@@ -147,13 +150,13 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 			( = b_1 b )
 			( = r_2 r )
 			( = shift_2 shift )
-			( not ( = b_1 0 ) )
+			( not ( = b_1 (_ bv0 16)) )
 			( not supported_0 )
-			( = shift_5 0 )
+			( = shift_5 (_ bv0 16))
 			( = shift_4 shift_5 )
 			( not shift_4 )
-			( = r_4 ( + r_2 a_0 ) )
-			( = b_3 ( - b_1 1 ) )
+			( = r_4 ( bvadd  r_2 a_0 ) )
+			( = b_3 ( - b_1 (_ bv1 16)) )
 			( = b_2 b_3 )
 			( = r_3 r_4 )
 			( = b_2 b! )
@@ -171,7 +174,7 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 )
 
-( define-fun post-f ( ( a Int )( b Int )( r Int )( shift Int )( supported Int )( x Int )( y Int )( a_0 Int )( b_0 Int )( b_1 Int )( b_2 Int )( b_3 Int )( r_0 Int )( r_1 Int )( r_2 Int )( r_3 Int )( r_4 Int )( shift_0 Int )( shift_1 Int )( shift_2 Int )( shift_3 Int )( shift_4 Int )( shift_5 Int )( supported_0 Int )( x_0 Int )( x_1 Int )( y_0 Int )( y_1 Int ) ) Bool
+( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( r (_ BitVec 16))( shift (_ BitVec 16))( supported (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( b_3 (_ BitVec 16))( r_0 (_ BitVec 16))( r_1 (_ BitVec 16))( r_2 (_ BitVec 16))( r_3 (_ BitVec 16))( r_4 (_ BitVec 16))( shift_0 (_ BitVec 16))( shift_1 (_ BitVec 16))( shift_2 (_ BitVec 16))( shift_3 (_ BitVec 16))( shift_4 (_ BitVec 16))( shift_5 (_ BitVec 16))( supported_0 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( or
 		( not
 			( and
@@ -186,23 +189,23 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		)
 		( not
 			( and
-				( not ( not ( = b_1 0 ) ) )
-				( not ( = r_2 ( * x_1 y_1 ) ) )
+				( not ( not ( = b_1 (_ bv0 16)) ) )
+				( not ( = r_2 ( bvmul  x_1 y_1 ) ) )
 			)
 		)
 	)
 )
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( pre-f a b r shift supported x y a_0 b_0 b_1 b_2 b_3 r_0 r_1 r_2 r_3 r_4 shift_0 shift_1 shift_2 shift_3 shift_4 shift_5 supported_0 x_0 x_1 y_0 y_1  )
 		( inv-f a b r shift supported x y )
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( and
 			( inv-f a b r shift supported x y )
 			( trans-f a b r shift supported x y a! b! r! shift! supported! x! y! a_0 b_0 b_1 b_2 b_3 r_0 r_1 r_2 r_3 r_4 shift_0 shift_1 shift_2 shift_3 shift_4 shift_5 supported_0 x_0 x_1 y_0 y_1 )
@@ -211,11 +214,14 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( inv-f a b r shift supported x y  )
 		( post-f a b r shift supported x y a_0 b_0 b_1 b_2 b_3 r_0 r_1 r_2 r_3 r_4 shift_0 shift_1 shift_2 shift_3 shift_4 shift_5 supported_0 x_0 x_1 y_0 y_1 )
 	)
 ))
 
+(check-sat)
+(get-model)
+(exit)

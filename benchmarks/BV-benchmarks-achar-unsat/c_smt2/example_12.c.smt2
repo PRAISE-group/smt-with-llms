@@ -1,38 +1,39 @@
-(set-logic LIA)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
-( declare-const power Int )
-( declare-const power! Int )
-( declare-const result Int )
-( declare-const result! Int )
-( declare-const x Int )
-( declare-const x! Int )
-( declare-const x_0 Int )
-( declare-const x_0! Int )
-( declare-const y Int )
-( declare-const y! Int )
-( declare-const y_power Int )
-( declare-const y_power! Int )
+( declare-const power (_ BitVec 16))
+( declare-const power! (_ BitVec 16))
+( declare-const result (_ BitVec 16))
+( declare-const result! (_ BitVec 16))
+( declare-const x (_ BitVec 16))
+( declare-const x! (_ BitVec 16))
+( declare-const x_0 (_ BitVec 16))
+( declare-const x_0! (_ BitVec 16))
+( declare-const y (_ BitVec 16))
+( declare-const y! (_ BitVec 16))
+( declare-const y_power (_ BitVec 16))
+( declare-const y_power! (_ BitVec 16))
 
-( declare-const power_0 Int )
-( declare-const power_1 Int )
-( declare-const power_2 Int )
-( declare-const power_3 Int )
-( declare-const result_0 Int )
-( declare-const result_1 Int )
-( declare-const x_0 Int )
-( declare-const x_1 Int )
-( declare-const x_2 Int )
-( declare-const x_0_0 Int )
-( declare-const x_0_1 Int )
-( declare-const y_0 Int )
-( declare-const y_power_0 Int )
-( declare-const y_power_1 Int )
+( declare-const power_0 (_ BitVec 16))
+( declare-const power_1 (_ BitVec 16))
+( declare-const power_2 (_ BitVec 16))
+( declare-const power_3 (_ BitVec 16))
+( declare-const result_0 (_ BitVec 16))
+( declare-const result_1 (_ BitVec 16))
+( declare-const x_0 (_ BitVec 16))
+( declare-const x_1 (_ BitVec 16))
+( declare-const x_2 (_ BitVec 16))
+( declare-const x_0_0 (_ BitVec 16))
+( declare-const x_0_1 (_ BitVec 16))
+( declare-const y_0 (_ BitVec 16))
+( declare-const y_power_0 (_ BitVec 16))
+( declare-const y_power_1 (_ BitVec 16))
 
-( define-fun inv-f( ( power Int )( result Int )( x Int )( x_0 Int )( y Int )( y_power Int ) ) Bool
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+( define-fun inv-f( ( power (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( x_0 (_ BitVec 16))( y (_ BitVec 16))( y_power (_ BitVec 16)) ) Bool
+	true
 )
 
-( define-fun pre-f ( ( power Int )( result Int )( x Int )( x_0 Int )( y Int )( y_power Int )( power_0 Int )( power_1 Int )( power_2 Int )( power_3 Int )( result_0 Int )( result_1 Int )( x_0 Int )( x_1 Int )( x_2 Int )( x_0_0 Int )( x_0_1 Int )( y_0 Int )( y_power_0 Int )( y_power_1 Int ) ) Bool
+( define-fun pre-f ( ( power (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( x_0 (_ BitVec 16))( y (_ BitVec 16))( y_power (_ BitVec 16))( power_0 (_ BitVec 16))( power_1 (_ BitVec 16))( power_2 (_ BitVec 16))( power_3 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_0_0 (_ BitVec 16))( x_0_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_power_0 (_ BitVec 16))( y_power_1 (_ BitVec 16)) ) Bool
 	( and
 		( = power power_1 )
 		( = result result_1 )
@@ -40,17 +41,17 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		( = x_0 x_0_1 )
 		( = y y_0 )
 		( = y_power y_power_1 )
-		( >= x_0 0 )
-		( not ( = y_0 0 ) )
-		( >= y_power_0 0 )
+		( bvugt = x_0 (_ bv0 16))
+		( not ( = y_0 (_ bv0 16)) )
+		( bvugt = y_power_0 (_ bv0 16))
 		( = x_0_1 x_0 )
-		( = result_1 0 )
-		( = power_1 32 )
-		( = y_power_1 ( << y_0 power_1 ) )
+		( = result_1 (_ bv0 16))
+		( = power_1 (_ bv32 16) )
+		( = y_power_1 ( bvult bvult  y_0 power_1 ) )
 	)
 )
 
-( define-fun trans-f ( ( power Int )( result Int )( x Int )( x_0 Int )( y Int )( y_power Int )( power! Int )( result! Int )( x! Int )( x_0! Int )( y! Int )( y_power! Int )( power_0 Int )( power_1 Int )( power_2 Int )( power_3 Int )( result_0 Int )( result_1 Int )( x_0 Int )( x_1 Int )( x_2 Int )( x_0_0 Int )( x_0_1 Int )( y_0 Int )( y_power_0 Int )( y_power_1 Int ) ) Bool
+( define-fun trans-f ( ( power (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( x_0 (_ BitVec 16))( y (_ BitVec 16))( y_power (_ BitVec 16))( power! (_ BitVec 16))( result! (_ BitVec 16))( x! (_ BitVec 16))( x_0! (_ BitVec 16))( y! (_ BitVec 16))( y_power! (_ BitVec 16))( power_0 (_ BitVec 16))( power_1 (_ BitVec 16))( power_2 (_ BitVec 16))( power_3 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_0_0 (_ BitVec 16))( x_0_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_power_0 (_ BitVec 16))( y_power_1 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = power_2 power )
@@ -67,8 +68,8 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		( and
 			( = power_2 power )
 			( = x_1 x )
-			( >= x_1 y_0 )
-			( = power_3 ( mod y_power_1 x_1 ) )
+			( bvugt = x_1 y_0 )
+			( = power_3 ( bvurem y_power_1 x_1 ) )
 			( = x_2 ( - x_1 y_power_1 ) )
 			( = power_3 power! )
 			( = x_2 x! )
@@ -84,7 +85,7 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 )
 
-( define-fun post-f ( ( power Int )( result Int )( x Int )( x_0 Int )( y Int )( y_power Int )( power_0 Int )( power_1 Int )( power_2 Int )( power_3 Int )( result_0 Int )( result_1 Int )( x_0 Int )( x_1 Int )( x_2 Int )( x_0_0 Int )( x_0_1 Int )( y_0 Int )( y_power_0 Int )( y_power_1 Int ) ) Bool
+( define-fun post-f ( ( power (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( x_0 (_ BitVec 16))( y (_ BitVec 16))( y_power (_ BitVec 16))( power_0 (_ BitVec 16))( power_1 (_ BitVec 16))( power_2 (_ BitVec 16))( power_3 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_0_0 (_ BitVec 16))( x_0_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_power_0 (_ BitVec 16))( y_power_1 (_ BitVec 16)) ) Bool
 	( or
 		( not
 			( and
@@ -98,23 +99,23 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		)
 		( not
 			( and
-				( not ( >= x_1 y_0 ) )
-				( not ( = x_0_1 ( + x_1 ( * y_0 result_1 ) ) ) )
+				( not ( bvugt = x_1 y_0 ) )
+				( not ( = x_0_1 ( bvadd  x_1 ( bvmul  y_0 result_1 ) ) ) )
 			)
 		)
 	)
 )
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( pre-f power result x x_0 y y_power power_0 power_1 power_2 power_3 result_0 result_1 x_0 x_1 x_2 x_0_0 x_0_1 y_0 y_power_0 y_power_1  )
 		( inv-f power result x x_0 y y_power )
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( and
 			( inv-f power result x x_0 y y_power )
 			( trans-f power result x x_0 y y_power power! result! x! x_0! y! y_power! power_0 power_1 power_2 power_3 result_0 result_1 x_0 x_1 x_2 x_0_0 x_0_1 y_0 y_power_0 y_power_1 )
@@ -123,11 +124,14 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( inv-f power result x x_0 y y_power  )
 		( post-f power result x x_0 y y_power power_0 power_1 power_2 power_3 result_0 result_1 x_0 x_1 x_2 x_0_0 x_0_1 y_0 y_power_0 y_power_1 )
 	)
 ))
 
+(check-sat)
+(get-model)
+(exit)

@@ -1,38 +1,42 @@
-(set-logic LIA)
+(set-logic QF_UFBV)
+(set-option :produce-models true)
 
-( declare-const i Int )
-( declare-const i! Int )
-( declare-const n Int )
-( declare-const n! Int )
-( declare-const out Int )
-( declare-const out! Int )
+( declare-const i (_ BitVec 16))
+( declare-const i! (_ BitVec 16))
+( declare-const n (_ BitVec 16))
+( declare-const n! (_ BitVec 16))
+( declare-const out (_ BitVec 16))
+( declare-const out! (_ BitVec 16))
 
-( declare-const i_0 Int )
-( declare-const i_1 Int )
-( declare-const n_0 Int )
-( declare-const out_0 Int )
-( declare-const out_1 Int )
-( declare-const out_2 Int )
-( declare-const out_3 Int )
-( declare-const out_4 Int )
-( declare-const out_5 Int )
+( declare-const i_0 (_ BitVec 16))
+( declare-const i_1 (_ BitVec 16))
+( declare-const n_0 (_ BitVec 16))
+( declare-const out_0 (_ BitVec 16))
+( declare-const out_1 (_ BitVec 16))
+( declare-const out_2 (_ BitVec 16))
+( declare-const out_3 (_ BitVec 16))
+( declare-const out_4 (_ BitVec 16))
+( declare-const out_5 (_ BitVec 16))
 
-( define-fun inv-f( ( i Int )( n Int )( out Int ) ) Bool
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; closed-box (uninterpreted) foo to model opaque C function
+(declare-fun isprime_cb ((_ BitVec 16)) Bool)
+
+( define-fun inv-f( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16)) ) Bool
+    true
 )
 
-( define-fun pre-f ( ( i Int )( n Int )( out Int )( i_0 Int )( i_1 Int )( n_0 Int )( out_0 Int )( out_1 Int )( out_2 Int )( out_3 Int )( out_4 Int )( out_5 Int ) ) Bool
+( define-fun pre-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
 	( and
 		( = i i_1 )
 		( = n n_0 )
 		( = out out_1 )
-		( > n_0 2 )
-		( = i_1 0 )
-		( = out_1 0 )
+		( bvugt  n_0 (_ bv2 16))
+		( = i_1 (_ bv0 16))
+		( = out_1 (_ bv0 16))
 	)
 )
 
-( define-fun trans-f ( ( i Int )( n Int )( out Int )( i! Int )( n! Int )( out! Int )( i_0 Int )( i_1 Int )( n_0 Int )( out_0 Int )( out_1 Int )( out_2 Int )( out_3 Int )( out_4 Int )( out_5 Int ) ) Bool
+( define-fun trans-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i! (_ BitVec 16))( n! (_ BitVec 16))( out! (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = out_2 out )
@@ -45,9 +49,9 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		)
 		( and
 			( = out_2 out )
-			( < i_1 n_0 )
-			( mod n_0 6 )
-			( = out_3 ( + out_2 1 ) )
+			( bvult  i_1 n_0 )
+			( isprime_cb n_0 )
+			( = out_3 ( bvadd  out_2 (_ bv1 16)) )
 			( = out_4 out_3 )
 			( = out_4 out! )
 			(= i i_1 )
@@ -57,9 +61,9 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 		)
 		( and
 			( = out_2 out )
-			( < i_1 n_0 )
-			( not ( mod n_0 6 ) )
-			( = out_5 ( + out_2 2 ) )
+			( bvult  i_1 n_0 )
+			( not ( isprime_cb n_0 ) )
+			( = out_5 ( bvadd out_2 (_ bv2 16)) )
 			( = out_4 out_5 )
 			( = out_4 out! )
 			(= i i_1 )
@@ -70,7 +74,7 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 )
 
-( define-fun post-f ( ( i Int )( n Int )( out Int )( i_0 Int )( i_1 Int )( n_0 Int )( out_0 Int )( out_1 Int )( out_2 Int )( out_3 Int )( out_4 Int )( out_5 Int ) ) Bool
+( define-fun post-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
 	( and
 		( or
 			( not
@@ -82,8 +86,8 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 			)
 			( not
 				( and
-					( not ( < i_1 n_0 ) )
-					( mod n_0 6 )
+					( not ( bvult  i_1 n_0 ) )
+					( isprime_cb n_0 )
 					( not ( = out_2 n_0 ) )
 				)
 			)
@@ -98,25 +102,26 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 			)
 			( not
 				( and
-					( not ( < i_1 n_0 ) )
-					( not ( mod n_0 6 ) )
-					( not ( = out_2 ( * 2 n_0 ) ) )
+					( not ( bvult  i_1 n_0 ) )
+					( not ( isprime_cb n_0 ) )
+					( not ( = out_2 ( bvmul (_ bv2 16) n_0 ) ) )
 				)
 			)
 		)
 	)
 )
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( pre-f i n out i_0 i_1 n_0 out_0 out_1 out_2 out_3 out_4 out_5  )
 		( inv-f i n out )
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( and
 			( inv-f i n out )
 			( trans-f i n out i! n! out! i_0 i_1 n_0 out_0 out_1 out_2 out_3 out_4 out_5 )
@@ -125,11 +130,14 @@ SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 	)
 ))
 
-SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
+; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
-	( =>
+	( => 
 		( inv-f i n out  )
 		( post-f i n out i_0 i_1 n_0 out_0 out_1 out_2 out_3 out_4 out_5 )
 	)
 ))
 
+(check-sat)
+(get-model)
+(exit)
