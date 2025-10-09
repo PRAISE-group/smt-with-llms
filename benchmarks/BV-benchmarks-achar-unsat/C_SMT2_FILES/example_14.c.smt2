@@ -18,7 +18,10 @@
 ( declare-const res_2 (_ BitVec 16) )
 ( declare-const res_3 (_ BitVec 16) )
 
+; Closed Box Function: retuns the multiplication of its two arguments
 ( declare-fun multiply_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+
+; Closed Box Function: retuns the factorial of its argument
 ( declare-fun factorial_cb ((_ BitVec 16)) (_ BitVec 16))
 
 ( define-fun inv-f( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) ) ) Bool

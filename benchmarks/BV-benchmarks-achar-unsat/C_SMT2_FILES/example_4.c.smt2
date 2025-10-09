@@ -1,6 +1,6 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
-; regenerate again this file from Code2Inv
+
 ( declare-const c (_ BitVec 16))
 ( declare-const c! (_ BitVec 16))
 ( declare-const i (_ BitVec 16))
@@ -28,8 +28,10 @@
 ( declare-const y_2 (_ BitVec 16))
 ( declare-const y_3 (_ BitVec 16))
 
+; Closed Box Function: returns addition of two numbers
 ( declare-fun add_sum_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
+; Closed Box Function: returns n-th Fibonacci number
 ( declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( c (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
@@ -162,7 +164,7 @@
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( => 
-		( inv-f c i n x y  )
+		( inv-f c i n x y )
 		( post-f c i n x y c_0 c_1 c_2 c_3 i_0 i_1 n_0 x_0 x_1 x_2 x_3 y_0 y_1 y_2 y_3 )
 	)
 ))

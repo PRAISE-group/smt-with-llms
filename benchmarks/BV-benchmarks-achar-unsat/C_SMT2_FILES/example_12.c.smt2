@@ -30,6 +30,9 @@
 ( declare-const y_power_0 (_ BitVec 16) )
 ( declare-const y_power_1 (_ BitVec 16) )
 
+; setPowerValue(&y_power, &x, &power);
+; 
+; Closed Box Function: Set power value based on y_power and x
 ( declare-fun setPowerValue_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( power (_ BitVec 16) )( result (_ BitVec 16) )( x (_ BitVec 16) )( x_0 (_ BitVec 16) )( y (_ BitVec 16) )( y_power (_ BitVec 16) ) ) Bool

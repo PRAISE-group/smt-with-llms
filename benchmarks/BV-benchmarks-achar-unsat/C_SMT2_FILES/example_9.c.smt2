@@ -32,6 +32,7 @@
 ( declare-const y_4 (_ BitVec 16))
 ( declare-const y_5 (_ BitVec 16))
 
+; Closed Box Function: Shift input 'x' by 's' bits to the right
 ( declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
@@ -74,7 +75,7 @@
 			( = y_2 y )
 			( bvuge s_2 (_ bv0 16))
 			( = y_3 ( bvmul (_ bv2 16) y_2 ) )
-			( = b_2 ( shift_cb ( bvadd  ( bvmul  ( bvmul (_ bv3 16) y_3 ) ( bvadd  y_3 (_ bv1 16)) ) (_ bv1 16)) s_2 ) )
+			( = b_2 ( shift_cb ( bvadd ( bvmul ( bvmul (_ bv3 16) y_3 ) ( bvadd y_3 (_ bv1 16)) ) (_ bv1 16)) s_2 ) )
 			( = s_3 ( bvsub s_2 (_ bv3 16) ) )
 			( bvuge x_1 b_2 )
 			( = x_2 ( bvsub x_1 b_2 ) )

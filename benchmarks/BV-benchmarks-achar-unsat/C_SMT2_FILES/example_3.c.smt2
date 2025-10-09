@@ -26,7 +26,12 @@
 ( declare-const y_0 (_ BitVec 16))
 ( declare-const y_1 (_ BitVec 16))
 
+; Closed Box function: return a % b
 ( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+
+; Closed Box function: return gcd(x, y)
+( declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+
 
 ( define-fun inv-f (( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
 	true
@@ -89,7 +94,7 @@
 		( not
 			( and
 				( not ( not ( = ( retmod_cb a_1 b_1 ) (_ bv0 16)) ) )
-				( not ( = b_1 ( retmod_cb x_1 y_1 ) ) )
+				( not ( = b_1 ( gcd_cb x_1 y_1 ) ) )
 			)
 		)
 	)
@@ -97,7 +102,7 @@
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( => 
-		( pre-f a b result x y a_0 a_1 a_2 b_0 b_1 b_2 result_0 result_1 result_2 x_0 x_1 y_0 y_1  )
+		( pre-f a b result x y a_0 a_1 a_2 b_0 b_1 b_2 result_0 result_1 result_2 x_0 x_1 y_0 y_1 )
 		( inv-f a b result x y )
 	)
 ))
