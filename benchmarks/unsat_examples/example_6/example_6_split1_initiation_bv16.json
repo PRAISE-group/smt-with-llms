@@ -2,22 +2,22 @@
   "smt_file": "./unsat_examples/example_6/example_6_split1_initiation_bv16.smt2",
   "object_file": "./unsat_examples/example_6/example_6.o",
   "functions": {
-    "foo_cb": {
-      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `if(a,b)` from the binary-exponentiation spec; opaque semantics used in trans-f.",
+    "retmod_cb": {
+      "smtDecl": "( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
+      "desc": "BV16 closed-box for `retmod_cb (a, b)` from the spec; models a % b modulo 2^16 on 16-bit domain in an opaque way.",
       "tests": [
-        [
-          2,
-          3
-        ],
-        [
-          5,
-          7
-        ]
+        [2, 3],
+        [5, 7],
+        [10, 3],
+        [10, 7]
       ],
-      "userLemmas": [
-        ""
-      ]
+      "userLemmas": [""]
+    },
+    "binpow_cb": {
+      "smtDecl": "( declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
+      "desc": "BV16 closed-box for `binpow_cb (a, b)` from the spec; models exponentiation-by-squaring on 16-bit domain in an opaque way.",
+      "tests": [[2], [10]],
+      "userLemmas": [""]
     }
   }
 }

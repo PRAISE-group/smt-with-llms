@@ -2,26 +2,21 @@
   "smt_file": "./unsat_examples/example_4/example_4_split2_consecution_bv16.smt2",
   "object_file": "./unsat_examples/example_4/example_4.o",
   "functions": {
-    "foo_cb": {
-      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `body(x,y)` from the Fibonacci loop; models the opaque add on 16-bit (e.g., x+y modulo 2^16).",
+    "add_sum_cb": {
+      "smtDecl": "( declare-fun add_sum_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
+      "desc": "BV16 closed-box for `add_sum_cb(x,y)` from the trans-f; models the opaque add on 16-bit (e.g., x+y modulo 2^16).",
       "tests": [
-        [
-          1,
-          1
-        ],
-        [
-          5,
-          8
-        ],
-        [
-          100,
-          155
-        ]
+        [1, 1],
+        [5, 8],
+        [100, 155]
       ],
-      "userLemmas": [
-        ""
-      ]
+      "userLemmas": [""]
+    },
+    "fib_cb": {
+      "smtDecl": "( declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16) )",
+      "desc": "BV16 closed-box for `fib_cb(x,y)` from the Fibonacci loop in inv-f; models the calcualtion og nth fibonacci number on 16-bit (e.g., fib(n) modulo 2^16).",
+      "tests": [[1], [5], [100]],
+      "userLemmas": [""]
     }
   }
 }

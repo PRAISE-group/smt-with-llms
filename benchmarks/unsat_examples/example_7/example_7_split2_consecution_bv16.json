@@ -3,21 +3,13 @@
   "object_file": "./unsat_examples/example_7/example_7.o",
   "functions": {
     "foo_cb": {
-      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `foo(res,num,bit)` used to abstract the integer square-root loop; opaque semantics.",
+      "smtDecl": "(declare-fun pre_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `pre_cb (res, num, bit)` used to abstract the integer bit shift by bit while res is bigger num in a loop for opaque semantics.",
       "tests": [
-        [
-          1,
-          1
-        ],
-        [
-          16,
-          4
-        ]
+        [10, 2, 2],
+        [16, 4, 2]
       ],
-      "userLemmas": [
-        ""
-      ]
+      "userLemmas": [""]
     }
   }
 }
