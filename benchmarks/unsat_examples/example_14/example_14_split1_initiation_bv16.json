@@ -2,22 +2,23 @@
   "smt_file": "./unsat_examples/example_14/example_14_split1_initiation_bv16.smt2",
   "object_file": "./unsat_examples/example_14/example_14.o",
   "functions": {
-    "foo_cb": {
-      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `__multiply(res,k)` from factorial loop; abstracts multiplication modulo 2^16; used in trans-f.",
+    "multiply_cb": {
+      "smtDecl": "(declare-fun multiply_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `multiply_cb(res, k)` from factorial loop; abstracts multiplication modulo 2^16; used in trans-f.",
       "tests": [
-        [
-          1,
-          2
-        ],
-        [
-          6,
-          4
-        ]
+        [1, 2],
+        [6, 4]
       ],
-      "userLemmas": [
-        ""
-      ]
+      "userLemmas": [""]
+    },
+    "factorial_cb": {
+      "smtDecl": "( declare-fun factorial_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `factorial_cb (n)` from factorial loop; abstracts factorial of n modulo 2^16; used in trans-f.",
+      "tests": [
+        [1, 2],
+        [6, 4]
+      ],
+      "userLemmas": [""]
     }
   }
 }

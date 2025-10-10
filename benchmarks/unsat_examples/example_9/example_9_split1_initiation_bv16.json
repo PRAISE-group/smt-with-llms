@@ -2,20 +2,20 @@
   "smt_file": "./unsat_examples/example_9/example_9_split1_initiation_bv16.smt2",
   "object_file": "./unsat_examples/example_9/example_9.o",
   "functions": {
-    "foo_cb": {
-      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16)) (_ BitVec 16))",
+    "icbrt_cb": {
+      "smtDecl": "(declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16))",
       "desc": "BV16 closed-box for `if` from the cube-root routine; opaque semantics used in trans-f.",
+      "tests": [[8], [27]],
+      "userLemmas": [""]
+    },
+    "shift_cb": {
+      "smtDecl": "( declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
+      "desc": "BV16 closed-box Shift first arg 'x' by 's' bits (second arg) to the right; opaque semantics used in trans-f.",
       "tests": [
-        [
-          8
-        ],
-        [
-          27
-        ]
+        [8, 2],
+        [24, 2]
       ],
-      "userLemmas": [
-        ""
-      ]
+      "userLemmas": [""]
     }
   }
 }

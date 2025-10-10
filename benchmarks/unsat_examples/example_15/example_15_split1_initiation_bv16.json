@@ -4,24 +4,13 @@
   "functions": {
     "foo_cb": {
       "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `foo(sum,i)` from sum-of-cubes loop; returns (sum + i^3) modulo 2^16, abstracted in trans-f.",
+      "desc": "BV16 closed-box for `foo(sum, i)` from sum-of-cubes loop; returns (sum + i^3) modulo 2^16, abstracted in trans-f.",
       "tests": [
-        [
-          0,
-          1
-        ],
-        [
-          5,
-          2
-        ],
-        [
-          255,
-          3
-        ]
+        [0, 1],
+        [5, 2],
+        [255, 3]
       ],
-      "userLemmas": [
-        ""
-      ]
+      "userLemmas": [""]
     }
   }
 }

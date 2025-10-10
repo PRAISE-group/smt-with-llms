@@ -2,8 +2,8 @@
   "smt_file": "./unsat_examples/example_8/example_8_split1_initiation_bv16.smt2",
   "object_file": "./unsat_examples/example_8/example_8.o",
   "functions": {
-    "__builtin_ctz_cb": {
-      "smtDecl": "(declare-fun __builtin_ctz_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+    "builtin_ctz_cb": {
+      "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
       "desc": "BV16 closed-box for multiply loop: abstracts r' = f(r, a, shift) (e.g., r + (a << shift)) modulo 2^16; used in trans-f.",
       "tests": [
         [3, 1],

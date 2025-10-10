@@ -22,7 +22,7 @@
 ( declare-const res_1 (_ BitVec 16))
 ( declare-const res_2 (_ BitVec 16))
 
-; Closed Box Function: Compute the cube of input 'x'
+; Closed Box Function: Compute the cube of input 'x' in BitVec 16
 ( declare-fun cube_cb ((_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16)) ) Bool

@@ -24,7 +24,7 @@
 ( declare-const sum_2 (_ BitVec 16) )
 ( declare-const sum_3 (_ BitVec 16) )
 
-; Closed Box Function: retuns the multiplication cube of its two arguments
+; Closed Box Function: retuns the addition of cube of the second argument with the first argument
 ( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
 ( define-fun inv-f( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
