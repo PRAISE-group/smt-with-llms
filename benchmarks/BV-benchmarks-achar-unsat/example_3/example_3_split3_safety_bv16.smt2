@@ -29,7 +29,7 @@
 ; Closed Box function: return a % b
 ( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
-; Closed Box function: return gcd(x, y)
+; Closed Box function: return gcd(x, y). Greated common divisor of x and y
 ( declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 
