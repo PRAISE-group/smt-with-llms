@@ -1,4 +1,4 @@
-int pre (int bit, int num, int cont) {
+int pre_cb (int bit, int num, int cont) {
     while (bit > num) {
         bit >>= cont;
     }

@@ -13,7 +13,7 @@
  * checked via composite.
  */
 
-long long binpow (long long a, long long b) {
+long long binpow_cb (long long a, long long b) {
     long long res = 1;
     while (b > 0) {
         if (b & 1) res = res * a;
@@ -38,7 +38,7 @@ long long int conjecture (int p) {
     if (p % 2 == 0 && p != 2) return 0LL;
 
     if ((p % 2 != 0) && (((2 - p) % 5 == 0) || ((2 + p) % 5 == 0))) {
-        return ((binpow(2, p - 1) % p == 1) && (fib(p + 1) % p == 0));
+        return ((binpow_cb(2, p - 1) % p == 1) && (fib(p + 1) % p == 0));
     }
     return 0LL;
 }
@@ -64,7 +64,7 @@ bool check_composite (uint64_t n, uint64_t a, uint64_t d, int s) {
     return true;
 };
 
-bool isprime (uint64_t n) {
+bool isprime_cb (uint64_t n) {
     if (n < 4) return n == 2 || n == 3;
 
     if (conjecture(n)) return conjecture(n);

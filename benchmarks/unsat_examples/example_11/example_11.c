@@ -1,5 +1,5 @@
 // https://godbolt.org/z/MYM4fv4GP
-long long int cube (long long int a) {
+long long int cube_cb (long long int a) {
     long long int res = 1;
     int b = 3;
     while (b > 0) {

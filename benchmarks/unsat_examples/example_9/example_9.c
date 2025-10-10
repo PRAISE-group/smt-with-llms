@@ -1,12 +1,16 @@
+int shift_cb (int a, int b) {
+    return a << b;
+}
+
 // https://www.oreilly.com/library/view/hackers-delight/0201914654/0201914654_ch11lev1sec2.html
-int icbrt (unsigned x) {
+int icbrt_cb (unsigned x) {
     int s;
     unsigned y, b;
     s = 30;
     y = 0;
     while (s >= 0) {  // Do 11 times.
         y = 2 * y;
-        b = shift(
+        b = shift_cb (
             (3 * y * (y + 1) + 1), 
             s
         );
@@ -17,8 +21,4 @@ int icbrt (unsigned x) {
         }
     }
     return y;
-}
-
-int shift (int a, int b) {
-    return a << b;
 }
