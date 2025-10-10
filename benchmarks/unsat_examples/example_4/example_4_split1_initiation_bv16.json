@@ -1,0 +1,26 @@
+{
+  "smt_file": "./unsat_examples/example_4/example_4_split1_initiation_bv16.smt2",
+  "object_file": "./unsat_examples/example_4/example_4.o",
+  "functions": {
+    "add_sum_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `body(x,y)` from the Fibonacci loop; models the opaque add on 16-bit (e.g., x+y modulo 2^16).",
+      "tests": [
+        [1, 1],
+        [5, 8],
+        [100, 155]
+      ],
+      "userLemmas": [""]
+    },
+    "fib_cb": {
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "BV16 closed-box for `body(x,y)` from the Fibonacci loop; models the opaque add on 16-bit (e.g., x+y modulo 2^16).",
+      "tests": [
+        [1, 1],
+        [5, 8],
+        [100, 155]
+      ],
+      "userLemmas": [""]
+    }
+  }
+}

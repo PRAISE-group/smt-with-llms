@@ -1,0 +1,12 @@
+{
+  "smt_file": "./unsat_examples/example_2/example_2_split1_initiation_bv16.smt2",
+  "object_file": "./unsat_examples/example_2/example_2.o",
+  "functions": {
+    "isprime_cb": {
+      "smtDecl": "(declare-fun isprime_cb ((_ BitVec 16)) Bool)",
+      "desc": "BV16 closed-box approximation of `isprime` used in trans-f; opaque semantics, arity=0.",
+      "tests": [[1], [5], [255]],
+      "userLemmas": [""]
+    }
+  }
+}
