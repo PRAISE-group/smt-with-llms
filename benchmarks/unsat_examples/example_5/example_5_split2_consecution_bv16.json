@@ -3,8 +3,8 @@
   "object_file": "./unsat_examples/example_5/example_5.o",
   "functions": {
     "retmod_cb": {
-      "smtDecl": "( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
-      "desc": "BV16 closed-box for `retmod_cb (a, b)` from the spec; models a % b modulo 2^16 on 16-bit domain in an opaque way.",
+      "smtDecl": "(declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'retmod_cb' takes 2 arguments (a, b) and returns a % b Uses BitVec 16 Domain.",
       "tests": [
         [2, 3],
         [5, 7],
@@ -14,8 +14,8 @@
       "userLemmas": [""]
     },
     "binpow_cb": {
-      "smtDecl": "( declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
-      "desc": "BV16 closed-box for `binpow_cb (a, b)` from the spec; models exponentiation-by-squaring on 16-bit domain in an opaque way.",
+      "smtDecl": "(declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'binpow_cb' takes 2 arguments (a, b) and returns a raised to the power b. Uses BitVec 16 Domain.",
       "tests": [[2], [10]],
       "userLemmas": [""]
     }

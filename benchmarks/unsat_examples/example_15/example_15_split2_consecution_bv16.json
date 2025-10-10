@@ -4,7 +4,7 @@
   "functions": {
     "foo_cb": {
       "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `foo(sum, i)` from sum-of-cubes loop; returns (sum + i^3) modulo 2^16, abstracted in trans-f.",
+      "desc": "Closed box function 'foo_cb' takes 2 arguments (sum, i) and returns sum + (i * i * i). Uses BitVec 16 Domain.",
       "tests": [
         [0, 1],
         [5, 2],

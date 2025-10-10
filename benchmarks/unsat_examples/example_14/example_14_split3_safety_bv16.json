@@ -4,7 +4,7 @@
   "functions": {
     "multiply_cb": {
       "smtDecl": "(declare-fun multiply_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `multiply_cb(res, k)` from factorial loop; abstracts multiplication modulo 2^16; used in trans-f.",
+      "desc": "Closed box function 'multiply_cb' takes 2 arguments (a, b) and returns a * b Uses BitVec 16 Domain.",
       "tests": [
         [1, 2],
         [6, 4]
@@ -13,11 +13,8 @@
     },
     "factorial_cb": {
       "smtDecl": "( declare-fun factorial_cb ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for `factorial_cb (n)` from factorial loop; abstracts factorial of n modulo 2^16; used in trans-f.",
-      "tests": [
-        [1, 2],
-        [6, 4]
-      ],
+      "desc": "Closed box function 'factorial_cb' takes 1 argument (N) and returns the factorial value of N. Uses BitVec 16 Domain.",
+      "tests": [[3], [12]],
       "userLemmas": [""]
     }
   }

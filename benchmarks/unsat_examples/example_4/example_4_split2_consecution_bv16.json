@@ -3,8 +3,8 @@
   "object_file": "./unsat_examples/example_4/example_4.o",
   "functions": {
     "add_sum_cb": {
-      "smtDecl": "( declare-fun add_sum_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
-      "desc": "BV16 closed-box for `add_sum_cb(x,y)` from the trans-f; models the opaque add on 16-bit (e.g., x+y modulo 2^16).",
+      "smtDecl": "(declare-fun add_sum_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'add_sum_cb' takes 2 arguments (a, b) and returns a + b. Uses BitVec 16 Domain.",
       "tests": [
         [1, 1],
         [5, 8],
@@ -13,8 +13,8 @@
       "userLemmas": [""]
     },
     "fib_cb": {
-      "smtDecl": "( declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16) )",
-      "desc": "BV16 closed-box for `fib_cb(x,y)` from the Fibonacci loop in inv-f; models the calcualtion og nth fibonacci number on 16-bit (e.g., fib(n) modulo 2^16).",
+      "smtDecl": "(declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'fib_cb' takes 1 argument (N) and returns the N-th Fibonacci number. Uses BitVec 16 Domain.",
       "tests": [[1], [5], [100]],
       "userLemmas": [""]
     }

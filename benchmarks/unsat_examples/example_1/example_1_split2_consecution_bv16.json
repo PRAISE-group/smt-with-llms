@@ -3,8 +3,8 @@
   "object_file": "./unsat_examples/example_1/example_1.o",
   "functions": {
     "foo_cb": {
-      "smtDecl": "( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
-      "desc": "BV16 closed-box for the C helper `foo(sum, i)`: returns (sum + i*i) modulo 2^16. Used in trans-f as sum' = foo_cb(sum, i+1).",
+      "smtDecl": "(declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function that takes 2 arguments (sum, i) and returns sum + (i * i). Uses BV16 Domain.",
       "tests": [
         [1, 1],
         [5, 2],

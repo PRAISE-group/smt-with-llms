@@ -9,3 +9,10 @@ unsigned int pre_cb (
 
     return bit;
 }
+
+unsigned int lshift_cb (
+    unsigned int res, 
+    unsigned int shift) 
+{
+    return res >> shift; 
+}

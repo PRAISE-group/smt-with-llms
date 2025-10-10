@@ -3,8 +3,8 @@
   "object_file": "./unsat_examples/example_3/example_3.o",
   "functions": {
     "retmod_cb": {
-      "smtDecl": "( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
-      "desc": "BV16 closed-box for `retmod_cb` used in trans-f; opaque semantics. For this program, `retmod_cb(a,b)` models (a mod b) on 16-bit unsigned (bvurem).",
+      "smtDecl": "(declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'retmod_cb' takes 2 arguments (a, b) and returns a % b Uses BitVec 16 Domain.",
       "tests": [
         [45, 7],
         [67, 10]
@@ -12,8 +12,8 @@
       "userLemmas": [""]
     },
     "gcd_cb": {
-      "smtDecl": "( declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )",
-      "desc": "BV16 closed-box for `gcd_cb` used in inv-f; opaque semantics. For this program, `gcd_cb(a,b)` models greatest common divisor for inputs a and b on 16-bit unsigned.",
+      "smtDecl": "(declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'gcd_cb' takes 2 arguments (a, b) and returns the greatest common divisor between a and b. Uses BitVec 16 Domain.",
       "tests": [
         [45, 7],
         [67, 10]

@@ -1,8 +1,13 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
 
+
 ; pre_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
 (declare-fun pre_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+
+; lshift_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
+(declare-fun lshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+
 
 (declare-const bit (_ BitVec 16))
 (declare-const bit! (_ BitVec 16))
@@ -93,11 +98,11 @@
       ; = num_2 ( + ( - num_1 res_2 ) bit_3 ) -> (= num_2 (bvadd (bvsub num_1 res_2) bit_3))
       (= num_2 (bvadd (bvsub num_1 res_2) bit_3))
       ; = res_3 ( + ( mod res_2 1 ) bit_3 ) -> mod -> bvshr
-      (= res_3 (bvadd (bvlshr res_2 (_ bv1 16)) bit_3))
+      (= res_3 (bvadd (lshift_cb  res_2 (_ bv1 16)) bit_3))
       (= num_3 num_2)
       (= res_4 res_3)
       ; bit_4 = ( mod bit_3 2 )
-      (= bit_4 (bvlshr bit_3 (_ bv2 16)))
+      (= bit_4 (lshift_cb  bit_3 (_ bv2 16)))
       (= bit_4 bit!)
       (= num_3 num!)
       (= res_4 res!)
@@ -110,10 +115,10 @@
       (= res_2 res)
       (not (= bit_3 (_ bv0 16)))
       (not (bvuge num_1 (bvadd res_2 bit_3)))
-      (= res_5 (bvlshr res_2 (_ bv1 16)))
+      (= res_5 (lshift_cb  res_2 (_ bv1 16)))
       (= num_3 num_1)
       (= res_4 res_5)
-      (= bit_4 (bvlshr bit_3 (_ bv2 16)))
+      (= bit_4 (lshift_cb  bit_3 (_ bv2 16)))
       (= bit_4 bit!)
       (= num_3 num!)
       (= res_4 res!)

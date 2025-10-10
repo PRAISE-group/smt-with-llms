@@ -4,7 +4,7 @@
   "functions": {
     "builtin_ctz_cb": {
       "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "BV16 closed-box for multiply loop: abstracts r' = f(r, a, shift) (e.g., r + (a << shift)) modulo 2^16; used in trans-f.",
+      "desc": "Closed box function builtin_ctz_cb takes 3 arguments (a, b, c) and returns a + (b << c). Uses BitVec 16 Domain.",
       "tests": [
         [3, 1],
         [7, 2]
