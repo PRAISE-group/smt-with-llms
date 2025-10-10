@@ -1,0 +1,84 @@
+Your objective is to generate 'initial lemmas' in 'SMT LIB Bit Vector (_ BitVec 16)' format.
+Please note that you need to generate atleast '2' and at most '6' lemmas.
+Conjunction of lemmas shoud be equivalent to the function description provided
+in natural language. You are forbidden from creating lemma that you have already
+created earlier in the conversation. Lemma should represent the given 'max_cb' function.
+I will now give the objective for lemma generation.
+
+I have provided some supporting information about 'max_cb' function.
+A lemma with bit-vector constraint typically looks like the ones given below.
+
+(assert (forall ((z (_ BitVec 32))) (=> (bvugt z (_ bv0 32)) (= (foo_cb z) (_ bv0 32)))))
+(assert (forall ((z (_ BitVec 16))) (=> (bvugt z (_ bv0 32)) (= (foo_cb z) (_ bv0 32)))))
+...
+
+1. Generate similar lemmas for the given closed box 'max_cb' with forall constraint over bit-vectors
+
+2. I have provided you an initial set of input examples '[(45, 78), (90, 991)]' with each tuple
+containing 2 inputs for 'max_cb' function.
+
+3. Give me each lemma in a seperate line so that I can parse it back.
+Each lemmas starts with an 'assert'. Please generate syntatically correct
+lemmas. See details below:
+
+    FUNCTION_DESCRIPTION: Closed Box Function 'max_cb' takes 2 arguments (a, b) returns the maximum between a and b.
+    SMT function Declaration: (declare-fun max_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+    OUTPUT_FORMAT: SMT LIB Bit Vector (_ BitVec 16).
+
+4. Write the lemmas in between LEMMA_START and LEMMA_END blocks.
+
+5. Do not give any explanation or extra text. Please use the following rules strictly:
+
+    a) The lemma for 'max_cb' formula should be self-contained.
+    b) The variables that you can use are only quantifier variables.
+    d) A lemma looks like this '(assert <formula>)', where <formula> is a first order
+        predicate with `forall` quantifier in correct SMT LIB format.
+    e) It is necessary that you create lemmas with `forall` constructs
+        over bit-vector theory in (_ BitVec 16) domain.
+
+-----------------------------------------------RESPONSE START------------------------------------------------------------------------
+LEMMA_START
+(assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (=> (bvuge a b) (= (foo_cb a b) a))))
+(assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (=> (bvugt b a) (= (foo_cb a b) b))))
+(assert (forall ((a (_ BitVec 16))) (= (foo_cb a a) a)))
+(assert (forall ((x (_ BitVec 16)) (y (_ BitVec 16))) (=> (and (= x (_ bv45 16)) (= y (_ bv78 16))) (= (max_cb x y) (_ bv78 16)))))
+(assert (forall ((x (_ BitVec 16)) (y (_ BitVec 16))) (=> (and (= x (_ bv90 16)) (= y (_ bv991 16))) (= (max_cb x y) (_ bv991 16)))))
+LEMMA_END
+-----------------------------------------------RESPONSE END------------------------------------------------------------------------
+
+
+Thanks for the previous lemmas generated. Strictly adhere to the following guidelines.
+
+1.  Please generate new interesting lemmas for the `max_cb` function
+    in SMT LIB Bit Vector (_ BitVec 16) format.
+
+2.  Do not generate the previously generated lemmas.
+
+    (assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (=> (bvuge a b) (= (max_cb a b) a))))
+    (assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (=> (bvugt b a) (= (max_cb a b) b))))
+    (assert (forall ((a (_ BitVec 16))) (= (max_cb a b) b)))
+    (assert (forall ((a (_ BitVec 16))) (= (max_cb a a) a)))
+    (assert (forall ((x (_ BitVec 16)) (y (_ BitVec 16))) (=> (and (= x (_ bv45 16)) (= y (_ bv78 16))) (= (max_cb x y) (_ bv78 16)))))
+    (assert (forall ((x (_ BitVec 16)) (y (_ BitVec 16))) (=> (and (= x (_ bv90 16)) (= y (_ bv991 16))) (= (max_cb x y) (_ bv991 16)))))
+
+3.  The following lemmas are wrong:
+
+    (assert (forall ((a (_ BitVec 16))) (= (max_cb a b) b)))
+
+    ERRORS: [
+        "unknown constant b"
+    ]
+
+    Please do not generate such lemmas again. Check the syntax for the lemmas before dispatching.
+
+
+-----------------------------------------------RESPONSE START------------------------------------------------------------------------
+LEMMA_START
+(assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (= (max_cb a b) (max_cb b a))))
+(assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (bvuge (max_cb a b) a)))
+(assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (bvuge (max_cb a b) b)))
+(assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (or (= (max_cb a b) a) (= (max_cb a b) b))))
+(assert (forall ((a (_ BitVec 16)) (b (_ BitVec 16))) (= (max_cb (max_cb a b) b) (max_cb a b))))
+(assert (forall ((a (_ BitVec 16)) (a2 (_ BitVec 16)) (b (_ BitVec 16))) (=> (bvule a a2) (bvule (max_cb a b) (max_cb a2 b)))))
+LEMMA_END
+-----------------------------------------------RESPONSE END------------------------------------------------------------------------
