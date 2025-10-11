@@ -2,11 +2,11 @@
 (set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16))
-( declare-const i! (_ BitVec 16))
+( declare-const i_ (_ BitVec 16))
 ( declare-const n (_ BitVec 16))
-( declare-const n! (_ BitVec 16))
+( declare-const n_ (_ BitVec 16))
 ( declare-const sum (_ BitVec 16))
-( declare-const sum! (_ BitVec 16))
+( declare-const sum_ (_ BitVec 16))
 
 ( declare-const i_0 (_ BitVec 16))
 ( declare-const i_1 (_ BitVec 16))
@@ -17,12 +17,12 @@
 ( declare-const sum_2 (_ BitVec 16))
 
 ; Closed Box Function: returns addition first argument + square of second argument
-; (define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
-; 	(bvadd x (bvmul y y))
-; )
+(define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
+ 	(bvadd x (bvmul y y))
+ )
 
 ; Closed Box Function: returns addition first argument + square of second argument
-( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+;( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ; invariant predicate (here trivially true)
 (define-fun inv-f ((i (_ BitVec 16)) (n (_ BitVec 16)) (sum (_ BitVec 16))) Bool
@@ -50,16 +50,16 @@
 	)
 )
 
-( define-fun trans-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( sum (_ BitVec 16))( i! (_ BitVec 16))( n! (_ BitVec 16))( sum! (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( sum_0 (_ BitVec 16))( sum_1 (_ BitVec 16))( sum_2 (_ BitVec 16)) ) Bool
+( define-fun trans-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( sum (_ BitVec 16))( i_ (_ BitVec 16))( n_ (_ BitVec 16))( sum_ (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( sum_0 (_ BitVec 16))( sum_1 (_ BitVec 16))( sum_2 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = i_1 i )
 			( = sum_1 sum )
-			( = i_1 i! )
-			( = sum_1 sum! )
+			( = i_1 i_ )
+			( = sum_1 sum_ )
 			( = n n_0 )
-			( = n! n_0 )
-			( = sum sum! )
+			( = n_ n_0 )
+			( = sum sum_ )
 		)
 		( and
 			( = i_1 i )
@@ -67,10 +67,10 @@
 			( bvult i_1 n_0 )
 			( = i_2 ( bvadd i_1 (_ bv1 16)) )
 			( = sum_2 ( foo_cb sum_1 i_2 ) )
-			( = i_2 i! )
-			( = sum_2 sum! )
+			( = i_2 i_ )
+			( = sum_2 sum_ )
 			(= n n_0 )
-			(= n! n_0 )
+			(= n_ n_0 )
 		)
 	)
 )
@@ -100,11 +100,26 @@
 	( =>
 		( and
 			( inv-f i n sum )
-			( trans-f i n sum i! n! sum! i_0 i_1 i_2 n_0 sum_0 sum_1 sum_2 )
+			( trans-f i n sum i_ n_ sum_ i_0 i_1 i_2 n_0 sum_0 sum_1 sum_2 )
 		)
-		( inv-f i! n! sum! )
+		( inv-f i_ n_ sum_ )
 	)
 ))
+
+
+(assert (bvult i     (_ bv10000 16)))
+(assert (bvult i_    (_ bv10000 16)))
+(assert (bvult n     (_ bv10000 16)))
+(assert (bvult n_    (_ bv10000 16)))
+(assert (bvult sum   (_ bv10000 16)))
+(assert (bvult sum_  (_ bv10000 16)))
+(assert (bvult i_0   (_ bv10000 16)))
+(assert (bvult i_1   (_ bv10000 16)))
+(assert (bvult i_2   (_ bv10000 16)))
+(assert (bvult n_0   (_ bv10000 16)))
+(assert (bvult sum_0 (_ bv10000 16)))
+(assert (bvult sum_1 (_ bv10000 16)))
+(assert (bvult sum_2 (_ bv10000 16)))
 
 (check-sat)
 (get-model)
