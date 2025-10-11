@@ -41,7 +41,7 @@
 ( declare-const y_1 (_ BitVec 16) )
 
 ; Closed Box Function: From GCC Builtin Function: __builtin_ctz
-( declare-fun builtin_ctz_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+( declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16) )
 
 ( define-fun inv-f( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) ) ) Bool
 	(and
@@ -87,7 +87,7 @@
 			( = shift_2 shift )
 			( not ( = b_1 (_ bv0 16) ) )
 			( = supported_0 (_ bv1 16) )
-			( = shift_3 ( builtin_ctz_cb b_1 (_ bv1 16) ) )
+			( = shift_3 ( builtin_ctz_cb b_1 ) )
 			( = shift_4 shift_3 )
 			( = shift_4 (_ bv1 16) )
 			( = r_3 ( bvadd r_2 ( bvshl a_0 shift_4 ) ) )

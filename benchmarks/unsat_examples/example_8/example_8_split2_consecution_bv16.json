@@ -3,12 +3,9 @@
   "object_file": "/home/benchmarks/unsat_examples/example_8/example_8.o",
   "functions": {
     "builtin_ctz_cb": {
-      "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function builtin_ctz_cb takes 3 arguments (a, b, c) and returns a + (b << c). Uses BitVec 16 Domain.",
-      "tests": [
-        [3, 1],
-        [7, 2]
-      ],
+      "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function builtin_ctz_cb takes 1 arguments (a) and returns no of trailing zeros in binary representation of ''. Uses BitVec 16 Domain.",
+      "tests": [[459], [1918]],
       "userLemmas": [""]
     }
   }
