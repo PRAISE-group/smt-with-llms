@@ -2,11 +2,11 @@
 (set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16))
-( declare-const i! (_ BitVec 16))
+( declare-const i_ (_ BitVec 16))
 ( declare-const n (_ BitVec 16))
-( declare-const n! (_ BitVec 16))
+( declare-const n_ (_ BitVec 16))
 ( declare-const sum (_ BitVec 16))
-( declare-const sum! (_ BitVec 16))
+( declare-const sum_ (_ BitVec 16))
 
 ( declare-const i_0 (_ BitVec 16))
 ( declare-const i_1 (_ BitVec 16))
@@ -49,16 +49,16 @@
 	)
 )
 
-( define-fun trans-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( sum (_ BitVec 16))( i! (_ BitVec 16))( n! (_ BitVec 16))( sum! (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( sum_0 (_ BitVec 16))( sum_1 (_ BitVec 16))( sum_2 (_ BitVec 16)) ) Bool
+( define-fun trans-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( sum (_ BitVec 16))( i_ (_ BitVec 16))( n_ (_ BitVec 16))( sum_ (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( sum_0 (_ BitVec 16))( sum_1 (_ BitVec 16))( sum_2 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = i_1 i )
 			( = sum_1 sum )
-			( = i_1 i! )
-			( = sum_1 sum! )
+			( = i_1 i_ )
+			( = sum_1 sum_ )
 			( = n n_0 )
-			( = n! n_0 )
-			( = sum sum! )
+			( = n_ n_0 )
+			( = sum sum_ )
 		)
 		( and
 			( = i_1 i )
@@ -66,10 +66,10 @@
 			( bvult  i_1 n_0 )
 			( = i_2 ( bvadd i_1 (_ bv1 16)) )
 			( = sum_2 ( foo_cb sum_1 i_2 ) )
-			( = i_2 i! )
-			( = sum_2 sum! )
+			( = i_2 i_ )
+			( = sum_2 sum_ )
 			(= n n_0 )
-			(= n! n_0 )
+			(= n_ n_0 )
 		)
 	)
 )

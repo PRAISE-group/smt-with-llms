@@ -2,11 +2,11 @@
 (set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16))
-( declare-const i! (_ BitVec 16))
+( declare-const i_ (_ BitVec 16))
 ( declare-const n (_ BitVec 16))
-( declare-const n! (_ BitVec 16))
+( declare-const n_ (_ BitVec 16))
 ( declare-const out (_ BitVec 16))
-( declare-const out! (_ BitVec 16))
+( declare-const out_ (_ BitVec 16))
 
 ( declare-const i_0 (_ BitVec 16))
 ( declare-const i_1 (_ BitVec 16))
@@ -48,16 +48,16 @@
 	)
 )
 
-( define-fun trans-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i! (_ BitVec 16))( n! (_ BitVec 16))( out! (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
+( define-fun trans-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i_ (_ BitVec 16))( n_ (_ BitVec 16))( out_ (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
 	( or
 		( and
 			( = out_2 out )
-			( = out_2 out! )
+			( = out_2 out_ )
 			( = i i_1 )
-			( = i! i_1 )
+			( = i_ i_1 )
 			( = n n_0 )
-			( = n! n_0 )
-			( = out out! )
+			( = n_ n_0 )
+			( = out out_ )
 		)
 		( and
 			( = out_2 out )
@@ -65,11 +65,11 @@
 			( isprime_cb n_0 )
 			( = out_3 ( bvadd out_2 (_ bv1 16)) )
 			( = out_4 out_3 )
-			( = out_4 out! )
+			( = out_4 out_ )
 			(= i i_1 )
-			(= i! i_1 )
+			(= i_ i_1 )
 			(= n n_0 )
-			(= n! n_0 )
+			(= n_ n_0 )
 		)
 		( and
 			( = out_2 out )
@@ -77,11 +77,11 @@
 			( not ( isprime_cb n_0 ) )
 			( = out_5 ( bvadd out_2 (_ bv2 16)) )
 			( = out_4 out_5 )
-			( = out_4 out! )
+			( = out_4 out_ )
 			(= i i_1 )
-			(= i! i_1 )
+			(= i_ i_1 )
 			(= n n_0 )
-			(= n! n_0 )
+			(= n_ n_0 )
 		)
 	)
 )

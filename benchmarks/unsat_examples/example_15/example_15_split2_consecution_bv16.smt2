@@ -2,13 +2,13 @@
 (set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16) )
-( declare-const i! (_ BitVec 16) )
+( declare-const i_ (_ BitVec 16) )
 ( declare-const lin_sum (_ BitVec 16) )
-( declare-const lin_sum! (_ BitVec 16) )
+( declare-const lin_sum_ (_ BitVec 16) )
 ( declare-const n (_ BitVec 16) )
-( declare-const n! (_ BitVec 16) )
+( declare-const n_ (_ BitVec 16) )
 ( declare-const sum (_ BitVec 16) )
-( declare-const sum! (_ BitVec 16) )
+( declare-const sum_ (_ BitVec 16) )
 
 ( declare-const i_0 (_ BitVec 16) )
 ( declare-const i_1 (_ BitVec 16) )
@@ -57,19 +57,19 @@
 	)
 )
 
-( define-fun trans-f ( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( i! (_ BitVec 16) )( lin_sum! (_ BitVec 16) )( n! (_ BitVec 16) )( sum! (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( i_2 (_ BitVec 16) )( i_3 (_ BitVec 16) )( lin_sum_0 (_ BitVec 16) )( lin_sum_1 (_ BitVec 16) )( lin_sum_2 (_ BitVec 16) )( lin_sum_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
+( define-fun trans-f ( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( i_ (_ BitVec 16) )( lin_sum_ (_ BitVec 16) )( n_ (_ BitVec 16) )( sum_ (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( i_2 (_ BitVec 16) )( i_3 (_ BitVec 16) )( lin_sum_0 (_ BitVec 16) )( lin_sum_1 (_ BitVec 16) )( lin_sum_2 (_ BitVec 16) )( lin_sum_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
 	( or
 		( and
 			( = i_2 i )
 			( = lin_sum_2 lin_sum )
 			( = sum_2 sum )
-			( = i_2 i! )
-			( = lin_sum_2 lin_sum! )
-			( = sum_2 sum! )
+			( = i_2 i_ )
+			( = lin_sum_2 lin_sum_ )
+			( = sum_2 sum_ )
 			( = n n_0 )
-			( = n! n_0 )
-			( = lin_sum lin_sum! )
-			( = sum sum! )
+			( = n_ n_0 )
+			( = lin_sum lin_sum_ )
+			( = sum sum_ )
 		)
 		( and
 			( = i_2 i )
@@ -79,11 +79,11 @@
 			( = i_3 ( bvadd i_2 (_ bv1 16) ) )
 			( = lin_sum_3 ( bvadd lin_sum_2 i_3 ) )
 			( = sum_3 ( foo_cb sum_2 i_3 ) )
-			( = i_3 i! )
-			( = lin_sum_3 lin_sum! )
-			( = sum_3 sum! )
+			( = i_3 i_ )
+			( = lin_sum_3 lin_sum_ )
+			( = sum_3 sum_ )
 			(= n n_0 )
-			(= n! n_0 )
+			(= n_ n_0 )
 		)
 	)
 )
@@ -112,9 +112,9 @@
 	( =>
 		( and
 			( inv-f i lin_sum n sum )
-			( trans-f i lin_sum n sum i! lin_sum! n! sum! i_0 i_1 i_2 i_3 lin_sum_0 lin_sum_1 lin_sum_2 lin_sum_3 n_0 sum_0 sum_1 sum_2 sum_3 )
+			( trans-f i lin_sum n sum i_ lin_sum_ n_ sum_ i_0 i_1 i_2 i_3 lin_sum_0 lin_sum_1 lin_sum_2 lin_sum_3 n_0 sum_0 sum_1 sum_2 sum_3 )
 		)
-		( inv-f i! lin_sum! n! sum! )
+		( inv-f i_ lin_sum_ n_ sum_ )
 	)
 ))
 

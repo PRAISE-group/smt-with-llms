@@ -2,11 +2,11 @@
 (set-option :produce-models true)
 
 ( declare-const k (_ BitVec 16) )
-( declare-const k! (_ BitVec 16) )
+( declare-const k_ (_ BitVec 16) )
 ( declare-const n (_ BitVec 16) )
-( declare-const n! (_ BitVec 16) )
+( declare-const n_ (_ BitVec 16) )
 ( declare-const res (_ BitVec 16) )
-( declare-const res! (_ BitVec 16) )
+( declare-const res_ (_ BitVec 16) )
 
 ( declare-const k_0 (_ BitVec 16) )
 ( declare-const k_1 (_ BitVec 16) )
@@ -40,16 +40,16 @@
 	)
 )
 
-( define-fun trans-f ( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( k! (_ BitVec 16) )( n! (_ BitVec 16) )( res! (_ BitVec 16) )( k_0 (_ BitVec 16) )( k_1 (_ BitVec 16) )( k_2 (_ BitVec 16) )( k_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) )( res_3 (_ BitVec 16) ) ) Bool
+( define-fun trans-f ( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( k_ (_ BitVec 16) )( n_ (_ BitVec 16) )( res_ (_ BitVec 16) )( k_0 (_ BitVec 16) )( k_1 (_ BitVec 16) )( k_2 (_ BitVec 16) )( k_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) )( res_3 (_ BitVec 16) ) ) Bool
 	( or
 		( and
 			( = k_2 k )
 			( = res_2 res )
-			( = k_2 k! )
-			( = res_2 res! )
+			( = k_2 k_ )
+			( = res_2 res_ )
 			( = n n_0 )
-			( = n! n_0 )
-			( = res res! )
+			( = n_ n_0 )
+			( = res res_ )
 		)
 		( and
 			( = k_2 k )
@@ -57,10 +57,10 @@
 			( not ( = k_2 n_0 ) )
 			( = k_3 ( bvadd k_2 (_ bv1 16) ) )
 			( = res_3 ( multiply_cb res_2 k_3 ) )
-			( = k_3 k! )
-			( = res_3 res! )
+			( = k_3 k_ )
+			( = res_3 res_ )
 			(= n n_0 )
-			(= n! n_0 )
+			(= n_ n_0 )
 		)
 	)
 )
