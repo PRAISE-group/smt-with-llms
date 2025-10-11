@@ -1,6 +1,6 @@
 {
-  "smt_file": "./unsat_examples/example_14/example_14_split3_safety_bv16.smt2",
-  "object_file": "./unsat_examples/example_14/example_14.o",
+  "smt_file": "/home/benchmarks/unsat_examples/example_14/example_14_split3_safety_bv16.smt2",
+  "object_file": "/home/benchmarks/unsat_examples/example_14/example_14.o",
   "functions": {
     "multiply_cb": {
       "smtDecl": "(declare-fun multiply_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",

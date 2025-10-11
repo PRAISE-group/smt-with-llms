@@ -1,6 +1,6 @@
 {
-  "smt_file": "./unsat_examples/example_9/example_9_split2_consecution_bv16.smt2",
-  "object_file": "./unsat_examples/example_9/example_9.o",
+  "smt_file": "/home/benchmarks/unsat_examples/example_9/example_9_split2_consecution_bv16.smt2",
+  "object_file": "/home/benchmarks/unsat_examples/example_9/example_9.o",
   "functions": {
     "icbrt_cb": {
       "smtDecl": "(declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16))",

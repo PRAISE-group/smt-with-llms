@@ -1,6 +1,6 @@
 {
-  "smt_file": "./unsat_examples/example_8/example_8_split3_safety_bv16.smt2",
-  "object_file": "./unsat_examples/example_8/example_8.o",
+  "smt_file": "/home/benchmarks/unsat_examples/example_8/example_8_split3_safety_bv16.smt2",
+  "object_file": "/home/benchmarks/unsat_examples/example_8/example_8.o",
   "functions": {
     "builtin_ctz_cb": {
       "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",

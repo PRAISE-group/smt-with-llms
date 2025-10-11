@@ -1,6 +1,6 @@
 {
-  "smt_file": "./unsat_examples/example_3/example_3_split1_initiation_bv16.smt2",
-  "object_file": "./unsat_examples/example_3/example_3.o",
+  "smt_file": "/home/benchmarks/unsat_examples/example_3/example_3_split1_initiation_bv16.smt2",
+  "object_file": "/home/benchmarks/unsat_examples/example_3/example_3.o",
   "functions": {
     "retmod_cb": {
       "smtDecl": "(declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
