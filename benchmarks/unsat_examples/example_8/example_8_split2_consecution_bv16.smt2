@@ -42,31 +42,31 @@
 
 ( assert () )
 ; Closed Box Function: From GCC Builtin Function: __builtin_ctz
-; (declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))
+(declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))
 
 
 ; __builtin_ctz: trailing zero count, undefined for n = 0.
 ; We model the undefined case with an unconstrained constant.
 (declare-const ctz_ub_zero (_ BitVec 16))
 
-(define-fun builtin_ctz_cb ((n (_ BitVec 16))) (_ BitVec 16)
-  (ite (= n (_ bv0 16)) ctz_ub_zero
-  (ite (= (bvand n (_ bv1 16)) (_ bv1 16)) (_ bv0 16)
-  (ite (= (bvand (bvlshr n (_ bv1 16)) (_ bv1 16)) (_ bv1 16)) (_ bv1 16)
-  (ite (= (bvand (bvlshr n (_ bv2 16)) (_ bv1 16)) (_ bv1 16)) (_ bv2 16)
-  (ite (= (bvand (bvlshr n (_ bv3 16)) (_ bv1 16)) (_ bv1 16)) (_ bv3 16)
-  (ite (= (bvand (bvlshr n (_ bv4 16)) (_ bv1 16)) (_ bv1 16)) (_ bv4 16)
-  (ite (= (bvand (bvlshr n (_ bv5 16)) (_ bv1 16)) (_ bv1 16)) (_ bv5 16)
-  (ite (= (bvand (bvlshr n (_ bv6 16)) (_ bv1 16)) (_ bv1 16)) (_ bv6 16)
-  (ite (= (bvand (bvlshr n (_ bv7 16)) (_ bv1 16)) (_ bv1 16)) (_ bv7 16)
-  (ite (= (bvand (bvlshr n (_ bv8 16)) (_ bv1 16)) (_ bv1 16)) (_ bv8 16)
-  (ite (= (bvand (bvlshr n (_ bv9 16)) (_ bv1 16)) (_ bv1 16)) (_ bv9 16)
-  (ite (= (bvand (bvlshr n (_ bv10 16)) (_ bv1 16)) (_ bv1 16)) (_ bv10 16)
-  (ite (= (bvand (bvlshr n (_ bv11 16)) (_ bv1 16)) (_ bv1 16)) (_ bv11 16)
-  (ite (= (bvand (bvlshr n (_ bv12 16)) (_ bv1 16)) (_ bv1 16)) (_ bv12 16)
-  (ite (= (bvand (bvlshr n (_ bv13 16)) (_ bv1 16)) (_ bv1 16)) (_ bv13 16)
-  (ite (= (bvand (bvlshr n (_ bv14 16)) (_ bv1 16)) (_ bv1 16)) (_ bv14 16)
-       (_ bv15 16))))))))))))))))))
+; (define-fun builtin_ctz_cb ((n (_ BitVec 16))) (_ BitVec 16)
+;   (ite (= n (_ bv0 16)) ctz_ub_zero
+;   (ite (= (bvand n (_ bv1 16)) (_ bv1 16)) (_ bv0 16)
+;   (ite (= (bvand (bvlshr n (_ bv1 16)) (_ bv1 16)) (_ bv1 16)) (_ bv1 16)
+;   (ite (= (bvand (bvlshr n (_ bv2 16)) (_ bv1 16)) (_ bv1 16)) (_ bv2 16)
+;   (ite (= (bvand (bvlshr n (_ bv3 16)) (_ bv1 16)) (_ bv1 16)) (_ bv3 16)
+;   (ite (= (bvand (bvlshr n (_ bv4 16)) (_ bv1 16)) (_ bv1 16)) (_ bv4 16)
+;   (ite (= (bvand (bvlshr n (_ bv5 16)) (_ bv1 16)) (_ bv1 16)) (_ bv5 16)
+;   (ite (= (bvand (bvlshr n (_ bv6 16)) (_ bv1 16)) (_ bv1 16)) (_ bv6 16)
+;   (ite (= (bvand (bvlshr n (_ bv7 16)) (_ bv1 16)) (_ bv1 16)) (_ bv7 16)
+;   (ite (= (bvand (bvlshr n (_ bv8 16)) (_ bv1 16)) (_ bv1 16)) (_ bv8 16)
+;   (ite (= (bvand (bvlshr n (_ bv9 16)) (_ bv1 16)) (_ bv1 16)) (_ bv9 16)
+;   (ite (= (bvand (bvlshr n (_ bv10 16)) (_ bv1 16)) (_ bv1 16)) (_ bv10 16)
+;   (ite (= (bvand (bvlshr n (_ bv11 16)) (_ bv1 16)) (_ bv1 16)) (_ bv11 16)
+;   (ite (= (bvand (bvlshr n (_ bv12 16)) (_ bv1 16)) (_ bv1 16)) (_ bv12 16)
+;   (ite (= (bvand (bvlshr n (_ bv13 16)) (_ bv1 16)) (_ bv1 16)) (_ bv13 16)
+;   (ite (= (bvand (bvlshr n (_ bv14 16)) (_ bv1 16)) (_ bv1 16)) (_ bv14 16)
+;        (_ bv15 16))))))))))))))))))
 
 ( define-fun inv-f( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) ) ) Bool
 	(and
