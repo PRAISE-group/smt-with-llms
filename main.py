@@ -81,7 +81,6 @@ if __name__ == "__main__":
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
 
-
     if commandLineArgs.usebedrock:
         time.sleep(10)
 
@@ -102,7 +101,9 @@ if __name__ == "__main__":
         # TODO: @Gourav, What all will this function return.
         # self.iteration +=1
         try:
-            resultVerdict = solverai.run(commandLineArgs, data, lemmaDict, functionsList, executiontime)
+            resultVerdict = solverai.run(
+                commandLineArgs, data, lemmaDict, functionsList, executiontime
+            )
         except Exception as e:
             print("Error on execution:", str(e))
             break
@@ -123,7 +124,9 @@ if __name__ == "__main__":
         #     resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
     print("Z3 Execution time", executiontime["z3"])
     print("fuzzer Execution time", executiontime["fuzzer"])
-    print("Total Execution time except LLM", executiontime["z3"] + executiontime["fuzzer"])
+    print(
+        "Total Execution time except LLM", executiontime["z3"] + executiontime["fuzzer"]
+    )
 
     exit()
     stop_event.set()

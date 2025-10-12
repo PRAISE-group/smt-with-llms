@@ -7,6 +7,7 @@ from code.models import AlgoVerdict
 from py_console import console
 import time
 
+
 class smtAI(object):
     """docstring for smtAI.
     uses LLM generated lemmas to find satisfying assignments
@@ -21,15 +22,17 @@ class smtAI(object):
         self.formulas = None
         self.vars = None
         self.mainFun = None
-        self.lemmasData = {} # key is the label to lemmas
+        self.lemmasData = {}  # key is the label to lemmas
         self.labelsUsed = 0
-        self.unsatCores = {} # key is the iteration number starts from 1
+        self.unsatCores = {}  # key is the iteration number starts from 1
         self.iteration = 0
-        self.lemmasUsed = {} # key is the iteration number starts from 1
-        self.cbFunctions = None # Map of close box functions z3 object
-        self.inputoutputassertions = [] # input output constraints obtained from modelcheck inconsistency
+        self.lemmasUsed = {}  # key is the iteration number starts from 1
+        self.cbFunctions = None  # Map of close box functions z3 object
+        self.inputoutputassertions = (
+            []
+        )  # input output constraints obtained from modelcheck inconsistency
         self.prevlemma = {}
-        self.addedOnce = False # if llm generated lemmas has been added at least once.
+        self.addedOnce = False  # if llm generated lemmas has been added at least once.
 
     def readSMTfile(self, inputfilepath):
         # if args.verbose:
@@ -53,7 +56,6 @@ class smtAI(object):
             self.collect_vars(child, seen)
         return seen
 
-
     def collectBoundVars(self, e, bound_vars=None):
         # print(e)
         if is_quantifier(e):
@@ -68,7 +70,6 @@ class smtAI(object):
                 for arg in e.children():
                     self.collectBoundVars(arg, bound_vars)
 
-
     def collect_functions(self, expr, seen=None):
         # print(expr, seen)
         if seen is None:
@@ -82,7 +83,7 @@ class smtAI(object):
             # print(is_const(expr), is_func_decl(expr))
             if is_const(expr):
                 return seen
-            elif decl.kind() == Z3_OP_UNINTERPRETED and name not in seen :
+            elif decl.kind() == Z3_OP_UNINTERPRETED and name not in seen:
                 seen[name] = decl
             else:
                 # print("This type of expression is not handled", expr)
@@ -102,7 +103,9 @@ class smtAI(object):
             decl = expr.decl()
             name = str(decl.name())
             # Filter out built-in operators like +, *, etc.
-            if decl.arity() == 0:   # z3 declares all constants as zero arity functions too
+            if (
+                decl.arity() == 0
+            ):  # z3 declares all constants as zero arity functions too
                 return seen
             if decl.kind() == Z3_OP_UNINTERPRETED:
                 return seen
@@ -131,47 +134,47 @@ class smtAI(object):
         # return "#b" + format(value, f'0{width}b')
         mask = (1 << width) - 1
         twos_complement = value & mask
-        return "#b" + format(twos_complement, f'0{width}b')
+        return "#b" + format(twos_complement, f"0{width}b")
 
     def z3_to_c(self, expr):
         # print("expr",expr)
         if expr.decl().kind() == Z3_OP_IMPLIES:
-                a, b = expr.children()
-                return f"(!({self.z3_to_c(a)}) || ({self.z3_to_c(b)}))"
+            a, b = expr.children()
+            return f"(!({self.z3_to_c(a)}) || ({self.z3_to_c(b)}))"
         elif is_and(expr):
-            return ' && '.join(f'({self.z3_to_c(c)})' for c in expr.children())
+            return " && ".join(f"({self.z3_to_c(c)})" for c in expr.children())
         elif is_or(expr):
-            return ' || '.join(f'({self.z3_to_c(c)})' for c in expr.children())
+            return " || ".join(f"({self.z3_to_c(c)})" for c in expr.children())
         elif is_not(expr):
-            return f'!({self.z3_to_c(expr.arg(0))})'
+            return f"!({self.z3_to_c(expr.arg(0))})"
         elif is_eq(expr):
-            return f'({self.z3_to_c(expr.arg(0))} == {self.z3_to_c(expr.arg(1))})'
+            return f"({self.z3_to_c(expr.arg(0))} == {self.z3_to_c(expr.arg(1))})"
         elif is_le(expr):
-            return f'({self.z3_to_c(expr.arg(0))} <= {self.z3_to_c(expr.arg(1))})'
+            return f"({self.z3_to_c(expr.arg(0))} <= {self.z3_to_c(expr.arg(1))})"
         elif is_lt(expr):
-            return f'({self.z3_to_c(expr.arg(0))} < {self.z3_to_c(expr.arg(1))})'
+            return f"({self.z3_to_c(expr.arg(0))} < {self.z3_to_c(expr.arg(1))})"
         elif is_ge(expr):
-            return f'({self.z3_to_c(expr.arg(0))} >= {self.z3_to_c(expr.arg(1))})'
+            return f"({self.z3_to_c(expr.arg(0))} >= {self.z3_to_c(expr.arg(1))})"
         elif is_gt(expr):
-            return f'({self.z3_to_c(expr.arg(0))} > {self.z3_to_c(expr.arg(1))})'
-        elif expr.decl().name() == 'bvugt':
-            return f'({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})'
-        elif expr.decl().name() == 'bvuge':
-            return f'({self.z3_to_c(expr.arg(0))}) >= ({self.z3_to_c(expr.arg(1))})'
-        elif expr.decl().name() == 'bvult':
-            return f'({self.z3_to_c(expr.arg(0))}) < ({self.z3_to_c(expr.arg(1))})'
-        elif expr.decl().name() == 'bvule':
-            return f'({self.z3_to_c(expr.arg(0))}) <= ({self.z3_to_c(expr.arg(1))})'
-        elif expr.decl().name() == 'bvmul':
-            return ' * '.join(f'({self.z3_to_c(c)})' for c in expr.children())
+            return f"({self.z3_to_c(expr.arg(0))} > {self.z3_to_c(expr.arg(1))})"
+        elif expr.decl().name() == "bvugt":
+            return f"({self.z3_to_c(expr.arg(0))}) > ({self.z3_to_c(expr.arg(1))})"
+        elif expr.decl().name() == "bvuge":
+            return f"({self.z3_to_c(expr.arg(0))}) >= ({self.z3_to_c(expr.arg(1))})"
+        elif expr.decl().name() == "bvult":
+            return f"({self.z3_to_c(expr.arg(0))}) < ({self.z3_to_c(expr.arg(1))})"
+        elif expr.decl().name() == "bvule":
+            return f"({self.z3_to_c(expr.arg(0))}) <= ({self.z3_to_c(expr.arg(1))})"
+        elif expr.decl().name() == "bvmul":
+            return " * ".join(f"({self.z3_to_c(c)})" for c in expr.children())
             # return f'({self.z3_to_c(expr.arg(0))}) * ({self.z3_to_c(expr.arg(1))})'
-        elif expr.decl().name() == 'bvadd':
-            return ' + '.join(f'({self.z3_to_c(c)})' for c in expr.children())
-        elif expr.decl().name() == 'bvurem':
-            return f'({self.z3_to_c(expr.arg(0))}) % ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == "bvadd":
+            return " + ".join(f"({self.z3_to_c(c)})" for c in expr.children())
+        elif expr.decl().name() == "bvurem":
+            return f"({self.z3_to_c(expr.arg(0))}) % ({self.z3_to_c(expr.arg(1))})"
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
-            return f'(({self.z3_to_c(cond)}) ? ({self.z3_to_c(then_expr)}) : ({self.z3_to_c(else_expr)}))'
+            return f"(({self.z3_to_c(cond)}) ? ({self.z3_to_c(then_expr)}) : ({self.z3_to_c(else_expr)}))"
         elif is_false(expr):
             return "0"
         elif is_true(expr):
@@ -188,42 +191,50 @@ class smtAI(object):
     def getFunctions(self, expr, funs):
         # print(expr,expr.decl().kind(),Z3_OP_UNINTERPRETED, is_and(expr), Z3_OP_BAND)
         if expr.decl().kind() == Z3_OP_IMPLIES:
-                a, b = expr.children()
-                return f"{self.getFunctions(a, funs)}) || ({self.getFunctions(b, funs)}))"
+            a, b = expr.children()
+            return f"{self.getFunctions(a, funs)}) || ({self.getFunctions(b, funs)}))"
         elif is_and(expr) or expr.decl().kind() == Z3_OP_BAND:
-            return ' && '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
+            return " && ".join(
+                f"({self.getFunctions(c, funs)})" for c in expr.children()
+            )
         elif is_or(expr) or expr.decl().kind() == Z3_OP_BOR:
-            return ' || '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
+            return " || ".join(
+                f"({self.getFunctions(c, funs)})" for c in expr.children()
+            )
         elif is_not(expr) or expr.decl().kind() == Z3_OP_BNOT:
-            return f'!({self.getFunctions(expr.arg(0), funs)})'
+            return f"!({self.getFunctions(expr.arg(0), funs)})"
         elif is_eq(expr):
-            return f'({self.getFunctions(expr.arg(0), funs)} == {self.getFunctions(expr.arg(1), funs)})'
+            return f"({self.getFunctions(expr.arg(0), funs)} == {self.getFunctions(expr.arg(1), funs)})"
         elif is_le(expr):
-            return f'({self.getFunctions(expr.arg(0), funs)} <= {self.getFunctions(expr.arg(1), funs)})'
+            return f"({self.getFunctions(expr.arg(0), funs)} <= {self.getFunctions(expr.arg(1), funs)})"
         elif is_lt(expr):
-            return f'({self.getFunctions(expr.arg(0), funs)} < {self.getFunctions(expr.arg(1), funs)})'
+            return f"({self.getFunctions(expr.arg(0), funs)} < {self.getFunctions(expr.arg(1), funs)})"
         elif is_ge(expr):
-            return f'({self.getFunctions(expr.arg(0), funs)} >= {self.getFunctions(expr.arg(1), funs)})'
+            return f"({self.getFunctions(expr.arg(0), funs)} >= {self.getFunctions(expr.arg(1), funs)})"
         elif is_gt(expr):
-            return f'({self.getFunctions(expr.arg(0), funs)} > {self.getFunctions(expr.arg(1), funs)})'
-        elif expr.decl().name() == 'bvugt':
-            return f'({self.getFunctions(expr.arg(0), funs)}) > ({self.getFunctions(expr.arg(1), funs)})'
-        elif expr.decl().name() == 'bvuge':
-            return f'({self.getFunctions(expr.arg(0), funs)}) >= ({self.getFunctions(expr.arg(1), funs)})'
-        elif expr.decl().name() == 'bvult':
-            return f'({self.getFunctions(expr.arg(0), funs)}) < ({self.getFunctions(expr.arg(1), funs)})'
-        elif expr.decl().name() == 'bvule':
-            return f'({self.getFunctions(expr.arg(0), funs)}) <= ({self.getFunctions(expr.arg(1), funs)})'
-        elif expr.decl().name() == 'bvmul':
-            return ' * '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
+            return f"({self.getFunctions(expr.arg(0), funs)} > {self.getFunctions(expr.arg(1), funs)})"
+        elif expr.decl().name() == "bvugt":
+            return f"({self.getFunctions(expr.arg(0), funs)}) > ({self.getFunctions(expr.arg(1), funs)})"
+        elif expr.decl().name() == "bvuge":
+            return f"({self.getFunctions(expr.arg(0), funs)}) >= ({self.getFunctions(expr.arg(1), funs)})"
+        elif expr.decl().name() == "bvult":
+            return f"({self.getFunctions(expr.arg(0), funs)}) < ({self.getFunctions(expr.arg(1), funs)})"
+        elif expr.decl().name() == "bvule":
+            return f"({self.getFunctions(expr.arg(0), funs)}) <= ({self.getFunctions(expr.arg(1), funs)})"
+        elif expr.decl().name() == "bvmul":
+            return " * ".join(
+                f"({self.getFunctions(c, funs)})" for c in expr.children()
+            )
             # return f'({self.getFunctions(expr.arg(0), funs)}) * ({self.getFunctions(expr.arg(1), funs)})'
-        elif expr.decl().name() == 'bvadd':
-            return ' + '.join(f'({self.getFunctions(c, funs)})' for c in expr.children())
-        elif expr.decl().name() == 'bvurem':
-            return f'({self.getFunctions(expr.arg(0), funs)}) % ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == "bvadd":
+            return " + ".join(
+                f"({self.getFunctions(c, funs)})" for c in expr.children()
+            )
+        elif expr.decl().name() == "bvurem":
+            return f"({self.getFunctions(expr.arg(0), funs)}) % ({self.getFunctions(expr.arg(1), funs)})"
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
-            return f'(({self.getFunctions(cond, funs)}) ? ({self.getFunctions(then_expr, funs)}) : ({self.getFunctions(else_expr, funs)}))'
+            return f"(({self.getFunctions(cond, funs)}) ? ({self.getFunctions(then_expr, funs)}) : ({self.getFunctions(else_expr, funs)}))"
         elif is_false(expr):
             return "0"
         elif is_true(expr):
@@ -234,7 +245,7 @@ class smtAI(object):
             return str(expr.as_long())
         else:
             if is_app(expr) and expr.decl().kind() == Z3_OP_UNINTERPRETED:
-            #     print("Fallback ",expr)
+                #     print("Fallback ",expr)
                 if expr not in funs:
                     funs.append(expr)
             return str(expr)  # fallback
@@ -245,7 +256,7 @@ class smtAI(object):
             self.getFunctions(f, funs)
         # print("funs:", funs)
         # print("self.formulas:", self.formulas)
-        inputOutput = [] # maps functions to input outputs
+        inputOutput = []  # maps functions to input outputs
         for f in funs:
             # print(f)
             funName = str(f)
@@ -253,7 +264,7 @@ class smtAI(object):
             if index != -1:
                 funName = str(funName)[:index]
             temp = {}
-            out = getCBInputOutput(self,args, f, bench["object_file"]).split(" ")
+            out = getCBInputOutput(self, args, f, bench["object_file"]).split(" ")
             outlist = []
             # print(temp[f], len(temp[f].split(" ")))
             if args.verbose:
@@ -274,18 +285,18 @@ class smtAI(object):
     #include <inttypes.h>
     #include <assert.h>
     """
-        s+= "extern \"C\"{\n"
+        s += 'extern "C"{\n'
         for name in self.cbFunctions:
             # s+= "extern "
             args = ""
             out = ""
             for i in range(self.cbFunctions[name].arity()):
                 # print(f"Argument {i + 1} type:", funs[name].domain(i))
-                args+=typenameConversion(self.cbFunctions[name].domain(i))+","
+                args += typenameConversion(self.cbFunctions[name].domain(i)) + ","
             out = typenameConversion(self.cbFunctions[name].range())
             # print("out ", out)
-            s+= out + " " + name + f"({args[:-1]});\n"
-        s+= "}\n"
+            s += out + " " + name + f"({args[:-1]});\n"
+        s += "}\n"
         formulas = self.formulas
         vars = self.vars
         vardecl = ""
@@ -296,32 +307,31 @@ class smtAI(object):
             # self.collect_vars(f, vars)
         # self.vars = vars
         # print("vars", vars)
-        ifconds+= "assert(0);"
+        ifconds += "assert(0);"
         # print("vars:")
         a = ""
         b = ""
         for var in vars:
-            if str(var.sort())=="Int" or is_bv(var):
+            if str(var.sort()) == "Int" or is_bv(var):
                 # print("int", var.decl().name(), ";")
-                a+= "%d "
-                b+= ", &" + str(var.decl().name())
-                vardecl += "int "+ str(var.decl().name())+ ";\n"
+                a += "%d "
+                b += ", &" + str(var.decl().name())
+                vardecl += "int " + str(var.decl().name()) + ";\n"
         s += "int main(){" + "\n"
-        s+= vardecl + "\n"
-        s+= f"scanf(\"{a[:-1]}\" {b});" + "\n"
+        s += vardecl + "\n"
+        s += f'scanf("{a[:-1]}" {b});' + "\n"
         a = ""
         b = ""
         for i in range(f.num_args()):
             arg = f.arg(i)
             a += "%d "
-            b+= f", ({arg})"
-        s += f"printf(\"{a}%d\"{b}, {f}); \n"
-        s+="}"
+            b += f", ({arg})"
+        s += f'printf("{a}%d"{b}, {f}); \n'
+        s += "}"
         # if args.verbose:
         #     print(f)
         #     print(s)
         return s
-
 
     def harnessForModelCheck(self):
         formulas = self.formulas
@@ -334,30 +344,30 @@ class smtAI(object):
             # self.collect_vars(f, vars)
         # self.vars = vars
         # print("vars", vars)
-        ifconds+= "assert(0);"
+        ifconds += "assert(0);"
         # print("vars:")
         a = ""
         b = ""
         for var in vars:
-            if str(var.sort())=="Int" or is_bool(var):
+            if str(var.sort()) == "Int" or is_bool(var):
                 # print("int", var.decl().name(), ";")
-                a+= "%d "
-                b+= ", &" + str(var.decl().name())
-                vardecl += "int "+ str(var.decl().name())+ ";\n"
+                a += "%d "
+                b += ", &" + str(var.decl().name())
+                vardecl += "int " + str(var.decl().name()) + ";\n"
             elif is_bv(var):
                 width = var.sort().size()  # extract bit width
                 if width == 8:
                     ctype = "uint8_t"
-                    fmt   = "%hhu"
+                    fmt = "%hhu"
                 elif width == 16:
                     ctype = "uint16_t"
-                    fmt   = "%hu"
+                    fmt = "%hu"
                 elif width == 32:
                     ctype = "uint32_t"
-                    fmt   = "%u"
+                    fmt = "%u"
                 elif width == 64:
                     ctype = "uint64_t"
-                    fmt   = "%llu"
+                    fmt = "%llu"
                 else:
                     print("Unknown bitvector size", var)
                     exit()
@@ -370,10 +380,10 @@ class smtAI(object):
                 exit()
 
         prog = "int main(){" + "\n"
-        prog+= vardecl + "\n"
-        prog+= f"scanf(\"{a[:-1]}\" {b});" + "\n"
-        prog+= ifconds + "\n"
-        prog+="}"
+        prog += vardecl + "\n"
+        prog += f'scanf("{a[:-1]}" {b});' + "\n"
+        prog += ifconds + "\n"
+        prog += "}"
         self.mainFun = prog
         return prog
 
@@ -382,7 +392,7 @@ class smtAI(object):
         functions = {}
         vars = set()
         for f in formulas:
-            functions.update(self.collect_functions(f,functions))
+            functions.update(self.collect_functions(f, functions))
             self.collect_vars(f, vars)
             # print(f, functions)
         self.vars = vars
@@ -397,7 +407,7 @@ class smtAI(object):
             print("\nclose boxed functions", cbFunctions)
         self.add(formulas)
         if args.verbose:
-            print("\nSMT file formulas",formulas)
+            print("\nSMT file formulas", formulas)
         self.push()
         if args.verbose:
             print("pushed")
@@ -422,13 +432,13 @@ class smtAI(object):
         #             self.lemmasUsed[self.iteration].append(label)
         #         # self.add(initialLemmasFormula)
         #     self.push()
-            # if args.verbose:
-            #     print("pushed")
+        # if args.verbose:
+        #     print("pushed")
 
     def run(self, args, bench, lemmasDict, functionsList, executiontime):
         # input("Enter an input to continue")
 
-        self.iteration +=1
+        self.iteration += 1
         console.info(f"starting iteration {self.iteration}")
         self.push()
         if not args.addGamma == 0:
@@ -465,8 +475,8 @@ class smtAI(object):
             console.info("functions:", self.cbFunctions)
         for v in self.vars:
             if args.verbose:
-                console.info(v,v.sort())
-        if (not args.addLemma == 0):
+                console.info(v, v.sort())
+        if not args.addLemma == 0:
             for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
                 # if "assert" not in lemmaString:
                 #     print("no assert in lemma")
@@ -487,7 +497,7 @@ class smtAI(object):
                     lemmasDict.setIncrementalCall(True)
                     # exit()
                     continue
-                if len(lemmaFormula)==0:
+                if len(lemmaFormula) == 0:
                     if args.verbose:
                         print("lemmaFormula is empty")
                     continue
@@ -496,7 +506,7 @@ class smtAI(object):
                 label = Bool(lemmaKey)
                 # if args.verbose:
                 #     print(label, str(label))
-                self.s.assert_and_track(lemmaFormula[0],label)
+                self.s.assert_and_track(lemmaFormula[0], label)
                 self.addedOnce = True
                 bound_vars = set()
                 # self.collectBoundVars(lemmaFormula[0], bound_vars)
@@ -514,7 +524,7 @@ class smtAI(object):
         # while iterations > 0:
         # iterations -= 1
         failedLemmas = []
-        print("\n\n\n\nLemmas used",self.lemmasUsed)
+        print("\n\n\n\nLemmas used", self.lemmasUsed)
         if self.iteration in self.lemmasUsed:
             for lem in self.lemmasUsed[self.iteration]:
                 print(lem, lemmaStrings[str(lem)])
@@ -526,7 +536,7 @@ class smtAI(object):
             f.write(str(self.s.assertions()))
         result = self.check()
         end = time.time()
-        executiontime["z3"]+=end-start
+        executiontime["z3"] += end - start
         if result == sat:
             # print(result)
             lemmasDict.setIncrementalCall(True)
@@ -538,13 +548,17 @@ class smtAI(object):
             #     f.write(str(self.s.assertions()))
             #     f.write(str(self.model()))
             # print("testing 2")
-            console.info("received a model, calling modelCheck() to check is model is consistent")
-            if modelCheck(self,args, self.cbFunctions, bench["object_file"], failedLemmas):
+            console.info(
+                "received a model, calling modelCheck() to check is model is consistent"
+            )
+            if modelCheck(
+                self, args, self.cbFunctions, bench["object_file"], failedLemmas
+            ):
                 print("satisfiable")
                 print(self.model())
                 print("Done")
-                print("="*50)
-                print("\n"*4)
+                print("=" * 50)
+                print("\n" * 4)
                 # exit()
                 return AlgoVerdict.SAT
             else:
@@ -560,12 +574,19 @@ class smtAI(object):
                         for decl in self.model().decls():
                             # print("Function:", decl.name())
                             if decl.name() == k:
-                                tmpassert += "(= ("+k + " "
+                                tmpassert += "(= (" + k + " "
                                 index = 0
                                 for inp in val[k][:-1]:
                                     domain = decl.domain(index)
                                     if is_bv_sort(domain):
-                                        tmpassert += str(self.to_smtlib_bv_bin(inp, domain.size())) + " "
+                                        tmpassert += (
+                                            str(
+                                                self.to_smtlib_bv_bin(
+                                                    inp, domain.size()
+                                                )
+                                            )
+                                            + " "
+                                        )
                                         # print(BitVecVal(inp, domain.size()))
                                     elif domain == IntSort():
                                         tmpassert += str(inp) + " "
@@ -575,7 +596,15 @@ class smtAI(object):
                                     index += 1
                                 # print(tmpassert)
                                 if is_bv_sort(decl.range()):
-                                    tmpassert += ") " + str(self.to_smtlib_bv_bin(val[k][-1], decl.range().size())) + "))"
+                                    tmpassert += (
+                                        ") "
+                                        + str(
+                                            self.to_smtlib_bv_bin(
+                                                val[k][-1], decl.range().size()
+                                            )
+                                        )
+                                        + "))"
+                                    )
                                 else:
                                     tmpassert += ") " + str(val[k][-1]) + "))"
                     # print(tmpassert)
@@ -606,19 +635,27 @@ class smtAI(object):
             # print(varmap)
             # exit()
             end = time.time()
-            executiontime["z3"]+= end-start
-            if len(unsatCore)==0:
+            executiontime["z3"] += end - start
+            if len(unsatCore) == 0:
                 return AlgoVerdict.UNSAT
             start = time.time()
             console.info("calling checkUnsat")
-            res = checkUnsat(unsatCore, self.lemmasData, lemmasDict, args, varmap, self.cbFunctions)
+            res = checkUnsat(
+                unsatCore,
+                self.lemmasData,
+                lemmasDict,
+                args,
+                varmap,
+                self.cbFunctions,
+                bench,  #: Iterable[Dict]
+            )
             if args.verbose:
-                print("result: ",res)
+                print("result: ", res)
                 for core in unsatCore:
-                    print("lemma status after pankaj call",lemmasDict[str(core)])
+                    print("lemma status after pankaj call", lemmasDict[str(core)])
             self.pop()
             end = time.time()
-            executiontime["fuzzer"]+= end-start
+            executiontime["fuzzer"] += end - start
             print("Execution time", executiontime)
             return res
         else:
@@ -626,7 +663,6 @@ class smtAI(object):
                 print("UNKNOWN")
             self.pop()
             return AlgoVerdict.UNKNOWN
-
 
     def __del__(self):
         print("MyClass object is being destroyed")

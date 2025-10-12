@@ -40,6 +40,7 @@
 ( declare-const y_0 (_ BitVec 16) )
 ( declare-const y_1 (_ BitVec 16) )
 
+( assert () )
 ; Closed Box Function: From GCC Builtin Function: __builtin_ctz
 ; (declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))
 

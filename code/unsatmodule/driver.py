@@ -6,15 +6,15 @@ from py_console import console
 from code.models import LemmaStatus, AlgoVerdict
 
 
-
-def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
-                lemmaMap,   # Map from id to lemma appeared in unsat core as z3 object
-                lemmasDict, # Main lemma dictionary containing all the meta-data
-                argsObj,    # command line arguments, just in case
-                varMap,     # str->z3Object for each variable
-                funcMap     # map for function as varMap
-                ):
-
+def checkUnsat(
+    lemmaList,  # list of lemma ids appeared in unsat core
+    lemmaMap,  # Map from id to lemma appeared in unsat core as z3 object
+    lemmasDict,  # Main lemma dictionary containing all the meta-data
+    argsObj,  # command line arguments, just in case
+    varMap,  # str->z3Object for each variable
+    funcMap,  # map for function as varMap
+    jsonData,
+):
     """
     print("lemma list: ", lemmaList)
     print("lemma map: ", lemmaMap)
@@ -23,18 +23,18 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
     print("funcmap: ", funcMap)
     """
 
-    assert(len(lemmaList) > 0, "Empty unsat core")
+    assert (len(lemmaList) > 0, "Empty unsat core")
 
     pu.initLogger()
 
     # get constraints for each fuzz instance/lemma
-    fuzz_cons = {} # planning to use this for parallelising fuzzer call
+    fuzz_cons = {}  # planning to use this for parallelising fuzzer call
 
     someInvalid = False
 
-    varMap = {} # TODO: fix this
+    varMap = {}  # TODO: fix this
 
-    #for id, lemma in lemmas.items():
+    # for id, lemma in lemmas.items():
     for id in lemmaList:
         lemma = lemmaMap[id]
         # first check if quantifier is present
@@ -55,7 +55,9 @@ def checkUnsat(lemmaList,  # list of lemma ids appeared in unsat core
         console.info(f"Invoking fuzzer for lemma: {lemma}")
         pu.LOG(f"Invoking fuzzer for lemma: {lemma}")
 
-        verdict, cex = fuzz.getVerdict(id, fuzz_cons[id], varMap, funcMap, argsObj, lemma_vars)
+        verdict, cex = fuzz.getVerdict(
+            id, fuzz_cons[id], varMap, funcMap, argsObj, lemma_vars
+        )
 
         if verdict == LemmaStatus.VALID:
             console.success(f"Lemma verified: {lemma}")
