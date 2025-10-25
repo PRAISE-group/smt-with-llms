@@ -12,7 +12,10 @@ file2="/home/out2.txt"
 > "$file2"
 
 check_files() {
-    if [[ $(<"$file1") == "SAT" ]]; then
+    # if [[ $(<"$file1") == "SAT" ]]; then
+    #     return 0
+    # fi
+    if grep -qE "SAT" "$file2"; then
         return 0
     fi
     if grep -qE "UNSAT" "$file2"; then
@@ -82,8 +85,8 @@ model="--usebedrock --model qwen.qwen3-32b-v1:0"
 model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
 # model="--model llama3:latest"
 model="--usebedrock --model openai.gpt-oss-120b-1:0"
-for i in {1..5}; do
-    if ! check_files; then
+# for i in {1..5}; do
+    # if ! check_files; then
         # echo "not sat checking for unsat"
         echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
         setsid timeout 3m uv run main.py -i "$1" -t 1 -v $model >> "$3" 2>&1 &
@@ -98,10 +101,10 @@ for i in {1..5}; do
         kill_tree "$pid2"
         sleep 10
         # wait $pid2
-    fi 
+    # fi 
     wait
-    break
-done
+    # break
+# done
 # if ! check_files; then
 #     # echo "not sat checking for unsat"
 #     echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
@@ -122,11 +125,11 @@ done
 echo "Exit code: $exit_code"
 sleep 1
 # Post-processing only after both programs and all their children have stopped
-echo "Both programs stopped."
-echo "Orax stat" >> "$3"
-cat /root/Orax/scripts/out1.csv >> "$3"
-cat "$file1"
-cat "$file2"
+# echo "Both programs stopped."
+# echo "Orax stat" >> "$3"
+# cat /root/Orax/scripts/out1.csv >> "$3"
+# cat "$file1"
+# cat "$file2"
 echo " "
 echo " "
 wait

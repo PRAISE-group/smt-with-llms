@@ -28,6 +28,7 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   pid1=$!
   wait $pid1
   sleep 2
+  wait
   rm -rf fuzz_temp/*
 
   ((i++))  # increment counter
@@ -54,7 +55,9 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   pid1=$!
   wait $pid1
   sleep 2
+  wait
   rm -rf fuzz_temp/*
+  echo "$filename Done"
 
   ((i++))  # increment counter
   wait

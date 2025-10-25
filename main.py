@@ -108,12 +108,12 @@ if __name__ == "__main__":
             print("Error on execution:", str(e))
             break
         if resultVerdict == AlgoVerdict.UNSAT:
-            with open("/home/out2.txt", "w") as f:
+            with open("out2.txt", "w") as f:
                 f.write("UNSAT")
             print("Program UNSAT")
         if resultVerdict == AlgoVerdict.SAT:
             print("Program SAT")
-            with open("/home/out2.txt", "w") as f:
+            with open("out2.txt", "w") as f:
                 f.write("SAT")
         # resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
         #     # Check SAT call, I think Gourav calls this.
