@@ -5,7 +5,10 @@
 - Install `uv` package manager: [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 ```bash
+# Install uv package manager.
 curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Creates a new .venv and install all required packages.
 uv sync --force-reinstall
 uv python install 3.12 3.13
 ```
@@ -97,9 +100,9 @@ Please set the following in the `.env` file. Example shows some bedrock models t
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 --stop
 
 # Errors.
-botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the Converse operation:
-Invocation of model ID meta.llama4-maverick-17b-instruct-v1:0 with on-demand throughput isn’t supported.
-Retry your request with the ID or ARN of an inference profile that contains this model.
+# botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the Converse operation:
+# Invocation of model ID meta.llama4-maverick-17b-instruct-v1:0 with on-demand throughput isn’t supported.
+# Retry your request with the ID or ARN of an inference profile that contains this model.
 
 # Model us.meta.llama4-maverick-17b-instruct-v1:0 (No errors now)
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0 --stop
