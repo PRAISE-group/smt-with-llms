@@ -1,6 +1,8 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
 
+; This is a new file now. 
+
 ( declare-const a (_ BitVec 16))
 ( declare-const a_ (_ BitVec 16))
 ( declare-const b (_ BitVec 16))
