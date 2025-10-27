@@ -1,16 +1,15 @@
 from time import sleep
 from typing import List, Optional, Any
-from code.utils.printers import console
 from itertools import chain
 from z3 import *
 
+from code.utils.printers import console
 from code.lemma.checkers import check_lemma_smtlib
 from code.lemma.llmModels import callLLMforResponse
 from code.lemma.context import LemmaDict
-from code.models import Function, Lemmas, LemmaStatus
 from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
-from code.models import exampleSet, ExampleSet
+from code.models import exampleSet, ExampleSet, Function, Lemmas, LemmaStatus
 
 
 def process_format(fragment: str) -> str:
