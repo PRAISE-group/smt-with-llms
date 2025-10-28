@@ -28,6 +28,10 @@ class TokenTrackingHandler(BaseCallbackHandler):
     def on_llm_end(self, response: LLMResult, run_id: uuid.UUID, **kwargs: Any) -> None:
         duration = perf_counter() - self.start_time
         console.log(f"[bold white]Ending LLM run, took {duration:1f}s")
+
+        if commandLineArgs.debug:
+            console.print(response.generations[0][0].message.usage_metadata)
+        
         if response.llm_output is not None and commandLineArgs.debug:
             self.prompt_tokens += response.llm_output["token_usage"]["prompt_tokens"]
             self.completion_tokens += response.llm_output["token_usage"][

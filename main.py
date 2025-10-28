@@ -5,7 +5,7 @@ import threading
 from time import sleep
 from code.utils.printers import console
 
-from code.lemma.context import LemmaDict
+from code.lemma.lemmaDict import LemmaDict
 from code.models import AlgoVerdict
 from code.utils.commandline import commandLineArgs
 from code.lemma.actions import generate_lemmas_background
@@ -81,11 +81,8 @@ if __name__ == "__main__":
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
 
-    if commandLineArgs.usebedrock:
-        time.sleep(10)
-
-    if commandLineArgs.usegpt:
-        time.sleep(10)
+    # @Pankaj, @Gourav. Wait for initial lemmas to come.
+    time.sleep(20)
 
     resultVerdict = AlgoVerdict.UNKNOWN
     solverai = smtAI()
