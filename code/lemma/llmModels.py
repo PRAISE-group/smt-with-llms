@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 from botocore.config import Config
 
+from pydantic import BaseModel
+from typing import Dict, List
 from langchain_aws import ChatBedrockConverse
 from langchain_ollama import OllamaLLM
 from langchain_openai import ChatOpenAI
@@ -17,6 +19,7 @@ from code.utils.printers import console
 from code.utils.commandline import commandLineArgs
 from code.lemma.callbacks import TokenTrackingHandler
 from code.lemma.promptTemplates import SYSTEM_PROMPT_TEMPLATE
+from code.models import Lemmas, LemmaStatus
 
 # TODO: Keep ChatGPT API key in .env file, do not commit.
 env_path = Path(__file__).resolve().parents[2] / ".env"
@@ -69,7 +72,6 @@ elif commandLineArgs.usebedrock:
         model=commandLineArgs.model,
         region_name=environ.get("AWS_REGION"),
         client=client,
-        temperature=0.35,
         max_tokens=None,
     )
 else:
@@ -88,8 +90,10 @@ else:
 prompt = ChatPromptTemplate.from_messages(
     [
         ("system", SYSTEM_PROMPT_TEMPLATE),
-        MessagesPlaceholder(variable_name="history", optional=True),
-        ("human", "Please read the input: {input}"),
+        MessagesPlaceholder(variable_name="history", optional=False),
+        ("human", "Can you briefly explain what is SMTLIB Format for SMT Solving (in 1~2 lines)?"),
+        ("human", "Can you give 2 examples of formulas in SMTLIB Format using bit-vector theory?"),
+        ("human", "{prompt}")
     ]
 )
 
@@ -102,12 +106,15 @@ def get_session_history(session_id: str) -> InMemoryChatMessageHistory:
         chat_histories[session_id] = InMemoryChatMessageHistory()
     return chat_histories[session_id]
 
+class LLMOutputLemmas(BaseModel):
+    explain: str
+    lemmas: List[Lemmas]
 
 # Create a conversation chain
 conversation = RunnableWithMessageHistory(
     chain,
     get_session_history,
-    input_messages_key="input",
+    input_messages_key="prompt",
     history_messages_key="history",
     verbose=False,
 )
@@ -115,7 +122,7 @@ conversation = RunnableWithMessageHistory(
 
 def callLLMforResponse(prompt: str, funcName: str):
     response = conversation.invoke(
-        {"input": prompt},
+        {"prompt": prompt},
         config={
             "configurable": {"session_id": f"session_{funcName}"},
             "callbacks": [TokenTrackingHandler()],
