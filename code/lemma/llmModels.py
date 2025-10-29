@@ -11,7 +11,7 @@ from typing import Dict, List
 from langchain_aws import ChatBedrockConverse
 from langchain_ollama import OllamaLLM
 from langchain_openai import ChatOpenAI
-from langchain_core.runnables import RunnableWithMessageHistory
+from langchain_core.runnables import RunnableWithMessageHistory, RunnableConfig
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.chat_history import InMemoryChatMessageHistory
 
@@ -78,10 +78,10 @@ else:
     # Connect to remote Ollama instance
     if BASE_URL is None:
         console.log(
-            "[bold red] Please provide the BASE_URL or BASE_URL_160/BASE_URL_156."
+            "[bold red]Please provide the BASE_URL or BASE_URL_160/BASE_URL_156 in .env file."
         )
         console.log(
-            "[bold green] Need the IP address and PORT of the local ollama serve running instance."
+            "[bold green]Need the IP address and PORT of the local ollama serve running instance."
         )
         exit(1)
     llm = OllamaLLM(model=commandLineArgs.model, base_url=BASE_URL)
@@ -91,9 +91,9 @@ prompt = ChatPromptTemplate.from_messages(
     [
         ("system", SYSTEM_PROMPT_TEMPLATE),
         MessagesPlaceholder(variable_name="history", optional=False),
-        ("human", "Can you briefly explain what is SMTLIB Format for SMT Solving (in 1~2 lines)?"),
+        ("human", "Can you briefly explain what is SMTLIB Format in the context of SMT Solving (in 1~2 lines)?"),
         ("human", "Can you give 2 examples of formulas in SMTLIB Format using bit-vector theory?"),
-        ("human", "{prompt}")
+        ("human", "{human_message}")
     ]
 )
 
@@ -114,7 +114,7 @@ class LLMOutputLemmas(BaseModel):
 conversation = RunnableWithMessageHistory(
     chain,
     get_session_history,
-    input_messages_key="prompt",
+    input_messages_key="human_message",
     history_messages_key="history",
     verbose=False,
 )
@@ -122,8 +122,8 @@ conversation = RunnableWithMessageHistory(
 
 def callLLMforResponse(prompt: str, funcName: str):
     response = conversation.invoke(
-        {"prompt": prompt},
-        config={
+        input={"human_message": prompt},
+        config = {
             "configurable": {"session_id": f"session_{funcName}"},
             "callbacks": [TokenTrackingHandler()],
         },

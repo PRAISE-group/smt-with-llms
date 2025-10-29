@@ -1,10 +1,11 @@
 import sys
 import time
+import uuid
 import json
 import threading
 from time import sleep
-from code.utils.printers import console
 
+from rich.console import Console
 from code.lemma.lemmaDict import LemmaDict
 from code.models import AlgoVerdict
 from code.utils.commandline import commandLineArgs
@@ -15,9 +16,13 @@ from code.satmodule.test.smttoc import *
 
 
 if __name__ == "__main__":
+    console = Console()
     lemmaDict = LemmaDict()
+    session_id = str(uuid.uuid4())
     functionsList: List[Function] = []
     running_llm_threads: list[threading.Thread] = []
+
+    console.log(f"Conversation Thread Id: {session_id}")
 
     with open(commandLineArgs.inputFile, "r") as f:
         data = json.load(f)
@@ -26,52 +31,64 @@ if __name__ == "__main__":
     commandLineArgs.sharedLib = data["object_file"]
 
     for key, value in data["functions"].items():
+        ftc = Function(
+            id=key,
+            name=key,
+            description=value.get("desc", "No description available."),
+            userLemmas=[
+                Lemmas(
+                    id=f"{key}_gen0_l{index}",
+                    status=LemmaStatus.UNKNOWN,
+                    associatedFunction=key,
+                    smtFormat=lemmaInfo,
+                    generation=0,
+                )
+                for index, lemmaInfo in enumerate(value.get("userLemmas", []), 1)
+            ],
+            inputs=[str(c) for c in value.get("tests", [])],
+            object_file=commandLineArgs.sharedLib,
+            smtDecl=data["functions"][key]["smtDecl"],
+            smt_file=data["smt_file"],
+        )
+
         functionsList.append(
-            Function(
-                id=key,
-                name=key,
-                description=value.get("desc", "No description available."),
-                userLemmas=[
-                    Lemmas(
-                        id=f"{key}_gen0_l{index}",
-                        status=LemmaStatus.UNKNOWN,
-                        associatedFunction=key,
-                        smtFormat=lemmaInfo,
-                        generation=0,
-                    )
-                    for index, lemmaInfo in enumerate(value.get("userLemmas", []), 1)
-                ],
-                inputs=[str(c) for c in value.get("tests", [])],
-                object_file=commandLineArgs.sharedLib,
-                smtDecl=data["functions"][key]["smtDecl"],
-                smt_file=data["smt_file"],
-            )
+            ftc
         )
 
     # Run a background thread for generating lemmas.
-    # One for each function.
     stop_event = threading.Event()
-    for f in functionsList:
-        t = threading.Thread(
-            target=generate_lemmas_background,
-            args=(
-                f,
-                "SMTLIB",
-                commandLineArgs.minLemma,
-                commandLineArgs.maxLemma,
-                lemmaDict,
-                stop_event,
-            ),
-            daemon=True,
-        )
-        t.start()
-        running_llm_threads.append(t)
+    conversationThread = threading.Thread(
+        target=generate_lemmas_background,
+        args=(
+            functionsList,
+            "BIT-VECTOR",
+            commandLineArgs.minLemma,
+            commandLineArgs.maxLemma,
+            lemmaDict,
+            session_id,
+            stop_event,
+        ),
+        daemon=True,
+    )
+    
+    conversationThread.start()
+    
+    # @Pankaj, @Gourav. Wait for initial lemmas to come.
+    with console.status(f"[bold green]Conversation Thread Id: {session_id}", spinner="bouncingBall") as status:
+        while True:
+            time.sleep(2)
+            status.update(
+                status="Waiting for initial lemmas...",
+                spinner="bouncingBall",
+                spinner_style="green",
+            )
+            if len(lemmaDict.items()) > 1:
+                break
 
     if commandLineArgs.stop:
         time.sleep(10)
         stop_event.set()
-        for t in running_llm_threads:
-            t.join()
+        conversationThread.join()
         sys.exit(0)
 
     # @Pankaj, @Gourav. Write the main driver here or abstract it out into a function.
@@ -81,13 +98,10 @@ if __name__ == "__main__":
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
 
-    # @Pankaj, @Gourav. Wait for initial lemmas to come.
-    time.sleep(20)
-
-    resultVerdict = AlgoVerdict.UNKNOWN
     solverai = smtAI()
     solverai.readSMTfile(data["smt_file"])
     solverai.initialize(commandLineArgs, data)
+    resultVerdict = AlgoVerdict.UNKNOWN
     executiontime = {"z3": 0, "fuzzer": 0}
 
     while not (resultVerdict == AlgoVerdict.SAT or resultVerdict == AlgoVerdict.UNSAT):
@@ -102,35 +116,28 @@ if __name__ == "__main__":
                 commandLineArgs, data, lemmaDict, functionsList, executiontime
             )
         except Exception as e:
-            print("Error on execution:", str(e))
+            console.log("Error on execution:", str(e))
             break
+
         if resultVerdict == AlgoVerdict.UNSAT:
             with open("out2.txt", "w") as f:
                 f.write("UNSAT")
-            print("Program UNSAT")
+            console.log("Program UNSAT")
+
         if resultVerdict == AlgoVerdict.SAT:
-            print("Program SAT")
+            console.log("Program SAT")
             with open("out2.txt", "w") as f:
                 f.write("SAT")
-        # resultVerdict = solverVerdict(lemmaDict, functionsList, commandLineArgs)
-        #     # Check SAT call, I think Gourav calls this.
-        #     # TODO: @Gourav, What all will this function return.
-        #     resultVerdict = checkSat(lemmaDict, functionsList, commandLineArgs)
-        # else:
-        #     # Check UNSAT call, Pankaj will call this.
-        #     resultVerdict = checkUnsat(lemmaDict, functionsList, commandLineArgs)
-    print("Z3 Execution time", executiontime["z3"])
-    print("fuzzer Execution time", executiontime["fuzzer"])
-    print(
+
+    console.log("Z3 Execution time", executiontime["z3"])
+    console.log("fuzzer Execution time", executiontime["fuzzer"])
+    console.log(
         "Total Execution time except LLM", executiontime["z3"] + executiontime["fuzzer"]
     )
 
-    exit()
+    # Stop the LLM running thread.
     stop_event.set()
-    for t in running_llm_threads:
-        t.join()
+    conversationThread.join()
 
-    # TODO: Sumit Check.
-    # Stop LLM responses here after exiting the while loop
-    console.log("[bold red]All threads exit stage.")
+    # Exit from the process.
     sys.exit(0)

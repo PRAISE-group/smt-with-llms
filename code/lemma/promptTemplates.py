@@ -3,12 +3,41 @@ SYSTEM_PROMPT_TEMPLATE = """
     I will give you a task in <DOMAIN> and you have to complete the task.
 """
 
-# Start prompting.
-LEMMA_GENERATION_START_TEMPLATE = """
-    Generate lemmas in the format of <FORMAT> for the function whose description will be provided below. 
+# PROMPT-1 prompt that goes to the LLM. We define the objective for the task here.
+OBJECTIVE_TEMPLATE = """
+    Objective: You will be given details one or more closed-box functions. Generate <ARTIFACT> 
+    in the format of <FORMAT> for the closed-box functions whose descriptions will be provided later. 
     
-    1) Please note that you need to generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA>.
-    2) You are forbidden from creating <LEMMA> that you have already created earlier in the conversation.
+    1) Please note that you need to generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <ARTIFACT>.
+    2) You are free to generate lemmas that use one or more of these closed-box functions.
+    
+    Is the objective of the task clear to you?
+"""
+
+# PROMPT-2 prompt that goes to the LLM. We define the guidelines for the task here.
+LEMMA_GENERATION_GUIDELINES = """
+    Please use the following rules strictly.
+
+    1) Write <ARTIFACT> in between LEMMA_START and LEMMA_END blocks. Give me each lemma in a seperate line so that I can parse it back.
+    
+    2) Only generate constraints with `forall` quantifier.
+    
+    3) The variables that you can use are only quantifier variables that are in <ARTIFACT>.
+    
+    4) <ARTIFACT> should be in SMT-LIB <FORMAT> format.
+        For example, `(assert (forall ((z (_ BitVec 32))) (=> (bvugt z (_ bv0 32)) (= (foo_cb z) (_ bv0 32)))))` is a well formatted lemma.
+        However, `(assert (forall ((z (_ BitVec 32))) (=> (bvugt z (_ bv0 32)) (= (foo_cb z) (_ bv0 32)))` is not as multiple parenthesis are missing at end. 
+        This is an incorrect lemma, `(assert (forall ((a (_ BitVec 32))) (= (max_cb a b) b)))` as it gives  "unknown constant b" error.
+        
+    5) Variables in the lemma should be universally quantified using forall quantifier.
+        For example, `(assert (forall ((a (_ BitVec 32))) (= (foo_cb a a) a)))` is a valid lemma.
+        However, `(assert (exists ((a (_ BitVec 32))) (= (foo_cb a a) a)))` is not a valid lemma.
+        
+    6) User is interested in only <FORMAT> theory. Use <FORMAT> size accordingly based upon the FUNCTION_PROTOTYPE of the function provided by user.
+    
+    7) <ARTIFACT> should look like '(assert FORMULA)', where FORMULA is a first order predicate with `forall` quantifier in correct SMT-LIB <FORMAT> format.
+    
+    8) Match the correct parenthesis, do not wrap the <ARTIFACT> in extra parenthesis.
 """
 
 FEW_SHOTS = """
@@ -27,53 +56,20 @@ FEW_SHOTS = """
     Generate similar lemmas for the given closed box <FUNCTION> with forall constraints in bit-vector theory.
 """
 
-# Base template to be added on each propmt.
-BASE_TEMPLATE = """
-    Write <LEMMA> in between LEMMA_START and LEMMA_END blocks. Please use the following rules strictly.
-
-    1) The <LEMMA> for <FUNCTION> formula should be self contained. Only generate constraints with `forall` quantifier.
-    
-    2) The variables that you can use are only quantifier variables that are in <LEMMA>.
-    
-    3) Lemma should be in SMT-LIB format.
-        For example, `(assert (forall ((z (_ BitVec 32))) (=> (bvugt z (_ bv0 32)) (= (foo_cb z) (_ bv0 32)))))` is a well formatted lemma.
-        However, `(assert (forall ((z (_ BitVec 32))) (=> (bvugt z (_ bv0 32)) (= (foo_cb z) (_ bv0 32)))` is not as multiple parenthesis are missing at end. 
-        This is an incorrect lemma, `(assert (forall ((a (_ BitVec 32))) (= (max_cb a b) b)))` as it gives  "unknown constant b" error.
-        
-    4) Variables in the lemma should be universally quantified using forall quantifier.
-        For example, `(assert (forall ((a (_ BitVec 32))) (= (foo_cb a a) a)))` is a valid lemma.
-        However, `(assert (exists ((a (_ BitVec 32))) (= (foo_cb a a) a)))` is not a valid lemma.
-        
-    5) User is interested in only Bitvector theory. Use Bitvector size accordingly based upon the FUNCTION_PROTOTYPE of the function provided by user.
-    
-    6) A <LEMMA> should look like '(assert <FORMULA>)', where <FORMULA> is a first order predicate with `forall` quantifier in correct SMTLIB format.
-    
-    7) Match the correct parenthesis, do not wrap the lemmas in extra parenthesis.
-"""
-
-# GenLemma call with objectives.
-LEMMA_OBJECTIVE_TEMPLATE = f"""
+# PROMPT-3 New we provide the details about a function and ask the LLM to generate a response.
+GEN_FUNCTION_LEMMAS = f"""
     {FEW_SHOTS}
     
-    Generate lemmas in the format of <FORMAT> for the function <FUNCTION> whose description is 
+    Generate <ARTIFACT> in <FORMAT> for the function <FUNCTION> whose description is 
     provided below in FUNCTION_DESCRIPTION with prototype FUNCTION_PROTOTYPE as signature.
 
     ```
     FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
-    FUNCTION_PROTOTYPE: <FUNCTION_DECLARATION>
-    OUTPUT_FORMAT: List of lemmas in <FORMAT>.
-    LEMMA_SAMPLE: <LEMMA_SAMPLE>
-    ```
-    
-    Give me each <LEMMA> in a seperate line so that I can parse it back. 
-    Please generate syntatically correct <LEMMA> in <FORMAT> syntax. 
-""" + BASE_TEMPLATE
-
-# Additional feedbacks if required.
-FEEDBACK_TEMPLATE = """
-    The quality of the <LEMMAS> is <QUALITY>.
-    Please perform the following, <NEXT_ACTION>.
+    FUNCTION_PROTOTYPE: <FUNCTION_PROTOTYPE>
+    OUTPUT_FORMAT: List of <ARTIFACT> in <FORMAT>.
+    ``` 
 """
+
 
 # Additional feedbacks if required. New lemmas required.
 INCREMENTAL_ACTION_TEMPLATE = """
@@ -84,7 +80,7 @@ INCREMENTAL_ACTION_TEMPLATE = """
     Use those to generate new <LEMMA>.
 
     <PAIRS>
-""" + BASE_TEMPLATE
+"""
 
 # Sync LLMs calls with lemma refinement.
 LEMMA_REFINEMENT_TEMPLATE = """
@@ -95,4 +91,4 @@ LEMMA_REFINEMENT_TEMPLATE = """
 
     <LEMMA_TEXT>
     <INPUT_TEXT>
-""" + BASE_TEMPLATE
+"""
