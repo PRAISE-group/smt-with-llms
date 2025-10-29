@@ -74,11 +74,11 @@ if __name__ == "__main__":
     conversationThread.start()
     
     # @Pankaj, @Gourav. Wait for initial lemmas to come.
-    with console.status(f"[bold green]Conversation Thread Id: {session_id}", spinner="bouncingBall") as status:
+    with console.status(f"[bold green]Conversation Thread Id: {session_id}", spinner="moon") as status:
         while True:
             time.sleep(2)
             status.update(
-                status="Waiting for initial lemmas...",
+                status="[bold red]Waiting for initial lemmas...",
                 spinner="bouncingBall",
                 spinner_style="green",
             )
@@ -86,7 +86,6 @@ if __name__ == "__main__":
                 break
 
     if commandLineArgs.stop:
-        time.sleep(10)
         stop_event.set()
         conversationThread.join()
         sys.exit(0)

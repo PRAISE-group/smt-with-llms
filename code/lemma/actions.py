@@ -3,7 +3,6 @@ from time import sleep
 from itertools import chain
 from typing import List, Optional, Any
 
-
 # Internal Imports.
 from code.utils.printers import console
 from code.lemma.checkers import check_lemma_smtlib
@@ -15,8 +14,6 @@ from code.models import exampleSet, ExampleSet, Function, Lemmas, LemmaStatus
 
 
 def process_format(fragment: str) -> str:
-    if "int" in fragment:
-        fragment = fragment.replace("int", "Int")
     return fragment
 
 
@@ -166,68 +163,12 @@ def generateLemmasForFunction(
     return get_lemmas_from_llm_response(response, func.name, func.smtDecl, generation)
 
 
-# def incrementalLemma(
-#     func: Function,
-#     formatting: str,
-#     minLimit: int,
-#     maxLimit: int,
-#     generation: int,
-#     exampleSet: ExampleSet,
-# ) -> List[Lemmas]:
-#     """
-#     Descp: Take in an input of type Function and return a list of Lemmas
-#     We use the prompts as shown in code.lemma.promptTemplates
-#     Lemmas added here will have UNKNOWN status
-#     """
-#
-#     user_prompt = INCREMENTAL_ACTION_TEMPLATE.replace("<LEMMA>", "lemmas")
-#     user_prompt = user_prompt.replace("<FORMAT>", formatting)
-#     user_prompt = user_prompt.replace("<FUNCTION>", func.name)
-#     user_prompt = user_prompt.replace("<MIN_LIMIT>", str(minLimit))
-#     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
-#
-#     exp = []
-#     for examples in exampleSet:
-#         if examples.funcName == "foo_cb":
-#             exp.append(f"Input: {examples.input}, Output: {examples.output}\n")
-#
-#     user_prompt = user_prompt.replace("<PAIRS>", "\n".join(exp))
-#
-#     response = callLLMforResponse(user_prompt, func.name)
-#     return get_lemmas_from_llm_response(response, func.name, func.smtDecl, generation)
-
-
-def refineSingleLemma(lemma: Lemmas, formatting: str, funcDecl: str, generation: int) -> List[Lemmas]:
-
-    if lemma.getRefineDepth() <= 0:
-        console.log(f"[bold red] No refinement available for lemma {lemma.name}")
-        lemma.setDelete()
-        return [lemma]
-
-    # Extract the counterexample.
-    counterExample = str(lemma.counterExample)
-
-    user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace(
-        "<FUNCTION>", lemma.associatedFunction
-    )
-    user_prompt = user_prompt.replace("<FORMAT>", formatting)
-    user_prompt = user_prompt.replace("<LEMMA_TEXT>", lemma.smtFormat)
-    user_prompt = user_prompt.replace("<INPUT_TEXT>", counterExample)
-    user_prompt = user_prompt.replace(
-        "<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'"
-    )
-
-    response = callLLMforResponse(user_prompt, lemma.associatedFunction)
-    lemma.decrementRefineDepth()
-    return get_lemmas_from_llm_response(response, lemma.associatedFunction, funcDecl, generation)
-
-
-def refineLemma(
+def getRefinedLemmasFromExamples(
+    funcList: List[Function],
     lemmaDict: LemmaDict,
     generation: Optional[int],
     formatting: Optional[str],
-    funcName: str,
-    funcDecl: str
+    sessionId: str,
 ) -> List[Lemmas]:
     """
     Descp: Take in a list of Lemmas that have INVALID lemma status
@@ -237,17 +178,27 @@ def refineLemma(
     """
 
     # Pick only those lemmas that are associated with funcName and is status INVALID
-    newLemmas = []
+    invalidLemmas, validLemmas = [], []
     for lemmaKey, lemma in lemmaDict.items():
-        if lemma.status == LemmaStatus.INVALID and lemma.associatedFunction == funcName:
-            lemmaList = refineSingleLemma(lemma, formatting, funcDecl, generation)
-            for lemma in lemmaList:
-                if lemma.getStatus() == LemmaStatus.SOFTDELETE:
-                    lemmaDict.remove(lemma)
-                else:
-                    newLemmas.append(lemma)
+        if lemma.status == LemmaStatus.INVALID:
+            invalidLemmas.append(lemma.smtFormat)
+        if lemma.status == LemmaStatus.VALID:
+            validLemmas.append(lemma.smtFormat)
 
-    return list(chain.from_iterable(newLemmas))
+    user_prompt = LEMMA_REFINEMENT_TEMPLATE
+    user_prompt = user_prompt.replace("<FORMAT>", formatting)
+    user_prompt = user_prompt.replace("<ARTIFACT>", 'lemmas')
+    user_prompt = user_prompt.replace("<REPLACE_LEMMAS_POS_LIST>", "\n".join(x for x in validLemmas))
+    user_prompt = user_prompt.replace("<REPLACE_LEMMAS_NEG_LIST>", "\n".join(x for x in invalidLemmas))
+
+    response = callLLMforResponse(user_prompt, sessionId)
+
+    if commandLineArgs.debug:
+        console.log(f"[bold red]New refinement lemmas:")
+        console.print(response.content)
+
+    funcDecl: str = "\n".join(x.smtDecl for x in funcList)
+    return get_lemmas_from_llm_response(response, "refinement", funcDecl, generation)
 
 
 def generate_lemmas_background(
@@ -296,20 +247,21 @@ def generate_lemmas_background(
             # After Fuzzer call, we may land here.
             # Keep track of generation
             lemmaDict.incrementLatestGeneration(sessionId)
-            generation = lemmaDict.getLatestGeneration(func.id)
+            generation = lemmaDict.getLatestGeneration(sessionId)
 
             console.log(
-                f"[bold red]Generating more lemmas for: {func.name}, after CEX "
-                f"T.Length: {len(lemmaDict)}, Generation: {generation}"
+                f"[bold red]Required refined lemmas after fuzzer invalidation!"
+                f"T.Length: {len(lemmaDict)}, Generation: {generation}, session: {sessionId}"
             )
 
-            res = refineLemma(
+            res = getRefinedLemmasFromExamples(
+                funcList=funcList,
                 lemmaDict=lemmaDict,
                 generation=generation,
                 formatting=formatting,
-                funcName=func.name,
-                funcDecl=func.smtDecl
+                sessionId=sessionId
             )
+            
             lemmaDict.setRefinementCall(False)
 
         for lms in res:

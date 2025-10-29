@@ -94,28 +94,16 @@ GEN_FUNCTION_LEMMAS = f"""
     ``` 
 """
 
-
-# Additional feedbacks if required. New lemmas required.
-INCREMENTAL_ACTION_TEMPLATE = """
-    I need new <LEMMA>.
-    Please generate <MIN_LIMIT> and at most <MAX_LIMIT> <LEMMA> in <FORMAT>.
-    I am providing you with a set of input (a list which forms the arguments to <FUNCTION>)
-    and output examples for the <FUNCTION>.
-    Use those to generate new <LEMMA>.
-
-    <PAIRS>
-"""
-
-# Sync LLMs calls with lemma refinement.
+# Refinement Lemmas Blocking Clause.
 LEMMA_REFINEMENT_TEMPLATE = """
-    I appreciate the response to the tasks so far. However there are issues.
+    I appreciate the response to the tasks so far. However, there are some issues.
    
     - NEGATIVE_EXAMPLES: 
     <ARTIFACT> you generated which are not correct.
     
     ```
     NEGATIVE_EXAMPLES:
-    <REPLACE_LEMMAS_LIST>
+    <REPLACE_LEMMAS_NEG_LIST>
     ```
 
     - POSITIVE_EXAMPLES:
@@ -123,10 +111,10 @@ LEMMA_REFINEMENT_TEMPLATE = """
     
     ```
     POSITIVE_EXAMPLES:
-    <REPLACE_LEMMAS_LIST>
+    <REPLACE_LEMMAS_POS_LIST>
     ```
     
     1) Please generate more <ARTIFACT> that are like POSITIVE_EXAMPLES.
     2) Do not generate <ARTIFACT> which are like the ones in NEGATIVE_EXAMPLES.
-    3) Be careful about the syntax correctness.
+    3) Be careful about the syntax correctness and adhere to <FORMAT>.
 """
