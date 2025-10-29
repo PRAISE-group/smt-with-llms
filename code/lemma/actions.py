@@ -1,16 +1,15 @@
 from time import sleep
 from typing import List, Optional, Any
-from code.utils.printers import console
 from itertools import chain
 from z3 import *
 
+from code.utils.printers import console
 from code.lemma.checkers import check_lemma_smtlib
 from code.lemma.llmModels import callLLMforResponse
-from code.lemma.context import LemmaDict
-from code.models import Function, Lemmas, LemmaStatus
+from code.lemma.lemmaDict import LemmaDict
 from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
-from code.models import exampleSet, ExampleSet
+from code.models import exampleSet, ExampleSet, Function, Lemmas, LemmaStatus
 
 
 def process_format(fragment: str) -> str:
@@ -19,7 +18,7 @@ def process_format(fragment: str) -> str:
     return fragment
 
 
-def get_text_from_content(response) -> str | None:
+def get_text_from_content(response) -> str | None | List[str]:
     """
     If response.content is a list, return content[1]['text'] (when present).
     Otherwise, return response.content as-is.
@@ -113,8 +112,10 @@ def generateIntialLemmas(
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
 
     response = callLLMforResponse(user_prompt, func.name)
+
     if commandLineArgs.debug:
-        console.log(response)
+        console.log("[bold red]First Response:")
+        console.print(response.content)
 
     function_prompt = LEMMA_OBJECTIVE_TEMPLATE.replace("<LEMMA>", "initial lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
@@ -138,8 +139,13 @@ def generateIntialLemmas(
         )
     else:
         function_prompt = function_prompt.replace("<LEMMA_SAMPLE>", "")
-    # print("prompt:", function_prompt)
+
     response = callLLMforResponse(function_prompt, func.name)
+
+    if commandLineArgs.debug:
+        console.log("[bold red]Next Response:")
+        console.print(response.content)
+
     return get_lemmas_from_llm_response(response, func.name, func.smtDecl, generation)
 
 
@@ -304,15 +310,6 @@ def generate_lemmas_background(
         for lms in res:
             lemmaDict[lms.id] = lms
 
-        # Rest and start again.
+        # Rest and start again (RATELIMIT).
         # Local Run results are not affected.
-        sleep(2)
-
-        # Bedrock has a rate-limit.
-        if commandLineArgs.usebedrock:
-            sleep(10)
-
-        # ChatGPT has not rate-limit but will incurr
-        # much higher cost.
-        if commandLineArgs.usegpt:
-            sleep(10)
+        sleep(5)

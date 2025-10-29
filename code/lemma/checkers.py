@@ -37,16 +37,13 @@ def check_lemma_smtlib(
     """
 
     try:
-        s = Solver()
-        t = parse_smt2_string(smt2)
+        lemma = parse_smt2_string(smt2)
         if commandLineArgs.debug:
-            console.print(t)
-        s.add(t)
-        s.check()
-    except Exception as e:
+            console.print(f"[bold blue]Parsed Lemmas :: {lemma}")
+    except Exception as exp:
         # Surface a clean error with the constructed SMT-LIB for quick debugging
         if commandLineArgs.debug:
-            console.print(e)
+            console.print(exp)
         return False
 
     return True
