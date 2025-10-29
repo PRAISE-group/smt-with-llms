@@ -197,57 +197,57 @@ def generateLemmasForFunction(
 #     return get_lemmas_from_llm_response(response, func.name, func.smtDecl, generation)
 
 
-# def refineSingleLemma(lemma: Lemmas, formatting: str, funcDecl: str, generation: int) -> List[Lemmas]:
-#
-#     if lemma.getRefineDepth() <= 0:
-#         console.log(f"[bold red] No refinement available for lemma {lemma.name}")
-#         lemma.setDelete()
-#         return [lemma]
-#
-#     # Extract the counterexample.
-#     counterExample = str(lemma.counterExample)
-#
-#     user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace(
-#         "<FUNCTION>", lemma.associatedFunction
-#     )
-#     user_prompt = user_prompt.replace("<FORMAT>", formatting)
-#     user_prompt = user_prompt.replace("<LEMMA_TEXT>", lemma.smtFormat)
-#     user_prompt = user_prompt.replace("<INPUT_TEXT>", counterExample)
-#     user_prompt = user_prompt.replace(
-#         "<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'"
-#     )
-#
-#     response = callLLMforResponse(user_prompt, lemma.associatedFunction)
-#     lemma.decrementRefineDepth()
-#     return get_lemmas_from_llm_response(response, lemma.associatedFunction, funcDecl, generation)
+def refineSingleLemma(lemma: Lemmas, formatting: str, funcDecl: str, generation: int) -> List[Lemmas]:
+
+    if lemma.getRefineDepth() <= 0:
+        console.log(f"[bold red] No refinement available for lemma {lemma.name}")
+        lemma.setDelete()
+        return [lemma]
+
+    # Extract the counterexample.
+    counterExample = str(lemma.counterExample)
+
+    user_prompt = LEMMA_REFINEMENT_TEMPLATE.replace(
+        "<FUNCTION>", lemma.associatedFunction
+    )
+    user_prompt = user_prompt.replace("<FORMAT>", formatting)
+    user_prompt = user_prompt.replace("<LEMMA_TEXT>", lemma.smtFormat)
+    user_prompt = user_prompt.replace("<INPUT_TEXT>", counterExample)
+    user_prompt = user_prompt.replace(
+        "<INPUT_TYPE>", "A dictionary from 'variable' names to 'values'"
+    )
+
+    response = callLLMforResponse(user_prompt, lemma.associatedFunction)
+    lemma.decrementRefineDepth()
+    return get_lemmas_from_llm_response(response, lemma.associatedFunction, funcDecl, generation)
 
 
-# def refineLemma(
-#     lemmaDict: LemmaDict,
-#     generation: Optional[int],
-#     formatting: Optional[str],
-#     funcName: str,
-#     funcDecl: str
-# ) -> List[Lemmas]:
-#     """
-#     Descp: Take in a list of Lemmas that have INVALID lemma status
-#     and return a list of Lemmas after LLM refinement
-#     We will possibly create new lemmas.
-#     Lemmas added here will have UNKNOWN status
-#     """
-#
-#     # Pick only those lemmas that are associated with funcName and is status INVALID
-#     newLemmas = []
-#     for lemmaKey, lemma in lemmaDict.items():
-#         if lemma.status == LemmaStatus.INVALID and lemma.associatedFunction == funcName:
-#             lemmaList = refineSingleLemma(lemma, formatting, funcDecl, generation)
-#             for lemma in lemmaList:
-#                 if lemma.getStatus() == LemmaStatus.SOFTDELETE:
-#                     lemmaDict.remove(lemma)
-#                 else:
-#                     newLemmas.append(lemma)
-#
-#     return list(chain.from_iterable(newLemmas))
+def refineLemma(
+    lemmaDict: LemmaDict,
+    generation: Optional[int],
+    formatting: Optional[str],
+    funcName: str,
+    funcDecl: str
+) -> List[Lemmas]:
+    """
+    Descp: Take in a list of Lemmas that have INVALID lemma status
+    and return a list of Lemmas after LLM refinement
+    We will possibly create new lemmas.
+    Lemmas added here will have UNKNOWN status
+    """
+
+    # Pick only those lemmas that are associated with funcName and is status INVALID
+    newLemmas = []
+    for lemmaKey, lemma in lemmaDict.items():
+        if lemma.status == LemmaStatus.INVALID and lemma.associatedFunction == funcName:
+            lemmaList = refineSingleLemma(lemma, formatting, funcDecl, generation)
+            for lemma in lemmaList:
+                if lemma.getStatus() == LemmaStatus.SOFTDELETE:
+                    lemmaDict.remove(lemma)
+                else:
+                    newLemmas.append(lemma)
+
+    return list(chain.from_iterable(newLemmas))
 
 
 def generate_lemmas_background(
@@ -291,26 +291,26 @@ def generate_lemmas_background(
     while not stop_event.is_set():
         res = []
 
-        # if lemmaDict.checkIfRefinementCall():
-        #     # We got new lemmas from the counterexample.
-        #     # After Fuzzer call, we may land here.
-        #     # Keep track of generation
-        #     lemmaDict.incrementLatestGeneration(sessionId)
-        #     generation = lemmaDict.getLatestGeneration(func.id)
-        #
-        #     console.log(
-        #         f"[bold red]Generating more lemmas for: {func.name}, after CEX "
-        #         f"T.Length: {len(lemmaDict)}, Generation: {generation}"
-        #     )
-        #
-        #     res = refineLemma(
-        #         lemmaDict=lemmaDict,
-        #         generation=generation,
-        #         formatting=formatting,
-        #         funcName=func.name,
-        #         funcDecl=func.smtDecl
-        #     )
-        #     lemmaDict.setRefinementCall(False)
+        if lemmaDict.checkIfRefinementCall():
+            # We got new lemmas from the counterexample.
+            # After Fuzzer call, we may land here.
+            # Keep track of generation
+            lemmaDict.incrementLatestGeneration(sessionId)
+            generation = lemmaDict.getLatestGeneration(func.id)
+
+            console.log(
+                f"[bold red]Generating more lemmas for: {func.name}, after CEX "
+                f"T.Length: {len(lemmaDict)}, Generation: {generation}"
+            )
+
+            res = refineLemma(
+                lemmaDict=lemmaDict,
+                generation=generation,
+                formatting=formatting,
+                funcName=func.name,
+                funcDecl=func.smtDecl
+            )
+            lemmaDict.setRefinementCall(False)
 
         for lms in res:
             lemmaDict[lms.id] = lms

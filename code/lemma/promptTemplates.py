@@ -1,11 +1,24 @@
+# Other Prompts:
+CHECK_1 = """
+    Can you briefly explain what is SMTLIB Format in the context of SMT Solving (in 1~2 lines)?
+"""
+
+CHECK_2 = """
+    Can you give me 2 examples of formulas in SMTLIB Format using bit-vector theory?
+"""
+
+# PROMPT-0 prompt that goes to the LLM. We define the capability of the LLMs for the task here.
 SYSTEM_PROMPT_TEMPLATE = """
-    You are an expert logical assistant. You are proficient in generating formulas in SMT-LIB format that is understandable by Z3 SMT Solver.
+    You are an expert logical assistant. 
+    You are proficient in generating formulas in SMT-LIB format that is understandable by Z3 SMT Solver.
     I will give you a task in <DOMAIN> and you have to complete the task.
+    
+    Are you ready for some action?
 """
 
 # PROMPT-1 prompt that goes to the LLM. We define the objective for the task here.
 OBJECTIVE_TEMPLATE = """
-    Objective: You will be given details one or more closed-box functions. Generate <ARTIFACT> 
+    Objective: You will be given details about one or more closed-box functions. Generate <ARTIFACT> 
     in the format of <FORMAT> for the closed-box functions whose descriptions will be provided later. 
     
     1) Please note that you need to generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <ARTIFACT>.
@@ -38,10 +51,14 @@ LEMMA_GENERATION_GUIDELINES = """
     7) <ARTIFACT> should look like '(assert FORMULA)', where FORMULA is a first order predicate with `forall` quantifier in correct SMT-LIB <FORMAT> format.
     
     8) Match the correct parenthesis, do not wrap the <ARTIFACT> in extra parenthesis.
+    
+    9) Generate <ARTIFACT> which uses correct <FORMAT> operations from the <FORMAT> theory you need to use.
+    
+    Are these 9 guideline rules clear to you?
 """
 
 FEW_SHOTS = """
-    Lemmas in bit-vector theory typically looks like the ones given below.
+    Lemmas in bit-vector theory typically looks like the ones given below.  `foo_cb` is a closed-box function here.
     
     ```
     (assert (= (foo_cb (_ bv0 32)) (_ bv0 32)))
@@ -51,6 +68,13 @@ FEW_SHOTS = """
     (assert (forall ((z (_ BitVec 32))) (= (foo_cb (foo_cb z)) (foo_cb z))))
     (assert (forall ((z (_ BitVec 32))) (or (= (foo_cb z) (_ bv0 32))  (= (foo_cb z) z))))
     (assert (forall ((z (_ BitVec 32))) (=> (not (bvugt z (_ bv0 32))) (= (bvugt (foo_cb z) (_ bv0 32)) false))))
+    ```
+    
+    Here is an example for lemma over closed-box function `ex()` in bitvector theory.
+    
+    ```
+    (declare-fun x () (_ BitVec 32))
+    (assert (forall ((x (_ BitVec 32))) (= (bvadd (bvadd x (_ bv1 32)) (_ bvneg x)) (_ bv1 32))))
     ```
     
     Generate similar lemmas for the given closed box <FUNCTION> with forall constraints in bit-vector theory.
@@ -84,11 +108,25 @@ INCREMENTAL_ACTION_TEMPLATE = """
 
 # Sync LLMs calls with lemma refinement.
 LEMMA_REFINEMENT_TEMPLATE = """
-    The following lemma for <FUNCTION> is wrong. Please generate new lemma.
-    LEMMA_TEXT: It is the lemma text in <FORMAT>
-    INPUT_TEXT: Values for the variables in the lemmas for which it is wrong.
-    INPUT_TYPE: <INPUT_TYPE>
+    I appreciate the response to the tasks so far. However there are issues.
+   
+    - NEGATIVE_EXAMPLES: 
+    <ARTIFACT> you generated which are not correct.
+    
+    ```
+    NEGATIVE_EXAMPLES:
+    <REPLACE_LEMMAS_LIST>
+    ```
 
-    <LEMMA_TEXT>
-    <INPUT_TEXT>
+    - POSITIVE_EXAMPLES:
+    <ARTIFACT> you generated which are correct and spot-on.
+    
+    ```
+    POSITIVE_EXAMPLES:
+    <REPLACE_LEMMAS_LIST>
+    ```
+    
+    1) Please generate more <ARTIFACT> that are like POSITIVE_EXAMPLES.
+    2) Do not generate <ARTIFACT> which are like the ones in NEGATIVE_EXAMPLES.
+    3) Be careful about the syntax correctness.
 """

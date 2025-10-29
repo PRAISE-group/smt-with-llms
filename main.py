@@ -61,7 +61,7 @@ if __name__ == "__main__":
         target=generate_lemmas_background,
         args=(
             functionsList,
-            "BIT-VECTOR",
+            "bitvector",
             commandLineArgs.minLemma,
             commandLineArgs.maxLemma,
             lemmaDict,
