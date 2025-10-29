@@ -1,8 +1,10 @@
-from time import sleep
-from typing import List, Optional, Any
-from itertools import chain
 from z3 import *
+from time import sleep
+from itertools import chain
+from typing import List, Optional, Any
 
+
+# Internal Imports.
 from code.utils.printers import console
 from code.lemma.checkers import check_lemma_smtlib
 from code.lemma.llmModels import callLLMforResponse
@@ -283,6 +285,8 @@ def generate_lemmas_background(
 
         for lms in res:
             lemmaDict[lms.id] = lms
+
+        sleep(2)
 
     while not stop_event.is_set():
         res = []
