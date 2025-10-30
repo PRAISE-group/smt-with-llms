@@ -1,3 +1,4 @@
+import uuid
 from z3 import *
 from time import sleep
 from itertools import chain
@@ -85,7 +86,7 @@ def get_lemmas_from_llm_response(
 
             lemmas.append(
                 Lemmas(
-                    id=f"{funcName}_gen{generation}_l{index}",
+                    id=f"{str(uuid.uuid4())}_gen{generation}_l{index}",
                     status=LemmaStatus.UNKNOWN,
                     associatedFunction=f"{funcName}",
                     smtFormat=f"{fragments}",

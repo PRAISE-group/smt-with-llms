@@ -40,14 +40,55 @@
 ( declare-const y_0 (_ BitVec 16) )
 ( declare-const y_1 (_ BitVec 16) )
 
-( assert () )
+; Constraints all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_100 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
+
+(assert (in_0_100 a))
+(assert (in_0_100 a_))
+(assert (in_0_100 b))
+(assert (in_0_100 b_))
+(assert (in_0_100 r))
+(assert (in_0_100 r_))
+(assert (in_0_100 shift))
+(assert (in_0_100 shift_))
+(assert (in_0_100 supported))
+(assert (in_0_100 supported_))
+(assert (in_0_100 x))
+(assert (in_0_100 x_))
+(assert (in_0_100 y))
+(assert (in_0_100 y_))
+
+(assert (in_0_100 a_0))
+(assert (in_0_100 b_0))
+(assert (in_0_100 b_1))
+(assert (in_0_100 b_2))
+(assert (in_0_100 b_3))
+(assert (in_0_100 b_4))
+(assert (in_0_100 r_0))
+(assert (in_0_100 r_1))
+(assert (in_0_100 r_2))
+(assert (in_0_100 r_3))
+(assert (in_0_100 r_4))
+(assert (in_0_100 r_5))
+(assert (in_0_100 shift_0))
+(assert (in_0_100 shift_1))
+(assert (in_0_100 shift_2))
+(assert (in_0_100 shift_3))
+(assert (in_0_100 shift_4))
+(assert (in_0_100 shift_5))
+(assert (in_0_100 supported_0))
+(assert (in_0_100 x_0))
+(assert (in_0_100 x_1))
+(assert (in_0_100 y_0))
+(assert (in_0_100 y_1))
+
 ; Closed Box Function: From GCC Builtin Function: __builtin_ctz
 (declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))
 
-
 ; __builtin_ctz: trailing zero count, undefined for n = 0.
 ; We model the undefined case with an unconstrained constant.
-(declare-const ctz_ub_zero (_ BitVec 16))
+; (declare-const ctz_ub_zero (_ BitVec 16))
 
 ; (define-fun builtin_ctz_cb ((n (_ BitVec 16))) (_ BitVec 16)
 ;   (ite (= n (_ bv0 16)) ctz_ub_zero
