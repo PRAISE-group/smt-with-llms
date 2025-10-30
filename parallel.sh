@@ -80,7 +80,7 @@ model="--model gpt-oss:20b --use156"
     # if ! check_files; then
         # echo "not sat checking for unsat"
         echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
-        setsid timeout 10m uv run main.py -i "$1" -t 1 -v $model >> "$3" 2>&1 &
+        setsid timeout 10m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
         pid2=$!
         exit_code=$?
         if ! wait "$pid2"; then

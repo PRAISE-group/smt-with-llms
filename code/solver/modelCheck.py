@@ -193,6 +193,9 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     if compilation.returncode != 0:
         print("Compilation failed: g++ harness.cpp objectFile -o program")
         print(compilation.stderr)
+        with open("oracleTemp/harness.cpp", "r") as f:
+            content = f.read()
+            print(content)
         exit()
         return False
     else:
@@ -212,6 +215,10 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
         for value in input_tuple:
             input_data += str(value)+ " "
         stdout, stderr = process.communicate(input=input_data)
+        if stderr:
+            with open("oracleTemp/harness.cpp", "r") as f:
+                content = f.read()
+                print(content)
         if args.verbose:
             print("stdout:", stdout)
             print("stderr:", stderr)

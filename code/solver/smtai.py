@@ -484,17 +484,17 @@ class smtAI(object):
                 #     return
                 try:
                     lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
-                    if "Extract" in lemmaString:
-                        lemmasDict.removeLemma(lemmaKey)
+                    # if "Extract" in lemmaString:
+                        # lemmasDict.removeLemma(lemmaKey)
                         # lemmasDict[str(id)].setInvalid("lemma should not use Extract or concat")
                         # lemmasDict.setIncrementalCall(True)
-                        continue
+                        # continue
                 except Exception as e:
                     if args.verbose:
                         print("incorrect lemma syntax error", str(e))
-                    lemmasDict.removeLemma(lemmaKey)
+                    # lemmasDict.removeLemma(lemmaKey)
                     # lemmasDict[str(id)].setInvalid(str(e))
-                    lemmasDict.setIncrementalCall(True)
+                    # lemmasDict.setIncrementalCall(True)
                     # exit()
                     continue
                 if len(lemmaFormula) == 0:
@@ -539,7 +539,7 @@ class smtAI(object):
         executiontime["z3"] += end - start
         if result == sat:
             # print(result)
-            lemmasDict.setIncrementalCall(True)
+            # lemmasDict.setIncrementalCall(True)
             # print("sat model",str(self.model()))
             # self.pop()
             # return AlgoVerdict.UNKNOWN
@@ -549,7 +549,7 @@ class smtAI(object):
             #     f.write(str(self.model()))
             # print("testing 2")
             console.info(
-                "received a model, calling modelCheck() to check is model is consistent"
+                "received a model, calling modelCheck() to check if model is consistent"
             )
             if modelCheck(
                 self, args, self.cbFunctions, bench["object_file"], failedLemmas
@@ -562,9 +562,10 @@ class smtAI(object):
                 # exit()
                 return AlgoVerdict.SAT
             else:
+                lemmaDict.setRefinementCall(True)
                 self.pop()
                 console.info("received a model, not consistent so give feedback to LLM")
-                lemmasDict.setIncrementalCall(True)
+                # lemmasDict.setIncrementalCall(True)
                 inconsistency = self.getOutputForCBFunctions(args, bench)
                 if args.verbose:
                     print(inconsistency)
