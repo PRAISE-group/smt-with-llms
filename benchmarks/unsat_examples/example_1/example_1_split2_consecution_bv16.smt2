@@ -16,13 +16,26 @@
 ( declare-const sum_1 (_ BitVec 16))
 ( declare-const sum_2 (_ BitVec 16))
 
-; Closed Box Function: returns addition first argument + square of second argument
-(define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
- 	(bvadd x (bvmul y y))
- )
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_100 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
+
+(assert (in_0_100 i))
+(assert (in_0_100 i_))
+(assert (in_0_100 n))
+(assert (in_0_100 n_))
+(assert (in_0_100 i_0))
+(assert (in_0_100 i_1))
+(assert (in_0_100 i_2))
+(assert (in_0_100 n_0))
 
 ; Closed Box Function: returns addition first argument + square of second argument
-;( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+; (define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
+;  	(bvadd x (bvmul y y))
+; )
+
+; Closed Box Function: returns addition first argument + square of second argument
+( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ; invariant predicate (here trivially true)
 (define-fun inv-f ((i (_ BitVec 16)) (n (_ BitVec 16)) (sum (_ BitVec 16))) Bool
