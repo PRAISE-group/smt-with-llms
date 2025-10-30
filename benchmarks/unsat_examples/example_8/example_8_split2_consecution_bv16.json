@@ -1,12 +1,12 @@
 {
   "smt_file": "/home/benchmarks/unsat_examples/example_8/example_8_split2_consecution_bv16.smt2",
   "object_file": "/home/benchmarks/unsat_examples/example_8/example_8.o",
-  "limit": [1, 1000],
+  "limit": [1, 100],
   "functions": {
     "builtin_ctz_cb": {
       "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function builtin_ctz_cb takes 1 arguments (a) and returns no of trailing zeros in binary representation of ''. Uses BitVec 16 Domain.",
-      "tests": [[459], [1918]],
+      "desc": "Closed box function builtin_ctz_cb takes 1 argument (arg_1) and returns the number of trailing zeros in binary representation of (arg_1). Uses BitVec 16 Domain.",
+      "tests": [[24], [22], [98], [2]],
       "userLemmas": [""]
     }
   }
