@@ -484,17 +484,17 @@ class smtAI(object):
                 #     return
                 try:
                     lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
-                    if "Extract" in lemmaString:
-                        lemmasDict.removeLemma(lemmaKey)
+                    # if "Extract" in lemmaString:
+                    #     lemmasDict.removeLemma(lemmaKey)
                         # lemmasDict[str(id)].setInvalid("lemma should not use Extract or concat")
                         # lemmasDict.setIncrementalCall(True)
-                        continue
+                        # continue
                 except Exception as e:
                     if args.verbose:
                         print("incorrect lemma syntax error", str(e))
-                    lemmasDict.removeLemma(lemmaKey)
+                    # lemmasDict.removeLemma(lemmaKey)
                     # lemmasDict[str(id)].setInvalid(str(e))
-                    lemmasDict.setIncrementalCall(True)
+                    # lemmasDict.setIncrementalCall(True)
                     # exit()
                     continue
                 if len(lemmaFormula) == 0:
@@ -539,7 +539,7 @@ class smtAI(object):
         executiontime["z3"] += end - start
         if result == sat:
             # print(result)
-            lemmasDict.setIncrementalCall(True)
+            # lemmasDict.setIncrementalCall(True)
             # print("sat model",str(self.model()))
             # self.pop()
             # return AlgoVerdict.UNKNOWN
@@ -564,7 +564,9 @@ class smtAI(object):
             else:
                 self.pop()
                 console.info("received a model, not consistent so give feedback to LLM")
-                lemmasDict.setIncrementalCall(True)
+                # lemmasDict.setIncrementalCall(True)
+                if not LemmaDict.checkIfRefinementCall:
+                    lemmaDict.setRefinementCall(True)
                 inconsistency = self.getOutputForCBFunctions(args, bench)
                 if args.verbose:
                     print(inconsistency)
