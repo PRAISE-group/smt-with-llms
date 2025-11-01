@@ -7,7 +7,14 @@
       "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))",
       "desc": "Closed box function builtin_ctz_cb takes 1 argument (arg_1) and returns the number of trailing zeros in binary representation of (arg_1). Uses BitVec 16 Domain.",
       "tests": [[24], [22], [98], [2]],
-      "userLemmas": [""]
+      "userLemmas": [
+        ""
+        ]
     }
-  }
+  },
+  "_comment": ["(assert (forall ((z (_ BitVec 16))) (=> (= z (_ bv0 16)) (= (builtin_ctz_cb z) (_ bv16 16)))))",
+        "(assert (forall ((z (_ BitVec 16))) (=> (distinct z (_ bv0 16)) (bvult (builtin_ctz_cb z) (_ bv16 16)))))",
+        "(assert (forall ((z (_ BitVec 16))) (=> (distinct z (_ bv0 16)) (= (bvand (bvlshr z (builtin_ctz_cb z)) (_ bv1 16)) (_ bv1 16)))))",
+        "(assert (forall ((z (_ BitVec 16))) (=> (= (bvand z (_ bv1 16)) (_ bv0 16)) (not (= (builtin_ctz_cb z) (_ bv0 16))))))",
+        "(assert (forall ((z (_ BitVec 16))) (=> (distinct z (_ bv0 16)) (= (builtin_ctz_cb (bvshl z (_ bv1 16))) (bvadd (builtin_ctz_cb z) (_ bv1 16))))))"]
 }

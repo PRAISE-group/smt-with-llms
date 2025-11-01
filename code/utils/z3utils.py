@@ -38,6 +38,17 @@ def z3_to_c(expr):
         return f'({z3_to_c(expr.arg(0))}) * ({z3_to_c(expr.arg(1))})'
     elif expr.decl().name() == 'bvurem':
         return f'({z3_to_c(expr.arg(0))}) % ({z3_to_c(expr.arg(1))})'
+    
+    elif expr.decl().name() == 'bvshl':
+        # Logical left shift
+        return f'({z3_to_c(expr.arg(0))} << {z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvlshr':
+        # Logical right shift (zero-fill)
+        return f'((unsigned){z3_to_c(expr.arg(0))} >> {z3_to_c(expr.arg(1))})'
+    elif expr.decl().name() == 'bvashr':
+        # Arithmetic right shift (sign-extend)
+        return f'((int){z3_to_c(expr.arg(0))} >> {z3_to_c(expr.arg(1))})'
+    
     elif expr.decl().kind() == z3.Z3_OP_ITE:
         cond, then_expr, else_expr = expr.children()
         return f'(({z3_to_c(cond)}) ? ({z3_to_c(then_expr)}) : ({z3_to_c(else_expr)}))'

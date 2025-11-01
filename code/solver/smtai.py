@@ -172,6 +172,17 @@ class smtAI(object):
             return " + ".join(f"({self.z3_to_c(c)})" for c in expr.children())
         elif expr.decl().name() == "bvurem":
             return f"({self.z3_to_c(expr.arg(0))}) % ({self.z3_to_c(expr.arg(1))})"
+        
+        elif expr.decl().name() == 'bvshl':
+            # Logical left shift
+            return f'({z3_to_c(expr.arg(0))} << {z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvlshr':
+            # Logical right shift (zero-fill)
+            return f'((unsigned){z3_to_c(expr.arg(0))} >> {z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == 'bvashr':
+            # Arithmetic right shift (sign-extend)
+            return f'((int){z3_to_c(expr.arg(0))} >> {z3_to_c(expr.arg(1))})'
+        
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
             return f"(({self.z3_to_c(cond)}) ? ({self.z3_to_c(then_expr)}) : ({self.z3_to_c(else_expr)}))"
@@ -232,6 +243,17 @@ class smtAI(object):
             )
         elif expr.decl().name() == "bvurem":
             return f"({self.getFunctions(expr.arg(0), funs)}) % ({self.getFunctions(expr.arg(1), funs)})"
+        
+        elif expr.decl().name() == 'bvshl':
+            # Logical left shift
+            return f'({self.getFunctions(expr.arg(0), funs)} << {self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvlshr':
+            # Logical right shift (zero-fill)
+            return f'((unsigned){self.getFunctions(expr.arg(0), funs)} >> {self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == 'bvashr':
+            # Arithmetic right shift (sign-extend)
+            return f'((int){self.getFunctions(expr.arg(0), funs)} >> {self.getFunctions(expr.arg(1), funs)})'
+        
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
             return f"(({self.getFunctions(cond, funs)}) ? ({self.getFunctions(then_expr, funs)}) : ({self.getFunctions(else_expr, funs)}))"

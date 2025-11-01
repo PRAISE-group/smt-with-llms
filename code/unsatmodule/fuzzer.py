@@ -51,7 +51,7 @@ __AFL_FUZZ_INIT();
 
 
 
-def createRest(filepath, lemma, varMap, id, lemma_vars):
+def createRest(filepath, lemma, varMap, id, lemma_vars, jsonData):
     def get_offset(var):
             # print(domain, type(domain))
         if isinstance(var, z3.z3.ArithSortRef):
@@ -86,15 +86,21 @@ def createRest(filepath, lemma, varMap, id, lemma_vars):
         content += f"    {type_i} {name_i} = *(({type_i} *)buff);\n"
         content += f"    buff += {offset};\n\n"
 
-
     for i in lemma_vars:
         name_i = str(i).replace("!","_")
         if name_i not in varlist:
+            varlist.append(name_i)
             type_i = typenameConversion(i)
             offset = get_offset(i)
             # content += f"    uint16_t {str(i)} = *((uint16_t *)buff);\n"
             content += f"    {type_i} {name_i} = *(({type_i} *)buff);\n"
             content += f"    buff += {offset};\n\n"
+            
+    if "limit" in jsonData:
+        lLimit=jsonData["limit"][0]
+        ULimit=jsonData["limit"][1]
+        for name_i in varlist:
+            content+= f"if ({name_i} < {lLimit} || {name_i} > {ULimit}) return 0;\n\n"
 
     tcount = 1
     for l in lemma:
@@ -115,13 +121,13 @@ def createRest(filepath, lemma, varMap, id, lemma_vars):
     return content
 
 
-def createFuzzFile(id, lemma, varMap, funcMap, lemma_vars):
+def createFuzzFile(id, lemma, varMap, funcMap, lemma_vars, jsonData):
     pwd = os.getcwd()
     fuzzd = pwd + "/fuzz_temp/"
     pu.createDirectory(fuzzd)
     with open(f"{fuzzd}lemma_check_{id}.cc", "w") as ffuzz:
         ffuzz.write(createHeader(funcMap))
-        rest = createRest(fuzzd, lemma, varMap, id, lemma_vars)
+        rest = createRest(fuzzd, lemma, varMap, id, lemma_vars, jsonData)
         ffuzz.write(rest)
         ffuzz.flush()
     return fuzzd, f"lemma_check_{id}.cc"
@@ -183,8 +189,8 @@ def fuzzIt(path, file, argObj, id):
 
 
 
-def getVerdict(id, lemma, varMap, funcMap, argObj, lemma_vars):
-    path, file = createFuzzFile(id, lemma, varMap, funcMap, lemma_vars)
+def getVerdict(id, lemma, varMap, funcMap, argObj, lemma_vars, jsonData):
+    path, file = createFuzzFile(id, lemma, varMap, funcMap, lemma_vars, jsonData)
     verdict, cex = fuzzIt(path, file, argObj, id) # this shared variable is from argument regarding the shared object
     return verdict, cex
 

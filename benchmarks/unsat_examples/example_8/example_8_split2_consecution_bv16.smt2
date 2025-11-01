@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 ; regenerate again this file from Code2Inv
 ( declare-const a (_ BitVec 16) )
@@ -274,6 +274,7 @@
 		( inv-f a_ b_ r_ shift_ supported_ x_ y_ )
 	)
 ))
+
 
 (check-sat)
 (get-model)

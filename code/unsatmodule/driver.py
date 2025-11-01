@@ -56,7 +56,7 @@ def checkUnsat(
         pu.LOG(f"Invoking fuzzer for lemma: {lemma}")
 
         verdict, cex = fuzz.getVerdict(
-            id, fuzz_cons[id], varMap, funcMap, argsObj, lemma_vars
+            id, fuzz_cons[id], varMap, funcMap, argsObj, lemma_vars, jsonData
         )
 
         if verdict == LemmaStatus.VALID:

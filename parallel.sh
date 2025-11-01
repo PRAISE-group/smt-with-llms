@@ -69,27 +69,20 @@ kill_tree() {
 # Run program2 in its own process group with timeout
 cd /home/
 # Done
-# model="--model gpt-oss:20b --use156"
-# Remaining
-# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model llama3:latest >> "$3" 2>&1 &
-# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 >> "$3" 2>&1 &
-# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0 >> "$3" 2>&1 &
-# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model qwen.qwen3-32b-v1:0 >> "$3" 2>&1 &
-# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0 >> "$3" 2>&1 &
-# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model llama3:latest >> "$3" 2>&1 &
-# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model llama3:latest >> "$3" 2>&1 &
-# setsid timeout 10m uv run main.py -i "$1" -t 1 --usebedrock --model openai.gpt-oss-120b-1:0 >> "$3" 2>&1 &
-model="--usebedrock --model meta.llama4-maverick-17b-instruct-v1:0"
-model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
-model="--usebedrock --model qwen.qwen3-32b-v1:0"
-model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
-# model="--model llama3:latest"
-model="--usebedrock --model openai.gpt-oss-120b-1:0"
-# for i in {1..5}; do
-    # if ! check_files; then
+model="--model gpt-oss:20b --use156"
+# model="--usebedrock --model meta.llama4-maverick-17b-instruct-v1:0"
+# model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
+# model="--usebedrock --model qwen.qwen3-32b-v1:0"
+# model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
+# # model="--model llama3:latest"
+# model="--usebedrock --model openai.gpt-oss-120b-1:0"
+for i in {1..10}; do
+    if ! check_files; then
         # echo "not sat checking for unsat"
+        echo "Current time: $(date)"
+        start_time=$(date +%s)
         echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
-        setsid timeout 3m uv run main.py -i "$1" -t 1 -v $model >> "$3" 2>&1 &
+        setsid timeout 3m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
         pid2=$!
         exit_code=$?
         if ! wait "$pid2"; then
@@ -97,14 +90,24 @@ model="--usebedrock --model openai.gpt-oss-120b-1:0"
             echo "Warning: uv process exited unexpectedly (iteration $i)" 
         fi
         echo "finished iteration $i"
+        end_time=$(date +%s)
+        runtime=$((end_time - start_time))
         kill_tree "$pid2"
         kill_tree "$pid2"
-        sleep 10
+        if [ $runtime -ge 300 ]; then
+            echo "time taken more than 300 seconds"
+            break
+        fi
+        if [ $exit_code -eq 124 ]; then
+            echo "Process timed out after 10 minutes on iteration $i"
+            break
+        fi
+        sleep 30
         # wait $pid2
-    # fi 
+    fi 
     wait
-    # break
-# done
+    break
+done
 # if ! check_files; then
 #     # echo "not sat checking for unsat"
 #     echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
