@@ -32,6 +32,41 @@
 ( declare-const y_4 (_ BitVec 16))
 ( declare-const y_5 (_ BitVec 16))
 
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_1000 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
+
+(assert (in_0_1000 b))
+(assert (in_0_1000 b_))
+(assert (in_0_1000 orig_x))
+(assert (in_0_1000 orig_x_))
+(assert (in_0_1000 s))
+(assert (in_0_1000 s_))
+(assert (in_0_1000 x))
+(assert (in_0_1000 x_))
+(assert (in_0_1000 y))
+(assert (in_0_1000 y_))
+
+(assert (in_0_1000 b_0))
+(assert (in_0_1000 b_1))
+(assert (in_0_1000 b_2))
+(assert (in_0_1000 orig_x_0))
+(assert (in_0_1000 orig_x_1))
+(assert (in_0_1000 s_0))
+(assert (in_0_1000 s_1))
+(assert (in_0_1000 s_2))
+(assert (in_0_1000 s_3))
+(assert (in_0_1000 x_0))
+(assert (in_0_1000 x_1))
+(assert (in_0_1000 x_2))
+(assert (in_0_1000 x_3))
+(assert (in_0_1000 y_0))
+(assert (in_0_1000 y_1))
+(assert (in_0_1000 y_2))
+(assert (in_0_1000 y_3))
+(assert (in_0_1000 y_4))
+(assert (in_0_1000 y_5))
+                 
 ; Closed Box Function: Shift input 'x' by 's' bits to the right
 ( declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 

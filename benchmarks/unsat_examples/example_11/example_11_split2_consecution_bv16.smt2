@@ -27,6 +27,32 @@
 ; Closed Box Function: Compute the cube of input 'x' in BitVec 16
 ( declare-fun cube_cb ((_ BitVec 16)) (_ BitVec 16) )
 
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_10 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv10 16))))
+
+(assert (in_0_10 a))
+(assert (in_0_10 a_))
+(assert (in_0_10 b))
+(assert (in_0_10 b_))
+(assert (in_0_10 i))
+(assert (in_0_10 i_))
+(assert (in_0_10 n))
+(assert (in_0_10 n_))
+(assert (in_0_10 res))
+(assert (in_0_10 res_))
+
+(assert (in_0_10 a_0))
+(assert (in_0_10 b_0))
+(assert (in_0_10 i_0))
+(assert (in_0_10 i_1))
+(assert (in_0_10 i_2))
+(assert (in_0_10 n_0))
+(assert (in_0_10 res_0))
+(assert (in_0_10 res_1))
+(assert (in_0_10 res_2))
+
+
 ( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( res (_ BitVec 16)) ) Bool
 	; INVARIANT
   (and

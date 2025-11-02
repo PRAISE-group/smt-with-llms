@@ -1,7 +1,7 @@
 {
   "smt_file": "/home/benchmarks/unsat_examples/example_9/example_9_split1_initiation_bv16.smt2",
   "object_file": "/home/benchmarks/unsat_examples/example_9/example_9.o",
-  "limit": [1, 1000],
+  "limit": [0, 1000],
   "functions": {
     "icbrt_cb": {
       "smtDecl": "(declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16))",

@@ -24,6 +24,26 @@
 ; Closed Box Function: retuns the factorial of its argument
 ( declare-fun factorial_cb ((_ BitVec 16)) (_ BitVec 16))
 
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_1000 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
+
+(assert (in_0_1000 k))
+(assert (in_0_1000 k_))
+(assert (in_0_1000 n))
+(assert (in_0_1000 n_))
+(assert (in_0_1000 res))
+(assert (in_0_1000 res_))
+
+(assert (in_0_1000 k_0))
+(assert (in_0_1000 k_1))
+(assert (in_0_1000 k_2))
+(assert (in_0_1000 k_3))
+(assert (in_0_1000 n_0))
+(assert (in_0_1000 res_0))
+(assert (in_0_1000 res_1))
+(assert (in_0_1000 res_2))
+
 ( define-fun inv-f( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) ) ) Bool
   (and
     (= res (factorial_cb k))

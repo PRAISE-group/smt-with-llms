@@ -36,6 +36,37 @@
 (declare-const res_4 (_ BitVec 16))
 (declare-const res_5 (_ BitVec 16))
 
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_1000 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
+
+(assert (in_0_1000 bit))
+(assert (in_0_1000 bit_))
+(assert (in_0_1000 num))
+(assert (in_0_1000 num_))
+(assert (in_0_1000 num_orig))
+(assert (in_0_1000 num_orig_))
+(assert (in_0_1000 res))
+(assert (in_0_1000 res_))
+
+(assert (in_0_1000 bit_0))
+(assert (in_0_1000 bit_1))
+(assert (in_0_1000 bit_2))
+(assert (in_0_1000 bit_3))
+(assert (in_0_1000 bit_4))
+(assert (in_0_1000 num_0))
+(assert (in_0_1000 num_1))
+(assert (in_0_1000 num_2))
+(assert (in_0_1000 num_3))
+(assert (in_0_1000 num_orig_0))
+(assert (in_0_1000 num_orig_1))
+(assert (in_0_1000 res_0))
+(assert (in_0_1000 res_1))
+(assert (in_0_1000 res_2))
+(assert (in_0_1000 res_3))
+(assert (in_0_1000 res_4))
+(assert (in_0_1000 res_5))
+
 (define-fun inv-f ((bit (_ BitVec 16)) (num (_ BitVec 16)) (num_orig (_ BitVec 16)) (res (_ BitVec 16))) Bool
   (or
     (and

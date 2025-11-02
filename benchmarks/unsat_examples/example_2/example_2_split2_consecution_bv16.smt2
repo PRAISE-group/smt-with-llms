@@ -18,6 +18,20 @@
 ( declare-const out_4 (_ BitVec 16))
 ( declare-const out_5 (_ BitVec 16))
 
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_100 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
+
+; INPUT VARIABLES CONSTRAINT
+(assert (in_0_100 i))
+(assert (in_0_100 i_))
+(assert (in_0_100 n))
+(assert (in_0_100 n_))
+(assert (in_0_100 i_0))
+(assert (in_0_100 i_1))
+(assert (in_0_100 n_0))
+
+
 ; closed-box (uninterpreted) foo to model opaque C function
 ; Find if the input number is prime
 ; // isprime() is based on Selfridge's Conjecture.

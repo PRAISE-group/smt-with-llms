@@ -32,6 +32,23 @@
 ( declare-const y_0 (_ BitVec 16))
 ( declare-const y_1 (_ BitVec 16))
 
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_100 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
+
+(assert (in_0_100 m))
+(assert (in_0_100 m_))
+(assert (in_0_100 x))
+(assert (in_0_100 x_))
+(assert (in_0_100 y))
+(assert (in_0_100 y_))
+
+(assert (in_0_100 m_0))
+(assert (in_0_100 x_0))
+(assert (in_0_100 x_1))
+(assert (in_0_100 y_0))
+(assert (in_0_100 y_1))
+
 ; Closed Box Function: returns the modulo of two numbers a % b.
 ( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 

@@ -20,6 +20,7 @@
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
   (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
 
+; INPUT VARIABLES CONSTRAINT
 (assert (in_0_100 i))
 (assert (in_0_100 i_))
 (assert (in_0_100 n))

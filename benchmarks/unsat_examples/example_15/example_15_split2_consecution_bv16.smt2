@@ -25,9 +25,34 @@
 ( declare-const sum_3 (_ BitVec 16) )
 
 ; Closed Box Function: retuns the addition of cube of the second argument with the first argument
-
 ( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
+; Constrain all 16-bit BV constants to the inclusive range [0, 100]
+(define-fun in_0_1000 ((x (_ BitVec 16))) Bool
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
+
+(assert (in_0_1000 i))
+(assert (in_0_1000 i_))
+(assert (in_0_1000 lin_sum))
+(assert (in_0_1000 lin_sum_))
+(assert (in_0_1000 n))
+(assert (in_0_1000 n_))
+(assert (in_0_1000 sum))
+(assert (in_0_1000 sum_))
+
+(assert (in_0_1000 i_0))
+(assert (in_0_1000 i_1))
+(assert (in_0_1000 i_2))
+(assert (in_0_1000 i_3))
+(assert (in_0_1000 lin_sum_0))
+(assert (in_0_1000 lin_sum_1))
+(assert (in_0_1000 lin_sum_2))
+(assert (in_0_1000 lin_sum_3))
+(assert (in_0_1000 n_0))
+(assert (in_0_1000 sum_0))
+(assert (in_0_1000 sum_1))
+(assert (in_0_1000 sum_2))
+(assert (in_0_1000 sum_3))
 
 ( define-fun inv-f( ( i (_ BitVec 16) )( lin_sum (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
