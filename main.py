@@ -31,13 +31,19 @@ if __name__ == "__main__":
     commandLineArgs.sharedLib = data["object_file"]
 
     for key, value in data["functions"].items():
+        lemmaIdHck = "".join(x for x in str(uuid.uuid4()).split("-"))
+        lemmaIdUnq = f"L{lemmaIdHck}_gen0_lN"
+        
+        if commandLineArgs.debug:
+            console.log(f"[bold yellow]New Lemma: {lemmaIdUnq}")
+            
         ftc = Function(
             id=key,
             name=key,
-            description=value.get("desc", "No description available."),
+            description=value.get("desc", f"No description available for this closed-box function {key}."),
             userLemmas=[
                 Lemmas(
-                    id=f"{key}_gen0_l{index}",
+                    id=f"L{lemmaIdHck}_gen0_l{index}",
                     status=LemmaStatus.UNKNOWN,
                     associatedFunction=key,
                     smtFormat=lemmaInfo,
@@ -51,6 +57,9 @@ if __name__ == "__main__":
             smt_file=data["smt_file"],
         )
 
+        if commandLineArgs.debug:
+            console.log(f"[bold yellow]New Function: {ftc}")
+            
         functionsList.append(
             ftc
         )
