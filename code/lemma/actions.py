@@ -84,9 +84,15 @@ def get_lemmas_from_llm_response(
             if not isSyntaxVal:
                 continue
 
+            lemmaIdHck = "".join(x for x in str(uuid.uuid4()).split("-"))
+            lemmaIdUnq = f"L{lemmaIdHck}_gen{generation}_l{index}"
+            
+            if commandLineArgs.debug:
+                console.log(f"[bold yellow]New Lemma: {lemmaIdUnq}")
+            
             lemmas.append(
                 Lemmas(
-                    id=f"{str(uuid.uuid4())}_gen{generation}_l{index}",
+                    id=lemmaIdUnq,
                     status=LemmaStatus.UNKNOWN,
                     associatedFunction=f"{funcName}",
                     smtFormat=f"{fragments}",
