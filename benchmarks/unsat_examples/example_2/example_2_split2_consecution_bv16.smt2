@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+(set-logic UFBV)
 (set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16))
@@ -38,6 +38,8 @@
 ; // https://en.wikipedia.org/wiki/John_Selfridge
 ; Closed Box Function: returns true if input number is prime
 (declare-fun isprime_cb ((_ BitVec 16)) Bool)
+
+;(define-fun isprime_cb ((n (_ BitVec 16))) Bool  (and    (bvugt n (_ bv1 16))    (forall ((d (_ BitVec 16)))      (=> (and (bvugt d (_ bv1 16)) (bvult d n))           (not (= (bvsrem n d) (_ bv0 16)))            )    )  ))
 
 ( define-fun inv-f( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16)) ) Bool
 ; INVARIANT:

@@ -19,6 +19,8 @@ class smtAI(object):
         super(smtAI, self).__init__()
         # set_param("timeout", 600000) # timeout for z3
         self.s = Solver()
+        # set_param('smt.logic', 'QF_BV')
+        self.s.set("unsat_core", True)
         self.formulas = None
         self.vars = None
         self.mainFun = None
@@ -33,6 +35,7 @@ class smtAI(object):
         )  # input output constraints obtained from modelcheck inconsistency
         self.prevlemma = {}
         self.addedOnce = False  # if llm generated lemmas has been added at least once.
+        self.smtFile=""
 
     def readSMTfile(self, inputfilepath):
         # if args.verbose:
@@ -434,6 +437,9 @@ class smtAI(object):
         if args.verbose:
             print("pushed")
         self.cbFunctions = cbFunctions
+        self.smtFile = self.s.to_smt2()[:-12]
+        # print(self.smtFile)
+        # exit()
         # if args.verbose:
         #     print(self.cbFunctions)
         # exit()
@@ -459,7 +465,7 @@ class smtAI(object):
 
     def run(self, args, bench, lemmasDict, functionsList, executiontime):
         # input("Enter an input to continue")
-
+        smtFileLemmas = ""
         self.iteration += 1
         console.info(f"starting iteration {self.iteration}")
         self.push()
@@ -525,21 +531,23 @@ class smtAI(object):
                     continue
                 # if args.verbose:
                 #     print("lemmaString", lemmaString, self.cbFunctions)
-                label = Bool(lemmaKey)
+                label1 = str(lemmaKey)
                 # if args.verbose:
                 #     print(label, str(label))
-                self.s.assert_and_track(lemmaFormula[0], label)
+                self.s.assert_and_track(lemmaFormula[0], label1)
+                smtFileLemmas += f"(assert (! {lemmaFormula[0].sexpr()} :named {label1}))\n"
+                # self.s.add(lemmaFormula[0], label=label1)
                 self.addedOnce = True
                 bound_vars = set()
                 # self.collectBoundVars(lemmaFormula[0], bound_vars)
                 # print(self.vars, bound_vars)
                 # exit()
                 # self.labelsUsed += 1
-                self.lemmasData[label] = lemmaFormula[0]
+                self.lemmasData[label1] = lemmaFormula[0]
                 if self.iteration not in self.lemmasUsed:
-                    self.lemmasUsed[self.iteration] = [label]
+                    self.lemmasUsed[self.iteration] = [label1]
                 else:
-                    self.lemmasUsed[self.iteration].append(label)
+                    self.lemmasUsed[self.iteration].append(label1)
                 # self.add(lemmaFormula)
         # print("testing 3")
         # iterations = args.iterations
@@ -556,6 +564,14 @@ class smtAI(object):
         createDirectory("oracleTemp")
         with open("oracleTemp/assertions", "w+") as f:
             f.write(str(self.s.assertions()))
+        # write_solver_to_smt2(self.s,"constraints.smt2")
+        with open("constraints.smt2", "w") as f:
+            f.write("(set-option :produce-unsat-cores true)\n")
+            f.write(self.smtFile)
+            f.write(smtFileLemmas)
+            f.write("(check-sat)\n")
+            f.write("(get-unsat-core)\n")
+        # exit()
         result = self.check()
         end = time.time()
         executiontime["z3"] += end - start
