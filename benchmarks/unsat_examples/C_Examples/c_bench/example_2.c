@@ -22,6 +22,7 @@ int main() {
         } else {
             out = out + 2;
         }
+        i = i + 1;
     }
     // loopend
     // postcheck
