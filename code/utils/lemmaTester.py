@@ -1,7 +1,10 @@
-from code_code.solver.modelCheck import get_vars
+from code.solver.modelCheck import get_vars
 from z3 import *
 import z3utils  as zu
 import z3
+import subprocess
+from typing import List
+
 def get_vars2(expr):
     """Return a set of Z3 variables (constants) in expr."""
     vars_found = set()
@@ -133,6 +136,31 @@ def smtlib_to_c(smtlib_str):
 
     c_code = get_C_code(phi, varMap, lemma_vars, all_func)
     return c_code
+
+def run_c_file(lemma: str, input_values: List[str], path_to_obj_file: str) -> int:
+    # Generate the C code.
+    CCode = smtlib_to_c(lemma)
+
+    # Write the C code to a temporary file
+    with open("temp_lemma.c", "w") as f:
+        f.write(CCode)
+    
+    # Compile the C code
+    compile_process = subprocess.run(["g++", "temp_lemma.c", f"{path_to_obj_file}", "-o", "temp_lemma"], capture_output=True)
+    if compile_process.returncode != 0:
+        print("Compilation failed:", compile_process.stderr.decode())
+        return -1
+    
+    # Prepare input string
+    input_str = "\n".join(input_values) + "\n"
+    
+    # Run the compiled program
+    run_process = subprocess.run(["./temp_lemma"], input=input_str.encode(), capture_output=True)
+    if run_process.returncode != 0:
+        print("Execution failed:", run_process.stderr.decode())
+        return -1
+    
+    return run_process.returncode
 
 
 # === Example usage ===
