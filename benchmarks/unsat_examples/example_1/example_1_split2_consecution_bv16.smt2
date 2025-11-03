@@ -34,7 +34,6 @@
 ; (define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
 ;  	(bvadd x (bvmul y y))
 ; )
-
 ; Closed Box Function: returns addition first argument + square of second argument
 ( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 

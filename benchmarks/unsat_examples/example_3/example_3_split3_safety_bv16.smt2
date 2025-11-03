@@ -58,6 +58,17 @@
 ( declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 
+; (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;   (bvurem a b)
+; )
+
+
+; (define-fun-rec gcd_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;   (ite (= b #x0000)
+;        a
+;        (gcd_cb b (bvurem a b)))
+; )
+
 ( define-fun inv-f (( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
 	; INVARIANT:
 	( = (gcd_cb a b) (gcd_cb x y))

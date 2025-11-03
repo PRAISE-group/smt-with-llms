@@ -51,12 +51,30 @@
 (assert (in_0_100 y_0))
 (assert (in_0_100 y_1))
   
+
+(assert (in_0_100 result_0))
+(assert (in_0_100 result_1))
+(assert (in_0_100 result_2))
+(assert (in_0_100 result_))
+(assert (in_0_100 result))
+
 ; Closed Box function: return a % b
 ( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ; Closed Box function: return gcd(x, y). Greated common divisor of x and y
 ( declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
+
+; (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;   (bvurem a b)
+; )
+
+
+; (define-fun-rec gcd_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;   (ite (= b #x0000)
+;        a
+;        (gcd_cb b (bvurem a b)))
+; )
 
 ( define-fun inv-f (( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
 	; INVARIANT:
@@ -74,37 +92,51 @@
 	)
 )
 
-( define-fun trans-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_ (_ BitVec 16))( b_ (_ BitVec 16))( result_ (_ BitVec 16))( x_ (_ BitVec 16))( y_ (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( result_2 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
-	( or
-		( and
-			( = a_1 a )
-			( = b_1 b )
-			( = result_1 result )
-			( = a_1 a_ )
-			( = b_1 b_ )
-			( = result_1 result_ )
-			( = result result_ )
-			( = x x_ )
-			( = y y_ )
-		)
-		( and
-			( = a_1 a )
-			( = b_1 b )
-			( = result_1 result )
-			( not ( = ( retmod_cb a_1 b_1 ) (_ bv0 16)) )
-			( = result_2 ( retmod_cb a_1 b_1 ) )
-			( = a_2 b_1 )
-			( = b_2 result_2 )
-			( = a_2 a_ )
-			( = b_2 b_ )
-			( = result_2 result_ )
-			(= x x_1 )
-			(= x_ x_1 )
-			(= y y_1 )
-			(= y_ y_1 )
-		)
-	)
+( define-fun trans-f
+  ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))
+    ( x (_ BitVec 16))( y (_ BitVec 16))
+    ( a_ (_ BitVec 16))( b_ (_ BitVec 16))( result_ (_ BitVec 16))
+    ( x_ (_ BitVec 16))( y_ (_ BitVec 16))
+    ( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))
+    ( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))
+    ( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( result_2 (_ BitVec 16))
+    ( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))
+    ( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
+  (or
+    ; Termination / stutter step:
+    ; Stop when b == 0 OR (a % b) == 0. Next-state equals current-state.
+    (and
+      (= a_1 a)
+      (= b_1 b)
+      (= result_1 result)
+      (or (= b_1 #x0000) (= (retmod_cb a_1 b_1) (_ bv0 16)))
+      (= a_1 a_)
+      (= b_1 b_)
+      (= result_1 result_)
+      (= x x_)
+      (= y y_)
+    )
+    ; Loop body step:
+    ; result = retmod(a, b); a = b; b = result;
+    (and
+      (= a_1 a)
+      (= b_1 b)
+      (= result_1 result)
+      (not (or (= b_1 #x0000) (= (retmod_cb a_1 b_1) (_ bv0 16))))
+      (= result_2 (retmod_cb a_1 b_1))
+      (= a_2 b_1)
+      (= b_2 result_2)
+      (= a_2 a_)
+      (= b_2 b_)
+      (= result_2 result_)
+      (= x x_1)
+      (= x_ x_1)
+      (= y y_1)
+      (= y_ y_1)
+    )
+  )
 )
+
 
 ( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( result_2 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( or
