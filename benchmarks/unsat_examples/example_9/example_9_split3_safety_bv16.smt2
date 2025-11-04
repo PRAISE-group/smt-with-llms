@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const b (_ BitVec 16))
@@ -38,6 +38,17 @@
 ; Closed Box Function: Integer Cube Root of input 'x'
 ( declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16) )
 
+;(define-fun-rec icbrt_cb ((N (_ BitVec 16))) (_ BitVec 16)
+;  (let ((approx (ite (bvule N #x0001) N (bvlshr N #x0002)))) ; N >> 2 ≈ cube root start
+;    (ite (or (= N #x0000) (= N #x0001))
+;         N
+;         (ite (bvule (bvmul (bvmul approx approx) approx) N)
+;              approx
+;              (bvsub approx #x0001)))))
+;
+;(define-fun shift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (bvlshr a b)
+;)
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_1000 ((x (_ BitVec 16))) Bool
@@ -181,5 +192,5 @@
 ))
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

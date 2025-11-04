@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const k (_ BitVec 16) )
@@ -23,6 +23,15 @@
 
 ; Closed Box Function: retuns the factorial of its argument
 ( declare-fun factorial_cb ((_ BitVec 16)) (_ BitVec 16))
+
+;(define-fun multiply_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (bvmul a b)
+;)
+;(define-fun-rec factorial_cb ((N (_ BitVec 16))) (_ BitVec 16)
+;  (ite (bvule N #x0001)
+;       #x0001
+;       (bvmul N (factorial_cb (bvsub N #x0001))))
+;)
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_1000 ((x (_ BitVec 16))) Bool
@@ -115,5 +124,5 @@
 ))
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

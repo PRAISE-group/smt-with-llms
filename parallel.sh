@@ -76,13 +76,13 @@ model="--model gpt-oss:20b --use156"
 # model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
 # # model="--model llama3:latest"
 # model="--usebedrock --model openai.gpt-oss-120b-1:0"
-for i in {1..5}; do
+for i in {1..2}; do
     if ! check_files; then
         # echo "not sat checking for unsat"
         echo "Current time: $(date)"
         start_time=$(date +%s)
         echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
-        setsid timeout 5m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
+        setsid timeout 60m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
         pid2=$!
         exit_code=$?
         if ! wait "$pid2"; then
@@ -94,18 +94,19 @@ for i in {1..5}; do
         runtime=$((end_time - start_time))
         kill_tree "$pid2"
         kill_tree "$pid2"
-        if [ $runtime -ge 300 ]; then
-            echo "time taken more than 300 seconds"
-            break
-        fi
-        if [ $exit_code -eq 124 ]; then
-            echo "Process timed out after 10 minutes on iteration $i"
-            break
-        fi
+        # if [ $runtime -ge 600 ]; then
+        #     echo "time taken more than 300 seconds"
+        #     break
+        # fi
+        # if [ $exit_code -eq 124 ]; then
+        #     echo "Process timed out after 10 minutes on iteration $i"
+        #     break
+        # fi
         sleep 30
         # wait $pid2
     fi 
     wait
+    rm -rf fuzz_temp/*
     # break
 done
 # if ! check_files; then

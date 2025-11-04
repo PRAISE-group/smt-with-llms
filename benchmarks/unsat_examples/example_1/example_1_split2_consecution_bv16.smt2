@@ -135,5 +135,5 @@
 (assert (bvult sum_2 (_ bv10000 16)))
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 
@@ -8,6 +8,13 @@
 ; lshift_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
 (declare-fun lshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
+;(define-fun-rec pre_cb ((a (_ BitVec 16)) (b (_ BitVec 16)) (c (_ BitVec 16))) (_ BitVec 16)
+;  (ite (bvugt a b)
+;       (pre_cb (bvshl a c) b c)
+;       a))
+;(define-fun lshift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (bvshl a b)
+;)
 
 (declare-const bit (_ BitVec 16))
 (declare-const bit_ (_ BitVec 16))
@@ -197,5 +204,5 @@
 
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

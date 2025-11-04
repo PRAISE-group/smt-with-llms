@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const c (_ BitVec 16))
@@ -195,5 +195,5 @@
 ))
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

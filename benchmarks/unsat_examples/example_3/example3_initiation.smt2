@@ -69,5 +69,5 @@
   (not (inv-f a b result x y))
 ))
 (check-sat)  ; Expect: unsat
-(get-model)
+;(get-model)
 (pop)

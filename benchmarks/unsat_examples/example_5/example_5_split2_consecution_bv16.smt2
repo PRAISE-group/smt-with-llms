@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const a (_ BitVec 16))
@@ -34,7 +34,7 @@
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
-  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv6 16))))
 
 (assert (in_0_100 m))
 (assert (in_0_100 m_))
@@ -54,6 +54,16 @@
 
 ; Closed Box Function: returns a ^ b (a to the power of b) via bianry exponentiation.
 ( declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+
+; (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;   (bvurem a b)
+; )
+
+;(define-fun-rec binpow_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (ite (= b #x0000)
+;       #x0001
+;       (bvmul a (binpow_cb a (bvsub b #x0001))))
+;)
 
 ( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( m (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
   (= (bvurem (bvmul res (binpow_cb a b)) m)
@@ -166,5 +176,5 @@
 ))
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

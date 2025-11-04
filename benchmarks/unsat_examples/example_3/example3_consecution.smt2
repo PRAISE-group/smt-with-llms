@@ -101,5 +101,5 @@
   (not (inv-f a_ b_ result_ x_ y_))
 ))
 (check-sat)     ; should be UNSAT for a correct invariant
-(get-model)
+;(get-model)
 (pop)

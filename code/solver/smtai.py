@@ -6,7 +6,63 @@ from code.models import exampleSet, ExampleSet
 from code.models import AlgoVerdict
 from py_console import console
 import time
+def quantifier_info(q: QuantifierRef):
+    """
+    Given a Z3 QuantifierRef object, returns:
+      - body_str: the body of the quantifier as a string (with original variable names)
+      - function_calls: list of function calls as strings (e.g., 'f(x)', 'g(y)')
+      - variables: list of variable names bound by the quantifier
+    """
+    if not isinstance(q, QuantifierRef):
+        raise TypeError("Expected a QuantifierRef object")
 
+    # --- Step 1: Reconstruct body with original variable names ---
+    num_vars = q.num_vars()
+    var_names = [q.var_name(i) for i in reversed(range(num_vars))]
+    var_sorts = [q.var_sort(i) for i in reversed(range(num_vars))]
+
+    # Create symbolic vars with same names & sorts
+    vars_named = [Const(name, sort) for name, sort in zip(var_names, var_sorts)]
+
+    # Substitute Bound(i) -> var
+    body_named = substitute_vars(q.body(), *vars_named)
+
+    # --- Step 2: Collect function applications ---
+    def collect_func_apps(expr):
+        apps = []
+        if is_app(expr):
+            decl = expr.decl()
+            # Skip pure variables and constants
+            if decl.arity() > 0 and decl.kind() == Z3_OP_UNINTERPRETED:
+                # Represent function call as "f(x, y)"
+                args_str = " ".join(a.sexpr() for a in expr.children())
+                apps.append(f"({decl.name()} {args_str})")
+            for c in expr.children():
+                apps.extend(collect_func_apps(c))
+        return apps
+
+    function_calls = sorted(set(collect_func_apps(body_named)))
+
+    def smt2_sort_str(sort):
+        if sort.kind() == Z3_INT_SORT:
+            return "Int"
+        elif sort.kind() == Z3_BOOL_SORT:
+            return "Bool"
+        elif sort.kind() == Z3_REAL_SORT:
+            return "Real"
+        elif sort.kind() == Z3_BV_SORT:
+            return f"(_ BitVec {sort.size()})"
+        else:
+            return str(sort)
+
+    variables_smt2 = [f"({name} {smt2_sort_str(sort)})" for name, sort in zip(var_names, var_sorts)]
+
+    # --- Step 3: Return results ---
+    return {
+        "body_str": body_named.sexpr(),
+        "function_calls": function_calls,
+        "variables": variables_smt2,
+    }
 
 class smtAI(object):
     """docstring for smtAI.
@@ -17,7 +73,7 @@ class smtAI(object):
 
     def __init__(self):
         super(smtAI, self).__init__()
-        # set_param("timeout", 600000) # timeout for z3
+        # set_param("timeout", 60000) # timeout for z3
         self.s = Solver()
         # set_param('smt.logic', 'QF_BV')
         self.s.set("unsat_core", True)
@@ -171,6 +227,8 @@ class smtAI(object):
         elif expr.decl().name() == "bvmul":
             return " * ".join(f"({self.z3_to_c(c)})" for c in expr.children())
             # return f'({self.z3_to_c(expr.arg(0))}) * ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().name() == "bvudiv":
+            return f"({self.z3_to_c(expr.arg(0))}) / ({self.z3_to_c(expr.arg(1))})"
         elif expr.decl().name() == "bvadd":
             return " + ".join(f"({self.z3_to_c(c)})" for c in expr.children())
         elif expr.decl().name() == "bvurem":
@@ -240,6 +298,8 @@ class smtAI(object):
                 f"({self.getFunctions(c, funs)})" for c in expr.children()
             )
             # return f'({self.getFunctions(expr.arg(0), funs)}) * ({self.getFunctions(expr.arg(1), funs)})'
+        elif expr.decl().name() == "bvudiv":
+            return f"({self.getFunctions(expr.arg(0), funs)}) / ({self.getFunctions(expr.arg(1), funs)})"
         elif expr.decl().name() == "bvadd":
             return " + ".join(
                 f"({self.getFunctions(c, funs)})" for c in expr.children()
@@ -511,7 +571,36 @@ class smtAI(object):
                 #     lemmasDict.removeLemma(lemmaKey)
                 #     return
                 try:
+                    # print(lemmaString, 1)
                     lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
+                    info = quantifier_info(lemmaFormula[0])
+                    # print(info)
+                    variables = ""
+                    for val in info["variables"]:
+                        variables+= val +" "
+                    variables = variables[:-1]
+                    pattern = ""
+                    for val in info["function_calls"]:
+                        pattern += f":pattern ({val}) "
+                    # "(assert (forall ((z (_ BitVec 16))) (=> (distinct z (_ bv0 16)) (bvult (builtin_ctz_cb z) (_ bv16 16)))))"
+                    query=f"(assert (forall ({variables}) (! {info["body_str"]} {pattern} ) ))"
+                    # print(query)
+                    # print(6)
+                    lemmaFormula = self.readSMTstring(query, self.cbFunctions)
+                    # new_forall = ForAll(bound_names, body, patterns=[cbFunctions[funt] (bound_names)])
+                    # print(new_forall)
+                    # lemmaFormula = [newQuery]
+                    # for ind in range(lemmaFormula[0].num_vars()):
+                    #     funtvars += f"{lemmaFormula[0].var_name(ind)} "
+                    # lemmaString = lemmaString[:-2] + f":pattern (({funt} {funtvars}))))"
+                    # print(lemmaString)
+                    # lemmaFormula = self.readSMTstring(lemmaString, self.cbFunctions)
+
+                    # print(lemmaFormula.sexpr())
+                    # print(2)
+                    # lemmaFormula = [rebuild_with_patterns(lemmaFormula[0], lambda v: f(v))]
+                    # lemmaFormula = [rebuild_with_cb_patterns(lemmaFormula[0], self.cbFunctions)]
+                    # print(3)
                     # if "Extract" in lemmaString:
                     #     lemmasDict.removeLemma(lemmaKey)
                         # lemmasDict[str(id)].setInvalid("lemma should not use Extract or concat")
@@ -525,17 +614,17 @@ class smtAI(object):
                     # lemmasDict.setIncrementalCall(True)
                     # exit()
                     continue
-                if len(lemmaFormula) == 0:
+                if len(lemmaString) == 0:
                     if args.verbose:
-                        print("lemmaFormula is empty")
+                        print("lemmaString is empty")
                     continue
                 # if args.verbose:
                 #     print("lemmaString", lemmaString, self.cbFunctions)
-                label1 = str(lemmaKey)
+                label1 = Bool(lemmaKey)
                 # if args.verbose:
                 #     print(label, str(label))
                 self.s.assert_and_track(lemmaFormula[0], label1)
-                smtFileLemmas += f"(assert (! {lemmaFormula[0].sexpr()} :named {label1}))\n"
+                smtFileLemmas += f"(assert {lemmaFormula[0].sexpr()})\n"
                 # self.s.add(lemmaFormula[0], label=label1)
                 self.addedOnce = True
                 bound_vars = set()
@@ -549,6 +638,8 @@ class smtAI(object):
                 else:
                     self.lemmasUsed[self.iteration].append(label1)
                 # self.add(lemmaFormula)
+                # print(lemmaFormula)
+        # exit()
         # print("testing 3")
         # iterations = args.iterations
         # while iterations > 0:
@@ -566,13 +657,62 @@ class smtAI(object):
             f.write(str(self.s.assertions()))
         # write_solver_to_smt2(self.s,"constraints.smt2")
         with open("constraints.smt2", "w") as f:
-            f.write("(set-option :produce-unsat-cores true)\n")
+            # f.write(self.s.to_smt2())
+            # f.write("(set-option :produce-unsat-cores true)\n")
             f.write(self.smtFile)
             f.write(smtFileLemmas)
             f.write("(check-sat)\n")
-            f.write("(get-unsat-core)\n")
+            # f.write("(get-unsat-core)\n")
+        z3_cmd = ["z3", "constraints.smt2"]
+        resultz3 = subprocess.run(z3_cmd, capture_output=True, text=True)
+        print("z3 result",resultz3.stdout.strip())
+        if resultz3.stdout.strip() == "unsat":
+            start = time.time()
+            console.info("Getting unsatcore for outside z3",resultz3.stdout)
+            unsatCore = self.lemmasUsed[self.iteration]
+            self.unsatCores[self.iteration] = unsatCore
+            if args.verbose:
+                print("UnsatCore:", unsatCore)  # TODO: Pankaj
+            varmap = set()
+            for key in self.vars:
+                varmap.add(str(key))
+            if args.verbose:
+                print(varmap)
+            for core in unsatCore:
+                if args.verbose:
+                    print(core, self.lemmasData[core])
+                self.collectBoundVars(self.lemmasData[core], varmap)
+            # print(self.vars)
+            # print(self.lemmasUsed)
+            # print(varmap)
+            # exit()
+            end = time.time()
+            executiontime["z3"] += end - start
+            if len(unsatCore) == 0:
+                return AlgoVerdict.UNSAT
+            start = time.time()
+            console.info("calling checkUnsat")
+            res = checkUnsat(
+                unsatCore,
+                self.lemmasData,
+                lemmasDict,
+                args,
+                varmap,
+                self.cbFunctions,
+                bench,  #: Iterable[Dict]
+            )
+            if args.verbose:
+                print("result: ", res)
+                for core in unsatCore:
+                    print("lemma status after pankaj call", lemmasDict[str(core)])
+            self.pop()
+            end = time.time()
+            executiontime["fuzzer"] += end - start
+            print("Execution time", executiontime)
+            return res
         # exit()
         result = self.check()
+        print(result)
         end = time.time()
         executiontime["z3"] += end - start
         if result == sat:

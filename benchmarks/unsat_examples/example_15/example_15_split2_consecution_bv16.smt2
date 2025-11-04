@@ -25,7 +25,9 @@
 ( declare-const sum_3 (_ BitVec 16) )
 
 ; Closed Box Function: retuns the addition of cube of the second argument with the first argument
-( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+;( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+
+(define-fun foo_cb ((sum (_ BitVec 16)) (i (_ BitVec 16))) (_ BitVec 16)  (bvadd sum (bvmul i (bvmul i i))))
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_1000 ((x (_ BitVec 16))) Bool
@@ -145,5 +147,5 @@
 
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

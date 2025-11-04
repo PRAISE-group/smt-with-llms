@@ -208,5 +208,5 @@
 ))
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)
