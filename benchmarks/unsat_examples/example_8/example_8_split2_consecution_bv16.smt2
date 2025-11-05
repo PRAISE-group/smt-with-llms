@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 ; regenerate again this file from Code2Inv
 ( declare-const a (_ BitVec 16) )
@@ -44,43 +44,29 @@
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
   (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
 
-(assert (= supported (_ bv5 16)))
-(assert (= supported_ (_ bv5 16)))
-(assert (= supported_0 (_ bv5 16)))
+;(assert (= supported (_ bv5 16)))
+;(assert (= supported_ (_ bv5 16)))
+;(assert (= supported_0 (_ bv5 16)))
 
 (assert (in_0_100 a))
-(assert (in_0_100 a_))
 (assert (in_0_100 b))
-(assert (in_0_100 b_))
 (assert (in_0_100 shift))
-(assert (in_0_100 shift_))
 (assert (in_0_100 supported))
-(assert (in_0_100 supported_))
 (assert (in_0_100 x))
-(assert (in_0_100 x_))
 (assert (in_0_100 y))
-(assert (in_0_100 y_))
 
-(assert (in_0_100 a_0))
-(assert (in_0_100 b_0))
-(assert (in_0_100 b_1))
-(assert (in_0_100 b_2))
-(assert (in_0_100 b_3))
-(assert (in_0_100 b_4))
-(assert (in_0_100 shift_0))
-(assert (in_0_100 shift_1))
-(assert (in_0_100 shift_2))
-(assert (in_0_100 shift_3))
-(assert (in_0_100 shift_4))
-(assert (in_0_100 shift_5))
-(assert (in_0_100 supported_0))
-(assert (in_0_100 x_0))
-(assert (in_0_100 x_1))
-(assert (in_0_100 y_0))
-(assert (in_0_100 y_1))
+(assert (in_0_100 r))
+
 
 ; Closed Box Function: From GCC Builtin Function: __builtin_ctz
 (declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))
+
+;(assert (forall ((x (_ BitVec 16))) (=> (= x (_ bv0 16)) (= (builtin_ctz_cb x) (_ bv16 16)))))
+;(assert (forall ((x (_ BitVec 16))) (=> (not (= x (_ bv0 16))) (bvule (builtin_ctz_cb x) (_ bv15 16)))))
+;(assert (forall ((x (_ BitVec 16))) (=> (= (bvand x (_ bv1 16)) (_ bv1 16)) (= (builtin_ctz_cb x) (_ bv0 16)))))
+;(assert (forall ((x (_ BitVec 16))) (=> (= (bvand x (_ bv1 16)) (_ bv0 16)) (bvugt (builtin_ctz_cb x) (_ bv0 16)))))
+;(assert (forall ((x (_ BitVec 16))) (= (builtin_ctz_cb (bvshl x (_ bv1 16))) (bvadd (_ bv1 16) (builtin_ctz_cb x)))))
+
 
 ; __builtin_ctz: trailing zero count, undefined for n = 0.
 ; We model the undefined case with an unconstrained constant.
@@ -107,24 +93,13 @@
 
 ( define-fun inv-f( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) ) ) Bool
 	(and
-		(bvuge y (_ bv0 16))
-		(bvuge b (_ bv0 16))
+		(bvsge y (_ bv0 16))
+		(bvsge b (_ bv0 16))
 		(= r (bvmul (bvsub y b) a)))
 )
 
-( define-fun pre-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( a_0 (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( b_3 (_ BitVec 16) )( b_4 (_ BitVec 16) )( r_0 (_ BitVec 16) )( r_1 (_ BitVec 16) )( r_2 (_ BitVec 16) )( r_3 (_ BitVec 16) )( r_4 (_ BitVec 16) )( r_5 (_ BitVec 16) )( shift_0 (_ BitVec 16) )( shift_1 (_ BitVec 16) )( shift_2 (_ BitVec 16) )( shift_3 (_ BitVec 16) )( shift_4 (_ BitVec 16) )( shift_5 (_ BitVec 16) )( supported_0 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) ) ) Bool
-	( and
-		( = a a_0 )
-		( = b b_0 )
-		( = r r_1 )
-		( = shift shift_1 )
-		( = x x_1 )
-		( = y y_1 )
-		( = x_1 a_0 )
-		( = y_1 b_0 )
-		( = r_1 (_ bv0 16) )
-		( = shift_1 (_ bv0 16) )
-	)
+(define-fun loop ((bit (_ BitVec 16))) Bool
+  (not (= (_ bv0 16) bit ))
 )
 
 ( define-fun trans-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( a_ (_ BitVec 16) )( b_ (_ BitVec 16) )( r_ (_ BitVec 16) )( shift_ (_ BitVec 16) )( supported_ (_ BitVec 16) )( x_ (_ BitVec 16) )( y_ (_ BitVec 16) )( a_0 (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( b_3 (_ BitVec 16) )( b_4 (_ BitVec 16) )( r_0 (_ BitVec 16) )( r_1 (_ BitVec 16) )( r_2 (_ BitVec 16) )( r_3 (_ BitVec 16) )( r_4 (_ BitVec 16) )( r_5 (_ BitVec 16) )( shift_0 (_ BitVec 16) )( shift_1 (_ BitVec 16) )( shift_2 (_ BitVec 16) )( shift_3 (_ BitVec 16) )( shift_4 (_ BitVec 16) )( shift_5 (_ BitVec 16) )( supported_0 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) ) ) Bool
@@ -142,6 +117,7 @@
 			( = supported supported_ )
 			( = x x_ )
 			( = y y_ )
+			( = b_1 (_ bv0 16) )
 		)
 		( and
 			( = b_1 b )
@@ -246,33 +222,12 @@
 	)
 )
 
-( define-fun post-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( r (_ BitVec 16) )( shift (_ BitVec 16) )( supported (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( a_0 (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( b_3 (_ BitVec 16) )( b_4 (_ BitVec 16) )( r_0 (_ BitVec 16) )( r_1 (_ BitVec 16) )( r_2 (_ BitVec 16) )( r_3 (_ BitVec 16) )( r_4 (_ BitVec 16) )( r_5 (_ BitVec 16) )( shift_0 (_ BitVec 16) )( shift_1 (_ BitVec 16) )( shift_2 (_ BitVec 16) )( shift_3 (_ BitVec 16) )( shift_4 (_ BitVec 16) )( shift_5 (_ BitVec 16) )( supported_0 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) ) ) Bool
-	( or
-		( not
-			( and
-				( = a a_0)
-				( = b b_1)
-				( = r r_2)
-				( = shift shift_2)
-				( = supported supported_0 )
-				( = x x_1)
-				( = y y_1)
-			)
-		)
-		( not
-			( and
-				( not ( not ( = b_1 (_ bv0 16) ) ) )
-				( not ( = r_2 ( bvmul x_1 y_1 ) ) )
-			)
-		)
-	)
-)
-
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( =>
 		( and
 			( inv-f a b r shift supported x y )
+			(loop b)
 			( trans-f a b r shift supported x y a_ b_ r_ shift_ supported_ x_ y_ a_0 b_0 b_1 b_2 b_3 b_4 r_0 r_1 r_2 r_3 r_4 r_5 shift_0 shift_1 shift_2 shift_3 shift_4 shift_5 supported_0 x_0 x_1 y_0 y_1 )
 		)
 		( inv-f a_ b_ r_ shift_ supported_ x_ y_ )
