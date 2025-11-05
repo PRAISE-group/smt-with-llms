@@ -51,6 +51,10 @@
          (_ bv6 16))))
 )
 
+(define-fun loop ((x (_ BitVec 16)) (y (_ BitVec 16))) Bool
+ 	( bvult x y )
+)
+
 ( define-fun pre-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( sum (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( i_2 (_ BitVec 16))( n_0 (_ BitVec 16))( sum_0 (_ BitVec 16))( sum_1 (_ BitVec 16))( sum_2 (_ BitVec 16)) ) Bool
 	( and
 		( = i i_0 )
@@ -73,6 +77,7 @@
 			( = n n_0 )
 			( = n_ n_0 )
 			( = sum sum_ )
+			(not ( bvult i_1 n_0 ))
 		)
 		( and
 			( = i_1 i )
@@ -112,7 +117,8 @@
 ( assert ( not
 	( =>
 		( and
-			( inv-f i n sum )
+			( inv-f i n sum ) 
+			(loop i n)
 			( trans-f i n sum i_ n_ sum_ i_0 i_1 i_2 n_0 sum_0 sum_1 sum_2 )
 		)
 		( inv-f i_ n_ sum_ )

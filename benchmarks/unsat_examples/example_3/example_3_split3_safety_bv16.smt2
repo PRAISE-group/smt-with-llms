@@ -58,20 +58,24 @@
 ( declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 
-; (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-;   (bvurem a b)
-; )
+ ;(define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+ ;  (bvurem a b)
+ ;)
 
 
-; (define-fun-rec gcd_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-;   (ite (= b #x0000)
-;        a
-;        (gcd_cb b (bvurem a b)))
-; )
+;(define-fun-rec gcd_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (ite (= b #x0000)
+;       a
+;       (gcd_cb b (bvurem a b)))
+;)
 
 ( define-fun inv-f (( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
 	; INVARIANT:
 	( = (gcd_cb a b) (gcd_cb x y))
+)
+
+(define-fun loop ((a (_ BitVec 16)) (b (_ BitVec 16))) Bool
+	( not ( = ( retmod_cb a b ) (_ bv0 16)) )
 )
 
 ( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( result_2 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
@@ -117,31 +121,16 @@
 	)
 )
 
-( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( result_2 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
-	( or
-		( not
-			( and
-				( = a a_1)
-				( = b b_1)
-				( = result result_1)
-				( = x x_1)
-				( = y y_1)
-			)
-		)
-		( not
-			( and
-				( not ( not ( = ( retmod_cb a_1 b_1 ) (_ bv0 16)) ) )
-				( not ( = b_1 ( gcd_cb x_1 y_1 ) ) )
-			)
-		)
-	)
+( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))) Bool
+	(= b (gcd_cb x y))
 )
 
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( => 
 		( inv-f a b result x y  )
-		( post-f a b result x y a_0 a_1 a_2 b_0 b_1 b_2 result_0 result_1 result_2 x_0 x_1 y_0 y_1 )
+		( post-f a b result x y)
+		(not (loop a b))
 	)
 ))
 

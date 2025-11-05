@@ -103,12 +103,16 @@
 ; INVARIANT:
   (and
     (bvugt n (_ bv2 16))
-    (bvule i i)
+    (bvule i n)
     (or
       (and (isprime_cb n)
            (= out (bvmul (_ bv1 16) i)))
       (and (not (isprime_cb n))
            (= out (bvmul (_ bv2 16) i)))))
+)
+
+(define-fun loop ((x (_ BitVec 16)) (y (_ BitVec 16))) Bool
+ 	( bvult x y )
 )
 
 ( define-fun pre-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
@@ -132,6 +136,7 @@
 			( = n n_0 )
 			( = n_ n_0 )
 			( = out out_ )
+			(not ( bvult i_1 n_0 ))
 		)
 		( and
 			( = out_2 out )
@@ -161,6 +166,7 @@
 		)
 	)
 )
+
 
 ( define-fun post-f ( ( i (_ BitVec 16))( n (_ BitVec 16))( out (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( out_0 (_ BitVec 16))( out_1 (_ BitVec 16))( out_2 (_ BitVec 16))( out_3 (_ BitVec 16))( out_4 (_ BitVec 16))( out_5 (_ BitVec 16)) ) Bool
 	( and

@@ -79,6 +79,10 @@
 	( = (gcd_cb a b) (gcd_cb x y))
 )
 
+(define-fun loop ((a (_ BitVec 16)) (b (_ BitVec 16))) Bool
+	( not ( = ( retmod_cb a b ) (_ bv0 16)) )
+)
+
 ( define-fun pre-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( result (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( result_0 (_ BitVec 16))( result_1 (_ BitVec 16))( result_2 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
 	( and
 		( = a a_0 )
@@ -113,6 +117,7 @@
       (= result_1 result_)
       (= x x_)
       (= y y_)
+      (not ( not ( = ( retmod_cb a_1 b_1 ) (_ bv0 16)) ))
     )
     ; Loop body step:
     ; result = retmod(a, b); a = b; b = result;
