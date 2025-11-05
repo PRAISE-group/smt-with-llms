@@ -1,6 +1,6 @@
 ; lshift_cb: left shift a by b (BV16)
 (define-fun lshift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-  (bvshl a b)
+  (bvlshr a b)
 )
 
 ; pre_cb: while (a > b) a <<= c; return a  (BV16)

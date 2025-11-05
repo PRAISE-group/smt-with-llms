@@ -4,15 +4,15 @@
 ; pre_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
 (declare-fun pre_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
-; lshift_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
-(declare-fun lshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+; rshift_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
+(declare-fun rshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
 ;(define-fun-rec pre_cb ((a (_ BitVec 16)) (b (_ BitVec 16)) (c (_ BitVec 16))) (_ BitVec 16)
 ;  (ite (bvugt a b)
 ;       (pre_cb (bvshl a c) b c)
 ;       a))
-;(define-fun lshift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-;  (bvshl a b)
+;(define-fun rshift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (bvlshr a b)
 ;)
 
 (declare-const bit (_ BitVec 16))
@@ -71,6 +71,12 @@
    (res_0 (_ BitVec 16)) (res_1 (_ BitVec 16)) (res_2 (_ BitVec 16)) (res_3 (_ BitVec 16)) (res_4 (_ BitVec 16)) (res_5 (_ BitVec 16)))
   Bool
   (and
+    ; This is the pre-body.
+    ; res = 0;
+    ; bit = 1 << 30;
+    ; while (bit > num) {
+    ;     bit >>= 2;
+    ; }
     (= bit bit_2)
     (= num num_0)
     (= num_orig num_orig_1)
