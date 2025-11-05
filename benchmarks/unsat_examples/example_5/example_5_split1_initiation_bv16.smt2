@@ -50,20 +50,16 @@
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
-  (and (bvuge x (_ bv0 16)) (bvule x (_ bv6 16))))
+  (and (bvuge x (_ bv1 16)) (bvule x (_ bv6 16))))
 
 (assert (in_0_100 m))
-(assert (in_0_100 m_))
+(assert (in_0_100 b))
 (assert (in_0_100 x))
-(assert (in_0_100 x_))
+(assert (in_0_100 a))
 (assert (in_0_100 y))
-(assert (in_0_100 y_))
+(assert (in_0_100 res))
 
-(assert (in_0_100 m_0))
-(assert (in_0_100 x_0))
-(assert (in_0_100 x_1))
-(assert (in_0_100 y_0))
-(assert (in_0_100 y_1))
+(assert (bvugt b (_ bv0 16)))
 
 ( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( m (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
   (= (bvurem (bvmul res (binpow_cb a b)) m)
@@ -86,83 +82,7 @@
 	)
 )
 
-( define-fun trans-f ( ( a (_ BitVec 16) )( b (_ BitVec 16) )( m (_ BitVec 16) )( res (_ BitVec 16) )( x (_ BitVec 16) )( y (_ BitVec 16) )( a_ (_ BitVec 16) )( b_ (_ BitVec 16) )( m_ (_ BitVec 16) )( res_ (_ BitVec 16) )( x_ (_ BitVec 16) )( y_ (_ BitVec 16) )( a_0 (_ BitVec 16) )( a_1 (_ BitVec 16) )( a_2 (_ BitVec 16) )( a_3 (_ BitVec 16) )( b_0 (_ BitVec 16) )( b_1 (_ BitVec 16) )( b_2 (_ BitVec 16) )( m_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) )( res_3 (_ BitVec 16) )( res_4 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_1 (_ BitVec 16) ) ) Bool
-	( or
-		( and
-			( = a_2 a )
-			( = b_1 b )
-			( = res_2 res )
-			( = a_2 a_ )
-			( = b_1 b_ )
-			( = res_2 res_ )
-			( = a a_ )
-			( = m m_ )
-			( = res res_ )
-			( = x x_ )
-			( = y y_ )
-		)
-		( and
-			( = a_2 a )
-			( = b_1 b )
-			( = res_2 res )
-			( bvugt b_1 (_ bv0 16) )
-			( = ( bvand b_1 (_ bv1 16)) (_ bv1 16))
-			( = res_3 ( retmod_cb ( bvmul ( bvmul res_2 (_ bv1 16) ) a_2 ) m_0 ) )
-			( = res_4 res_3 )
-			( = a_3 ( retmod_cb ( bvmul ( bvmul a_2 (_ bv1 16) ) a_2 ) m_0 ) )
-			(= b_2 ( bvudiv b_1 (_ bv2 16) ) )
-			( = a_3 a_ )
-			( = b_2 b_ )
-			( = res_4 res_ )
-			(= m m_0 )
-			(= m_ m_0 )
-			(= x x_1 )
-			(= x_ x_1 )
-			(= y y_1 )
-			(= y_ y_1 )
-		)
-		( and
-			( = a_2 a )
-			( = b_1 b )
-			( = res_2 res )
-			( bvugt b_1 (_ bv0 16) )
-			( not ( = ( bvand b_1 (_ bv1 16)) (_ bv1 16)) )
-			( = res_4 res_2 )
-			( = a_3 ( retmod_cb ( bvmul ( bvmul a_2 (_ bv1 16) ) a_2 ) m_0 ) )
-			(= b_2 ( bvudiv b_1 (_ bv2 16) ) )
-			( = a_3 a_ )
-			( = b_2 b_ )
-			( = res_4 res_ )
-			(= m m_0 )
-			(= m_ m_0 )
-			(= x x_1 )
-			(= x_ x_1 )
-			(= y y_1 )
-			(= y_ y_1 )
-		)
-	)
-)
 
-( define-fun post-f ( ( a (_ BitVec 16))( b (_ BitVec 16))( m (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( a_0 (_ BitVec 16))( a_1 (_ BitVec 16))( a_2 (_ BitVec 16))( a_3 (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( m_0 (_ BitVec 16))( res_0 (_ BitVec 16))( res_1 (_ BitVec 16))( res_2 (_ BitVec 16))( res_3 (_ BitVec 16))( res_4 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16)) ) Bool
-	( or
-		( not
-			( and
-				( = a a_2)
-				( = b b_0)
-				( = m m_0)
-				( = res res_2)
-				( = x x_1)
-				( = y y_1)
-			)
-		)
-		( not
-			( and
-				( not ( bvugt b_0 (_ bv0 16)) )
-				( not ( = res_2 ( retmod_cb ( binpow_cb x_1 y_1 ) m_0 ) ) )
-			)
-		)
-	)
-)
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( =>

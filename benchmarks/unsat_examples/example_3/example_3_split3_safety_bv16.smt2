@@ -128,9 +128,11 @@
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( => 
-		( inv-f a b result x y  )
+		(and 
+			( inv-f a b result x y  )
+			(not (loop a b))
+		)
 		( post-f a b result x y)
-		(not (loop a b))
 	)
 ))
 

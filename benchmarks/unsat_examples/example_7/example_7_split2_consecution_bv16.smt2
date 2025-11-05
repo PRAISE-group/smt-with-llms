@@ -82,29 +82,11 @@
     (not (= bit (_ bv0 16))))
 )
 
-(define-fun pre-f
-  ((bit (_ BitVec 16)) (num (_ BitVec 16)) (num_orig (_ BitVec 16)) (res (_ BitVec 16))
-   (bit_0 (_ BitVec 16)) (bit_1 (_ BitVec 16)) (bit_2 (_ BitVec 16)) (bit_3 (_ BitVec 16)) (bit_4 (_ BitVec 16))
-   (num_0 (_ BitVec 16)) (num_1 (_ BitVec 16)) (num_2 (_ BitVec 16)) (num_3 (_ BitVec 16))
-   (num_orig_0 (_ BitVec 16)) (num_orig_1 (_ BitVec 16))
-   (res_0 (_ BitVec 16)) (res_1 (_ BitVec 16)) (res_2 (_ BitVec 16)) (res_3 (_ BitVec 16)) (res_4 (_ BitVec 16)) (res_5 (_ BitVec 16)))
-  Bool
-  (and
-    (= bit bit_2)
-    (= num num_0)
-    (= num_orig num_orig_1)
-    (= res res_1)
-    ; >= num_0 0  --> unsigned greater-or-equal
-    (bvuge num_0 (_ bv0 16))
-    ; = res_1 0
-    (= res_1 (_ bv0 16))
-    ; = bit_1 ( << 1 30 )  --> bvshl
-    (= bit_1 (bvshl (_ bv1 16) (_ bv30 16)))
-    (= num_orig_1 num_0)
-    ; = bit_2 ( pre_cb bit_1 num_0 2 )
-    (= bit_2 (pre_cb bit_1 num_0 (_ bv2 16)))
-  )
+
+(define-fun loop ((bit (_ BitVec 16))) Bool
+  (not (= (_ bv0 16) bit ))
 )
+
 
 (define-fun trans-f
   ((bit (_ BitVec 16)) (num (_ BitVec 16)) (num_orig (_ BitVec 16)) (res (_ BitVec 16))
@@ -125,6 +107,7 @@
       (= num num_)
       (= num_orig num_orig_)
       (= res res_)
+      (= bit_3 (_ bv0 16))
     )
     (and
       (= bit_3 bit)
@@ -166,36 +149,11 @@
   )
 )
 
-(define-fun post-f
-  ((bit (_ BitVec 16)) (num (_ BitVec 16)) (num_orig (_ BitVec 16)) (res (_ BitVec 16))
-   (bit_0 (_ BitVec 16)) (bit_1 (_ BitVec 16)) (bit_2 (_ BitVec 16)) (bit_3 (_ BitVec 16)) (bit_4 (_ BitVec 16))
-   (num_0 (_ BitVec 16)) (num_1 (_ BitVec 16)) (num_2 (_ BitVec 16)) (num_3 (_ BitVec 16))
-   (num_orig_0 (_ BitVec 16)) (num_orig_1 (_ BitVec 16))
-   (res_0 (_ BitVec 16)) (res_1 (_ BitVec 16)) (res_2 (_ BitVec 16)) (res_3 (_ BitVec 16)) (res_4 (_ BitVec 16)) (res_5 (_ BitVec 16)))
-  Bool
-  (or
-    (not
-      (and
-        (= bit bit_3)
-        (= num num_1)
-        (= num_orig num_orig_1)
-        (= res res_2)
-      )
-    )
-    (not
-      (and
-        (not (not (= bit_3 (_ bv0 16))))
-        ; (not ( <= ( * res_2 res_2 ) num_orig_1 ) ) -> <= -> bvule, * -> bvmul
-        (not (bvule (bvmul res_2 res_2) num_orig_1))
-      )
-    )
-  )
-)
-
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 (assert (not
   (=> (and
          (inv-f bit num num_orig res)
+         (loop bit)
          (trans-f bit num num_orig res bit_ num_ num_orig_ res_ bit_0 bit_1 bit_2 bit_3 bit_4 num_0 num_1 num_2 num_3 num_orig_0 num_orig_1 res_0 res_1 res_2 res_3 res_4 res_5)
        )
        (inv-f bit_ num_ num_orig_ res_)

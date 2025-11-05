@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const c (_ BitVec 16))
@@ -34,22 +34,22 @@
 ; Closed Box Function: returns n-th Fibonacci number
 ( declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16) )
 
-; ; add_sum_cb: a + b over 16-bit bitvectors (mod 2^16)
-; (define-fun add_sum_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-;   (bvadd a b)
-; )
+ ; add_sum_cb: a + b over 16-bit bitvectors (mod 2^16)
+ ;(define-fun add_sum_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+ ;  (bvadd a b)
+ ;)
 
-; ; fib_cb: N-th Fibonacci number over BV16 (mod 2^16)
-; ; Tail-recursive helper: fib_it(i, a, b) returns F(i) with current pair (a=F(k), b=F(k+1))
-; (define-fun-rec fib_it ((i (_ BitVec 16)) (a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-;   (ite (= i #x0000)
-;       a
-;       (fib_it (bvsub i #x0001) b (bvadd a b)))
-; )
+ ; fib_cb: N-th Fibonacci number over BV16 (mod 2^16)
+ ; Tail-recursive helper: fib_it(i, a, b) returns F(i) with current pair (a=F(k), b=F(k+1))
+ ;(define-fun-rec fib_it ((i (_ BitVec 16)) (a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+ ;  (ite (= i #x0000)
+ ;      a
+ ;      (fib_it (bvsub i #x0001) b (bvadd a b)))
+ ;)
 
-; (define-fun fib_cb ((n (_ BitVec 16))) (_ BitVec 16)
-;   (fib_it n #x0000 #x0001)
-; )
+ ;(define-fun fib_cb ((n (_ BitVec 16))) (_ BitVec 16)
+ ;  (fib_it n #x0000 #x0001)
+ ;)
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
@@ -77,6 +77,10 @@
     (bvule i n)
     (= y (fib_cb (bvadd i (_ bv1 16))))
     (= x (fib_cb i)))
+)
+
+(define-fun loop ((i (_ BitVec 16)) (n (_ BitVec 16))) Bool
+	(bvult i n)
 )
 
 ( define-fun pre-f ( ( c (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( c_0 (_ BitVec 16))( c_1 (_ BitVec 16))( c_2 (_ BitVec 16))( c_3 (_ BitVec 16))( i_0 (_ BitVec 16))( i_1 (_ BitVec 16))( n_0 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16)) ) Bool
@@ -110,6 +114,7 @@
 			( = c c_ )
 			( = x x_ )
 			( = y y_ )
+			(not ( bvult i_1 n_0 ))
 		)
 		( and
 			( = c_2 c )
