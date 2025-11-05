@@ -61,9 +61,9 @@ elif commandLineArgs.usebedrock:
 
     cfg = Config(
         region_name=REGION,
-        retries={"max_attempts": 5, "mode": "standard"},
-        connect_timeout=10,
-        read_timeout=120  # allow longer server generation/streaming
+        retries={"max_attempts": 10, "mode": "adaptive"},
+        connect_timeout=100,
+        read_timeout=240  # allow longer server generation/streaming
     )
     
     client = boto3.client(service_name="bedrock-runtime", config=cfg)

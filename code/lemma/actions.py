@@ -14,14 +14,15 @@ from code.lemma.llmModels import callLLMforResponse
 from code.lemma.lemmaDict import LemmaDict
 from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
-from code.models import exampleSet, ExampleSet, Function, Lemmas, LemmaStatus
+from code.models import Function, Lemmas, LemmaStatus
 from code.utils.lemmaTester import smtlib_to_c
 
 decl = ""
 funcInputs = []
 
-def run_c_file(body: str, path_to_obj_file: str) -> bool:
+def perform_light_check_lemma(body: str, path_to_obj_file: str) -> bool:
     console.print("[bold yellow]Running C code for lemma verification...")
+    directory_path = os.path.dirname(path_to_obj_file)
 
     if not path_to_obj_file:
         console.log("[bold red]No object file provided for linking.")
@@ -45,20 +46,23 @@ def run_c_file(body: str, path_to_obj_file: str) -> bool:
     with open("light_check_lemma.cpp", "w") as f:
         f.write(CCode)
 
+    # Prepare the object file path
+    shell_command = f"cd {directory_path} && make"
+    make_process = subprocess.run(shell_command, shell=True, capture_output=True, text=True)
+    if make_process.returncode != 0:
+        console.log("[bold red]Make failed:", make_process.stderr)
+        return False
     
     # Compile the C code
     compile_process = subprocess.run(["g++", "light_check_lemma.cpp", f"{os.path.normpath(path_to_obj_file)}", "-Wall", "-O0", "-o", "light_check_lemma.out"], capture_output=True, text=True)
     if compile_process.returncode != 0:
-        console.log("[bold red]Compilation failed:", compile_process.stderr.decode())
+        console.log("[bold red]Compilation failed:", compile_process.stderr)
         return False
-    
-    # Prepare input string
-    # input_str = "\n".join(input_values) + "\n"
     
     # Run the compiled program
     run_process = subprocess.run(["strace", "./light_check_lemma.out"], input=program_input, capture_output=True, text=True)
     if run_process.returncode != 0:
-        console.log("[bold red]Execution failed:", run_process.stderr.decode())
+        console.log("[bold red]Execution failed:", run_process.stderr)
         return False
     
     console.log("[bold green]Lemma holds for the provided inputs.")
@@ -138,8 +142,11 @@ def get_lemmas_from_llm_response(
                 continue
 
             # Quick check using C code execution.
-            pathLib = "./"+"/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[2:])
-            lightCheck = run_c_file(str(decl + "\n" + fragments), pathLib)
+            pathLib = os.path.normpath("./"+"/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[2:]))
+            lightCheck = perform_light_check_lemma(str(decl + "\n" + fragments), pathLib)
+
+            if not lightCheck:
+                console.log(f"[bold red]Lemma failed light check, skipping: {fragments}")
 
             lemmaIdHck = "".join(x for x in str(uuid.uuid4()).split("-"))
             lemmaIdUnq = f"L{lemmaIdHck}_gen{generation}_l{index}"
