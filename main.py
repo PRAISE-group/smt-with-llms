@@ -35,8 +35,11 @@ if __name__ == "__main__":
         lemmaIdUnq = f"L{lemmaIdHck}_gen0_lN"
         
         if commandLineArgs.debug:
-            console.log(f"[bold yellow]New Lemma: {lemmaIdUnq}")
-            
+            console.log(f"[bold yellow]New User provided Lemma: {lemmaIdUnq}")
+        
+        for test in value.get("tests", []):
+            console.log(f"[bold blue]Test Input for function {key}: {test}")
+
         ftc = Function(
             id=key,
             name=key,
@@ -51,7 +54,7 @@ if __name__ == "__main__":
                 )
                 for index, lemmaInfo in enumerate(value.get("userLemmas", []), 1)
             ],
-            inputs=[str(c) for c in value.get("tests", [])],
+            inputs=[str(test) for test in value.get("tests", [])],
             object_file=commandLineArgs.sharedLib,
             smtDecl=data["functions"][key]["smtDecl"],
             smt_file=data["smt_file"],

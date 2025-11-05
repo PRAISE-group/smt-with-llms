@@ -1,5 +1,7 @@
 import uuid
 from z3 import *
+import random
+import subprocess
 from time import sleep
 from itertools import chain
 from typing import List, Optional, Any
@@ -7,12 +9,60 @@ from typing import List, Optional, Any
 # Internal Imports.
 from code.utils.printers import console
 from code.lemma.checkers import check_lemma_smtlib
+from code.utils.lemmaTester import smtlib_to_c
 from code.lemma.llmModels import callLLMforResponse
 from code.lemma.lemmaDict import LemmaDict
 from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
 from code.models import exampleSet, ExampleSet, Function, Lemmas, LemmaStatus
 from code.utils.lemmaTester import smtlib_to_c
+
+decl = ""
+funcInputs = []
+
+def run_c_file(body: str, path_to_obj_file: str) -> bool:
+    console.print("[bold yellow]Running C code for lemma verification...")
+
+    if not path_to_obj_file:
+        console.log("[bold red]No object file provided for linking.")
+        return False
+    
+    if not body:
+        console.log("[bold red]No lemma SMT-LIB string provided.")
+        return False
+
+    # Generate the C code.
+    CCode, varList = smtlib_to_c(body)
+    console.log("[bold green]Vars in C Code:\n{}".format(varList))
+    program_input = ""
+
+    for x in varList:
+        val = random.randint(10, 99)
+        console.log("[bold green]Feeding value {} to variable {}".format(val, x))
+        program_input += f"{val} "
+
+    # Write the C code to a temporary file
+    with open("light_check_lemma.cpp", "w") as f:
+        f.write(CCode)
+
+    
+    # Compile the C code
+    compile_process = subprocess.run(["g++", "light_check_lemma.cpp", f"{os.path.normpath(path_to_obj_file)}", "-Wall", "-O0", "-o", "light_check_lemma.out"], capture_output=True, text=True)
+    if compile_process.returncode != 0:
+        console.log("[bold red]Compilation failed:", compile_process.stderr.decode())
+        return False
+    
+    # Prepare input string
+    # input_str = "\n".join(input_values) + "\n"
+    
+    # Run the compiled program
+    run_process = subprocess.run(["strace", "./light_check_lemma.out"], input=program_input, capture_output=True, text=True)
+    if run_process.returncode != 0:
+        console.log("[bold red]Execution failed:", run_process.stderr.decode())
+        return False
+    
+    console.log("[bold green]Lemma holds for the provided inputs.")
+    return True
 
 def process_format(fragment: str) -> str:
     return fragment
@@ -57,8 +107,10 @@ def process_response(response: Any) -> str | None:
 def get_lemmas_from_llm_response(
     response: str, funcName: str, funcDecl: str, generation: int
 ) -> List[Lemmas]:
+    global decl
     lemmas: List[Lemmas] = []
     formattedResponse: str | None = process_response(response)
+
     # TODO: Hashing based check to see if lemma is already added.
     # TODO: Do not add same identical lemma again.
     for index, fragments in enumerate(formattedResponse.strip().split("\n"), 0):
@@ -74,15 +126,20 @@ def get_lemmas_from_llm_response(
             and "forall" in fragments
         ):
             fragments = process_format(fragments)
+            
             isSyntaxVal: bool = check_lemma_smtlib(
                 lemma_smt=fragments,
                 extra_decls="",
                 extra_asserts="",
-                funcDecl=funcDecl
+                funcDecl=decl
             )
 
             if not isSyntaxVal:
                 continue
+
+            # Quick check using C code execution.
+            pathLib = "./"+"/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[2:])
+            lightCheck = run_c_file(str(decl + "\n" + fragments), pathLib)
 
             lemmaIdHck = "".join(x for x in str(uuid.uuid4()).split("-"))
             lemmaIdUnq = f"L{lemmaIdHck}_gen{generation}_l{index}"
@@ -219,15 +276,27 @@ def generate_lemmas_background(
 ):
     lemmaDict.setLatestGeneration(sessionId, 1)
     generation = lemmaDict.getLatestGeneration(sessionId)
+    global decl
 
     # PROMPT-1 Define objectives of the task.
     defineObjective(formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, sessionId=sessionId)
 
     # PROMPT-2 Define the guidelines.
     defineGuidelines(formatting=formatting, sessionId=sessionId)
-    
+
+    for function in funcList:
+        decl += function.smtDecl + "\n"
+        funcInputs.append(function.inputs[0].strip("[").strip("]"))
+
+    if commandLineArgs.debug:
+        for declLine in decl.strip().split("\n"):
+            console.log(f"[bold blue]Function Decl Line: {declLine}")
+        for x in funcInputs:
+            console.log(f"[bold blue]Function Input Sample: {x.strip().split(',')}")
+
     # This gives you the list of Initial LEMMAs from LLM
     for function in funcList:
+
         # Add existing userLemmas since we need them.
         for lemmas in function.userLemmas:
             lemmaDict[lemmas.id] = lemmas
@@ -244,7 +313,7 @@ def generate_lemmas_background(
         for lms in res:
             lemmaDict[lms.id] = lms
 
-        sleep(2)
+        sleep(4)
 
     while not stop_event.is_set():
         res = []
