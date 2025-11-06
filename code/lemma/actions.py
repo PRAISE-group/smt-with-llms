@@ -60,7 +60,7 @@ def perform_light_check_lemma(body: str, path_to_obj_file: str) -> bool:
         return False
     
     # Run the compiled program
-    run_process = subprocess.run(["strace", "./light_check_lemma.out"], input=program_input, capture_output=True, text=True)
+    run_process = subprocess.run(["./light_check_lemma.out"], input=program_input, capture_output=True, text=True)
     if run_process.returncode != 0:
         console.log("[bold red]Execution failed:", run_process.stderr)
         return False

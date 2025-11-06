@@ -32,30 +32,9 @@
 
 ; INPUT VARIABLES CONSTRAINT
 (assert (in_0_100 a))
-(assert (in_0_100 a_))
 (assert (in_0_100 b))
-(assert (in_0_100 b_))
 (assert (in_0_100 x))
-(assert (in_0_100 x_))
 (assert (in_0_100 y))
-(assert (in_0_100 y_))
-
-(assert (in_0_100 a_0))
-(assert (in_0_100 a_1))
-(assert (in_0_100 a_2))
-(assert (in_0_100 b_0))
-(assert (in_0_100 b_1))
-(assert (in_0_100 b_2))
-(assert (in_0_100 x_0))
-(assert (in_0_100 x_1))
-(assert (in_0_100 y_0))
-(assert (in_0_100 y_1))
-  
-
-(assert (in_0_100 result_0))
-(assert (in_0_100 result_1))
-(assert (in_0_100 result_2))
-(assert (in_0_100 result_))
 (assert (in_0_100 result))
 
 ; Closed Box function: return a % b

@@ -1,7 +1,7 @@
 {
   "smt_file": "/home/benchmarks/unsat_examples/example_3/example_3_split1_initiation_bv16.smt2",
   "object_file": "/home/benchmarks/unsat_examples/example_3/example_3.o",
-  "limit": [1, 1000],
+  "limit": [1, 100],
   "functions": {
     "retmod_cb": {
       "smtDecl": "(declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",

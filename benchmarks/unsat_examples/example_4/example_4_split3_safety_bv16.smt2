@@ -33,19 +33,11 @@
   (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
 
 (assert (in_0_100 c))
-(assert (in_0_100 c_))
+(assert (in_0_100 x))
 (assert (in_0_100 i))
-(assert (in_0_100 i_))
+(assert (in_0_100 y))
 (assert (in_0_100 n))
-(assert (in_0_100 n_))
 
-(assert (in_0_100 c_0))
-(assert (in_0_100 c_1))
-(assert (in_0_100 c_2))
-(assert (in_0_100 c_3))
-(assert (in_0_100 i_0))
-(assert (in_0_100 i_1))
-(assert (in_0_100 n_0))
 
 ; Closed Box Function: returns addition of two numbers
 ( declare-fun add_sum_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )

@@ -56,19 +56,11 @@
   (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
 
 (assert (in_0_100 c))
-(assert (in_0_100 c_))
 (assert (in_0_100 i))
-(assert (in_0_100 i_))
 (assert (in_0_100 n))
-(assert (in_0_100 n_))
+(assert (in_0_100 x))
+(assert (in_0_100 y))
 
-(assert (in_0_100 c_0))
-(assert (in_0_100 c_1))
-(assert (in_0_100 c_2))
-(assert (in_0_100 c_3))
-(assert (in_0_100 i_0))
-(assert (in_0_100 i_1))
-(assert (in_0_100 n_0))
 
 ( define-fun inv-f( ( c (_ BitVec 16))( i (_ BitVec 16))( n (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
 ; INVARIANT

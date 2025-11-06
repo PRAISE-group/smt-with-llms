@@ -76,13 +76,13 @@ model="--model gpt-oss:20b --use156"
 # model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
 # # model="--model llama3:latest"
 # model="--usebedrock --model openai.gpt-oss-120b-1:0"
-for i in {1..2}; do
+for i in {1..5}; do
     if ! check_files; then
         # echo "not sat checking for unsat"
         echo "Current time: $(date)"
         start_time=$(date +%s)
         echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
-        setsid timeout 60m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
+        setsid timeout 5m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
         pid2=$!
         exit_code=$?
         if ! wait "$pid2"; then

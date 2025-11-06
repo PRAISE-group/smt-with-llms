@@ -1,7 +1,7 @@
 {
   "smt_file": "/home/benchmarks/unsat_examples/example_2/example_2_split3_safety_bv16.smt2",
   "object_file": "/home/benchmarks/unsat_examples/example_2/example_2.o",
-  "limit": [1, 1000],
+  "limit": [1, 100],
   "functions": {
     "isprime_cb": {
       "smtDecl": "(declare-fun isprime_cb ((_ BitVec 16)) Bool)",

@@ -14,11 +14,8 @@
 
 ; INPUT VARIABLES CONSTRAINT
 (assert (in_0_100 i))
-(assert (in_0_100 i_))
 (assert (in_0_100 n))
-(assert (in_0_100 n_))
 (assert (in_0_100 out))
-(assert (in_0_100 out_))
 
 
 ; closed-box (uninterpreted) foo to model opaque C function
@@ -27,9 +24,9 @@
 ; // https://en.wikipedia.org/wiki/John_Selfridge
 ; Closed Box Function: returns true if input number is prime
 
-;(declare-fun isprime_cb ((_ BitVec 16)) Bool)
+(declare-fun isprime_cb ((_ BitVec 16)) Bool)
 
-(define-fun isprime_cb ((n (_ BitVec 16))) Bool  (and    (bvugt n (_ bv1 16))    (forall ((d (_ BitVec 16)))      (=> (and (bvugt d (_ bv1 16)) (bvult d n))           (not (= (bvsrem n d) (_ bv0 16)))            )    )  ))
+;(define-fun isprime_cb ((n (_ BitVec 16))) Bool  (and    (bvugt n (_ bv1 16))    (forall ((d (_ BitVec 16)))      (=> (and (bvugt d (_ bv1 16)) (bvult d n))           (not (= (bvsrem n d) (_ bv0 16)))            )    )  ))
 
 
 ; (define-fun isprime_cb ((n (_ BitVec 16))) Bool

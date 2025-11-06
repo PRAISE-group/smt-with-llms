@@ -33,23 +33,23 @@
 ( declare-const y_5 (_ BitVec 16))
 
 ; Closed Box Function: Shift input 'x' by 's' bits to the right
-;( declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+( declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ; Closed Box Function: Integer Cube Root of input 'x'
-;( declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16) )
+( declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16) )
 
 
-(define-fun-rec icbrt_cb ((N (_ BitVec 16))) (_ BitVec 16)
-  (let ((approx (ite (bvsle N #x0001) N (bvlshr N #x0002)))) ; N >> 2 ≈ cube root start
-    (ite (or (= N #x0000) (= N #x0001))
-         N
-         (ite (bvsle (bvmul (bvmul approx approx) approx) N)
-              approx
-              (bvsub approx #x0001)))))
+;(define-fun-rec icbrt_cb ((N (_ BitVec 16))) (_ BitVec 16)
+;  (let ((approx (ite (bvsle N #x0001) N (bvlshr N #x0002)))) ; N >> 2 ≈ cube root start
+;    (ite (or (= N #x0000) (= N #x0001))
+;         N
+;         (ite (bvsle (bvmul (bvmul approx approx) approx) N)
+;              approx
+;              (bvsub approx #x0001)))))
 
-(define-fun shift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-  (bvshl a b)
-)
+;(define-fun shift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (bvshl a b)
+;)
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_1000 ((x (_ BitVec 16))) Bool

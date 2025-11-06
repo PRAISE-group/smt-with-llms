@@ -1,7 +1,7 @@
 {
   "smt_file": "/home/benchmarks/unsat_examples/example_8/example_8_split2_consecution_bv16.smt2",
   "object_file": "/home/benchmarks/unsat_examples/example_8/example_8.o",
-  "limit": [0, 100],
+  "limit": [0, 1000],
   "functions": {
     "builtin_ctz_cb": {
       "smtDecl": "(declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))",

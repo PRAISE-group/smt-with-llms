@@ -50,7 +50,7 @@
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
-  (and (bvuge x (_ bv1 16)) (bvule x (_ bv6 16))))
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv6 16))))
 
 (assert (in_0_100 m))
 (assert (in_0_100 b))

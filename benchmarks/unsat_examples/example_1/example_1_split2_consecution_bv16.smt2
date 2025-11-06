@@ -22,20 +22,15 @@
 
 ; INPUT VARIABLES CONSTRAINT
 (assert (in_0_100 i))
-(assert (in_0_100 i_))
 (assert (in_0_100 n))
-(assert (in_0_100 n_))
-(assert (in_0_100 i_0))
-(assert (in_0_100 i_1))
-(assert (in_0_100 i_2))
-(assert (in_0_100 n_0))
+(assert (in_0_100 sum))
 
 ; Closed Box Function: returns addition first argument + square of second argument
-; (define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
-;  	(bvadd x (bvmul y y))
-; )
+ (define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
+  	(bvadd x (bvmul y y))
+ )
 ; Closed Box Function: returns addition first argument + square of second argument
-( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+;( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ; invariant predicate (here trivially true)
 (define-fun inv-f ((i (_ BitVec 16)) (n (_ BitVec 16)) (sum (_ BitVec 16))) Bool

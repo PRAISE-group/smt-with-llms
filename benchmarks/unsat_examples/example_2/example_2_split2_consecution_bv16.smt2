@@ -24,22 +24,8 @@
 
 ; INPUT VARIABLES CONSTRAINT
 (assert (in_0_100 i))
-(assert (in_0_100 i_))
 (assert (in_0_100 n))
-(assert (in_0_100 n_))
-(assert (in_0_100 i_0))
-(assert (in_0_100 i_1))
-(assert (in_0_100 n_0))
-
 (assert (in_0_100 out))
-(assert (in_0_100 out_))
-
-(assert (in_0_100 out_0))
-(assert (in_0_100 out_1))
-(assert (in_0_100 out_2))
-(assert (in_0_100 out_3))
-(assert (in_0_100 out_4))
-(assert (in_0_100 out_5))
 
 ; closed-box (uninterpreted) foo to model opaque C function
 ; Find if the input number is prime
