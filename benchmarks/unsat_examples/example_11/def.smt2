@@ -6,3 +6,5 @@
 (define-fun sum_cubes_cb ((a (_ BitVec 16)) (b (_ BitVec 16)) (n (_ BitVec 16))) (_ BitVec 16)
   (bvadd (bvadd (cube_cb a) (cube_cb b)) (cube_cb n))
 ) 
+
+; https://godbolt.org/z/erG19T56f
