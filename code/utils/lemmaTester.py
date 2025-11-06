@@ -99,7 +99,7 @@ extern \"C\"{\n
         if name_i in var_list:
             continue
         var_list.append(name_i)
-        c_code += f"{' '*4}{typenameConversion(i)} {name_i};\n\n"
+        c_code += f"{' '*4}{typenameConversion(i)} {name_i} = 0;\n\n"
         c_code += f"{' '*4}std::cin >> {name_i};\n\n"
     
     tabc = 1

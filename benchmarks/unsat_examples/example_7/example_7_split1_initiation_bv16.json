@@ -13,8 +13,8 @@
       "userLemmas": [""]
     },
     "lshift_cb": {
-      "smtDecl": "(declare-fun lshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'lshift_cb' takes 2 arguments (a, b) and returns a << b (left shift). Uses BitVec 16 Domain.",
+      "smtDecl": "(declare-fun rshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'rshift_cb' takes 2 arguments (a, b) and returns a >> b (right shift). Uses BitVec 16 Domain.",
       "tests": [
         [10, 2],
         [16, 1]
