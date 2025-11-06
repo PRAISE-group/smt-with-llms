@@ -5,15 +5,15 @@
 ; pre_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
 (declare-fun pre_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
-; rshift_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
-(declare-fun rshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+; lshift_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
+(declare-fun lshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
 ;(define-fun-rec pre_cb ((a (_ BitVec 16)) (b (_ BitVec 16)) (c (_ BitVec 16))) (_ BitVec 16)
 ;  (ite (bvugt a b)
 ;       (pre_cb (bvshl a c) b c)
 ;       a))
-;(define-fun rshift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-;  (bvlshr a b)
+;(define-fun lshift_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (bvshl a b)
 ;)
 
 (declare-const bit (_ BitVec 16))
@@ -45,40 +45,20 @@
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_1000 ((x (_ BitVec 16))) Bool
-  (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
 
 (assert (in_0_1000 bit))
-(assert (in_0_1000 bit_))
 (assert (in_0_1000 num))
-(assert (in_0_1000 num_))
 (assert (in_0_1000 num_orig))
-(assert (in_0_1000 num_orig_))
 (assert (in_0_1000 res))
-(assert (in_0_1000 res_))
 
-(assert (in_0_1000 bit_0))
-(assert (in_0_1000 bit_1))
-(assert (in_0_1000 bit_2))
-(assert (in_0_1000 bit_3))
-(assert (in_0_1000 bit_4))
-(assert (in_0_1000 num_0))
-(assert (in_0_1000 num_1))
-(assert (in_0_1000 num_2))
-(assert (in_0_1000 num_3))
-(assert (in_0_1000 num_orig_0))
-(assert (in_0_1000 num_orig_1))
-(assert (in_0_1000 res_0))
-(assert (in_0_1000 res_1))
-(assert (in_0_1000 res_2))
-(assert (in_0_1000 res_3))
-(assert (in_0_1000 res_4))
-(assert (in_0_1000 res_5))
+
 
 (define-fun inv-f ((bit (_ BitVec 16)) (num (_ BitVec 16)) (num_orig (_ BitVec 16)) (res (_ BitVec 16))) Bool
   (or
     (and
       (= bit (_ bv0 16))
-      (bvule (bvmul res res) num_orig))
+      (bvsle (bvmul res res) num_orig))
     (not (= bit (_ bv0 16))))
 )
 
@@ -122,15 +102,15 @@
       (= res_2 res)
       (not (= bit_3 (_ bv0 16)))
       ; >= num_1 ( + res_2 bit_3 )  -> bvuge num_1 (bvadd res_2 bit_3)
-      (bvuge num_1 (bvadd res_2 bit_3))
+      (bvsge num_1 (bvadd res_2 bit_3))
       ; = num_2 ( + ( - num_1 res_2 ) bit_3 ) -> (= num_2 (bvadd (bvsub num_1 res_2) bit_3))
       (= num_2 (bvadd (bvsub num_1 res_2) bit_3))
       ; = res_3 ( + ( mod res_2 1 ) bit_3 ) -> mod -> bvshr
-      (= res_3 (bvadd (rshift_cb res_2 (_ bv1 16)) bit_3))
+      (= res_3 (bvadd (lshift_cb res_2 (_ bv1 16)) bit_3))
       (= num_3 num_2)
       (= res_4 res_3)
       ; bit_4 = ( mod bit_3 2 )
-      (= bit_4 (rshift_cb bit_3 (_ bv2 16)))
+      (= bit_4 (lshift_cb bit_3 (_ bv2 16)))
       (= bit_4 bit_)
       (= num_3 num_)
       (= res_4 res_)
@@ -142,11 +122,11 @@
       (= num_1 num)
       (= res_2 res)
       (not (= bit_3 (_ bv0 16)))
-      (not (bvuge num_1 (bvadd res_2 bit_3)))
-      (= res_5 (rshift_cb res_2 (_ bv1 16)))
+      (not (bvsge num_1 (bvadd res_2 bit_3)))
+      (= res_5 (lshift_cb res_2 (_ bv1 16)))
       (= num_3 num_1)
       (= res_4 res_5)
-      (= bit_4 (rshift_cb bit_3 (_ bv2 16)))
+      (= bit_4 (lshift_cb bit_3 (_ bv2 16)))
       (= bit_4 bit_)
       (= num_3 num_)
       (= res_4 res_)

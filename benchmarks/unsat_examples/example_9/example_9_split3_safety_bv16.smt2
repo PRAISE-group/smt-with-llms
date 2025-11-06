@@ -55,139 +55,31 @@
   (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
 
 (assert (in_0_1000 b))
-(assert (in_0_1000 b_))
 (assert (in_0_1000 orig_x))
-(assert (in_0_1000 orig_x_))
 (assert (in_0_1000 s))
-(assert (in_0_1000 s_))
 (assert (in_0_1000 x))
-(assert (in_0_1000 x_))
 (assert (in_0_1000 y))
-(assert (in_0_1000 y_))
-
-(assert (in_0_1000 b_0))
-(assert (in_0_1000 b_1))
-(assert (in_0_1000 b_2))
-(assert (in_0_1000 orig_x_0))
-(assert (in_0_1000 orig_x_1))
-(assert (in_0_1000 s_0))
-(assert (in_0_1000 s_1))
-(assert (in_0_1000 s_2))
-(assert (in_0_1000 s_3))
-(assert (in_0_1000 x_0))
-(assert (in_0_1000 x_1))
-(assert (in_0_1000 x_2))
-(assert (in_0_1000 x_3))
-(assert (in_0_1000 y_0))
-(assert (in_0_1000 y_1))
-(assert (in_0_1000 y_2))
-(assert (in_0_1000 y_3))
-(assert (in_0_1000 y_4))
-(assert (in_0_1000 y_5))
 
 ( define-fun inv-f( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
- (and
-    (bvuge orig_x (bvmul y (bvmul y y)))
-    (bvuge (icbrt_cb orig_x) y))
+    (bvsge orig_x (bvadd x (bvshl (bvmul y (bvmul y y)) (bvadd (_ bv3 16) s) )))
 )
 
-( define-fun pre-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( orig_x_0 (_ BitVec 16))( orig_x_1 (_ BitVec 16))( s_0 (_ BitVec 16))( s_1 (_ BitVec 16))( s_2 (_ BitVec 16))( s_3 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16))( y_4 (_ BitVec 16))( y_5 (_ BitVec 16)) ) Bool
-	( and
-		( = orig_x orig_x_1 )
-		( = s s_1 )
-		( = x x_0 )
-		( = y y_1 )
-		( bvuge x_0 (_ bv0 16))
-		( = y_1 (_ bv0 16))
-		( = s_1 (_ bv30 16) )
-		( = orig_x_1 x_0 )
+( define-fun loop ( ( s (_ BitVec 16))) Bool
+	( bvsge s (_ bv0 16)
 	)
 )
 
-( define-fun trans-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( b_ (_ BitVec 16))( orig_x_ (_ BitVec 16))( s_ (_ BitVec 16))( x_ (_ BitVec 16))( y_ (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( orig_x_0 (_ BitVec 16))( orig_x_1 (_ BitVec 16))( s_0 (_ BitVec 16))( s_1 (_ BitVec 16))( s_2 (_ BitVec 16))( s_3 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16))( y_4 (_ BitVec 16))( y_5 (_ BitVec 16)) ) Bool
-	( or
-		( and
-			( = b_1 b )
-			( = s_2 s )
-			( = x_1 x )
-			( = y_2 y )
-			( = b_1 b_ )
-			( = s_2 s_ )
-			( = x_1 x_ )
-			( = y_2 y_ )
-			( = b b_ )
-			( = orig_x orig_x_ )
-			( = x x_ )
-			( = y y_ )
-		)
-		( and
-			( = b_1 b )
-			( = s_2 s )
-			( = x_1 x )
-			( = y_2 y )
-			( bvuge s_2 (_ bv0 16))
-			( = y_3 ( bvmul (_ bv2 16) y_2 ) )
-			( = b_2 ( shift_cb ( bvadd ( bvmul ( bvmul (_ bv3 16) y_3 ) ( bvadd y_3 (_ bv1 16)) ) (_ bv1 16)) s_2 ) )
-			( = s_3 ( bvsub s_2 (_ bv3 16) ) )
-			( bvuge x_1 b_2 )
-			( = x_2 ( bvsub x_1 b_2 ) )
-			( = y_4 ( bvadd  y_3 (_ bv1 16)) )
-			( = x_3 x_2 )
-			( = y_5 y_4 )
-			( = b_2 b_ )
-			( = s_3 s_ )
-			( = x_3 x_ )
-			( = y_5 y_ )
-			(= orig_x orig_x_1 )
-			(= orig_x_ orig_x_1 )
-		)
-		( and
-			( = b_1 b )
-			( = s_2 s )
-			( = x_1 x )
-			( = y_2 y )
-			( bvuge s_2 (_ bv0 16))
-			( = y_3 ( bvmul (_ bv2 16) y_2 ) )
-			( = b_2 ( shift_cb ( bvadd  ( bvmul  ( bvmul  (_ bv3 16) y_3 ) ( bvadd  y_3 (_ bv1 16)) ) (_ bv1 16)) s_2 ) )
-			( = s_3 ( bvsub s_2 (_ bv3 16) ) )
-			( not ( bvuge x_1 b_2 ) )
-			( = x_3 x_1 )
-			( = y_5 y_3 )
-			( = b_2 b_ )
-			( = s_3 s_ )
-			( = x_3 x_ )
-			( = y_5 y_ )
-			(= orig_x orig_x_1 )
-			(= orig_x_ orig_x_1 )
-		)
-	)
-)
-
-( define-fun post-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))( b_0 (_ BitVec 16))( b_1 (_ BitVec 16))( b_2 (_ BitVec 16))( orig_x_0 (_ BitVec 16))( orig_x_1 (_ BitVec 16))( s_0 (_ BitVec 16))( s_1 (_ BitVec 16))( s_2 (_ BitVec 16))( s_3 (_ BitVec 16))( x_0 (_ BitVec 16))( x_1 (_ BitVec 16))( x_2 (_ BitVec 16))( x_3 (_ BitVec 16))( y_0 (_ BitVec 16))( y_1 (_ BitVec 16))( y_2 (_ BitVec 16))( y_3 (_ BitVec 16))( y_4 (_ BitVec 16))( y_5 (_ BitVec 16)) ) Bool
-	( or
-		( not
-			( and
-				( = b b_1)
-				( = orig_x orig_x_1)
-				( = s s_2)
-				( = x x_1)
-				( = y y_2)
-			)
-		)
-		( not
-			( and
-				( not ( bvuge s_2 (_ bv0 16)) )
-				( not ( bvuge orig_x_1 ( bvmul ( bvmul  y_2 y_2 ) y_2 ) ) )
-			)
-		)
-	)
+( define-fun post-f ( ( b (_ BitVec 16))( orig_x (_ BitVec 16))( s (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16))) Bool
+	;((orig_x >= (y * y * y)))
+	(bvsge orig_x (bvmul y (bvmul y y)))
 )
 
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( => 
 		( inv-f b orig_x s x y  )
-		( post-f b orig_x s x y b_0 b_1 b_2 orig_x_0 orig_x_1 s_0 s_1 s_2 s_3 x_0 x_1 x_2 x_3 y_0 y_1 y_2 y_3 y_4 y_5 )
+		(not (loop s))
+		( post-f b orig_x s x y )
 	)
 ))
 

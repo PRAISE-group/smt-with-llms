@@ -35,23 +35,11 @@
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_1000 ((x (_ BitVec 16))) Bool
-  (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
+  (and (bvuge x (_ bv1 16)) (bvule x (_ bv10 16))))
 
 (assert (in_0_1000 k))
-(assert (in_0_1000 k_))
 (assert (in_0_1000 n))
-(assert (in_0_1000 n_))
 (assert (in_0_1000 res))
-(assert (in_0_1000 res_))
-
-(assert (in_0_1000 k_0))
-(assert (in_0_1000 k_1))
-(assert (in_0_1000 k_2))
-(assert (in_0_1000 k_3))
-(assert (in_0_1000 n_0))
-(assert (in_0_1000 res_0))
-(assert (in_0_1000 res_1))
-(assert (in_0_1000 res_2))
 
 ( define-fun inv-f( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) ) ) Bool
   (and
@@ -60,62 +48,20 @@
     (bvuge n (_ bv0 16)))
 )
 
-( define-fun pre-f ( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( k_0 (_ BitVec 16) )( k_1 (_ BitVec 16) )( k_2 (_ BitVec 16) )( k_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) )( res_3 (_ BitVec 16) ) ) Bool
-	( and
-		( = k k_1 )
-		( = res res_1 )
-		( = k_1 (_ bv1 16) )
-		( = res_1 (_ bv1 16) )
-	)
-)
-
-( define-fun trans-f ( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( k_ (_ BitVec 16) )( n_ (_ BitVec 16) )( res_ (_ BitVec 16) )( k_0 (_ BitVec 16) )( k_1 (_ BitVec 16) )( k_2 (_ BitVec 16) )( k_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) )( res_3 (_ BitVec 16) ) ) Bool
-	( or
-		( and
-			( = k_2 k )
-			( = res_2 res )
-			( = k_2 k_ )
-			( = res_2 res_ )
-			( = n n_0 )
-			( = n_ n_0 )
-			( = res res_ )
-		)
-		( and
-			( = k_2 k )
-			( = res_2 res )
-			( not ( = k_2 n_0 ) )
-			( = k_3 ( bvadd k_2 (_ bv1 16) ) )
-			( = res_3 ( multiply_cb res_2 k_3 ) )
-			( = k_3 k_ )
-			( = res_3 res_ )
-			(= n n_0 )
-			(= n_ n_0 )
-		)
+( define-fun loop ( ( k (_ BitVec 16) )( n (_ BitVec 16) )) Bool
+	( not (= k n)
 	)
 )
 
 ( define-fun post-f ( ( k (_ BitVec 16) )( n (_ BitVec 16) )( res (_ BitVec 16) )( k_0 (_ BitVec 16) )( k_1 (_ BitVec 16) )( k_2 (_ BitVec 16) )( k_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( res_0 (_ BitVec 16) )( res_1 (_ BitVec 16) )( res_2 (_ BitVec 16) )( res_3 (_ BitVec 16) ) ) Bool
-	( or
-		( not
-			( and
-				( = k k_2)
-				( = n n_0 )
-				( = res res_2)
-			)
-		)
-		( not
-			( and
-				( not ( not ( = k_2 n_0 ) ) )
-				( not ( = res_2 ( factorial_cb n_0 ) ) )
-			)
-		)
-	)
+	;(res == factorial(n))
+	(= res (factorial_cb n))
 )
 
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( =>
-		( inv-f k n res  )
+		(and (not (loop k n)) ( inv-f k n res  ))
 		( post-f k n res k_0 k_1 k_2 k_3 n_0 res_0 res_1 res_2 res_3 )
 	)
 ))
