@@ -1,0 +1,19 @@
+{
+  "smt_file": "/home/benchmarks/unsat_examples/example_13/example_13_split2_consecution_bv16.smt2",
+  "object_file": "/home/benchmarks/unsat_examples/example_13/example_13.o",
+  "limit": [1, 100],
+  "functions": {
+    "predict_cb": {
+      "smtDecl": "(declare-fun predict_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'predict_cb' takes 1 argument (a), strictly returns value between 0 and 9. It is called 100 times in a loop and returns 0 exactly ten times, 1 exactly ten times, ... , and 9 exactly ten times. The function is deterministic.",
+      "tests": [
+        [12],
+        [99],
+        [0],
+        [45],
+        [87]
+      ],
+      "userLemmas": [""]
+    }
+  }
+}

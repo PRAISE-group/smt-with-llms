@@ -1,4 +1,4 @@
-int setPowerValue_power(int y_power, int x, int power) {
+int setPowerValue_power_cb(int y_power, int x, int power) {
     while (y_power > x) {
         y_power >>= 1;
         power -= 1;
@@ -6,7 +6,7 @@ int setPowerValue_power(int y_power, int x, int power) {
 	return power;
 }
 
-int setPowerValue_ypower(int y_power, int x, int power) {
+int setPowerValue_ypower_cb(int y_power, int x, int power) {
     while (y_power > x) {
         y_power >>= 1;
         power -= 1;

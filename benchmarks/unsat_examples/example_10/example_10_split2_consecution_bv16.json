@@ -3,18 +3,18 @@
   "object_file": "/home/benchmarks/unsat_examples/example_10/example_10.o",
   "limit": [1, 100],
   "functions": {
-    "set_lock": {
-      "smtDecl": "(declare-fun set_lock ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'set_lock' takes 1 argument (a) and returns 1",
+    "set_lock_cb": {
+      "smtDecl": "(declare-fun set_unlock_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'set_lock_cb' takes 1 argument (a) and returns 1",
       "tests": [
         [12],
         [100]
       ],
       "userLemmas": [""]
     },
-    "set_unlock": {
-      "smtDecl": "(declare-fun set_unlock ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'set_lock' takes 1 argument (a) and returns 0",
+    "set_unlock_cb": {
+      "smtDecl": "(declare-fun set_unlock_cb ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'set_unlock_cb' takes 1 argument (a) and returns 0",
       "tests": [
         [12],
         [100]

@@ -1,7 +1,7 @@
-int set_lock(int x) {
+int set_lock_cb(int x) {
 	return 1;
 }
 
-int set_unlock(int x) {
+int set_unlock_cb(int x) {
 	return 0;
 }

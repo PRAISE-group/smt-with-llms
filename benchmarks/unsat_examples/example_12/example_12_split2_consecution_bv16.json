@@ -3,18 +3,18 @@
   "object_file": "/home/benchmarks/unsat_examples/example_12/example_12.o",
   "limit": [1, 100],
   "functions": {
-    "setPowerValue_power": {
-      "smtDecl": "(declare-fun setPowerValue_power ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'setPowerValue_power' takes 3 arguments (a, b, c), does a >>= 1 and c -= 1 in a loop until a <= b. Finally it returns the updated value of c",
+    "setPowerValue_power_cb": {
+      "smtDecl": "(declare-fun setPowerValue_power_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'setPowerValue_power_cb' takes 3 arguments (a, b, c), does a >>= 1 and c -= 1 in a loop until a <= b. Finally it returns the updated value of c",
       "tests": [
         [12, 3, 5],
         [100, 4, 7]
       ],
       "userLemmas": [""]
     },
-    "setPowerValue_ypower": {
-      "smtDecl": "(declare-fun setPowerValue_ypower ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'setPowerValue_ypower' takes 3 arguments (a, b, c), does a >>= 1 and c -= 1 in a loop until a <= b. Finally it returns the updated value of a",
+    "setPowerValue_ypower_cb": {
+      "smtDecl": "(declare-fun setPowerValue_ypower_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'setPowerValue_ypower_cb' takes 3 arguments (a, b, c), does a >>= 1 and c -= 1 in a loop until a <= b. Finally it returns the updated value of a",
       "tests": [
         [12, 3, 5],
         [100, 4, 7]
