@@ -73,7 +73,7 @@ class smtAI(object):
 
     def __init__(self):
         super(smtAI, self).__init__()
-        # set_param("timeout", 60000) # timeout for z3
+        set_param("timeout", 60000) # timeout for z3
         self.s = Solver()
         # set_param('smt.logic', 'QF_BV')
         self.s.set("unsat_core", True)
@@ -530,8 +530,8 @@ class smtAI(object):
         console.info(f"starting iteration {self.iteration}")
         self.push()
         if not args.addGamma == 0:
-            if len(self.inputoutputassertions) > 20:
-                self.inputoutputassertions = self.inputoutputassertions[-20:]
+            if len(self.inputoutputassertions) > 40:
+                self.inputoutputassertions = self.inputoutputassertions[-40:]
             for v in self.inputoutputassertions:
                 if args.verbose:
                     print(v)
@@ -663,54 +663,54 @@ class smtAI(object):
             f.write(smtFileLemmas)
             f.write("(check-sat)\n")
             # f.write("(get-unsat-core)\n")
-        z3_cmd = ["z3", "constraints.smt2"]
-        resultz3 = subprocess.run(z3_cmd, capture_output=True, text=True)
-        print("z3 result",resultz3.stdout.strip())
-        if resultz3.stdout.strip() == "unsat":
-            start = time.time()
-            console.info("Getting unsatcore for outside z3",resultz3.stdout)
-            unsatCore = self.lemmasUsed[self.iteration]
-            self.unsatCores[self.iteration] = unsatCore
-            if args.verbose:
-                print("UnsatCore:", unsatCore)  # TODO: Pankaj
-            varmap = set()
-            for key in self.vars:
-                varmap.add(str(key))
-            if args.verbose:
-                print(varmap)
-            for core in unsatCore:
-                if args.verbose:
-                    print(core, self.lemmasData[core])
-                self.collectBoundVars(self.lemmasData[core], varmap)
-            # print(self.vars)
-            # print(self.lemmasUsed)
-            # print(varmap)
-            # exit()
-            end = time.time()
-            executiontime["z3"] += end - start
-            if len(unsatCore) == 0:
-                return AlgoVerdict.UNSAT
-            start = time.time()
-            console.info("calling checkUnsat")
-            res = checkUnsat(
-                unsatCore,
-                self.lemmasData,
-                lemmasDict,
-                args,
-                varmap,
-                self.cbFunctions,
-                bench,  #: Iterable[Dict]
-            )
-            if args.verbose:
-                print("result: ", res)
-                for core in unsatCore:
-                    print("lemma status after pankaj call", lemmasDict[str(core)])
-            self.pop()
-            end = time.time()
-            executiontime["fuzzer"] += end - start
-            print("Execution time", executiontime)
-            return res
-        # exit()
+        z3_cmd = ["z3", "-T:120", "constraints.smt2"]
+        # resultz3 = subprocess.run(z3_cmd, capture_output=True, text=True)
+        # print("z3 result",resultz3.stdout.strip())
+        # if resultz3.stdout.strip() == "unsat":
+        #     start = time.time()
+        #     console.info("Getting unsatcore for outside z3",resultz3.stdout)
+        #     unsatCore = self.lemmasUsed[self.iteration]
+        #     self.unsatCores[self.iteration] = unsatCore
+        #     if args.verbose:
+        #         print("UnsatCore:", unsatCore)  # TODO: Pankaj
+        #     varmap = set()
+        #     for key in self.vars:
+        #         varmap.add(str(key))
+        #     if args.verbose:
+        #         print(varmap)
+        #     for core in unsatCore:
+        #         if args.verbose:
+        #             print(core, self.lemmasData[core])
+        #         self.collectBoundVars(self.lemmasData[core], varmap)
+        #     # print(self.vars)
+        #     # print(self.lemmasUsed)
+        #     # print(varmap)
+        #     # exit()
+        #     end = time.time()
+        #     executiontime["z3"] += end - start
+        #     if len(unsatCore) == 0:
+        #         return AlgoVerdict.UNSAT
+        #     start = time.time()
+        #     console.info("calling checkUnsat")
+        #     res = checkUnsat(
+        #         unsatCore,
+        #         self.lemmasData,
+        #         lemmasDict,
+        #         args,
+        #         varmap,
+        #         self.cbFunctions,
+        #         bench,  #: Iterable[Dict]
+        #     )
+        #     if args.verbose:
+        #         print("result: ", res)
+        #         for core in unsatCore:
+        #             print("lemma status after pankaj call", lemmasDict[str(core)])
+        #     self.pop()
+        #     end = time.time()
+        #     executiontime["fuzzer"] += end - start
+        #     print("Execution time", executiontime)
+        #     return res
+        # # exit()
         result = self.check()
         print(result)
         end = time.time()
@@ -839,6 +839,53 @@ class smtAI(object):
             print("Execution time", executiontime)
             return res
         else:
+            resultz3 = subprocess.run(z3_cmd, capture_output=True, text=True)
+            print("z3 result",resultz3.stdout.strip())
+            if resultz3.stdout.strip() == "unsat":
+                start = time.time()
+                console.info("Getting unsatcore for outside z3",resultz3.stdout)
+                unsatCore = self.lemmasUsed[self.iteration]
+                self.unsatCores[self.iteration] = unsatCore
+                if args.verbose:
+                    print("UnsatCore:", unsatCore)  # TODO: Pankaj
+                varmap = set()
+                for key in self.vars:
+                    varmap.add(str(key))
+                if args.verbose:
+                    print(varmap)
+                for core in unsatCore:
+                    if args.verbose:
+                        print(core, self.lemmasData[core])
+                    self.collectBoundVars(self.lemmasData[core], varmap)
+                # print(self.vars)
+                # print(self.lemmasUsed)
+                # print(varmap)
+                # exit()
+                end = time.time()
+                executiontime["z3"] += end - start
+                if len(unsatCore) == 0:
+                    return AlgoVerdict.UNSAT
+                start = time.time()
+                console.info("calling checkUnsat")
+                res = checkUnsat(
+                    unsatCore,
+                    self.lemmasData,
+                    lemmasDict,
+                    args,
+                    varmap,
+                    self.cbFunctions,
+                    bench,  #: Iterable[Dict]
+                )
+                if args.verbose:
+                    print("result: ", res)
+                    for core in unsatCore:
+                        print("lemma status after pankaj call", lemmasDict[str(core)])
+                self.pop()
+                end = time.time()
+                executiontime["fuzzer"] += end - start
+                print("Execution time", executiontime)
+                return res
+            # exit()
             if args.verbose:
                 print("UNKNOWN")
             self.pop()

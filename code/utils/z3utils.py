@@ -38,7 +38,8 @@ def z3_to_c(expr):
         return f'({z3_to_c(expr.arg(0))}) * ({z3_to_c(expr.arg(1))})'
     elif expr.decl().name() == 'bvurem':
         return f'({z3_to_c(expr.arg(0))}) % ({z3_to_c(expr.arg(1))})'
-    
+    elif expr.decl().name() == "bvudiv":
+            return f"({z3_to_c(expr.arg(0))}) / ({z3_to_c(expr.arg(1))})"
     elif expr.decl().name() == 'bvshl':
         # Logical left shift
         return f'({z3_to_c(expr.arg(0))} << {z3_to_c(expr.arg(1))})'

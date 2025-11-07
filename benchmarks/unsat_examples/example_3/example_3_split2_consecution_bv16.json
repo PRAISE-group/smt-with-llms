@@ -3,18 +3,18 @@
   "object_file": "/home/benchmarks/unsat_examples/example_3/example_3.o",
   "limit": [1, 100],
   "functions": {
-    "retmod_cb": {
-      "smtDecl": "(declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'retmod_cb' takes 2 arguments (a, b) and returns a % b Uses BitVec 16 Domain.",
+    "gcd_cb": {
+      "smtDecl": "(declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'gcd_cb' takes 2 arguments (a, b) and returns the greatest common divisor between a and b. Uses BitVec 16 Domain.",
       "tests": [
         [45, 7],
         [67, 10]
       ],
       "userLemmas": [""]
     },
-    "gcd_cb": {
-      "smtDecl": "(declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'gcd_cb' takes 2 arguments (a, b) and returns the greatest common divisor between a and b. Uses BitVec 16 Domain.",
+    "retmod_cb": {
+      "smtDecl": "(declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'retmod_cb' takes 2 arguments (a, b) and returns a % b",
       "tests": [
         [45, 7],
         [67, 10]
