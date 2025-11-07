@@ -1,0 +1,25 @@
+{
+  "smt_file": "/home/benchmarks/unsat_examples/example_10/example_10_split2_initiation_bv16.smt2",
+  "object_file": "/home/benchmarks/unsat_examples/example_10/example_10.o",
+  "limit": [1, 100],
+  "functions": {
+    "set_lock": {
+      "smtDecl": "(declare-fun set_lock ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'set_lock' takes 1 argument (a) and returns 1",
+      "tests": [
+        [12],
+        [100]
+      ],
+      "userLemmas": [""]
+    },
+    "set_unlock": {
+      "smtDecl": "(declare-fun set_unlock ((_ BitVec 16)) (_ BitVec 16))",
+      "desc": "Closed box function 'set_lock' takes 1 argument (a) and returns 0",
+      "tests": [
+        [12],
+        [100]
+      ],
+      "userLemmas": [""]
+    }
+  }
+}
