@@ -1,8 +1,6 @@
 (set-logic QF_UFBV)
 (set-option :produce-models true)
 
-(set-logic LIA)
-
 ( declare-const arr (_ BitVec 16) )
 ( declare-const arr! (_ BitVec 16) )
 ( declare-const i (_ BitVec 16) )
@@ -31,11 +29,47 @@
 ; closed-box predictor
 (declare-fun predict_cb ((_ BitVec 16)) (_ BitVec 16))
 
+(assert ( = n (_ bv100 16) ))
+(assert ( = n! (_ bv100 16) ))
+(assert ( = n_0 (_ bv100 16) ))
+(assert ( = n_1 (_ bv100 16) ))
+
+; ( define-fun inv-f( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
+; 	( and
+; 		( = n (_ bv100 16) )
+; 		( = sum (predict_cb index) )
+; 	)
+; )
 
 ( define-fun inv-f( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
-	( and
-		( = n (_ bv100 16) )
-		( = sum (predict_cb index) )
+	(and
+	  (bvule index n)
+	  (bvuge index (_ bv0 16))
+	  (bvuge n (_ bv0 16))
+	  (and
+		(bvuge
+		  sum
+		  (bvsub
+			(bvadd
+			  (bvmul
+				(bvmul (_ bv5 16) (bvsub (bvudiv index (_ bv10 16)) (_ bv1 16)))
+				(bvudiv index (_ bv10 16)))
+			  (bvmul
+				(bvudiv index (_ bv10 16))
+				(bvsub index (bvmul (_ bv10 16) (bvudiv index (_ bv10 16)))))
+			)
+			(_ bv9 16)))
+		(bvule
+		  sum
+		  (bvadd
+			(bvadd
+			  (bvmul
+				(bvmul (_ bv5 16) (bvsub (bvudiv index (_ bv10 16)) (_ bv1 16)))
+				(bvudiv index (_ bv10 16)))
+			  (bvmul
+				(bvudiv index (_ bv10 16))
+				(bvsub index (bvmul (_ bv10 16) (bvudiv index (_ bv10 16))))))
+			(_ bv9 16))))
 	)
 )
 
