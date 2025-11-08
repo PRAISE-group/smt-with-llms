@@ -2,6 +2,7 @@ from z3 import Solver, parse_smt2_string, BitVecSort, BitVecVal, Function
 from code.utils.commandline import commandLineArgs
 from code.utils.printers import console
 
+
 def _wrap_assert_if_needed(lemma: str) -> str:
     s = lemma.strip()
     # Accept multiple assertions already
@@ -12,6 +13,7 @@ def _wrap_assert_if_needed(lemma: str) -> str:
         return f"(assert {s})"
     # If someone passes without outer parens, try to be helpful:
     return f"(assert ({s}))"
+
 
 def check_lemma_smtlib(
     lemma_smt: str,

@@ -63,9 +63,9 @@ elif commandLineArgs.usebedrock:
         region_name=REGION,
         retries={"max_attempts": 10, "mode": "adaptive"},
         connect_timeout=100,
-        read_timeout=240  # allow longer server generation/streaming
+        read_timeout=240,  # allow longer server generation/streaming
     )
-    
+
     client = boto3.client(service_name="bedrock-runtime", config=cfg)
 
     llm = ChatBedrockConverse(
@@ -91,9 +91,15 @@ prompt = ChatPromptTemplate.from_messages(
     [
         ("system", SYSTEM_PROMPT_TEMPLATE),
         MessagesPlaceholder(variable_name="history", optional=False),
-        ("human", "Can you briefly explain what is SMTLIB Format in the context of SMT Solving (in 1~2 lines)?"),
-        ("human", "Can you give 2 examples of formulas in SMTLIB Format using bit-vector theory?"),
-        ("human", "{human_message}")
+        (
+            "human",
+            "Can you briefly explain what is SMTLIB Format in the context of SMT Solving (in 1~2 lines)?",
+        ),
+        (
+            "human",
+            "Can you give 2 examples of formulas in SMTLIB Format using bit-vector theory?",
+        ),
+        ("human", "{human_message}"),
     ]
 )
 
@@ -106,9 +112,11 @@ def get_session_history(session_id: str) -> InMemoryChatMessageHistory:
         chat_histories[session_id] = InMemoryChatMessageHistory()
     return chat_histories[session_id]
 
+
 class LLMOutputLemmas(BaseModel):
     explain: str
     lemmas: List[Lemmas]
+
 
 # Create a conversation chain
 conversation = RunnableWithMessageHistory(
@@ -123,7 +131,7 @@ conversation = RunnableWithMessageHistory(
 def callLLMforResponse(prompt: str, funcName: str):
     response = conversation.invoke(
         input={"human_message": prompt},
-        config = {
+        config={
             "configurable": {"session_id": f"session_{funcName}"},
             "callbacks": [TokenTrackingHandler()],
         },

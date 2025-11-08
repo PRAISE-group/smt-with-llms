@@ -1,5 +1,5 @@
+import os
 import uuid
-from z3 import *
 import random
 import subprocess
 from time import sleep
@@ -20,6 +20,7 @@ from code.utils.lemmaTester import smtlib_to_c
 decl = ""
 funcInputs = []
 
+
 def perform_light_check_lemma(body: str, path_to_obj_file: str) -> bool:
     console.print("[bold yellow]Running C code for lemma verification...")
     directory_path = os.path.dirname(path_to_obj_file)
@@ -27,7 +28,7 @@ def perform_light_check_lemma(body: str, path_to_obj_file: str) -> bool:
     if not path_to_obj_file:
         console.log("[bold red]No object file provided for linking.")
         return False
-    
+
     if not body:
         console.log("[bold red]No lemma SMT-LIB string provided.")
         return False
@@ -48,25 +49,42 @@ def perform_light_check_lemma(body: str, path_to_obj_file: str) -> bool:
 
     # Prepare the object file path
     shell_command = f"cd {directory_path} && make"
-    make_process = subprocess.run(shell_command, shell=True, capture_output=True, text=True)
+    make_process = subprocess.run(
+        shell_command, shell=True, capture_output=True, text=True
+    )
     if make_process.returncode != 0:
         console.log("[bold red]Make failed:", make_process.stderr)
         return False
-    
+
     # Compile the C code
-    compile_process = subprocess.run(["g++", "light_check_lemma.cpp", f"{os.path.normpath(path_to_obj_file)}", "-Wall", "-O0", "-o", "light_check_lemma.out"], capture_output=True, text=True)
+    compile_process = subprocess.run(
+        [
+            "g++",
+            "light_check_lemma.cpp",
+            f"{os.path.normpath(path_to_obj_file)}",
+            "-Wall",
+            "-O0",
+            "-o",
+            "light_check_lemma.out",
+        ],
+        capture_output=True,
+        text=True,
+    )
     if compile_process.returncode != 0:
         console.log("[bold red]Compilation failed:", compile_process.stderr)
         return False
-    
+
     # Run the compiled program
-    run_process = subprocess.run(["./light_check_lemma.out"], input=program_input, capture_output=True, text=True)
+    run_process = subprocess.run(
+        ["./light_check_lemma.out"], input=program_input, capture_output=True, text=True
+    )
     if run_process.returncode != 0:
         console.log("[bold red]Execution failed:", run_process.stderr)
         return False
-    
+
     console.log("[bold green]Lemma holds for the provided inputs.")
     return True
+
 
 def process_format(fragment: str) -> str:
     return fragment
@@ -108,6 +126,7 @@ def process_response(response: Any) -> str | None:
     else:
         return response
 
+
 def get_lemmas_from_llm_response(
     response: str, funcName: str, funcDecl: str, generation: int
 ) -> List[Lemmas]:
@@ -130,30 +149,34 @@ def get_lemmas_from_llm_response(
             and "forall" in fragments
         ):
             fragments = process_format(fragments)
-            
+
             isSyntaxVal: bool = check_lemma_smtlib(
-                lemma_smt=fragments,
-                extra_decls="",
-                extra_asserts="",
-                funcDecl=decl
+                lemma_smt=fragments, extra_decls="", extra_asserts="", funcDecl=decl
             )
 
             if not isSyntaxVal:
                 continue
 
             # Quick check using C code execution.
-            pathLib = os.path.normpath("./"+"/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[2:]))
-            lightCheck = perform_light_check_lemma(str(decl + "\n" + fragments), pathLib)
+            pathLib = os.path.normpath(
+                "./"
+                + "/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[2:])
+            )
+            lightCheck = perform_light_check_lemma(
+                str(decl + "\n" + fragments), pathLib
+            )
 
             if not lightCheck:
-                console.log(f"[bold red]Lemma failed light check, skipping: {fragments}")
+                console.log(
+                    f"[bold red]Lemma failed light check, skipping: {fragments}"
+                )
 
             lemmaIdHck = "".join(x for x in str(uuid.uuid4()).split("-"))
             lemmaIdUnq = f"L{lemmaIdHck}_gen{generation}_l{index}"
-            
+
             if commandLineArgs.debug:
                 console.log(f"[bold yellow]New Lemma: {lemmaIdUnq}")
-            
+
             lemmas.append(
                 Lemmas(
                     id=lemmaIdUnq,
@@ -166,13 +189,14 @@ def get_lemmas_from_llm_response(
 
     return lemmas
 
+
 def defineObjective(
-        formatting: str, minLimit: int, maxLimit: int, sessionId: str
+    formatting: str, minLimit: int, maxLimit: int, sessionId: str
 ) -> None:
     """
     After checking the capabilities of the LLM, we now define the task the
     LLM needs to perform. First useful prompt that goes to the LLM.
-    We define the objective for the task here. 
+    We define the objective for the task here.
     """
 
     user_prompt = OBJECTIVE_TEMPLATE.replace("<ARTIFACT>", "lemmas")
@@ -180,14 +204,13 @@ def defineObjective(
     user_prompt = user_prompt.replace("<MIN_LIMIT>", str(minLimit))
     user_prompt = user_prompt.replace("<MAX_LIMIT>", str(maxLimit))
     response = callLLMforResponse(user_prompt, sessionId)
-    
+
     if commandLineArgs.debug:
         console.log("[bold red]Objective Understanding:")
         console.print(response.content)
 
-def defineGuidelines(
-        formatting: str, sessionId: str
-) -> None:
+
+def defineGuidelines(formatting: str, sessionId: str) -> None:
     """
     After checking the capabilities of the LLM, we now define the task the
     LLM needs to perform. First useful prompt that goes to the LLM.
@@ -202,6 +225,7 @@ def defineGuidelines(
         console.log("[bold red]Guidelines Understanding:")
         console.print(response.content)
 
+
 def generateLemmasForFunction(
     func: Function, formatting: str, generation: int, sessionId: str
 ) -> List[Lemmas]:
@@ -211,7 +235,7 @@ def generateLemmasForFunction(
     Lemmas added here will have UNKNOWN status at the beginning.
     """
     console.log(f"[bold blue]Lemma Generation for: {func.name}")
-    
+
     function_prompt = GEN_FUNCTION_LEMMAS.replace("<ARTIFACT>", "lemmas")
     function_prompt = function_prompt.replace("<FUNCTION>", func.name)
     function_prompt = function_prompt.replace("<FORMAT>", formatting)
@@ -258,9 +282,13 @@ def getRefinedLemmasFromExamples(
 
     user_prompt = LEMMA_REFINEMENT_TEMPLATE
     user_prompt = user_prompt.replace("<FORMAT>", formatting)
-    user_prompt = user_prompt.replace("<ARTIFACT>", 'lemmas')
-    user_prompt = user_prompt.replace("<REPLACE_LEMMAS_POS_LIST>", "\n".join(x for x in validLemmas))
-    user_prompt = user_prompt.replace("<REPLACE_LEMMAS_NEG_LIST>", "\n".join(x for x in invalidLemmas))
+    user_prompt = user_prompt.replace("<ARTIFACT>", "lemmas")
+    user_prompt = user_prompt.replace(
+        "<REPLACE_LEMMAS_POS_LIST>", "\n".join(x for x in validLemmas)
+    )
+    user_prompt = user_prompt.replace(
+        "<REPLACE_LEMMAS_NEG_LIST>", "\n".join(x for x in invalidLemmas)
+    )
 
     response = callLLMforResponse(user_prompt, sessionId)
 
@@ -268,6 +296,7 @@ def getRefinedLemmasFromExamples(
         console.log(f"[bold red]New refinement lemmas:")
         console.print(response.content)
 
+    # Prepare function declarations
     funcDecl: str = "\n".join(x.smtDecl for x in funcList)
     return get_lemmas_from_llm_response(response, "refinement", funcDecl, generation)
 
@@ -286,7 +315,9 @@ def generate_lemmas_background(
     global decl
 
     # PROMPT-1 Define objectives of the task.
-    defineObjective(formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, sessionId=sessionId)
+    defineObjective(
+        formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, sessionId=sessionId
+    )
 
     # PROMPT-2 Define the guidelines.
     defineGuidelines(formatting=formatting, sessionId=sessionId)
@@ -314,7 +345,7 @@ def generate_lemmas_background(
             func=function,
             formatting=formatting,
             generation=generation,
-            sessionId=sessionId
+            sessionId=sessionId,
         )
 
         for lms in res:
@@ -342,9 +373,9 @@ def generate_lemmas_background(
                 lemmaDict=lemmaDict,
                 generation=generation,
                 formatting=formatting,
-                sessionId=sessionId
+                sessionId=sessionId,
             )
-            
+
             lemmaDict.setRefinementCall(False)
 
         for lms in res:
