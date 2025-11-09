@@ -25,7 +25,7 @@ from code.models import Lemmas, LemmaStatus
 env_path = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(dotenv_path=env_path)
 
-SYSTEM_PROMPT_TEMPLATE = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation")
+SYSTEM_PROMPT_TEMPLATE = SYSTEM_PROMPT_TEMPLATE.replace("<DOMAIN>", "lemma generation in SMT-LIB Bitvector Format")
 
 BASE_URL = environ.get("BASE_URL", None)
 
