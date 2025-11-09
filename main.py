@@ -30,9 +30,9 @@ if __name__ == "__main__":
     # FIXME: can we do better here
     commandLineArgs.sharedLib = data["object_file"]
 
-    for key, value in data["functions"].items():
+    for index, (key, value) in enumerate(data["functions"].items(), 0):
         lemmaIdHck = "".join(x for x in str(uuid.uuid4()).split("-"))
-        lemmaIdUnq = f"L{lemmaIdHck}_gen0_lN"
+        lemmaIdUnq = f"L{lemmaIdHck}_gen0_l{index}"
         
         if commandLineArgs.debug:
             console.log(f"[bold yellow]New User provided Lemma: {lemmaIdUnq}")
