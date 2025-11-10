@@ -73,7 +73,7 @@ class smtAI(object):
 
     def __init__(self):
         super(smtAI, self).__init__()
-        set_param("timeout", 60000) # timeout for z3
+        set_param("timeout", 120000) # timeout for z3
         self.s = Solver()
         # set_param('smt.logic', 'QF_BV')
         self.s.set("unsat_core", True)

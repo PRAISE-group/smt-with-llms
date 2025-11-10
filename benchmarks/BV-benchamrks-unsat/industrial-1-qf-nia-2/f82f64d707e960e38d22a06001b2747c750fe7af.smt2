@@ -7,17 +7,15 @@
 
 (declare-fun mode_int ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
 
-;(declare-fun spoon_1 ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
-(declare-fun spoon_2_cb ((_ BitVec 32)) (_ BitVec 32))
-;(declare-fun spoon_3 ((_ BitVec 32) (_ BitVec 32)) (_ BitVec 32))
+;(declare-fun spoon_2_cb ((_ BitVec 32)) (_ BitVec 32))
 
 ;; (define-fun spoon_1 ((kitten_1 (_ BitVec 32)) (kitten_2 (_ BitVec 32))) (_ BitVec 32)
 ;; 	    (ite (bvult 0 kitten_2) (mod_int kitten_1 kitten_2) (+ (mod_int kitten_1 kitten_2) kitten_2))
 ;; )
 
-;; (define-fun spoon_2_cb ((kitten_3 (_ BitVec 32))) Bool
-;; 	    (and (<= 0 kitten_3) (<= kitten_3 999))
-;; )
+ (define-fun spoon_2_cb ((kitten_3 (_ BitVec 32))) (_ BitVec 32)
+ 	    (and (bvsle (_ bv0 32) kitten_3) (bvsle kitten_3 (_ bv999 32)))
+ )
 
 ;; (define-fun spoon_3 ((kitten_4 (_ BitVec 32)) (kitten_5 Bool) (kitten_6 Bool) (kitten_7 Bool) (kitten_8 Bool)) Bool
 ;; 	    (=> (or (= kitten_5 true) (<= 0 999)) (spoon_2_cb kitten_4))
@@ -104,5 +102,5 @@
 (assert (= (_ bv1 32) (spoon_2_cb cat_47)))
 
 (check-sat)
-(get-model)
+;(get-model)
 (exit)

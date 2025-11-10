@@ -5,9 +5,9 @@
 (declare-const x       (_ BitVec 16))
 (declare-const y       (_ BitVec 16))
 (declare-const lock    (_ BitVec 16))
-(declare-const x!      (_ BitVec 16))
-(declare-const y!      (_ BitVec 16))
-(declare-const lock!   (_ BitVec 16))
+(declare-const x_      (_ BitVec 16))
+(declare-const y_      (_ BitVec 16))
+(declare-const lock_   (_ BitVec 16))
 
 ; assumes:
 ; (define-fun set_lock_cb   ((l (_ BitVec 16))) (_ BitVec 16) (_ bv1 16))
@@ -23,24 +23,28 @@
   )
 )
 
+(define-fun loop ((x (_ BitVec 16)) (y (_ BitVec 16))) Bool
+  (not (= x y))
+)
+
 (define-fun trans-f ((x (_ BitVec 16)) (y (_ BitVec 16)) (lock (_ BitVec 16))
-                     (x! (_ BitVec 16)) (y! (_ BitVec 16)) (lock! (_ BitVec 16))) Bool
+                     (x_ (_ BitVec 16)) (y_ (_ BitVec 16)) (lock_ (_ BitVec 16))) Bool
   (or
     (and (= x y)
-         (= x! x) (= y! y) (= lock! lock))
+         (= x_ x) (= y_ y) (= lock_ lock) (not (loop x y)) )
     (and (not (= x y))
-         (= x! y)
+         (= x_ y)
          (or
-           (and (= lock! (set_lock_cb lock))
-                (= y! y))
-           (and (= lock! (set_unlock_cb lock))
-                (= y! (bvadd y (_ bv1 16)))))
+           (and (= lock_ (set_lock_cb lock))
+                (= y_ y))
+           (and (= lock_ (set_unlock_cb lock))
+                (= y_ (bvadd y (_ bv1 16)))))
     ))
 )
 
-(assert (not (=> (and (inv-f x y lock)
-                      (trans-f x y lock x! y! lock!))
-                 (inv-f x! y! lock!))))
+(assert (not (=> (and (inv-f x y lock) (loop x y)
+                      (trans-f x y lock x_ y_ lock_))
+                 (inv-f x_ y_ lock_))))
 
 (check-sat)
 ; (get-model)

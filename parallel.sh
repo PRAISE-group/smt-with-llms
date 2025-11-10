@@ -70,18 +70,22 @@ kill_tree() {
 cd /home/
 # Done
 model="--model gpt-oss:20b --use156"
-# model="--usebedrock --model meta.llama4-maverick-17b-instruct-v1:0"
+# model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
 # model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
 # model="--usebedrock --model qwen.qwen3-32b-v1:0"
 # model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
 # # model="--model llama3:latest"
 # model="--usebedrock --model openai.gpt-oss-120b-1:0"
+
+echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
 for i in {1..10}; do
     if ! check_files; then
         # echo "not sat checking for unsat"
         echo "Current time: $(date)"
+        echo " " >> $3
+        echo "Starting script iteration" >> $3
+        echo " " >> $3
         start_time=$(date +%s)
-        echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
         setsid timeout 10m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
         pid2=$!
         exit_code=$?
