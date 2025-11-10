@@ -29,6 +29,7 @@ int main() {
     // loopstart
     while ((x >= y)) {
         // loop body
+        // This updates both y_power and power.
         setPowerValue(&y_power, &x, &power);
         result += 1 << power;
         x = x - y_power;
