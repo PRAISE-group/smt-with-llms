@@ -2,15 +2,15 @@
 (set-option :produce-models true)
 
 ( declare-const arr (_ BitVec 16) )
-( declare-const arr! (_ BitVec 16) )
+( declare-const arr_ (_ BitVec 16) )
 ( declare-const i (_ BitVec 16) )
-( declare-const i! (_ BitVec 16) )
+( declare-const i_ (_ BitVec 16) )
 ( declare-const index (_ BitVec 16) )
-( declare-const index! (_ BitVec 16) )
+( declare-const index_ (_ BitVec 16) )
 ( declare-const n (_ BitVec 16) )
-( declare-const n! (_ BitVec 16) )
+( declare-const n_ (_ BitVec 16) )
 ( declare-const sum (_ BitVec 16) )
-( declare-const sum! (_ BitVec 16) )
+( declare-const sum_ (_ BitVec 16) )
 
 ( declare-const arr_0 (_ BitVec 16) )
 ( declare-const i_0 (_ BitVec 16) )
@@ -30,7 +30,7 @@
 (declare-fun predict_cb ((_ BitVec 16)) (_ BitVec 16))
 
 (assert ( = n (_ bv100 16) ))
-(assert ( = n! (_ bv100 16) ))
+(assert ( = n_ (_ bv100 16) ))
 (assert ( = n_0 (_ bv100 16) ))
 (assert ( = n_1 (_ bv100 16) ))
 
@@ -88,18 +88,18 @@
 ; 	)
 ; )
 
-( define-fun trans-f ( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( arr! (_ BitVec 16) )( i! (_ BitVec 16) )( index! (_ BitVec 16) )( n! (_ BitVec 16) )( sum! (_ BitVec 16) )( arr_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( index_0 (_ BitVec 16) )( index_1 (_ BitVec 16) )( index_2 (_ BitVec 16) )( index_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( n_1 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
+( define-fun trans-f ( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( arr_ (_ BitVec 16) )( i_ (_ BitVec 16) )( index_ (_ BitVec 16) )( n_ (_ BitVec 16) )( sum_ (_ BitVec 16) )( arr_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( index_0 (_ BitVec 16) )( index_1 (_ BitVec 16) )( index_2 (_ BitVec 16) )( index_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( n_1 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
 	(or
 	(and
 		(= index_2 index)
 		(= sum_2 sum)
-		(= index_2 index!)
-		(= sum_2 sum!)
+		(= index_2 index_)
+		(= sum_2 sum_)
 		(= n n_1)
-		(= n! n_1)
-		(= arr arr!)
-		(= i i!)
-		(= sum sum!)
+		(= n_ n_1)
+		(= arr arr_)
+		(= i i_)
+		(= sum sum_)
 	)
 	(and
 		(= index_2 index)
@@ -109,14 +109,14 @@
 		; index += 1
 		(= sum_3 (bvadd sum_2 (predict_cb index_2)))
 		(= index_3 (bvadd index_2 (_ bv1 16)))
-		(= index_3 index!)
-		(= sum_3 sum!)
+		(= index_3 index_)
+		(= sum_3 sum_)
 		(= arr arr_0)
-		(= arr! arr_0)
+		(= arr_ arr_0)
 		(= i i_1)
-		(= i! i_1)
+		(= i_ i_1)
 		(= n n_1)
-		(= n! n_1)
+		(= n_ n_1)
 	)
 	)
 )
@@ -154,9 +154,9 @@
 	( =>
 		( and
 			( inv-f arr i index n sum )
-			( trans-f arr i index n sum arr! i! index! n! sum! arr_0 i_0 i_1 index_0 index_1 index_2 index_3 n_0 n_1 sum_0 sum_1 sum_2 sum_3 )
+			( trans-f arr i index n sum arr_ i_ index_ n_ sum_ arr_0 i_0 i_1 index_0 index_1 index_2 index_3 n_0 n_1 sum_0 sum_1 sum_2 sum_3 )
 		)
-		( inv-f arr! i! index! n! sum! )
+		( inv-f arr_ i_ index_ n_ sum_ )
 	)
 ))
 
