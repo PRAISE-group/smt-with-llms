@@ -5,6 +5,7 @@ from typing import Dict
 from dotenv import load_dotenv
 from pathlib import Path
 from botocore.config import Config
+from rich.syntax import Syntax
 
 from pydantic import BaseModel
 from typing import Dict, List
@@ -91,14 +92,6 @@ prompt = ChatPromptTemplate.from_messages(
     [
         ("system", SYSTEM_PROMPT_TEMPLATE),
         MessagesPlaceholder(variable_name="history", optional=False),
-        (
-            "human",
-            "Can you briefly explain what is SMTLIB Format in the context of SMT Solving (in 1~2 lines)?",
-        ),
-        (
-            "human",
-            "Can you give 2 examples of formulas in SMTLIB Format using bit-vector theory?",
-        ),
         ("human", "{human_message}"),
     ]
 )
@@ -117,7 +110,6 @@ class LLMOutputLemmas(BaseModel):
     explain: str
     lemmas: List[Lemmas]
 
-
 # Create a conversation chain
 conversation = RunnableWithMessageHistory(
     chain,
@@ -127,7 +119,6 @@ conversation = RunnableWithMessageHistory(
     verbose=False,
 )
 
-
 def callLLMforResponse(prompt: str, funcName: str):
     response = conversation.invoke(
         input={"human_message": prompt},
@@ -136,5 +127,9 @@ def callLLMforResponse(prompt: str, funcName: str):
             "callbacks": [TokenTrackingHandler()],
         },
     )
+
+    console.print(f"{'*'*40}")
+    console.print(prompt)
+    console.print(f"{'*'*40}")
 
     return response

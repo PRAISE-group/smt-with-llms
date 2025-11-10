@@ -314,6 +314,16 @@ def generate_lemmas_background(
     generation = lemmaDict.getLatestGeneration(sessionId)
     global decl
 
+    # PROMPT-0 Check Knowledge.
+    res = callLLMforResponse(CHECK_1, sessionId)
+    if commandLineArgs.debug:
+        console.log(res.content)
+
+    # PROMPT-0 Check Knowledge.
+    res = callLLMforResponse(CHECK_2, sessionId)
+    if commandLineArgs.debug:
+        console.log(res.content)
+
     # PROMPT-1 Define objectives of the task.
     defineObjective(
         formatting=formatting, minLimit=minLimit, maxLimit=maxLimit, sessionId=sessionId

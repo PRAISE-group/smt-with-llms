@@ -9,11 +9,9 @@ CHECK_2 = """
 
 # PROMPT-0 prompt that goes to the LLM. We define the capability of the LLMs for the task here.
 SYSTEM_PROMPT_TEMPLATE = """
-    You are an expert logical assistant. 
-    You are proficient in generating formulas in SMT-LIB format that is understandable by Z3 SMT Solver.
-    I will give you a task in <DOMAIN> and you have to complete the task.
-    
-    Are you ready for some action?
+    You are an expert logical assistant. You are proficient in generating formulas in SMT-LIB format 
+    that is understandable by Z3 SMT Solver. I will give you a task in <DOMAIN> and you have to complete the task.
+    **Are you ready for some action?**
 """
 
 # PROMPT-1 prompt that goes to the LLM. We define the objective for the task here.
@@ -24,12 +22,12 @@ OBJECTIVE_TEMPLATE = """
     1) Please note that you need to generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <ARTIFACT>.
     2) You are free to generate lemmas that use one or more of these closed-box functions.
     
-    Is the objective of the task clear to you?
+    **Is the objective of the task clear to you?**
 """
 
 # PROMPT-2 prompt that goes to the LLM. We define the guidelines for the task here.
 LEMMA_GENERATION_GUIDELINES = """
-    Please use the following rules strictly.
+    **Please use the following rules strictly.**
 
     1) Write <ARTIFACT> in between LEMMA_START and LEMMA_END blocks. Give me each lemma in a seperate line so that I can parse it back.
     
@@ -52,13 +50,13 @@ LEMMA_GENERATION_GUIDELINES = """
     
     8) Match the correct parenthesis, do not wrap the <ARTIFACT> in extra parenthesis.
     
-    9) Generate <ARTIFACT> which uses correct <FORMAT> operations from the <FORMAT> theory you need to use.
+    9) Generate <ARTIFACT> which uses correct <FORMAT> operations from the <FORMAT> theory instructed earlier.
     
-    Are these 9 guideline rules clear to you?
+    **Are these 9 guideline rules clear to you?**
 """
 
 FEW_SHOTS = """
-    Lemmas in bit-vector theory typically looks like the ones given below.  `foo_cb` is a closed-box function here.
+    Lemmas in bit-vector theory typically looks like the ones given below. `foo_cb` is a closed-box function here.
     
     ```
     (assert (= (foo_cb (_ bv0 32)) (_ bv0 32)))
@@ -70,14 +68,14 @@ FEW_SHOTS = """
     (assert (forall ((z (_ BitVec 32))) (=> (not (bvugt z (_ bv0 32))) (= (bvugt (foo_cb z) (_ bv0 32)) false))))
     ```
     
-    Here is an example for lemma over closed-box function `ex()` in bitvector theory.
+    Here is an example for lemma over closed-box function `x()` in bitvector theory.
     
     ```
     (declare-fun x () (_ BitVec 32))
     (assert (forall ((x (_ BitVec 32))) (= (bvadd (bvadd x (_ bv1 32)) (_ bvneg x)) (_ bv1 32))))
     ```
     
-    Generate similar lemmas for the given closed box <FUNCTION> with forall constraints in bit-vector theory.
+    Generate similar lemmas for the given closed box <FUNCTION> with forall constraints in bit-vector theory between LEMMA_START and LEMMA_END blocks.
 """
 
 # PROMPT-3 New we provide the details about a function and ask the LLM to generate a response.
@@ -90,7 +88,7 @@ GEN_FUNCTION_LEMMAS = f"""
     ```
     FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
     FUNCTION_PROTOTYPE: <FUNCTION_PROTOTYPE>
-    OUTPUT_FORMAT: List of <ARTIFACT> in <FORMAT>.
+    OUTPUT_FORMAT: List of <ARTIFACT> in <FORMAT>, between LEMMA_START and LEMMA_END blocks.
     ``` 
 """
 
