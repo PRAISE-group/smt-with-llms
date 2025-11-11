@@ -25,8 +25,14 @@ int digits_data[100] = {
 // Closed-box function predict takes a image data representing a digit between 0 and 9 
 // Returns a value between 0 and 9, if the image prdicted by the neural network is correct.
 // else it returns a zero.
+// int predict_cb(int index) {
+// 	if ((index < 0) || (index >= 100))
+// 		return 0;
+//     return (digits_data[index] / 10);
+// }
+
 int predict_cb(int index) {
 	if ((index < 0) || (index >= 100))
 		return 0;
-    return (digits_data[index] / 10);
+    return (index / 10);
 }

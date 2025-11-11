@@ -12,27 +12,16 @@ def parse_file(filepath):
         text = f.read()  # read full content
 
     # Split based on the marker
-    parts = text.split("Starting script iteration")
+    partitions = text.split("Starting script iteration")
 
     # Get the last part (after the final occurrence)
-    last_part = parts[-1]
-    num_splits = len(parts) - 1
+    last_part = partitions[-1]
+    num_splits = len(partitions) - 1
 
     # Split into lines
     lines = last_part.strip().splitlines()
 
     # Case 1: contains ",sat"
-    for line in lines:
-        if ",sat" in line:
-            category = "SAT"
-            parts = line.strip().split(",")
-            if len(parts) >= 2:
-                try:
-                    z3_time = float(parts[1])  # assuming second field is time
-                except ValueError:
-                    z3_time = None
-            fuzzer_time = 0.0  # if not explicitly given
-            return category, z3_time, fuzzer_time, num_splits
 
     # Case 2: contains "Program SAT"
     for i, line in enumerate(lines):
@@ -40,8 +29,8 @@ def parse_file(filepath):
             category = "SAT"
             if i + 2 < len(lines):
                 try:
-                    z3_time = float(lines[i+1].split()[-1])
-                    fuzzer_time = float(lines[i+2].split()[-1])
+                    z3_time = float(lines[i+1].split()[3])
+                    fuzzer_time = float(lines[i+2].split()[3])
                 except Exception:
                     pass
             return category, z3_time, fuzzer_time, num_splits
@@ -52,8 +41,8 @@ def parse_file(filepath):
             category = "UNSAT"
             if i + 2 < len(lines):
                 try:
-                    z3_time = float(lines[i+1].split()[-1])
-                    fuzzer_time = float(lines[i+2].split()[-1])
+                    z3_time = float(lines[i+1].split()[3])
+                    fuzzer_time = float(lines[i+2].split()[3])
                 except Exception:
                     pass
             return category, z3_time, fuzzer_time, num_splits

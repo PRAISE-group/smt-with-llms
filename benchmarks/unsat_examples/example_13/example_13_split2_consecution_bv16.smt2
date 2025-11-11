@@ -29,6 +29,13 @@
 ; closed-box predictor
 (declare-fun predict_cb ((_ BitVec 16)) (_ BitVec 16))
 
+;(define-fun predict_cb ((index (_ BitVec 16))) (_ BitVec 16)
+;  (ite (or (bvslt index #x0000)                 ; index < 0
+;           (bvsge index #x0064))                ; index >= 100 (0x64)
+;       #x0000                                   ; return 0
+;       (bvsdiv index #x000A))                   ; return index / 10
+;)
+
 (assert ( = n (_ bv100 16) ))
 (assert ( = n_ (_ bv100 16) ))
 (assert ( = n_0 (_ bv100 16) ))
@@ -40,6 +47,10 @@
 ; 		( = sum (predict_cb index) )
 ; 	)
 ; )
+
+(define-fun loop ((index (_ BitVec 16)) (n (_ BitVec 16))) Bool
+  (bvult index n)
+)
 
 ( define-fun inv-f( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) ) ) Bool
 	(and
@@ -73,20 +84,6 @@
 	)
 )
 
-; ( define-fun pre-f ( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( arr_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( index_0 (_ BitVec 16) )( index_1 (_ BitVec 16) )( index_2 (_ BitVec 16) )( index_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( n_1 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
-; 	( and
-; 		( = arr arr_0 )
-; 		( = i i_1 )
-; 		( = index index_1 )
-; 		( = n n_1 )
-; 		( = sum sum_1 )
-; 		( = arr_0  )
-; 		( = sum_1 0 )
-; 		( = i_1 0 )
-; 		( = n_1 100 )
-; 		( = index_1 0 )
-; 	)
-; )
 
 ( define-fun trans-f ( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( arr_ (_ BitVec 16) )( i_ (_ BitVec 16) )( index_ (_ BitVec 16) )( n_ (_ BitVec 16) )( sum_ (_ BitVec 16) )( arr_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( index_0 (_ BitVec 16) )( index_1 (_ BitVec 16) )( index_2 (_ BitVec 16) )( index_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( n_1 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
 	(or
@@ -100,6 +97,7 @@
 		(= arr arr_)
 		(= i i_)
 		(= sum sum_)
+		(not (loop index n))
 	)
 	(and
 		(= index_2 index)
@@ -121,52 +119,18 @@
 	)
 )
 
-; ( define-fun post-f ( ( arr (_ BitVec 16) )( i (_ BitVec 16) )( index (_ BitVec 16) )( n (_ BitVec 16) )( sum (_ BitVec 16) )( arr_0 (_ BitVec 16) )( i_0 (_ BitVec 16) )( i_1 (_ BitVec 16) )( index_0 (_ BitVec 16) )( index_1 (_ BitVec 16) )( index_2 (_ BitVec 16) )( index_3 (_ BitVec 16) )( n_0 (_ BitVec 16) )( n_1 (_ BitVec 16) )( sum_0 (_ BitVec 16) )( sum_1 (_ BitVec 16) )( sum_2 (_ BitVec 16) )( sum_3 (_ BitVec 16) ) ) Bool
-; 	( or
-; 		( not
-; 			( and
-; 				( = arr arr_0)
-; 				( = i i_1)
-; 				( = index index_2)
-; 				( = n n_1)
-; 				( = sum sum_2)
-; 			)
-; 		)
-; 		( not
-; 			( and
-; 				( not ( < index_2 n_1 ) )
-; 				( not ( = sum_2 450 ) )
-; 			)
-; 		)
-; 	)
-; )
-
-; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
-; ( assert ( not
-; 	( =>
-; 		( pre-f arr i index n sum arr_0 i_0 i_1 index_0 index_1 index_2 index_3 n_0 n_1 sum_0 sum_1 sum_2 sum_3  )
-; 		( inv-f arr i index n sum )
-; 	)
-; ))
-
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
 	( =>
 		( and
 			( inv-f arr i index n sum )
+			(loop index n)
 			( trans-f arr i index n sum arr_ i_ index_ n_ sum_ arr_0 i_0 i_1 index_0 index_1 index_2 index_3 n_0 n_1 sum_0 sum_1 sum_2 sum_3 )
 		)
 		( inv-f arr_ i_ index_ n_ sum_ )
 	)
 ))
 
-; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
-; ( assert ( not
-; 	( =>
-; 		( inv-f arr i index n sum  )
-; 		( post-f arr i index n sum arr_0 i_0 i_1 index_0 index_1 index_2 index_3 n_0 n_1 sum_0 sum_1 sum_2 sum_3 )
-; 	)
-; ))
 
 (check-sat)
 ; (get-model)
