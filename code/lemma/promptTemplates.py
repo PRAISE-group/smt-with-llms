@@ -89,7 +89,8 @@ GEN_FUNCTION_LEMMAS = f"""
     FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
     FUNCTION_PROTOTYPE: <FUNCTION_PROTOTYPE>
     OUTPUT_FORMAT: List of <ARTIFACT> in <FORMAT>, between LEMMA_START and LEMMA_END blocks.
-    ``` 
+    ```
+    You are free to generate lemmas over one or more of the closed-box functions whose descriptions have been provided till now.
 """
 
 # Refinement Lemmas Blocking Clause.
@@ -115,4 +116,5 @@ LEMMA_REFINEMENT_TEMPLATE = """
     1) Please generate more <ARTIFACT> that are like POSITIVE_EXAMPLES.
     2) Do not generate <ARTIFACT> which are like the ones in NEGATIVE_EXAMPLES.
     3) Be careful about the syntax correctness and adhere to <FORMAT>.
+    4) Do not repeat the <ARTIFACT> that are already present in POSITIVE_EXAMPLES.
 """
