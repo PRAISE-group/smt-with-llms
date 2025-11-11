@@ -5,7 +5,7 @@
   "functions": {
     "predict_cb": {
       "smtDecl": "(declare-fun predict_cb ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'predict_cb' takes 1 argument (arg1), always returns a value between 0 and 9. It is called 100 times in a loop and returns 0 exactly ten times for arg1 less than 10, 1 exactly ten times for arg1 less than 20 but greater than 10, ... , and 9 exactly ten times when arg1 is less than 100 and greater than 90. The function is deterministic.",
+      "desc": "Closed box function 'predict_cb' takes 1 argument (arg1), always returns floor of arg1 divided by 10 if arg1 is greater than 0 and less than 100. Otherwise it returns zero.",
       "tests": [
         [12],
         [99],

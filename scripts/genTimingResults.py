@@ -8,27 +8,44 @@ def extract_times_from_file(filepath):
     fuzzer_time = None
     status = "UNKNOWN"
 
-    with open(filepath, 'r', errors='ignore') as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith("Total Time:"):
-                try:
-                    total_time = float(line.split(":")[1].strip())
-                except:
-                    pass
-            elif line.startswith("Z3 Execution time"):
-                try:
-                    z3_time = float(line.split()[-1])
-                except:
-                    pass
-            elif line.startswith("fuzzer Execution time"):
-                try:
-                    fuzzer_time = float(line.split()[-1])
-                except:
-                    pass
-            elif "Program UNSAT" in line:
-                status = "UNSAT"
+    with open(filepath, "r") as f:
+        text = f.read()  # read full content
 
+    # Split based on the marker
+    parts = text.split("Starting script iteration")
+
+    # Get the last part (after the final occurrence)
+    last_part = parts[-1]
+    num_splits = len(parts) - 1
+    # print(last_part)
+    # exit()
+    # Split into lines
+    lines = last_part.strip().splitlines()
+
+    for line in lines:
+        line = line.strip()
+        # print(line)
+        if line.startswith("Total Execution time except LLM"):
+            try:
+                total_time = float(line[31:].split()[0].strip())
+                # print(line)
+            except:
+                pass
+        elif line.startswith("Z3 Execution time"):
+            try:
+                z3_time = float(line[17:].split()[0].strip())
+                # print(line)
+            except:
+                pass
+        elif line.startswith("fuzzer Execution time"):
+            try:
+                fuzzer_time = float(line[21:].split()[0].strip())
+                # print(line)
+            except:
+                pass
+        elif "Program UNSAT" in line:
+            status = "UNSAT"
+    # exit()
     # Apply defaults if missing
     if total_time is None and z3_time is None and fuzzer_time is None:
         total_time = 600.0

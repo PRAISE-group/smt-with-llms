@@ -51,7 +51,7 @@ int main() {
     // loopstart
     while (index < n) {
         // loop body
-        sum += predict(digits_data[index]);
+        sum += predict(index);
         index += 1;
     }
     // loopend

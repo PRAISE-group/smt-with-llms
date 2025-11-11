@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const power (_ BitVec 16) )
@@ -31,24 +31,31 @@
 (declare-fun setPowerValue_power_cb  ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 (declare-fun setPowerValue_ypower_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
+;(define-fun-rec setPowerValue_power_cb ((y_power (_ BitVec 16)) (x (_ BitVec 16)) (power (_ BitVec 16))) (_ BitVec 16)
+;  (ite (bvugt y_power x)
+;       (setPowerValue_power_cb (bvlshr y_power #x0001) x (bvsub power #x0001))
+;       power))
+
+;(define-fun-rec setPowerValue_ypower_cb ((y_power (_ BitVec 16)) (x (_ BitVec 16)) (power (_ BitVec 16))) (_ BitVec 16)
+;  (ite (bvugt y_power x)
+;       (setPowerValue_ypower_cb (bvlshr y_power #x0001) x (bvsub power #x0001))
+;       y_power))
+
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_1000 ((x (_ BitVec 16))) Bool
-  (and (bvsge x (_ bv0 16)) (bvsle x (_ bv1000 16))))
+  (and (bvsge x (_ bv0 16)) (bvsle x (_ bv5 16))))
 
 (assert (in_0_1000 x_0))
-(assert (in_0_1000 x_0_))
-(assert (in_0_1000 x_0))
-(assert (in_0_1000 x_1))
-(assert (in_0_1000 x_2))
 (assert (in_0_1000 x))
-(assert (in_0_1000 x_))
-(assert (in_0_1000 x_0_1))
-(assert (in_0_1000 x_0_1))
+(assert (in_0_1000 result))
+(assert (in_0_1000 power))
+(assert (in_0_1000 y_power))
 (assert (bvuge y (_ bv1 16)))
 (assert (bvuge y_0 (_ bv1 16)))
+(assert (bvuge y_power (_ bv1 16)))
 
 (define-fun loop ((x (_ BitVec 16)) (y (_ BitVec 16))) Bool
-  (bvsge x y)
+  (bvuge x y)
 )
 
 ( define-fun inv-f( ( power (_ BitVec 16) )( result (_ BitVec 16) )( x (_ BitVec 16) )( x_0 (_ BitVec 16) )( y (_ BitVec 16) )( y_power (_ BitVec 16) ) ) Bool
@@ -57,6 +64,7 @@
 	  (bvuge x_0 (_ bv0 16))
 	  (bvugt y (_ bv0 16))
 	  (bvuge y_power (_ bv0 16))
+	  (= y_power (bvshl y power))
 	)
 )
 
@@ -92,54 +100,18 @@
 			(not (loop x y))
 		)
 		( and
-			(= x_1 x)
-			(bvuge x_1 y_0)
-			(= power_1   (setPowerValue_power_cb  y_power x_1 power))
-			(= y_power_1 (setPowerValue_ypower_cb y_power x_1 power))
-			(= x_2 (bvsub x_1 y_power_1))
-			(= x_2 x_)
-			(= power power_1)
-			(= power_ power_1)
-			(= result result_1)
-			(= result_ (bvadd result_1 (bvshl (_ bv1 16) power_1)))
-			(= x_0 x_0_1)
-			(= x_0_ x_0_1)
-			(= y y_0)
-			(= y_ y_0)
-			(= y_power y_power_1)
-			(= y_power_ y_power_1)
+			(bvuge x y)
+			(= power_1   (setPowerValue_power_cb  y_power x power))
+			(= y_power_1 (setPowerValue_ypower_cb y_power x power))
+			(= y_power_ y_power)
+			(= power_ power)
+			(= x_ (bvsub x y_power_1))
+			(= result_ (bvadd result (bvshl (_ bv1 16) power_1)))
+			(= x_0_ x_0)
+			(= y y_)
 		)
 	)
 )
-
-; ( define-fun post-f ( ( power (_ BitVec 16) )( result (_ BitVec 16) )( x (_ BitVec 16) )( x_0 (_ BitVec 16) )( y (_ BitVec 16) )( y_power (_ BitVec 16) )( power_0 (_ BitVec 16) )( power_1 (_ BitVec 16) )( result_0 (_ BitVec 16) )( result_1 (_ BitVec 16) )( x_0 (_ BitVec 16) )( x_1 (_ BitVec 16) )( x_2 (_ BitVec 16) )( x_0_0 (_ BitVec 16) )( x_0_1 (_ BitVec 16) )( y_0 (_ BitVec 16) )( y_power_0 (_ BitVec 16) )( y_power_1 (_ BitVec 16) ) ) Bool
-; 	( or
-; 		( not
-; 			( and
-; 				( = power power_1)
-; 				( = result result_1)
-; 				( = x x_1)
-; 				( = x_0 x_0_1)
-; 				( = y y_0)
-; 				( = y_power y_power_1)
-; 			)
-; 		)
-; 		( not
-; 			( and
-; 				(bvult x_1 y_0)
-; 				(not (= x_0_1 (bvadd x_1 (bvmul y_0 result_1))))
-; 			)
-; 		)
-; 	)
-; )
-
-; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
-;( assert ( not
-;	( =>
-;		( pre-f power result x x_0 y y_power power_0 power_1 result_0 result_1 x_0 x_1 x_2 x_0_0 x_0_1 y_0 y_power_0 y_power_1  )
-;		( inv-f power result x x_0 y y_power )
-;	)
-;))
 
 ; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
 ( assert ( not
@@ -153,13 +125,6 @@
 	)
 ))
 
-; SPLIT_HERE_asdfghjklzxcvbnmqwertyuiop
-;( assert ( not
-;	( =>
-;		( inv-f power result x x_0 y y_power  )
-;		( post-f power result x x_0 y y_power power_0 power_1 result_0 result_1 x_0 x_1 x_2 x_0_0 x_0_1 y_0 y_power_0 y_power_1 )
-;	)
-;))
 
 (check-sat)
 ;(get-model)
