@@ -10,7 +10,7 @@ CHECK_2 = """
 # PROMPT-0 prompt that goes to the LLM. We define the capability of the LLMs for the task here.
 SYSTEM_PROMPT_TEMPLATE = """
     You are an expert logical assistant. You are proficient in generating formulas in SMT-LIB format 
-    that is understandable by Z3 SMT Solver. I will give you a task in <DOMAIN> and you have to complete the task.
+    that is understandable by Z3 SMT Solver. The user will give you a task in <DOMAIN> and you have to complete the task.
     **Are you ready for some action?**
 """
 
@@ -20,7 +20,7 @@ OBJECTIVE_TEMPLATE = """
     in the format of <FORMAT> for the closed-box functions whose descriptions will be provided later. 
     
     1) Please note that you need to generate atleast <MIN_LIMIT> and at most <MAX_LIMIT> <ARTIFACT>.
-    2) You are free to generate lemmas that use one or more of these closed-box functions.
+    2) You are free to generate lemmas that use one or more closed-box functions.
     
     **Is the objective of the task clear to you?**
 """
