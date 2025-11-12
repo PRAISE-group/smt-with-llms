@@ -69,8 +69,8 @@ kill_tree() {
 # Run program2 in its own process group with timeout
 cd /home/
 # Done
-model="--model gpt-oss:20b --use156"
-# model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
+# model="--model gpt-oss:20b --use156"
+model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
 # model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
 # model="--usebedrock --model qwen.qwen3-32b-v1:0"
 # model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"

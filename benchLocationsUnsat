@@ -100,3 +100,6 @@
 /home/benchmarks/unsat_examples/example_6/example_6_split1_initiation_bv16.json
 /home/benchmarks/unsat_examples/example_6/example_6_split2_consecution_bv16.json
 /home/benchmarks/unsat_examples/example_6/example_6_split3_safety_bv16.json
+/home/benchmarks/unsat_examples/example_10/example_10_split2_consecution_bv16.json
+/home/benchmarks/unsat_examples/example_12/example_12_split2_consecution_bv16.json
+/home/benchmarks/unsat_examples/example_13/example_13_split2_consecution_bv16.json

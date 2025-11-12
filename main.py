@@ -108,7 +108,7 @@ if __name__ == "__main__":
     # TODO: commandLineArgs is a class dictonary of all the attributes presented via the command line.
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
-
+    time.sleep(20)
     solverai = smtAI()
     solverai.readSMTfile(data["smt_file"])
     solverai.initialize(commandLineArgs, data)

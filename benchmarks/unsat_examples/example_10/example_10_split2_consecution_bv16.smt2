@@ -1,13 +1,13 @@
 (set-logic QF_UFBV)
-(set-option :produce-models true)
+;(set-option :produce-models true)
 
 ; ------------ State ------------
-(declare-const x       (_ BitVec 16))
-(declare-const y       (_ BitVec 16))
-(declare-const lock    (_ BitVec 16))
-(declare-const x_      (_ BitVec 16))
-(declare-const y_      (_ BitVec 16))
-(declare-const lock_   (_ BitVec 16))
+(declare-const x (_ BitVec 16))
+(declare-const y (_ BitVec 16))
+(declare-const lock (_ BitVec 16))
+(declare-const x_ (_ BitVec 16))
+(declare-const y_ (_ BitVec 16))
+(declare-const lock_ (_ BitVec 16))
 
 ; assumes:
 ; (define-fun set_lock_cb   ((l (_ BitVec 16))) (_ BitVec 16) (_ bv1 16))

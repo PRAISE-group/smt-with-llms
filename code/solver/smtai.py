@@ -227,22 +227,26 @@ class smtAI(object):
         elif expr.decl().name() == "bvmul":
             return " * ".join(f"({self.z3_to_c(c)})" for c in expr.children())
             # return f'({self.z3_to_c(expr.arg(0))}) * ({self.z3_to_c(expr.arg(1))})'
+        elif expr.decl().kind() == Z3_OP_BUDIV0:
+            return f"({self.z3_to_c(expr.arg(0))}) / ({self.z3_to_c(expr.arg(1))})"        
         elif expr.decl().name() == "bvudiv":
             return f"({self.z3_to_c(expr.arg(0))}) / ({self.z3_to_c(expr.arg(1))})"
         elif expr.decl().name() == "bvadd":
             return " + ".join(f"({self.z3_to_c(c)})" for c in expr.children())
+        elif expr.decl().name() == "bvsub":
+            return " - ".join(f"({self.z3_to_c(c)})" for c in expr.children())
         elif expr.decl().name() == "bvurem":
             return f"({self.z3_to_c(expr.arg(0))}) % ({self.z3_to_c(expr.arg(1))})"
         
         elif expr.decl().name() == 'bvshl':
             # Logical left shift
-            return f'({z3_to_c(expr.arg(0))} << {z3_to_c(expr.arg(1))})'
+            return f'({self.z3_to_c(expr.arg(0))} << {self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvlshr':
             # Logical right shift (zero-fill)
-            return f'((unsigned){z3_to_c(expr.arg(0))} >> {z3_to_c(expr.arg(1))})'
+            return f'((unsigned){self.z3_to_c(expr.arg(0))} >> {self.z3_to_c(expr.arg(1))})'
         elif expr.decl().name() == 'bvashr':
             # Arithmetic right shift (sign-extend)
-            return f'((int){z3_to_c(expr.arg(0))} >> {z3_to_c(expr.arg(1))})'
+            return f'((int){self.z3_to_c(expr.arg(0))} >> {self.z3_to_c(expr.arg(1))})'
         
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
@@ -257,7 +261,7 @@ class smtAI(object):
             return str(expr.as_long())
         else:
             # if is_app(expr) and expr.decl().kind() == Z3_OP_UNINTERPRETED:
-            #     print("Fallback ",expr)
+            print("Fallback ",expr, expr.decl().kind())
             return str(expr)  # fallback
 
     def getFunctions(self, expr, funs):
