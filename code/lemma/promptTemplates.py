@@ -113,8 +113,7 @@ LEMMA_REFINEMENT_TEMPLATE = """
     <REPLACE_LEMMAS_POS_LIST>
     ```
     
-    1) Please generate more <ARTIFACT> that are like POSITIVE_EXAMPLES.
-    2) Do not generate <ARTIFACT> which are like the ones in NEGATIVE_EXAMPLES.
-    3) Be careful about the syntax correctness and adhere to <FORMAT>.
-    4) Do not repeat the <ARTIFACT> that are already present in POSITIVE_EXAMPLES.
+    1) Do not generate <ARTIFACT> which are like the ones in NEGATIVE_EXAMPLES.
+    2) Be careful about the syntax correctness and adhere to <FORMAT>.
+    3) Do not repeat the <ARTIFACT> that are already present in POSITIVE_EXAMPLES.
 """
