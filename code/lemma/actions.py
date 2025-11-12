@@ -279,7 +279,9 @@ def getRefinedLemmasFromExamples(
             invalidLemmas.append(lemma.smtFormat)
         if lemma.status == LemmaStatus.VALID:
             validLemmas.append(lemma.smtFormat)
-
+        if lemma.status == LemmaStatus.UNKNOWN:
+            validLemmas.append(lemma.smtFormat)
+            
     user_prompt = LEMMA_REFINEMENT_TEMPLATE
     user_prompt = user_prompt.replace("<FORMAT>", formatting)
     user_prompt = user_prompt.replace("<ARTIFACT>", "lemmas")
