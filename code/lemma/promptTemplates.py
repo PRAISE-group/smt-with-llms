@@ -82,12 +82,12 @@ FEW_SHOTS = """
 GEN_FUNCTION_LEMMAS = f"""
     {FEW_SHOTS}
     
-    Generate <ARTIFACT> in <FORMAT> for the function <FUNCTION> whose description is 
-    provided below in FUNCTION_DESCRIPTION with prototype FUNCTION_PROTOTYPE as signature.
+    A natural language description of the function <FUNCTION>
+    is provided below in `DESC` along with it's prototype in `PROTOTYPE` as signature.
 
     ```
-    FUNCTION_DESCRIPTION: <FUNCTION_DESCRIPTION>
-    FUNCTION_PROTOTYPE: <FUNCTION_PROTOTYPE>
+    DESC: <FUNCTION_DESCRIPTION>
+    PROTOTYPE: <FUNCTION_PROTOTYPE>
     OUTPUT_FORMAT: List of <ARTIFACT> in <FORMAT>, between LEMMA_START and LEMMA_END blocks.
     ```
     You are free to generate lemmas over one or more of the closed-box functions whose descriptions have been provided till now.
