@@ -105,7 +105,7 @@ LEMMA_REFINEMENT_TEMPLATE = """
     ```
 
     - ALL_LEMMAS:
-    Other <ARTIFACT> that you generated.
+    Other <ARTIFACT> that you generated, except the ones already present in INVALID_LEMMAS.
     
     ```
     <REPLACE_LEMMAS_POS_LIST>
