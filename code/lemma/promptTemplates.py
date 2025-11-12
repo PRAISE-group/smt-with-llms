@@ -56,7 +56,14 @@ LEMMA_GENERATION_GUIDELINES = """
 """
 
 FEW_SHOTS = """
-    Lemmas in bit-vector theory typically looks like the ones given below. `foo_cb` is a closed-box function here.
+    Lemmas in <FORMAT> theory typically looks like the ones given below.
+    
+    Here is an example of a simple lemma using the `forall` quantification.
+    
+    ```
+    (assert (forall ((x (_ BitVec 32))) (= (bvadd (bvadd x (_ bv1 32)) (_ bvneg x)) (_ bv1 32))))
+    ```
+    Here are some lemmas for a closed-box function **foo_cb()**.
     
     ```
     (assert (= (foo_cb (_ bv0 32)) (_ bv0 32)))
@@ -68,14 +75,7 @@ FEW_SHOTS = """
     (assert (forall ((z (_ BitVec 32))) (=> (not (bvugt z (_ bv0 32))) (= (bvugt (foo_cb z) (_ bv0 32)) false))))
     ```
     
-    Here is an example for lemma over closed-box function `x()` in bitvector theory.
-    
-    ```
-    (declare-fun x () (_ BitVec 32))
-    (assert (forall ((x (_ BitVec 32))) (= (bvadd (bvadd x (_ bv1 32)) (_ bvneg x)) (_ bv1 32))))
-    ```
-    
-    Generate similar lemmas for the given closed box <FUNCTION> with forall constraints in bit-vector theory between LEMMA_START and LEMMA_END blocks.
+    Generate similar lemmas for the given closed box <FUNCTION> with `forall` constraints in <FORMAT> theory between LEMMA_START and LEMMA_END blocks.
 """
 
 # PROMPT-3 New we provide the details about a function and ask the LLM to generate a response.
