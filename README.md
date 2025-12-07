@@ -97,7 +97,7 @@ Please set the following in the `.env` file. Example shows some bedrock models t
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
 
 # Model meta.llama4-maverick-17b-instruct-v1:0
-❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 --stop
+❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0 --stop
 
 # Errors.
 # botocore.errorfactory.ValidationException: An error occurred (ValidationException) when calling the Converse operation:
