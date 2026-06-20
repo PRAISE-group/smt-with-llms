@@ -1,0 +1,10 @@
+#include <stddef.h>
+#include <string.h>
+
+int cmp(char const *a, size_t a_len, char const *b, size_t b_len) {
+  if (a_len < b_len)
+    return -1;
+  if (b_len < a_len)
+    return 1;
+  return memcmp(a, b, a_len);
+}
