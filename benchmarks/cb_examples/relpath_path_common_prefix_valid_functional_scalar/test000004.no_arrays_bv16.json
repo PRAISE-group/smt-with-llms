@@ -1,89 +1,19 @@
 {
   "smt_file": "/home/sumiqlnx/klee_experiments/smt-with-llms/benchmarks/cb_examples/relpath_path_common_prefix_valid_functional_scalar/test000004.no_arrays_bv16.smt2",
   "object_file": "/home/sumiqlnx/klee_experiments/smt-with-llms/benchmarks/cb_examples/relpath_path_common_prefix_valid_functional_scalar/path_common_prefix_slice.o",
-  "limit": [
-    1,
-    255
-  ],
+  "limit": [1, 255],
   "functions": {
     "path_common_prefix_cb": {
       "smtDecl": "(declare-fun path_common_prefix_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
       "desc": "Closed-box wrapper for GNU coreutils relpath's path_common_prefix. It takes two slash-prefixed, zero-terminated path buffers, each approximated as 6 BV16 character slots: path1[0..5], then path2[0..5]. The return value is the length of the common path prefix boundary.",
       "tests": [
-        [
-          47,
-          0,
-          0,
-          0,
-          0,
-          0,
-          47,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          47,
-          97,
-          0,
-          0,
-          0,
-          0,
-          47,
-          98,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          47,
-          47,
-          0,
-          0,
-          0,
-          0,
-          47,
-          47,
-          97,
-          0,
-          0,
-          0
-        ],
-        [
-          47,
-          97,
-          47,
-          98,
-          0,
-          0,
-          47,
-          97,
-          47,
-          99,
-          0,
-          0
-        ],
-        [
-          47,
-          47,
-          97,
-          0,
-          0,
-          0,
-          47,
-          97,
-          0,
-          0,
-          0,
-          0
-        ]
+        [47, 0, 0, 0, 0, 0, 47, 0, 0, 0, 0, 0],
+        [47, 97, 0, 0, 0, 0, 47, 98, 0, 0, 0, 0],
+        [47, 47, 0, 0, 0, 0, 47, 47, 97, 0, 0, 0],
+        [47, 97, 47, 98, 0, 0, 47, 97, 47, 99, 0, 0],
+        [47, 47, 97, 0, 0, 0, 47, 97, 0, 0, 0, 0]
       ],
-      "userLemmas": [
-        ""
-      ]
+      "userLemmas": [""]
     }
   }
 }
