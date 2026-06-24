@@ -1,0 +1,124 @@
+array closed_box_call_incr_cb_0_arg0_in0[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in1[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in2[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in3[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in4[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in5[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in6[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in7[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in8[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg0_in9[1] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg1[2] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_arg2[2] : w32 -> w8 = symbolic
+array closed_box_call_incr_cb_0_ret[2] : w32 -> w8 = symbolic
+array const_arr120[10] : w32 -> w8 = [48 48 48 48 0 0 0 0 0 0]
+array digit0[2] : w32 -> w8 = symbolic
+array digit1[2] : w32 -> w8 = symbolic
+array digit2[2] : w32 -> w8 = symbolic
+array digit3[2] : w32 -> w8 = symbolic
+array digit4[2] : w32 -> w8 = symbolic
+array digit5[2] : w32 -> w8 = symbolic
+array digit6[2] : w32 -> w8 = symbolic
+array in0[2] : w32 -> w8 = symbolic
+array in1[2] : w32 -> w8 = symbolic
+array in2[2] : w32 -> w8 = symbolic
+array in3[2] : w32 -> w8 = symbolic
+array in4[2] : w32 -> w8 = symbolic
+array in5[2] : w32 -> w8 = symbolic
+array in6[2] : w32 -> w8 = symbolic
+array in7[2] : w32 -> w8 = symbolic
+array in8[2] : w32 -> w8 = symbolic
+array in9[2] : w32 -> w8 = symbolic
+array nine_position[2] : w32 -> w8 = symbolic
+array num_digits[2] : w32 -> w8 = symbolic
+array num_zeroes[2] : w32 -> w8 = symbolic
+(query [(Sle (ZExt w32 (ReadLSB w16 0 in0))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in1))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in2))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in3))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in4))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in5))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in6))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in7))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in8))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 in9))
+              255)
+         (Slt 0
+              N0:(ZExt w32 N1:(ReadLSB w16 0 num_zeroes)))
+         (Slt 0
+              N2:(ZExt w32 N3:(ReadLSB w16 0 num_digits)))
+         (Sle N4:(ZExt w32 (ReadLSB w16 0 nine_position))
+              N2)
+         (Sle (Add w32 2 N5:(Add w32 N0 N2))
+              10)
+         (Sle N6:(ZExt w32 (ReadLSB w16 0 digit0))
+              255)
+         (Sle N7:(ZExt w32 (ReadLSB w16 0 digit1))
+              255)
+         (Sle N8:(ZExt w32 (ReadLSB w16 0 digit2))
+              255)
+         (Sle N9:(ZExt w32 (ReadLSB w16 0 digit3))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 digit4))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 digit5))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 digit6))
+              255)
+         (Sle 1 N4)
+         (Sle 48 N6)
+         (Sle N6 56)
+         (Sle 2 N4)
+         (Sle 48 N7)
+         (Sle N7 56)
+         (Sle 3 N4)
+         (Sle 48 N8)
+         (Sle N8 56)
+         (Sle 4 N4)
+         (Sle 48 N9)
+         (Sle N9 56)
+         (Eq false (Sle 5 N4))
+         (Slt 1 N0)
+         (Slt 2 N0)
+         (Slt 3 N0)
+         (Eq (ReadLSB w16 0 closed_box_call_incr_cb_0_arg1)
+             N1)
+         (Eq (ReadLSB w16 0 closed_box_call_incr_cb_0_arg2)
+             N3)
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in0)
+             (Read w8 0 U0:[(Extract w32 0 (SExt w64 N5))=0,
+                            (Extract w32 0 (SExt w64 (Add w32 3 N0)))=N10:(Read w8 0 digit3),
+                            (Extract w32 0 (SExt w64 (Add w32 2 N0)))=N11:(Read w8 0 digit2),
+                            (Extract w32 0 (SExt w64 (Add w32 1 N0)))=N12:(Read w8 0 digit1),
+                            (Extract w32 0 (SExt w64 N0))=N13:(Read w8 0 digit0),
+                            9=N14:(Read w8 0 in9),
+                            8=N15:(Read w8 0 in8),
+                            7=N16:(Read w8 0 in7),
+                            6=N17:(Read w8 0 in6),
+                            5=N18:(Read w8 0 in5),
+                            4=N19:(Read w8 0 in4)] @ const_arr120))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in1) (Read w8 1 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in2) (Read w8 2 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in3) (Read w8 3 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in4) (Read w8 4 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in5) (Read w8 5 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in6) (Read w8 6 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in7) (Read w8 7 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in8) (Read w8 8 U0))
+         (Eq (Read w8 0 closed_box_call_incr_cb_0_arg0_in9) (Read w8 9 U0))
+         (Eq false
+             (Slt 8
+                  (ZExt w32 (Extract w16 0 (AShr w32 N20:(ZExt w32 (ReadLSB w16 0 closed_box_call_incr_cb_0_ret))
+                                                     8)))))
+         (Eq 0
+             (Extract w16 0 (And w32 N20 255)))]
+        false)

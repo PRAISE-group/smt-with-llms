@@ -1,0 +1,1 @@
+This closed-box function increments the decimal subsequence that starts at a symbolic offset inside a fixed 10-slot buffer. It propagates carry through trailing '9' digits, updates the buffer in place, and returns a packed 16-bit result whose high byte is the new first-digit offset and whose low byte is the updated digit count.

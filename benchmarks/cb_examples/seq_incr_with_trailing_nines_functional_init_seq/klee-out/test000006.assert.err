@@ -1,0 +1,9 @@
+Error: ASSERTION FAIL: is_incremented_with_carry(old_buf + first_digit_offset, old_num_digits, nine_position, first_digit, num_digits)
+File: seq_incr_with_trailing_nines_functional_init_seq_klee.c
+Line: 224
+assembly.ll line: 1069
+State: 8
+Stack: 
+	#000001069 in __user_main() at seq_incr_with_trailing_nines_functional_init_seq_klee.c:224
+	#100000406 in __uClibc_main(128435259179008, 1, 128451298197504, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#200000575 in main(1, 128451298197504)

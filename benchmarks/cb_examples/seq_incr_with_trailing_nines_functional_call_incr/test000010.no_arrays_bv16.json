@@ -1,0 +1,75 @@
+{
+  "smt_file": "/home/sumiqlnx/klee_experiments/smt-with-llms/benchmarks/cb_examples/seq_incr_with_trailing_nines_functional_call_incr/test000010.no_arrays_bv16.smt2",
+  "object_file": "/home/sumiqlnx/klee_experiments/smt-with-llms/benchmarks/cb_examples/seq_incr_with_trailing_nines_functional_call_incr/call_incr_slice.o",
+  "limit": [
+    1,
+    255
+  ],
+  "functions": {
+    "call_incr_cb": {
+      "smtDecl": "(declare-fun call_incr_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 176))",
+      "desc": "This closed-box function increments the decimal subsequence that starts at a symbolic offset inside a fixed 10-slot buffer. It propagates carry through trailing '9' digits, updates the buffer in place, and returns a packed 16-bit result whose high byte is the new first-digit offset and whose low byte is the updated digit count.",
+      "tests": [
+        [
+          48,
+          57,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          48,
+          49,
+          57,
+          57,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          3
+        ],
+        [
+          48,
+          48,
+          56,
+          57,
+          57,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          3
+        ],
+        [
+          48,
+          48,
+          57,
+          57,
+          57,
+          57,
+          0,
+          0,
+          0,
+          0,
+          2,
+          4
+        ]
+      ],
+      "userLemmas": [
+        ""
+      ]
+    }
+  }
+}

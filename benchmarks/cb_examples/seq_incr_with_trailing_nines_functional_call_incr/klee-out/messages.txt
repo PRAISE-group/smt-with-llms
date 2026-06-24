@@ -1,0 +1,13 @@
+KLEE: Using Z3 solver backend
+KLEE: Deterministic allocator: Using quarantine queue size 8
+KLEE: Deterministic allocator: globals (start-address=0x7ae5d1800000 size=10 GiB)
+KLEE: Deterministic allocator: constants (start-address=0x7ae351800000 size=10 GiB)
+KLEE: Deterministic allocator: heap (start-address=0x79e351800000 size=1024 GiB)
+KLEE: Deterministic allocator: stack (start-address=0x79c351800000 size=128 GiB)
+KLEE: ERROR: seq_incr_with_trailing_nines_functional_call_incr_klee.c:238: ASSERTION FAIL: is_incremented_with_carry(old_buf + num_zeroes, old_num_digits, nine_position, first_digit, num_digits)
+KLEE: NOTE: now ignoring this error at this location
+KLEE: Deterministic allocator: Using quarantine queue size 8
+KLEE: Deterministic allocator: globals (start-address=0x79c0d1800000 size=10 GiB)
+KLEE: Deterministic allocator: constants (start-address=0x79be51800000 size=10 GiB)
+KLEE: Deterministic allocator: heap (start-address=0x78be51800000 size=1024 GiB)
+KLEE: Deterministic allocator: stack (start-address=0x789e51800000 size=128 GiB)

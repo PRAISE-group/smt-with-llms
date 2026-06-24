@@ -1,0 +1,1 @@
+This closed-box function initializes a fixed 10-slot buffer for the sequence increment benchmark. It writes a positive prefix of zeroes, a symbolic run of non-'9' digits, then trailing '9' digits, stores the terminating zero, and returns the first-digit offset.

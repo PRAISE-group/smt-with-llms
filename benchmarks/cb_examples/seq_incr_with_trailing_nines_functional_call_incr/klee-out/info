@@ -1,0 +1,23 @@
+/home/sumiqlnx/klee_experiments/klee_build/bin/klee --libc=uclibc --smt-closed-box-functions=call_incr_cb --write-smt2s --write-kqueries --write-paths --output-dir=klee-out seq_incr_with_trailing_nines_functional_call_incr_klee.bc
+PID: 95
+Using monotonic steady clock with 1/1000000000s resolution
+Started: 2026-06-24 20:44:19
+BEGIN searcher description
+<InterleavedSearcher> containing 2 searchers:
+RandomPathSearcher
+WeightedRandomSearcher::CoveringNew
+</InterleavedSearcher>
+END searcher description
+Finished: 2026-06-24 20:44:32
+Elapsed: 00:00:13
+KLEE: done: explored paths = 994
+KLEE: done: avg. constructs per query = 183
+KLEE: done: total queries = 2118
+KLEE: done: valid queries = 1310
+KLEE: done: invalid queries = 808
+KLEE: done: query cex = 2118
+
+KLEE: done: total instructions = 106076
+KLEE: done: completed paths = 560
+KLEE: done: partially completed paths = 434
+KLEE: done: generated tests = 561
