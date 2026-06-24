@@ -1,0 +1,9 @@
+Error: ASSERTION FAIL: strlen(result) == (size_t)num_digits || strlen(result) == (size_t)num_digits + 1
+File: getlimits_decimal_absval_init_positive_klee.c
+Line: 181
+assembly.ll line: 956
+State: 15
+Stack: 
+	#000000956 in __user_main() at getlimits_decimal_absval_init_positive_klee.c:181
+	#100000406 in __uClibc_main(133692766814208, 1, 133708805832704, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#200000575 in main(1, 133708805832704)

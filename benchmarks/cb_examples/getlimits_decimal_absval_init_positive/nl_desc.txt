@@ -1,0 +1,1 @@
+This closed-box function initializes a fixed 10-slot buffer with a positive decimal string of symbolic length. It writes a reserved leading '0' slot, chooses one nonzero leading digit and zero-or-more trailing digits, places the terminating zero at the correct position, and leaves untouched bytes unchanged.

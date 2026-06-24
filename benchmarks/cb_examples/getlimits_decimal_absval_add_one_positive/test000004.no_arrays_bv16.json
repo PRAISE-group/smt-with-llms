@@ -1,0 +1,79 @@
+{
+  "smt_file": "/home/sumiqlnx/klee_experiments/smt-with-llms/benchmarks/cb_examples/getlimits_decimal_absval_add_one_positive/test000004.no_arrays_bv16.smt2",
+  "object_file": "/home/sumiqlnx/klee_experiments/smt-with-llms/benchmarks/cb_examples/getlimits_decimal_absval_add_one_positive/decimal_absval_add_one_slice.o",
+  "limit": [
+    1,
+    255
+  ],
+  "functions": {
+    "decimal_absval_add_one_cb": {
+      "smtDecl": "(declare-fun decimal_absval_add_one_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 176))",
+      "desc": "This closed-box function increments a positive decimal string stored in a fixed 10-slot buffer. It propagates carries through trailing '9' digits, can grow the number by one digit in the reserved leading slot, and returns either the original digit start or the new leading digit.",
+      "tests": [
+        [
+          48,
+          49,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          48,
+          57,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          48,
+          49,
+          50,
+          51,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          48,
+          57,
+          57,
+          57,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          48,
+          57,
+          57,
+          57,
+          57,
+          57,
+          57,
+          57,
+          0,
+          0
+        ]
+      ],
+      "userLemmas": [
+        ""
+      ]
+    }
+  }
+}

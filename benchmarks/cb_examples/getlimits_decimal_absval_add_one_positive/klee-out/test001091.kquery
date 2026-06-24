@@ -1,0 +1,96 @@
+array closed_box_decimal_absval_add_one_cb_0_arg0_in0[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in1[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in2[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in3[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in4[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in5[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in6[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in7[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in8[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in9[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out0[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out1[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out2[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out3[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out4[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out5[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out6[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out7[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out8[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out9[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_ret_offset[8] : w32 -> w8 = symbolic
+array const_arr1[10] : w32 -> w8 = [0 0 0 0 0 0 0 0 0 0]
+array num_digits[2] : w32 -> w8 = symbolic
+array slot0[2] : w32 -> w8 = symbolic
+array slot1[2] : w32 -> w8 = symbolic
+array slot2[2] : w32 -> w8 = symbolic
+array slot3[2] : w32 -> w8 = symbolic
+array slot4[2] : w32 -> w8 = symbolic
+array slot5[2] : w32 -> w8 = symbolic
+array slot6[2] : w32 -> w8 = symbolic
+array slot7[2] : w32 -> w8 = symbolic
+array slot8[2] : w32 -> w8 = symbolic
+array slot9[2] : w32 -> w8 = symbolic
+(query [(Sle 1
+              N0:(ZExt w32 (ReadLSB w16 0 num_digits)))
+         (Sle N0 7)
+         (Sle N1:(ZExt w32 (ReadLSB w16 0 slot1))
+              255)
+         (Eq 48
+             (ReadLSB w16 0 slot0))
+         (Sle 49 N1)
+         (Sle N1 57)
+         (Eq false (Sle 2 N0))
+         (Eq 0
+             (ReadLSB w16 0 slot2))
+         (Eq 0
+             (ReadLSB w16 0 slot3))
+         (Eq 0
+             (ReadLSB w16 0 slot4))
+         (Eq 0
+             (ReadLSB w16 0 slot5))
+         (Eq 0
+             (ReadLSB w16 0 slot6))
+         (Eq 0
+             (ReadLSB w16 0 slot7))
+         (Eq 0
+             (ReadLSB w16 0 slot8))
+         (Eq 0
+             (ReadLSB w16 0 slot9))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in0) N2:(Read w8 0 slot0))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in1) N3:(Read w8 0 slot1))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in2) N4:(Read w8 0 slot2))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in3) N5:(Read w8 0 slot3))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in4) N6:(Read w8 0 slot4))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in5) N7:(Read w8 0 slot5))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in6) N8:(Read w8 0 slot6))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in7) N9:(Read w8 0 slot7))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in8) N10:(Read w8 0 slot8))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in9) N11:(Read w8 0 slot9))
+         (Eq 0
+             (ReadLSB w64 0 closed_box_decimal_absval_add_one_cb_0_ret_offset))
+         (Eq false
+             (Eq 0 N12:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out4)))
+         (Eq 0 N13:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out8))
+         (Eq 48
+             (Read w8 N14:(ReadLSB w32 0 closed_box_decimal_absval_add_one_cb_0_ret_offset) [9=(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out9),
+                                                                                             8=N13,
+                                                                                             7=N15:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out7),
+                                                                                             6=N16:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out6),
+                                                                                             5=N17:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out5),
+                                                                                             4=N12,
+                                                                                             3=N18:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out3),
+                                                                                             2=N19:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out2),
+                                                                                             1=N20:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out1),
+                                                                                             0=(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out0)] @ const_arr1))
+         (Eq 48 N20)
+         (Eq 48 N19)
+         (Eq 48 N18)
+         (Eq false
+             (Slt N21:(ZExt w32 N12) 48))
+         (Eq false (Slt 57 N21))
+         (Eq false (Eq 48 N12))
+         (Eq 48 N17)
+         (Eq 48 N16)
+         (Eq 48 N15)]
+        false)

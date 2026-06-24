@@ -1,0 +1,1 @@
+This closed-box function increments a positive decimal string stored in a fixed 10-slot buffer. It propagates carries through trailing '9' digits, can grow the number by one digit in the reserved leading slot, and returns either the original digit start or the new leading digit.

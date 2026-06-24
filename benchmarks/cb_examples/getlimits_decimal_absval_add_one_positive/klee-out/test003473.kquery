@@ -1,0 +1,111 @@
+array closed_box_decimal_absval_add_one_cb_0_arg0_in0[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in1[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in2[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in3[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in4[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in5[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in6[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in7[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in8[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_in9[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out0[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out1[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out2[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out3[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out4[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out5[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out6[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out7[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out8[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_arg0_out9[1] : w32 -> w8 = symbolic
+array closed_box_decimal_absval_add_one_cb_0_ret_offset[8] : w32 -> w8 = symbolic
+array const_arr5[10] : w32 -> w8 = [0 0 0 0 0 0 0 0 0 0]
+array num_digits[2] : w32 -> w8 = symbolic
+array slot0[2] : w32 -> w8 = symbolic
+array slot1[2] : w32 -> w8 = symbolic
+array slot2[2] : w32 -> w8 = symbolic
+array slot3[2] : w32 -> w8 = symbolic
+array slot4[2] : w32 -> w8 = symbolic
+array slot5[2] : w32 -> w8 = symbolic
+array slot6[2] : w32 -> w8 = symbolic
+array slot7[2] : w32 -> w8 = symbolic
+array slot8[2] : w32 -> w8 = symbolic
+array slot9[2] : w32 -> w8 = symbolic
+(query [(Sle 1
+              N0:(ZExt w32 (ReadLSB w16 0 num_digits)))
+         (Sle N0 7)
+         (Sle N1:(ZExt w32 (ReadLSB w16 0 slot1))
+              255)
+         (Sle N2:(ZExt w32 (ReadLSB w16 0 slot2))
+              255)
+         (Sle N3:(ZExt w32 (ReadLSB w16 0 slot3))
+              255)
+         (Sle N4:(ZExt w32 (ReadLSB w16 0 slot4))
+              255)
+         (Sle N5:(ZExt w32 (ReadLSB w16 0 slot5))
+              255)
+         (Eq 48
+             (ReadLSB w16 0 slot0))
+         (Sle 49 N1)
+         (Sle N1 57)
+         (Sle 2 N0)
+         (Sle 48 N2)
+         (Sle N2 57)
+         (Sle 3 N0)
+         (Sle 48 N3)
+         (Sle N3 57)
+         (Sle 4 N0)
+         (Sle 48 N4)
+         (Sle N4 57)
+         (Sle 5 N0)
+         (Sle 48 N5)
+         (Sle N5 57)
+         (Eq false (Sle 6 N0))
+         (Eq 0
+             (ReadLSB w16 0 slot6))
+         (Eq 0
+             (ReadLSB w16 0 slot7))
+         (Eq 0
+             (ReadLSB w16 0 slot8))
+         (Eq 0
+             (ReadLSB w16 0 slot9))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in0) N6:(Read w8 0 slot0))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in1) N7:(Read w8 0 slot1))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in2) N8:(Read w8 0 slot2))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in3) N9:(Read w8 0 slot3))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in4) N10:(Read w8 0 slot4))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in5) N11:(Read w8 0 slot5))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in6) N12:(Read w8 0 slot6))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in7) N13:(Read w8 0 slot7))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in8) N14:(Read w8 0 slot8))
+         (Eq (Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_in9) N15:(Read w8 0 slot9))
+         (Eq 0
+             (ReadLSB w64 0 closed_box_decimal_absval_add_one_cb_0_ret_offset))
+         (Eq false
+             (Eq 0 N16:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out1)))
+         (Eq false
+             (Eq 0 N17:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out2)))
+         (Eq 0 N18:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out6))
+         (Eq 48
+             (Read w8 N19:(ReadLSB w32 0 closed_box_decimal_absval_add_one_cb_0_ret_offset) [9=(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out9),
+                                                                                             8=(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out8),
+                                                                                             7=(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out7),
+                                                                                             6=N18,
+                                                                                             5=N20:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out5),
+                                                                                             4=N21:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out4),
+                                                                                             3=N22:(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out3),
+                                                                                             2=N17,
+                                                                                             1=N16,
+                                                                                             0=(Read w8 0 closed_box_decimal_absval_add_one_cb_0_arg0_out0)] @ const_arr5))
+         (Eq false
+             (Slt N23:(ZExt w32 N16) 48))
+         (Eq false (Slt 57 N23))
+         (Eq false (Eq 48 N16))
+         (Eq false
+             (Slt N24:(ZExt w32 N17) 48))
+         (Eq false (Slt 57 N24))
+         (Eq false (Eq 48 N17))
+         (Eq 48 N22)
+         (Eq 48 N21)
+         (Eq 48 N20)]
+        false)

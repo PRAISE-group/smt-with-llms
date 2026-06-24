@@ -1,0 +1,9 @@
+Error: ASSERTION FAIL: is_valid_positive(result)
+File: getlimits_decimal_absval_add_one_positive_klee.c
+Line: 157
+assembly.ll line: 992
+State: 6
+Stack: 
+	#000000992 in __user_main() at getlimits_decimal_absval_add_one_positive_klee.c:157
+	#100000399 in __uClibc_main(132471108665344, 1, 132487147683840, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#200000568 in main(1, 132487147683840)

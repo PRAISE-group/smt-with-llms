@@ -1,0 +1,23 @@
+/home/sumiqlnx/klee_experiments/klee_build/bin/klee --libc=uclibc --smt-closed-box-functions=init_positive_cb --write-smt2s --write-kqueries --write-paths --output-dir=klee-out getlimits_decimal_absval_init_positive_klee.bc
+PID: 5
+Using monotonic steady clock with 1/1000000000s resolution
+Started: 2026-06-24 20:16:21
+BEGIN searcher description
+<InterleavedSearcher> containing 2 searchers:
+RandomPathSearcher
+WeightedRandomSearcher::CoveringNew
+</InterleavedSearcher>
+END searcher description
+Finished: 2026-06-24 20:16:35
+Elapsed: 00:00:14
+KLEE: done: explored paths = 6692
+KLEE: done: avg. constructs per query = 12
+KLEE: done: total queries = 168
+KLEE: done: valid queries = 8
+KLEE: done: invalid queries = 160
+KLEE: done: query cex = 168
+
+KLEE: done: total instructions = 550973
+KLEE: done: completed paths = 2372
+KLEE: done: partially completed paths = 4320
+KLEE: done: generated tests = 2375
