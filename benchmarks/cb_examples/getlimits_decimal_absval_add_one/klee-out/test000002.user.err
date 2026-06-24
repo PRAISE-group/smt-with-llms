@@ -1,0 +1,9 @@
+Error: invalid klee_assume call (provably false)
+File: getlimits_decimal_absval_add_one_klee.c
+Line: 99
+assembly.ll line: 771
+State: 5
+Stack: 
+	#000000771 in __user_main() at getlimits_decimal_absval_add_one_klee.c:99
+	#100000398 in __uClibc_main(125436916924416, 1, 125452955942912, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#200000567 in main(1, 125452955942912)

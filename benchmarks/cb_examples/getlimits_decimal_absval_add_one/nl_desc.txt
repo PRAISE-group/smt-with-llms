@@ -1,0 +1,1 @@
+This closed-box function increments the absolute value of a negative decimal string stored in a fixed 10-slot buffer. It carries through trailing '9' digits, can grow the magnitude by one digit, and returns either the original sign position or the newly introduced leading sign.

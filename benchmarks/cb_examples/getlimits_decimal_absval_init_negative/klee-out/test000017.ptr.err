@@ -1,0 +1,15 @@
+Error: memory error: out of bound pointer
+File: libc/string/strlen.c
+Line: 22
+assembly.ll line: 4439
+State: 130
+Stack: 
+	#000004439 in strlen(129303087939586) at libc/string/strlen.c:22
+	#100001294 in postcond_negative(129303087939585, symbolic) at getlimits_decimal_absval_init_negative_klee.c:291
+	#200000921 in __user_main() at getlimits_decimal_absval_init_negative_klee.c:401
+	#300000405 in __uClibc_main(130512725213184, 1, 130528764231680, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#400000574 in main(1, 130528764231680)
+Info: 
+	address: 129303087939594
+	next: object at 129277318135808 of size 1
+		MO8508[1] allocated at postcond_negative():  %9 = alloca i8, align 1

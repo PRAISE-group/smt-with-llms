@@ -1,0 +1,9 @@
+Error: ASSERTION FAIL: result_index == 0 || result_index == 1
+File: getlimits_decimal_absval_add_one_klee.c
+Line: 130
+assembly.ll line: 1024
+State: 11
+Stack: 
+	#000001024 in __user_main() at getlimits_decimal_absval_add_one_klee.c:130
+	#100000398 in __uClibc_main(125436916924416, 1, 125452955942912, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#200000567 in main(1, 125452955942912)

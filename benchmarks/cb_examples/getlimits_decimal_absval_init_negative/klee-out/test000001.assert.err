@@ -1,0 +1,9 @@
+Error: ASSERTION FAIL: postcond_negative(result, num_digits)
+File: getlimits_decimal_absval_init_negative_klee.c
+Line: 401
+assembly.ll line: 929
+State: 4
+Stack: 
+	#000000929 in __user_main() at getlimits_decimal_absval_init_negative_klee.c:401
+	#100000405 in __uClibc_main(130512725213184, 1, 130528764231680, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#200000574 in main(1, 130528764231680)

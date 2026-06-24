@@ -1,0 +1,39 @@
+array num_digits[2] : w32 -> w8 = symbolic
+array slot0[2] : w32 -> w8 = symbolic
+array slot1[2] : w32 -> w8 = symbolic
+array slot2[2] : w32 -> w8 = symbolic
+array slot3[2] : w32 -> w8 = symbolic
+array slot4[2] : w32 -> w8 = symbolic
+array slot5[2] : w32 -> w8 = symbolic
+array slot6[2] : w32 -> w8 = symbolic
+array slot7[2] : w32 -> w8 = symbolic
+array slot8[2] : w32 -> w8 = symbolic
+array slot9[2] : w32 -> w8 = symbolic
+(query [(Sle 1
+              N0:(ZExt w32 (ReadLSB w16 0 num_digits)))
+         (Sle N0 7)
+         (Sle (ZExt w32 (ReadLSB w16 0 slot0))
+              255)
+         (Sle N1:(ZExt w32 (ReadLSB w16 0 slot2))
+              255)
+         (Sle N2:(ZExt w32 (ReadLSB w16 0 slot3))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 slot4))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 slot5))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 slot6))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 slot7))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 slot8))
+              255)
+         (Sle (ZExt w32 (ReadLSB w16 0 slot9))
+              255)
+         (Eq 45
+             (ReadLSB w16 0 slot1))
+         (Sle 49 N1)
+         (Sle N1 57)
+         (Eq false (Slt N0 2))
+         (Eq false (Sle 48 N2))]
+        false)
