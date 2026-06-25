@@ -70,7 +70,7 @@
 (declare-fun SIV@45 () Bool)
 (declare-fun SIV@44 () Bool)
 (declare-fun SIV@52 () Int)
-(declare-fun is_prime_@@0 (Int Int) Int)
+(declare-fun is_prime__cb (Int Int) Int)
 (declare-fun SIV@51 () Int)
 (declare-fun SIV@75 () Int)
 (declare-fun SIV@74 () Int)
@@ -318,7 +318,7 @@
  (let (($x777 (and (= (ControlFlow 2 0) 242445) (not (=> (and (and true (= (ControlFlow 2 242445) 242443)) (= (ControlFlow 2 242443) 236175) true (and true SIV@44) $x764) false)))))
  (=> SIV@38 $x777))))))
 (assert
- (let (($x796 (and (= SIV@52 (is_prime_@@0 $u0 SIV@51)) (= (ControlFlow 3 234919) (- 0 242581)))))
+ (let (($x796 (and (= SIV@52 (is_prime__cb $u0 SIV@51)) (= (ControlFlow 3 234919) (- 0 242581)))))
  (let (($x797 (and (and (boogie_si_record_i32 $u0) (= SIV@51 (- $u0 1))) $x796)))
  (let (($x804 (=> (and (= (ControlFlow 3 242506) 234919) $x797) (not (= SIV@24 SIV@52)))))
  (let (($x810 (and (= (ControlFlow 3 0) 242510) (not (=> (and (and true (= (ControlFlow 3 242510) 242506)) (= (ControlFlow 3 242506) 234919) $x797) (not (= SIV@24 SIV@52)))))))

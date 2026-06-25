@@ -50,7 +50,7 @@
 (declare-fun SIV@19 () Bool)
 (declare-fun SIV@12 () Int)
 (declare-fun boogie_si_record_i32 (Int) Bool)
-(declare-fun id@@0 (Int) Int)
+(declare-fun id_cb (Int) Int)
 (declare-fun boogie_si_record_ref (Int) Bool)
 (declare-fun SIV@18 () Bool)
 (assert
@@ -160,7 +160,7 @@
  (let (($x349 (and (=> (and (= (ControlFlow 1 227064) 227065) $x315 (= (ControlFlow 1 231882) (- 0 232101))) $x303) (=> (and (= (ControlFlow 1 227064) 227066) (and SIV@14 (= (ControlFlow 1 227066) 227067)) (= (ControlFlow 1 227067) 227068) (and (= SIV@15 SIV@14) (= (ControlFlow 1 227068) 227063)) (= SIV@16 0) (and (= SIV@17 SIV@15) (= (ControlFlow 1 227063) 231882)) (= (ControlFlow 1 231882) (- 0 232101))) $x303))))
  (let (($x358 (=> (and (and (= SIV@13 1) (= (ControlFlow 1 227061) 227064)) true (and true SIV@19)) $x349)))
  (let (($x380 (and (boogie_si_record_i32 SIV@12) (= SIV@13 (ite (not (= SIV@12 20)) 1 0)))))
- (let (($x381 (and (and (boogie_si_record_ref main) (= SIV@12 (id@@0 20))) $x380)))
+ (let (($x381 (and (and (boogie_si_record_ref main) (= SIV@12 (id_cb 20))) $x380)))
  (let (($x390 (=> (and (and true SIV@18) $x381) (and (=> (and (= (ControlFlow 1 227060) 227061) (and (= SIV@13 1) (= (ControlFlow 1 227061) 227064)) true (and true SIV@19)) $x349) $x387))))
  (let (($x399 (=> (and (and true (= (ControlFlow 1 231887) 231880)) (= (ControlFlow 1 231880) 227060) true (and true SIV@18) $x381) (and (=> (and (= (ControlFlow 1 227060) 227061) (and (= SIV@13 1) (= (ControlFlow 1 227061) 227064)) true (and true SIV@19)) $x349) $x387))))
  (=> SIV@5 (and (= (ControlFlow 1 0) 231887) (not $x399)))))))))))))))))))

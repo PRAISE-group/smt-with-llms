@@ -1,1 +1,14 @@
-{}
+{
+  "smt_file": "./benchmarks/gt_new/id_i25_o25-1.smt2_5.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "ackermann_cb": {
+      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
+      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
+      "tests": [[1, 2], [3, 1]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}
