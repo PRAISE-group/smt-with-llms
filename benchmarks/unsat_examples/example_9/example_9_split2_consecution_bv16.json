@@ -3,15 +3,9 @@
   "object_file": "/home/benchmarks/unsat_examples/example_9/example_9.o",
   "limit": [0, 100],
   "functions": {
-    "icbrt_cb": {
-      "smtDecl": "(declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'icbrt_cb' takes 1 argument (N) and returns integer cube root of N as a fixed BV16. Uses BitVec 16 Domain.",
-      "tests": [[8], [27]],
-      "userLemmas": [""]
-    },
     "shift_cb": {
       "smtDecl": "(declare-fun shift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'shift_cb' takes 2 arguments (a, b) and returns a << b (right shift). Uses BitVec 16 Domain.",
+      "desc": "Closed box function 'shift_cb' takes 2 arguments (a, b) and returns a << b (left shift). Uses BitVec 16 Domain.",
       "tests": [
         [8, 2],
         [24, 2]

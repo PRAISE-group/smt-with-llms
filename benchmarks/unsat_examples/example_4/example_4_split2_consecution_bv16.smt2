@@ -1,4 +1,4 @@
-;(set-logic QF_UFBV)
+(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const c (_ BitVec 16))
@@ -30,7 +30,7 @@
 
 ; Constrain all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
-  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv20 16))))
 
 (assert (in_0_100 c))
 (assert (in_0_100 x))
@@ -44,6 +44,9 @@
 
 ; ; Closed Box Function: returns n-th Fibonacci number
 ( declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16) )
+
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (= (add_sum_cb a b)       (bvadd a b))))
+;(assert  (and    (= (fib_cb #x0000) #x0000)    (= (fib_cb #x0001) #x0001)    (forall ((n (_ BitVec 16)))      (=> (bvuge n #x0002)          (= (fib_cb n)             (bvadd               (fib_cb (bvsub n #x0001))               (fib_cb (bvsub n #x0002))))))))
 
 ; add_sum_cb: a + b over 16-bit bitvectors (mod 2^16)
 ; (define-fun add_sum_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)

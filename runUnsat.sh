@@ -61,4 +61,5 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
 
   ((i++))  # increment counter
   wait
+  # break
 done < "$input_file"

@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16) )
@@ -26,6 +26,8 @@
 
 ; Closed Box Function: retuns the addition of cube of the second argument with the first argument
 ( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
+
+;(assert  (forall ((sum (_ BitVec 16))           (i (_ BitVec 16)))    (= (foo_cb sum i)       (bvadd sum              (bvmul i (bvmul i i))))))
 
 ;(define-fun foo_cb ((sum (_ BitVec 16)) (i (_ BitVec 16))) (_ BitVec 16)  (bvadd sum (bvmul i (bvmul i i))))
 

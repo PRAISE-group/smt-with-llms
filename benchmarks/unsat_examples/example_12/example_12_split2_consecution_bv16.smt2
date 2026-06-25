@@ -31,6 +31,10 @@
 (declare-fun setPowerValue_power_cb  ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 (declare-fun setPowerValue_ypower_cb ((_ BitVec 16) (_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
+
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16))           (c (_ BitVec 16)))    (= (setPowerValue_power_cb a b c)       (ite (bvugt a b)            (setPowerValue_power_cb              (bvlshr a #x0001)              b              (bvsub c #x0001))            c))))
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16))           (c (_ BitVec 16)))    (= (setPowerValue_ypower_cb a b c)       (ite (bvugt a b)            (setPowerValue_ypower_cb              (bvlshr a #x0001)              b              (bvsub c #x0001))            a))))
+
 ;(define-fun-rec setPowerValue_power_cb ((y_power (_ BitVec 16)) (x (_ BitVec 16)) (power (_ BitVec 16))) (_ BitVec 16)
 ;  (ite (bvugt y_power x)
 ;       (setPowerValue_power_cb (bvlshr y_power #x0001) x (bvsub power #x0001))

@@ -1,4 +1,4 @@
-;(set-logic UFBV)
+(set-logic UFBV)
 (set-option :produce-models true)
 
 ( declare-const a (_ BitVec 16))
@@ -42,6 +42,9 @@
 
 ; Closed Box function: return gcd(x, y). Greated common divisor of x and y
 ( declare-fun gcd_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+
+(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (= (retmod_cb a b)       (bvurem a b))))
+(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (let ((g (gcd_cb a b)))      (and        (= (bvurem a g) #x0000)        (= (bvurem b g) #x0000)        (forall ((d (_ BitVec 16)))          (=> (and                (not (= d #x0000))                (= (bvurem a d) #x0000)                (= (bvurem b d) #x0000))              (bvuge g d)))))))
 
 
 ; (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)

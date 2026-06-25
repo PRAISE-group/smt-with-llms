@@ -38,6 +38,9 @@
 ; Closed Box Function: Integer Cube Root of input 'x'
 ( declare-fun icbrt_cb ((_ BitVec 16)) (_ BitVec 16) )
 
+;(assert  (forall ((N (_ BitVec 16)))    (let ((r (icbrt_cb N)))      (and        (bvule (bvmul r (bvmul r r)) N)        (bvult N               (bvmul (bvadd r #x0001)                       (bvmul (bvadd r #x0001)                               (bvadd r #x0001))))))))
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (= (shift_cb a b)       (bvshl a b))))
+
 
 ;(define-fun-rec icbrt_cb ((N (_ BitVec 16))) (_ BitVec 16)
 ;  (let ((approx (ite (bvsle N #x0001) N (bvlshr N #x0002)))) ; N >> 2 ≈ cube root start

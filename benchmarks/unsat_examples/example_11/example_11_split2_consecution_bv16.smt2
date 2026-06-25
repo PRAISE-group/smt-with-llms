@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ; This is a new file now. 
@@ -26,6 +26,8 @@
 
 ; Closed Box Function: Compute the cube of input 'x' in BitVec 16
 ( declare-fun cube_cb ((_ BitVec 16)) (_ BitVec 16) )
+
+(assert  (forall ((N (_ BitVec 16)))    (= (cube_cb N)       (bvmul N (bvmul N N)))))
 
 ;(define-fun cube_cb ((N (_ BitVec 16))) (_ BitVec 16)
 ;  (bvmul N (bvmul N N))

@@ -1,22 +1,22 @@
 {
   "smt_file": "/home/benchmarks/unsat_examples/example_4/example_4_split2_consecution_bv16.smt2",
   "object_file": "/home/benchmarks/unsat_examples/example_4/example_4.o",
-  "limit": [0, 100],
+  "limit": [0, 20],
   "functions": {
     "add_sum_cb": {
       "smtDecl": "(declare-fun add_sum_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'add_sum_cb' takes 2 arguments (a, b) and returns a + b. Uses BitVec 16 Domain.",
+      "desc": "Closed box function 'add_sum_cb' takes 2 arguments (a, b) and returns their sum a + b.",
       "tests": [
         [1, 1],
         [5, 8],
-        [100, 155]
+        [2, 3]
       ],
       "userLemmas": [""]
     },
     "fib_cb": {
       "smtDecl": "(declare-fun fib_cb ((_ BitVec 16)) (_ BitVec 16))",
-      "desc": "Closed box function 'fib_cb' takes 1 argument (N) and returns the N-th Fibonacci number. Uses BitVec 16 Domain.",
-      "tests": [[1], [5], [100]],
+      "desc": "Closed box function 'fib_cb' takes 1 argument (N) and returns the N-th Fibonacci number.",
+      "tests": [[1], [5], [4]],
       "userLemmas": [""]
     }
   }

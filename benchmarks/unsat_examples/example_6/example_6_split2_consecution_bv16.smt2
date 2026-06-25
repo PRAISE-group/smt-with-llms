@@ -38,6 +38,9 @@
 ; Closed Box Function: returns a ^ b (a to the power of b) via bianry exponentiation.
 ( declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (= (retmod_cb a b)       (bvurem a b))))
+;(assert  (and    (forall ((a (_ BitVec 16)))      (= (binpow_cb a #x0000)         #x0001))    (forall ((a (_ BitVec 16))             (b (_ BitVec 16)))      (=> (bvugt b #x0000)          (= (binpow_cb a b)             (bvmul a                     (binpow_cb a (bvsub b #x0001))))))))
+
 ; (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
 ;   (bvurem a b)
 ; )

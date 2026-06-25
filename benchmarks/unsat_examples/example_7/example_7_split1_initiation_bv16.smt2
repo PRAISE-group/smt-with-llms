@@ -7,6 +7,9 @@
 ; rshift_cb is an uninterpreted function taking 3 BitVec16 args (as requested)
 (declare-fun rshift_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16))
 
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16))           (c (_ BitVec 16)))    (= (pre_cb a b c)       (ite (bvugt a b)            (pre_cb (bvshl a c) b c)            a))))
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (= (rshift_cb a b)       (bvlshr a b))))
+
 ;(define-fun-rec pre_cb ((a (_ BitVec 16)) (b (_ BitVec 16)) (c (_ BitVec 16))) (_ BitVec 16)
 ;  (ite (bvugt a b)
 ;       (pre_cb (bvshl a c) b c)

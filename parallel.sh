@@ -69,8 +69,8 @@ kill_tree() {
 # Run program2 in its own process group with timeout
 cd /home/
 # Done
-# model="--model gpt-oss:20b --use156"
-model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
+model="--model gpt-oss:20b --use156"
+# model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
 # model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
 # model="--usebedrock --model qwen.qwen3-32b-v1:0"
 # model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
@@ -86,7 +86,7 @@ for i in {1..10}; do
         echo "Starting script iteration" >> $3
         echo " " >> $3
         start_time=$(date +%s)
-        setsid timeout 10m uv run main.py -i "$1" -t 1 $model >> "$3" 2>&1 &
+        setsid timeout 10m uv run main.py -i "$1" -t 1 -v $model >> "$3" 2>&1 &
         pid2=$!
         exit_code=$?
         if ! wait "$pid2"; then
@@ -106,7 +106,7 @@ for i in {1..10}; do
         #     echo "Process timed out after 10 minutes on iteration $i"
         #     break
         # fi
-        sleep 30
+        sleep 60
         # wait $pid2
     fi 
     wait
