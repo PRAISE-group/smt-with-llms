@@ -1,52 +1,52 @@
-int ackermann(int m, int n) {
+int ackermann_cb(int m, int n) {
     if (m==0) {
         return n+1;
     }
     if (n==0) {
-        return ackermann(m-1,1);
+        return ackermann_cb(m-1,1);
     }
-    return ackermann(m-1,ackermann(m,n-1));
+    return ackermann_cb(m-1,ackermann_cb(m,n-1));
 }
 
 
-long long addition(long long m, long long n) {
+long long addition_cb(long long m, long long n) {
     if (n == 0) {
         return m;
     }
     if (n > 0) {
-        return addition(m+1, n-1);
+        return addition_cb(m+1, n-1);
     }
     if (n < 0) {
-        return addition(m-1, n+1);
+        return addition_cb(m-1, n+1);
     }
     return 0;
 }
 
-int isOdd(int n);
-int isEven(int n);
+int isOdd_cb(int n);
+int isEven_cb(int n);
 
-int isOdd(int n) {
+int isOdd_cb(int n) {
     if (n == 0) {
         return 0;
     } else if (n == 1) {
         return 1;
     } else {
-        return isEven(n - 1);
+        return isEven_cb(n - 1);
     }
 }
 
-int isEven(int n) {
+int isEven_cb(int n) {
     if (n == 0) {
         return 1;
     } else if (n == 1) {
         return 0;
     } else {
-        return isOdd(n - 1);
+        return isOdd_cb(n - 1);
     }
 }
 
 
-int gcd(int y1, int y2) {
+int gcd_cb(int y1, int y2) {
     if (y1 <= 0 || y2 <= 0) {
         return 0;
     }
@@ -54,10 +54,39 @@ int gcd(int y1, int y2) {
         return y1;
     }
     if (y1 > y2) {
-        return gcd(y1 - y2, y2);
+        return gcd_cb(y1 - y2, y2);
     }
-    return gcd(y1, y2 - y1);
+    return gcd_cb(y1, y2 - y1);
 }
+
+int divides_cb(int n, int m) {
+    if (m == 0) {
+        return 1; // true
+    }
+    if (n > m) {
+        return 0; // false
+    }
+    return divides_cb(n, m - n);
+    // int k; return k;
+}
+
+unsigned int idb23_cb(unsigned int x) {
+  if (x==0) return 0;
+  unsigned int ret = idb23_cb(x-1) + 1;
+  if (ret > 2) return 2;
+  return ret;
+  // int k; return k;
+}
+
+int idb510_cb(int x) {
+  if (x==0) return 0;
+  int ret = idb510_cb((unsigned int)x-1) + 1;
+  if (ret > 5) return 5;
+  return ret;
+  // int k; return k;
+}
+
+
 
 // There are multiple functions with same name
 // unsigned int id(unsigned int x) {
@@ -69,23 +98,23 @@ int gcd(int y1, int y2) {
 // }
 
 
-int f91(int x) {
+int f91_cb(int x) {
     if (x > 100)
         return x -10;
     else {
-        return f91(f91(x+11));
+        return f91_cb(f91_cb(x+11));
     }
 }
 
 
-int mult(int n, int m) {
+int mult_cb(int n, int m) {
     if (m < 0) {
-        return mult(n, -m);
+        return mult_cb(n, -m);
     }
     if (m == 0) {
         return 0;
     }
-    return n + mult(n, m - 1);
+    return n + mult_cb(n, m - 1);
 }
 
 
@@ -107,7 +136,7 @@ int multiple_of(int n, int m) {
 }
 
 
-int is_prime_(int n, int m);
+int is_prime__cb(int n, int m);
 int is_prime(int n);
 
 // Is n prime?
@@ -136,14 +165,14 @@ int is_prime_(int n, int m) {
     return 0;
 }
 
-int hanoi(int n) {
+int hanoi_cb(int n) {
 	if (n == 1) {
 		return 1;
 	}
 	return 2 * (hanoi(n-1)) + 1;
 }
 
-unsigned int sum(unsigned int n, unsigned int m) {
+unsigned int sum_cb(unsigned int n, unsigned int m) {
     if (n == 0) {
       return m;
     } else {

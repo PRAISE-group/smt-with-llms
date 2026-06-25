@@ -1,0 +1,14 @@
+{
+  "smt_file": "./benchmarks/gt_new/EvenOdd01-1.smt2_5.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "isOdd_cb": {
+      "smtDecl": "(declare-fun isOdd_cb (Int) Int)",
+      "desc": "Returns 1 if the input is odd number else returns zero.",
+      "tests": [[1], [2]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}

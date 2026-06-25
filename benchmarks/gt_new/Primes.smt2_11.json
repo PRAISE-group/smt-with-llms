@@ -1,0 +1,14 @@
+{
+  "smt_file": "./benchmarks/gt_new/Primes.smt2_11.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "is_prime__cb": {
+      "smtDecl": "(declare-fun is_prime__cb (Int Int) Int)",
+      "desc": "Takes two integers (n, m) as arguments, if any integer from m down to 2 divides n then it returns false; otherwise, after it returns true.",
+      "tests": [[1, 3], [4, 5]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}
