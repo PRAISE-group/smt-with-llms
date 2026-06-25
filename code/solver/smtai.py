@@ -532,8 +532,10 @@ class smtAI(object):
             print(f"No lemmas found for iteration {self.iteration}")
         console.info("Calling Z3 check()")
         createDirectory("oracleTemp")
+        print("before writing")
         with open("oracleTemp/assertions", "w+") as f:
             f.write(str(self.s.assertions()))
+        print("after writing")
         result = self.check()
         end = time.time()
         executiontime["z3"] += end - start

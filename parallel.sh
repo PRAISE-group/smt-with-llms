@@ -4,8 +4,8 @@
 # $1: json file path
 # $2: smt file path
 # $3: log_file
-file1="/home/out1.txt"
-file2="/home/out2.txt"
+file1="./out1.txt"
+file2="./out2.txt"
 
 # Clear old outputs
 > "$file1"
@@ -67,7 +67,7 @@ kill_tree() {
 
 # echo "Orax done"
 # Run program2 in its own process group with timeout
-cd /home/
+#cd /home/
 # Done
 model="--model gpt-oss:20b --use156"
 # model="--usebedrock --model meta.llama4-maverick-17b-instruct-v1:0"

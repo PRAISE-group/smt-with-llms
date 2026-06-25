@@ -91,7 +91,7 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
     for d in solver.vars:
         val = m[d]
         if args.verbose:
-            print(f"{d} = {m[d]}")
+            print("model" ,f"{d} = {m[d]}")
         if val.sort().name() == "Bool":
             input_tuple.append(int(z3.is_true(val)))  # True → 1, False → 0
         else:
@@ -151,12 +151,15 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     m = solver.model()
     input_tuple = []
     for d in solver.vars:
-        val = m[d]
+        val = m.eval(d, model_completion=True)
+        # val = m[d]
         if args.verbose:
             print(f"{d} = {m[d]}")
         if val.sort().name() == "Bool":
+            # print("first")
             input_tuple.append(int(z3.is_true(val)))  # True → 1, False → 0
         else:
+            # print("second")
             input_tuple.append(int(val.as_long()))
         # if args.verbose:
         #     print(f"{d} = {m[d]}")
