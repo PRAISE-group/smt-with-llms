@@ -1,15 +1,6 @@
-(set-option :print-success false)
-(set-info :smt-lib-version 2.6)
-(set-option :smt.array.extensional false)
-(set-option :smt.mbqi false)
-(set-option :model.compact false)
-(set-option :model.v2 true)
-(set-option :pp.bv_literals false)
-; done setting options
-
-
+; benchmark generated from python API
+(set-info :status unknown)
 (declare-fun tickleBool (Bool) Bool)
-(assert (and (tickleBool true) (tickleBool false)))
 (declare-fun $0 () Int)
 (declare-fun $1 () Int)
 (declare-fun $0.ref () Int)
@@ -43,102 +34,92 @@
 (declare-fun __SMACK_init_func_memory_model () Int)
 (declare-fun llvm.dbg.value () Int)
 (declare-fun __SMACK_static_init () Int)
-(assert (= $0 0))
-(assert (= $1 1))
-(assert (= $0.ref 0))
-(assert (= $1.ref 1))
-(assert (= $1024.ref 1024))
-(assert (= $GLOBALS_BOTTOM (- 0 21672)))
-(assert (= $EXTERNS_BOTTOM (+ $GLOBALS_BOTTOM (- 0 32768))))
-(assert (= $MALLOC_TOP 9223372036854775807))
-(assert (= ($and.i1 0 0) 0))
-(assert (= ($or.i1 0 0) 0))
-(assert (= ($xor.i1 0 0) 0))
-(assert (= ($and.i1 0 1) 0))
-(assert (= ($or.i1 0 1) 1))
-(assert (= ($xor.i1 0 1) 1))
-(assert (= ($and.i1 1 0) 0))
-(assert (= ($or.i1 1 0) 1))
-(assert (= ($xor.i1 1 0) 1))
-(assert (= ($and.i1 1 1) 1))
-(assert (= ($or.i1 1 1) 1))
-(assert (= ($xor.i1 1 1) 0))
-(assert (= ($and.i32 32 16) 0))
-(assert (= id (- 0 1032)))
-(assert (= main (- 0 2064)))
-(assert (= __SMACK_code (- 0 3096)))
-(assert (= __VERIFIER_assume (- 0 4128)))
-(assert (= __SMACK_dummy (- 0 5160)))
-(assert (= __VERIFIER_assert (- 0 6192)))
-(assert (= __SMACK_and32 (- 0 7224)))
-(assert (= __SMACK_and64 (- 0 8256)))
-(assert (= __SMACK_and16 (- 0 9288)))
-(assert (= __SMACK_and8 (- 0 10320)))
-(assert (= __SMACK_or32 (- 0 11352)))
-(assert (= __SMACK_or64 (- 0 12384)))
-(assert (= __SMACK_or16 (- 0 13416)))
-(assert (= __SMACK_or8 (- 0 14448)))
-(assert (= __SMACK_check_overflow (- 0 15480)))
-(assert (= __SMACK_loop_exit (- 0 16512)))
-(assert (= __SMACK_decls (- 0 17544)))
-(assert (= __SMACK_top_decl (- 0 18576)))
-(assert (= __SMACK_init_func_memory_model (- 0 19608)))
-(assert (= llvm.dbg.value (- 0 20640)))
-(assert (= __SMACK_static_init (- 0 21672)))
-(assert true)
-(push 1)
-(declare-fun ControlFlow (Int Int) Int)
-(declare-fun SIV@5 () Bool)
-(declare-fun SIV@3 () Bool)
-(declare-fun SIV@1 () Int)
-(declare-fun SIV@4 () Int)
-(declare-fun SIV@2 () Bool)
-(declare-fun SIV@0 () Bool)
-(assert  (and (= (ControlFlow 0 0) 305980) (not (let ((start__unique__1_correct  (=> (and (and true SIV@5) (and (not SIV@3) (= (ControlFlow 0 281566) (- 0 306040)))) (not (and (= SIV@1 SIV@4) (= SIV@2 SIV@3))))))
-(let ((q@0_correct  (=> (= (ControlFlow 0 305977) 281566) start__unique__1_correct)))
-(let ((PreconditionGeneratedEntry_correct  (=> (and SIV@0 (= (ControlFlow 0 305980) 305977)) q@0_correct)))
-PreconditionGeneratedEntry_correct))))))
-; Inlining main_trace_1 from main
-(declare-fun SIV@14 () Bool)
-(declare-fun SIV@17 () Int)
-(declare-fun SIV@16 () Bool)
-(declare-fun SIV@13 () Int)
-(declare-fun SIV@15 () Bool)
-(declare-fun boogie_si_record_ref (Int) Bool)
-(declare-fun SIV@12 () Int)
-(declare-fun id@@0 (Int) Int)
-(declare-fun boogie_si_record_i32 (Int) Bool)
-(assert  (=> SIV@5 (and (= (ControlFlow 1 0) 306099) (not (let ((SeqInstr_1__unique__4_correct  (=> (and (not SIV@14) (= (ControlFlow 1 281547) (- 0 306297))) (not (and (= SIV@4 SIV@17) (= SIV@3 SIV@14))))))
-(let (($bb4__unique__3_correct  (=> (and (and true true) (and SIV@16 (= (ControlFlow 1 281546) 281547))) SeqInstr_1__unique__4_correct)))
-(let (($bb1__unique__2_correct  (=> (and (= SIV@13 1) (= (ControlFlow 1 281545) 281546)) $bb4__unique__3_correct)))
-(let (($bb0__unique__1_correct  (=> (and (and (and true true) (and SIV@15 (boogie_si_record_ref main))) (and (and (= SIV@12 (id@@0 5)) (boogie_si_record_i32 SIV@12)) (and (= SIV@13 (ite (not (= SIV@12 5)) 1 0)) (= (ControlFlow 1 281544) 281545)))) $bb1__unique__2_correct)))
-(let ((q@0_correct@@0  (=> (= (ControlFlow 1 306096) 281544) $bb0__unique__1_correct)))
-(let ((PreconditionGeneratedEntry_correct@@0  (=> (and true (= (ControlFlow 1 306099) 306096)) q@0_correct@@0)))
-PreconditionGeneratedEntry_correct@@0))))))))))
-; Inlining $initialize_trace_1 from main_trace_1
-(declare-fun SIV@19 () Bool)
-(declare-fun SIV@20 () Bool)
-(assert  (=> SIV@15 (and (= (ControlFlow 2 0) 306350) (not (let ((anon0__unique__1_correct  (=> true (=> (and true SIV@19) (=> (and (and true true) (and SIV@20 (= (ControlFlow 2 281340) (- 0 306387)))) false)))))
-(let ((q@0_correct@@1  (=> (= (ControlFlow 2 306348) 281340) anon0__unique__1_correct)))
-(let ((PreconditionGeneratedEntry_correct@@1  (=> (and true (= (ControlFlow 2 306350) 306348)) q@0_correct@@1)))
-PreconditionGeneratedEntry_correct@@1)))))))
-; Inlining __VERIFIER_assert_trace_1 from main_trace_1
-(assert  (=> SIV@16 (and (= (ControlFlow 3 0) 306418) (not (let ((SeqInstr_4__unique__3_correct  (=> (and (not false) (= (ControlFlow 3 281412) (- 0 306488))) (= SIV@14  (not false)))))
-(let ((assert_rewrite_dummy_block_0__unique__2_correct  (=> (and (= 0 $0) (= (ControlFlow 3 281411) 281412)) SeqInstr_4__unique__3_correct)))
-(let (($bb0__unique__1_correct@@0  (=> (and (boogie_si_record_i32 0) (= (ControlFlow 3 281410) 281411)) assert_rewrite_dummy_block_0__unique__2_correct)))
-(let ((q@0_correct@@2  (=> (= (ControlFlow 3 306415) 281410) $bb0__unique__1_correct@@0)))
-(let ((PreconditionGeneratedEntry_correct@@2  (=> (and true (= (ControlFlow 3 306418) 306415)) q@0_correct@@2)))
-PreconditionGeneratedEntry_correct@@2)))))))))
-; Inlining __SMACK_static_init_trace_1 from $initialize_trace_1
-(assert  (=> SIV@19 (and (= (ControlFlow 4 0) 306506) (not (let (($bb0__unique__1_correct@@1  (=> (= (ControlFlow 4 281288) (- 0 306511)) false)))
-(let ((q@0_correct@@3  (=> (= (ControlFlow 4 306504) 281288) $bb0__unique__1_correct@@1)))
-(let ((PreconditionGeneratedEntry_correct@@3  (=> (and true (= (ControlFlow 4 306506) 306504)) q@0_correct@@3)))
-PreconditionGeneratedEntry_correct@@3)))))))
-; Inlining __SMACK_init_func_memory_model_trace_1 from $initialize_trace_1
-(assert  (=> SIV@20 (and (= (ControlFlow 5 0) 306521) (not (let (($bb0__unique__1_correct@@2  (=> (= (ControlFlow 5 281328) (- 0 306550)) false)))
-(let ((q@0_correct@@4  (=> (= (ControlFlow 5 306519) 281328) $bb0__unique__1_correct@@2)))
-(let ((PreconditionGeneratedEntry_correct@@4  (=> (and true (= (ControlFlow 5 306521) 306519)) q@0_correct@@4)))
-PreconditionGeneratedEntry_correct@@4)))))))
-(push 1)
-
+(assert
+ (and (tickleBool true) (tickleBool false)))
+(assert
+ (= $0 0))
+(assert
+ (= $1 1))
+(assert
+ (= $0.ref 0))
+(assert
+ (= $1.ref 1))
+(assert
+ (= $1024.ref 1024))
+(assert
+ (let ((?x23 (- 0 21672)))
+ (= $GLOBALS_BOTTOM ?x23)))
+(assert
+ (= $EXTERNS_BOTTOM (+ $GLOBALS_BOTTOM (- 0 32768))))
+(assert
+ (= $MALLOC_TOP 9223372036854775807))
+(assert
+ (= ($and.i1 0 0) 0))
+(assert
+ (= ($or.i1 0 0) 0))
+(assert
+ (= ($xor.i1 0 0) 0))
+(assert
+ (= ($and.i1 0 1) 0))
+(assert
+ (= ($or.i1 0 1) 1))
+(assert
+ (= ($xor.i1 0 1) 1))
+(assert
+ (= ($and.i1 1 0) 0))
+(assert
+ (= ($or.i1 1 0) 1))
+(assert
+ (= ($xor.i1 1 0) 1))
+(assert
+ (= ($and.i1 1 1) 1))
+(assert
+ (= ($or.i1 1 1) 1))
+(assert
+ (= ($xor.i1 1 1) 0))
+(assert
+ (= ($and.i32 32 16) 0))
+(assert
+ (= id (- 0 1032)))
+(assert
+ (= main (- 0 2064)))
+(assert
+ (= __SMACK_code (- 0 3096)))
+(assert
+ (= __VERIFIER_assume (- 0 4128)))
+(assert
+ (= __SMACK_dummy (- 0 5160)))
+(assert
+ (= __VERIFIER_assert (- 0 6192)))
+(assert
+ (= __SMACK_and32 (- 0 7224)))
+(assert
+ (= __SMACK_and64 (- 0 8256)))
+(assert
+ (= __SMACK_and16 (- 0 9288)))
+(assert
+ (= __SMACK_and8 (- 0 10320)))
+(assert
+ (= __SMACK_or32 (- 0 11352)))
+(assert
+ (= __SMACK_or64 (- 0 12384)))
+(assert
+ (= __SMACK_or16 (- 0 13416)))
+(assert
+ (= __SMACK_or8 (- 0 14448)))
+(assert
+ (= __SMACK_check_overflow (- 0 15480)))
+(assert
+ (= __SMACK_loop_exit (- 0 16512)))
+(assert
+ (= __SMACK_decls (- 0 17544)))
+(assert
+ (= __SMACK_top_decl (- 0 18576)))
+(assert
+ (= __SMACK_init_func_memory_model (- 0 19608)))
+(assert
+ (= llvm.dbg.value (- 0 20640)))
+(assert
+ (let ((?x23 (- 0 21672)))
+ (= __SMACK_static_init ?x23)))
 (check-sat)

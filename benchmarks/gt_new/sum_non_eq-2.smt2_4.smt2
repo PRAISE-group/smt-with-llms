@@ -1,15 +1,6 @@
-(set-option :print-success false)
-(set-info :smt-lib-version 2.6)
-(set-option :smt.array.extensional false)
-(set-option :smt.mbqi false)
-(set-option :model.compact false)
-(set-option :model.v2 true)
-(set-option :pp.bv_literals false)
-; done setting options
-
-
+; benchmark generated from python API
+(set-info :status unknown)
 (declare-fun tickleBool (Bool) Bool)
-(assert (and (tickleBool true) (tickleBool false)))
 (declare-fun $0 () Int)
 (declare-fun $1 () Int)
 (declare-fun $0.ref () Int)
@@ -46,116 +37,198 @@
 (declare-fun __SMACK_init_func_memory_model () Int)
 (declare-fun llvm.dbg.value () Int)
 (declare-fun __SMACK_static_init () Int)
-(assert (= $0 0))
-(assert (= $1 1))
-(assert (= $0.ref 0))
-(assert (= $1.ref 1))
-(assert (= $1024.ref 1024))
-(assert (= $GLOBALS_BOTTOM (- 0 24768)))
-(assert (= $EXTERNS_BOTTOM (+ $GLOBALS_BOTTOM (- 0 32768))))
-(assert (= $MALLOC_TOP 9223372036854775807))
-(assert (= ($and.i1 0 0) 0))
-(assert (= ($or.i1 0 0) 0))
-(assert (= ($xor.i1 0 0) 0))
-(assert (= ($and.i1 0 1) 0))
-(assert (= ($or.i1 0 1) 1))
-(assert (= ($xor.i1 0 1) 1))
-(assert (= ($and.i1 1 0) 0))
-(assert (= ($or.i1 1 0) 1))
-(assert (= ($xor.i1 1 0) 1))
-(assert (= ($and.i1 1 1) 1))
-(assert (= ($or.i1 1 1) 1))
-(assert (= ($xor.i1 1 1) 0))
-(assert (= ($and.i32 32 16) 0))
-(assert (= sum (- 0 1032)))
-(assert (= main (- 0 2064)))
-(assert (= __SMACK_code (- 0 3096)))
-(assert (= __VERIFIER_assume (- 0 4128)))
-(assert (= __SMACK_dummy (- 0 5160)))
-(assert (= __VERIFIER_assert (- 0 6192)))
-(assert (= __SMACK_and32 (- 0 7224)))
-(assert (= __SMACK_and64 (- 0 8256)))
-(assert (= __SMACK_and16 (- 0 9288)))
-(assert (= __SMACK_and8 (- 0 10320)))
-(assert (= __SMACK_or32 (- 0 11352)))
-(assert (= __SMACK_or64 (- 0 12384)))
-(assert (= __SMACK_or16 (- 0 13416)))
-(assert (= __SMACK_or8 (- 0 14448)))
-(assert (= __SMACK_check_overflow (- 0 15480)))
-(assert (= __SMACK_loop_exit (- 0 16512)))
-(assert (= __VERIFIER_nondet_unsigned_int (- 0 17544)))
-(assert (= __SMACK_nondet_unsigned_int (- 0 18576)))
-(assert (= __VERIFIER_nondet_uint (- 0 19608)))
-(assert (= __SMACK_decls (- 0 20640)))
-(assert (= __SMACK_top_decl (- 0 21672)))
-(assert (= __SMACK_init_func_memory_model (- 0 22704)))
-(assert (= llvm.dbg.value (- 0 23736)))
-(assert (= __SMACK_static_init (- 0 24768)))
-(assert true)
-(push 1)
+(declare-fun SIV@3 () Bool)
+(declare-fun SIV@2 () Bool)
+(declare-fun SIV@4 () Int)
+(declare-fun SIV@1 () Int)
 (declare-fun ControlFlow (Int Int) Int)
 (declare-fun SIV@5 () Bool)
-(declare-fun SIV@3 () Bool)
-(declare-fun SIV@1 () Int)
-(declare-fun SIV@4 () Int)
-(declare-fun SIV@2 () Bool)
 (declare-fun SIV@0 () Bool)
-(assert  (and (= (ControlFlow 0 0) 237672) (not (let ((start_correct  (=> (and (and true SIV@5) (and (not SIV@3) (= (ControlFlow 0 232749) (- 0 237726)))) (not (and (= SIV@1 SIV@4) (= SIV@2 SIV@3))))))
-(let ((q@0_correct  (=> (= (ControlFlow 0 237669) 232749) start_correct)))
-(let ((PreconditionGeneratedEntry_correct  (=> (and SIV@0 (= (ControlFlow 0 237672) 237669)) q@0_correct)))
-PreconditionGeneratedEntry_correct))))))
-(push 1)
-(assert (not
-SIV@5
-))
-(pop 1)
-(push 1)
-(pop 1)
-; Inlining main from main
-(declare-fun SIV@22 () Int)
 (declare-fun SIV@23 () Bool)
+(declare-fun SIV@22 () Int)
+(declare-fun SIV@21 () Bool)
+(declare-fun SIV@19 () Int)
 (declare-fun SIV@20 () Bool)
 (declare-fun SIV@28 () Int)
-(declare-fun SIV@21 () Bool)
 (declare-fun SIV@27 () Bool)
-(declare-fun SIV@19 () Int)
-(declare-fun SIV@24 () Bool)
-(declare-fun boogie_si_record_ref (Int) Bool)
-(declare-fun SIV@25 () Bool)
-(declare-fun boogie_si_record_i32 (Int) Bool)
-(declare-fun SIV@15 () Int)
-(declare-fun SIV@26 () Bool)
-(declare-fun SIV@16 () Int)
-(declare-fun SIV@17 () Int)
-(declare-fun sum@@0 (Int Int) Int)
 (declare-fun SIV@18 () Int)
-(assert  (=> SIV@5 (and (= (ControlFlow 1 0) 237789) (not (let ((GeneratedUnifiedExit_correct  (=> (= (ControlFlow 1 237784) (- 0 238156)) (not (and (= SIV@4 SIV@22) (= SIV@3 SIV@23))))))
-(let ((SeqInstr_1_correct  (=> (and (and (not SIV@20) (= SIV@22 SIV@28)) (and (= SIV@23 SIV@20) (= (ControlFlow 1 231645) 237784))) GeneratedUnifiedExit_correct)))
-(let (($bb3_correct  (=> (= SIV@22 0) (=> (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) GeneratedUnifiedExit_correct))))
-(let (($bb5_correct  (=> (and (= SIV@21 SIV@20) (= (ControlFlow 1 231648) 231643)) $bb3_correct)))
-(let ((SeqInstr_3_correct  (=> (= (ControlFlow 1 231647) 231648) $bb5_correct)))
-(let ((SeqInstr_2_correct  (=> (and SIV@20 (= (ControlFlow 1 231646) 231647)) SeqInstr_3_correct)))
-(let (($bb4_correct  (=> true (=> (and true SIV@27) (and (=> (= (ControlFlow 1 231644) 231645) SeqInstr_1_correct) (=> (= (ControlFlow 1 231644) 231646) SeqInstr_2_correct))))))
-(let (($bb1_correct  (=> (and (= SIV@19 1) (= (ControlFlow 1 231641) 231644)) $bb4_correct)))
-(let (($bb2_correct  (=> (not (= SIV@19 1)) (=> (and (= SIV@21 true) (= (ControlFlow 1 231642) 231643)) $bb3_correct))))
-(let (($bb0_correct  (=> (and true true) (=> (and (and (and (and SIV@24 (boogie_si_record_ref main)) (and true true)) (and (and SIV@25 (boogie_si_record_i32 SIV@15)) (and (boogie_si_record_i32 SIV@15) true))) (and (and (and true SIV@26) (and (boogie_si_record_i32 SIV@16) (boogie_si_record_i32 SIV@16))) (and (and (= SIV@17 (sum@@0 SIV@15 SIV@16)) (boogie_si_record_i32 SIV@17)) (and (= SIV@18 (+ SIV@15 SIV@16)) (= SIV@19 (ite (not (= SIV@17 SIV@18)) 1 0)))))) (and (=> (= (ControlFlow 1 231640) 231641) $bb1_correct) (=> (= (ControlFlow 1 231640) 231642) $bb2_correct))))))
-(let ((q@0_correct@@0  (=> (= (ControlFlow 1 237782) 231640) $bb0_correct)))
-(let ((PreconditionGeneratedEntry_correct@@0  (=> (and true (= (ControlFlow 1 237789) 237782)) q@0_correct@@0)))
-PreconditionGeneratedEntry_correct@@0))))))))))))))))
-(push 1)
-(assert (not
-SIV@24
-))
-(assert (not
-SIV@25
-))
-(assert (not
-SIV@26
-))
-(assert (not
-SIV@27
-))
-(pop 1)
-(push 1)
-
+(declare-fun SIV@17 () Int)
+(declare-fun SIV@16 () Int)
+(declare-fun SIV@15 () Int)
+(declare-fun boogie_si_record_i32 (Int) Bool)
+(declare-fun sum@@0 (Int Int) Int)
+(declare-fun SIV@26 () Bool)
+(declare-fun SIV@25 () Bool)
+(declare-fun boogie_si_record_ref (Int) Bool)
+(declare-fun SIV@24 () Bool)
+(declare-fun SIV@31 () Bool)
+(declare-fun SIV@30 () Bool)
+(declare-fun SIV@35 () Int)
+(declare-fun SIV@36 () Bool)
+(declare-fun SIV@41 () Int)
+(declare-fun SIV@42 () Bool)
+(declare-fun SIV@48 () Bool)
+(declare-fun SIV@47 () Bool)
+(assert
+ (and (tickleBool true) (tickleBool false)))
+(assert
+ (= $0 0))
+(assert
+ (= $1 1))
+(assert
+ (= $0.ref 0))
+(assert
+ (= $1.ref 1))
+(assert
+ (= $1024.ref 1024))
+(assert
+ (let ((?x23 (- 0 24768)))
+ (= $GLOBALS_BOTTOM ?x23)))
+(assert
+ (= $EXTERNS_BOTTOM (+ $GLOBALS_BOTTOM (- 0 32768))))
+(assert
+ (= $MALLOC_TOP 9223372036854775807))
+(assert
+ (= ($and.i1 0 0) 0))
+(assert
+ (= ($or.i1 0 0) 0))
+(assert
+ (= ($xor.i1 0 0) 0))
+(assert
+ (= ($and.i1 0 1) 0))
+(assert
+ (= ($or.i1 0 1) 1))
+(assert
+ (= ($xor.i1 0 1) 1))
+(assert
+ (= ($and.i1 1 0) 0))
+(assert
+ (= ($or.i1 1 0) 1))
+(assert
+ (= ($xor.i1 1 0) 1))
+(assert
+ (= ($and.i1 1 1) 1))
+(assert
+ (= ($or.i1 1 1) 1))
+(assert
+ (= ($xor.i1 1 1) 0))
+(assert
+ (= ($and.i32 32 16) 0))
+(assert
+ (= sum (- 0 1032)))
+(assert
+ (= main (- 0 2064)))
+(assert
+ (= __SMACK_code (- 0 3096)))
+(assert
+ (= __VERIFIER_assume (- 0 4128)))
+(assert
+ (= __SMACK_dummy (- 0 5160)))
+(assert
+ (= __VERIFIER_assert (- 0 6192)))
+(assert
+ (= __SMACK_and32 (- 0 7224)))
+(assert
+ (= __SMACK_and64 (- 0 8256)))
+(assert
+ (= __SMACK_and16 (- 0 9288)))
+(assert
+ (= __SMACK_and8 (- 0 10320)))
+(assert
+ (= __SMACK_or32 (- 0 11352)))
+(assert
+ (= __SMACK_or64 (- 0 12384)))
+(assert
+ (= __SMACK_or16 (- 0 13416)))
+(assert
+ (= __SMACK_or8 (- 0 14448)))
+(assert
+ (= __SMACK_check_overflow (- 0 15480)))
+(assert
+ (= __SMACK_loop_exit (- 0 16512)))
+(assert
+ (= __VERIFIER_nondet_unsigned_int (- 0 17544)))
+(assert
+ (= __SMACK_nondet_unsigned_int (- 0 18576)))
+(assert
+ (= __VERIFIER_nondet_uint (- 0 19608)))
+(assert
+ (= __SMACK_decls (- 0 20640)))
+(assert
+ (= __SMACK_top_decl (- 0 21672)))
+(assert
+ (= __SMACK_init_func_memory_model (- 0 22704)))
+(assert
+ (= llvm.dbg.value (- 0 23736)))
+(assert
+ (let ((?x23 (- 0 24768)))
+ (= __SMACK_static_init ?x23)))
+(assert
+ true)
+(assert
+ (let (($x168 (and (and true SIV@5) (and (not SIV@3) (= (ControlFlow 0 232749) (- 0 237726))))))
+ (let (($x180 (=> (and (= (ControlFlow 0 237669) 232749) $x168) (not (and (= SIV@1 SIV@4) (= SIV@2 SIV@3))))))
+ (and (= (ControlFlow 0 0) 237672) (not (=> (and (and SIV@0 (= (ControlFlow 0 237672) 237669)) (= (ControlFlow 0 237669) 232749) $x168) (not (and (= SIV@1 SIV@4) (= SIV@2 SIV@3)))))))))
+(assert
+ (let (($x327 (not (and (= SIV@4 SIV@22) (= SIV@3 SIV@23)))))
+ (let (($x328 (=> (= (ControlFlow 1 237784) (- 0 238156)) $x327)))
+ (let (($x348 (=> (and (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) (= (ControlFlow 1 237784) (- 0 238156))) $x327)))
+ (let (($x349 (=> (and (= SIV@22 0) (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) (= (ControlFlow 1 237784) (- 0 238156))) $x327)))
+ (let (($x389 (=> (and (and (= SIV@21 true) (= (ControlFlow 1 231642) 231643)) (= SIV@22 0) (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) (= (ControlFlow 1 237784) (- 0 238156))) $x327)))
+ (let (($x430 (=> (and (= (ControlFlow 1 231640) 231642) (not (= SIV@19 1)) (and (= SIV@21 true) (= (ControlFlow 1 231642) 231643)) (= SIV@22 0) (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) (= (ControlFlow 1 237784) (- 0 238156))) $x327)))
+ (let (($x355 (=> (and (and (= SIV@21 SIV@20) (= (ControlFlow 1 231648) 231643)) (= SIV@22 0) (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) (= (ControlFlow 1 237784) (- 0 238156))) $x327)))
+ (let (($x364 (=> (and (and SIV@20 (= (ControlFlow 1 231646) 231647)) (= (ControlFlow 1 231647) 231648) (and (= SIV@21 SIV@20) (= (ControlFlow 1 231648) 231643)) (= SIV@22 0) (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) (= (ControlFlow 1 237784) (- 0 238156))) $x327)))
+ (let (($x339 (and (and (not SIV@20) (= SIV@22 SIV@28)) (and (= SIV@23 SIV@20) (= (ControlFlow 1 231645) 237784)))))
+ (let (($x373 (and (=> (and (= (ControlFlow 1 231644) 231645) $x339 (= (ControlFlow 1 237784) (- 0 238156))) $x327) (=> (and (= (ControlFlow 1 231644) 231646) (and SIV@20 (= (ControlFlow 1 231646) 231647)) (= (ControlFlow 1 231647) 231648) (and (= SIV@21 SIV@20) (= (ControlFlow 1 231648) 231643)) (= SIV@22 0) (and (= SIV@23 SIV@21) (= (ControlFlow 1 231643) 237784)) (= (ControlFlow 1 237784) (- 0 238156))) $x327))))
+ (let (($x382 (=> (and (and (= SIV@19 1) (= (ControlFlow 1 231641) 231644)) true (and true SIV@27)) $x373)))
+ (let (($x421 (and (= SIV@18 (+ SIV@15 SIV@16)) (= SIV@19 (ite (not (= SIV@17 SIV@18)) 1 0)))))
+ (let (($x413 (and (= SIV@17 (sum@@0 SIV@15 SIV@16)) (boogie_si_record_i32 SIV@17))))
+ (let (($x408 (and (and true SIV@26) (and (boogie_si_record_i32 SIV@16) (boogie_si_record_i32 SIV@16)))))
+ (let (($x401 (and (and SIV@25 (boogie_si_record_i32 SIV@15)) (and (boogie_si_record_i32 SIV@15) true))))
+ (let (($x402 (and (and (and SIV@24 (boogie_si_record_ref main)) (and true true)) $x401)))
+ (let (($x432 (=> (and $x402 (and $x408 (and $x413 $x421))) (and (=> (and (= (ControlFlow 1 231640) 231641) (and (= SIV@19 1) (= (ControlFlow 1 231641) 231644)) true (and true SIV@27)) $x373) $x430))))
+ (let (($x391 (and true true)))
+ (let (($x441 (=> (and (and true (= (ControlFlow 1 237789) 237782)) (= (ControlFlow 1 237782) 231640) $x391 (and $x402 (and $x408 (and $x413 $x421)))) (and (=> (and (= (ControlFlow 1 231640) 231641) (and (= SIV@19 1) (= (ControlFlow 1 231641) 231644)) true (and true SIV@27)) $x373) $x430))))
+ (=> SIV@5 (and (= (ControlFlow 1 0) 237789) (not $x441)))))))))))))))))))))))
+(assert
+ (let (($x391 (and true true)))
+ (let (($x500 (and $x391 (and SIV@31 (= (ControlFlow 2 232725) (- 0 238273))))))
+ (let (($x507 (=> (and (= (ControlFlow 2 238238) 232725) true (and true SIV@30) $x500) false)))
+ (let (($x513 (and (= (ControlFlow 2 0) 238240) (not (=> (and (and true (= (ControlFlow 2 238240) 238238)) (= (ControlFlow 2 238238) 232725) true (and true SIV@30) $x500) false)))))
+ (=> SIV@24 $x513))))))
+(assert
+ (let (($x521 (boogie_si_record_i32 SIV@35)))
+ (let (($x529 (and (and SIV@36 $x521) (and $x521 (= (ControlFlow 3 232553) (- 0 238390))))))
+ (let (($x391 (and true true)))
+ (let (($x537 (=> (and (= (ControlFlow 3 238301) 232553) $x391 $x529) (not (= SIV@15 SIV@35)))))
+ (let (($x543 (and (= (ControlFlow 3 0) 238304) (not (=> (and (and true (= (ControlFlow 3 238304) 238301)) (= (ControlFlow 3 238301) 232553) $x391 $x529) (not (= SIV@15 SIV@35)))))))
+ (=> SIV@25 $x543)))))))
+(assert
+ (let (($x550 (boogie_si_record_i32 SIV@41)))
+ (let (($x555 (and (and SIV@42 $x550) (and $x550 (= (ControlFlow 4 232553) (- 0 238390))))))
+ (let (($x391 (and true true)))
+ (let (($x562 (=> (and (= (ControlFlow 4 238301) 232553) $x391 $x555) (not (= SIV@16 SIV@41)))))
+ (let (($x568 (and (= (ControlFlow 4 0) 238304) (not (=> (and (and true (= (ControlFlow 4 238304) 238301)) (= (ControlFlow 4 238301) 232553) $x391 $x555) (not (= SIV@16 SIV@41)))))))
+ (=> SIV@26 $x568)))))))
+(assert
+ (let (($x580 (not SIV@48)))
+ (let (($x581 (= SIV@20 $x580)))
+ (let (($x582 (=> (= (ControlFlow 5 238436) (- 0 238521)) $x581)))
+ (let (($x607 (=> (and (and (= SIV@48 SIV@47) (= (ControlFlow 5 231844) 238436)) (= (ControlFlow 5 238436) (- 0 238521))) $x581)))
+ (let (($x614 (=> (and (and (= SIV@47 true) (= (ControlFlow 5 231843) 231844)) (and (= SIV@48 SIV@47) (= (ControlFlow 5 231844) 238436)) (= (ControlFlow 5 238436) (- 0 238521))) $x581)))
+ (let (($x622 (=> (and (= (ControlFlow 5 231838) 231843) (not (= 0 $0)) (and (= SIV@47 true) (= (ControlFlow 5 231843) 231844)) (and (= SIV@48 SIV@47) (= (ControlFlow 5 231844) 238436)) (= (ControlFlow 5 238436) (- 0 238521))) $x581)))
+ (let (($x589 (=> (and (and (= SIV@48 false) (= (ControlFlow 5 231840) 238436)) (= (ControlFlow 5 238436) (- 0 238521))) $x581)))
+ (let (($x599 (and (=> (and (= (ControlFlow 5 231839) 231840) (not false) (and (= SIV@48 false) (= (ControlFlow 5 231840) 238436)) (= (ControlFlow 5 238436) (- 0 238521))) $x581) (=> (= (ControlFlow 5 231839) 231841) true))))
+ (let (($x591 (= 0 $0)))
+ (let (($x624 (=> (boogie_si_record_i32 0) (and (=> (and (= (ControlFlow 5 231838) 231839) $x591) $x599) $x622))))
+ (let (($x632 (=> (and (and true (= (ControlFlow 5 238441) 238434)) (= (ControlFlow 5 238434) 231838) (boogie_si_record_i32 0)) (and (=> (and (= (ControlFlow 5 231838) 231839) $x591) $x599) $x622))))
+ (=> SIV@27 (and (= (ControlFlow 5 0) 238441) (not $x632)))))))))))))))
+(assert
+ (not SIV@30))
+(assert
+ (not SIV@36))
+(assert
+ (not SIV@42))
+(assert
+ (not SIV@31))
 (check-sat)
