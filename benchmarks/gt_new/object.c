@@ -19,8 +19,11 @@ long long addition(long long m, long long n) {
     if (n < 0) {
         return addition(m-1, n+1);
     }
+    return 0;
 }
 
+int isOdd(int n);
+int isEven(int n);
 
 int isOdd(int n) {
     if (n == 0) {
@@ -130,6 +133,7 @@ int is_prime_(int n, int m) {
             return is_prime_(n, m - 1);
         }
     }
+    return 0;
 }
 
 int hanoi(int n) {
