@@ -16,8 +16,20 @@ def analyze_file(filepath):
     lemma_verified_count = 0
     unsat_core_count = 0
 
-    with open(filepath, 'r', errors='ignore') as f:
-        lines = f.readlines()
+    # with open(filepath, 'r', errors='ignore') as f:
+    #     lines = f.readlines()
+    with open(filepath, "r") as f:
+        text = f.read()  # read full content
+
+    # Split based on the marker
+    parts = text.split("Starting script iteration")
+
+    # Get the last part (after the final occurrence)
+    last_part = parts[-1]
+    num_splits = len(parts) - 1
+
+    # Split into lines
+    lines = last_part.strip().splitlines()
 
     in_block = False
     block_lines = []

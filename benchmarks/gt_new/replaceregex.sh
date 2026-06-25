@@ -7,7 +7,7 @@ for file in *.smt2; do
     echo "[+] Processing $file"
 
     # in-place replace @ → _
-    sed -i 's/@/_/g' "$file"
+    sed -i 's/main/main_/g' "$file"
 
 done
 

@@ -141,11 +141,11 @@ int is_prime(int n);
 
 // Is n prime?
 int is_prime(int n) {
-    return is_prime_(n, n - 1);
+    return is_prime__cb(n, n - 1);
 }
 
 
-int is_prime_(int n, int m) {
+int is_prime__cb(int n, int m) {
     if (n <= 1) {
         return 0; // false
     }
@@ -159,7 +159,7 @@ int is_prime_(int n, int m) {
             if (multiple_of(n, m) == 0) {
                 return 0; // false
             }
-            return is_prime_(n, m - 1);
+            return is_prime__cb(n, m - 1);
         }
     }
     return 0;
@@ -169,13 +169,13 @@ int hanoi_cb(int n) {
 	if (n == 1) {
 		return 1;
 	}
-	return 2 * (hanoi(n-1)) + 1;
+	return 2 * (hanoi_cb(n-1)) + 1;
 }
 
 unsigned int sum_cb(unsigned int n, unsigned int m) {
     if (n == 0) {
       return m;
     } else {
-      return sum(n - 1, m + 1);
+      return sum_cb(n - 1, m + 1);
     }
 }

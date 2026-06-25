@@ -1,6 +1,7 @@
 import subprocess
 import os
 from code.utils.unsatUtil import *
+from code.solver.funcModelToC import print_model_as_c
 import z3
 
 def typenameConversion(domain):
@@ -43,7 +44,12 @@ def getHarness(solver, funs):
 #include <stdlib.h>
 #include <inttypes.h>
 #include <assert.h>
+#define True  true
+#define False false
 """
+    m = solver.model()
+    functs = print_model_as_c(m)
+    s+= functs + "\n"
     s+= "extern \"C\"{\n"
     for name in funs:
         # s+= "extern "
@@ -218,10 +224,13 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
         for value in input_tuple:
             input_data += str(value)+ " "
         stdout, stderr = process.communicate(input=input_data)
+        # print("before exec")
         if stderr:
             with open("oracleTemp/harness.cpp", "r") as f:
                 content = f.read()
                 print(content)
+        # else:
+        # print("after exec")
         if args.verbose:
             print("stdout:", stdout)
             print("stderr:", stderr)

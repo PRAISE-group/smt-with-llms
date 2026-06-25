@@ -28,6 +28,7 @@ class smtAI(object):
         self.iteration = 0
         self.lemmasUsed = {}  # key is the iteration number starts from 1
         self.cbFunctions = None  # Map of close box functions z3 object
+        self.AllFunctions = None
         self.inputoutputassertions = (
             []
         )  # input output constraints obtained from modelcheck inconsistency
@@ -284,7 +285,13 @@ class smtAI(object):
     #include <stdlib.h>
     #include <inttypes.h>
     #include <assert.h>
+    #define True  true
+    #define False false
     """
+        m = self.model()
+        functs = print_model_as_c(m)
+        s+= functs + "\n"
+        # s+= "extern \"C\"{\n"
         s += 'extern "C"{\n'
         for name in self.cbFunctions:
             # s+= "extern "
@@ -399,7 +406,9 @@ class smtAI(object):
         # Show results
         # print("\nFunction symbols found in SMT2:")
         cbFunctions = {}
+        allFunctions = {}
         for name, decl in functions.items():
+            allFunctions[name] = decl
             if name.endswith("_cb"):
                 cbFunctions[name] = decl
         # s.add(f_func(3, 4) > 0)
@@ -412,6 +421,7 @@ class smtAI(object):
         if args.verbose:
             print("pushed")
         self.cbFunctions = cbFunctions
+        self.allFunctions = allFunctions
         # if args.verbose:
         #     print(self.cbFunctions)
         # exit()
@@ -448,7 +458,7 @@ class smtAI(object):
                 if args.verbose:
                     print(v)
                 try:
-                    assertion = self.readSMTstring(v, self.cbFunctions)
+                    assertion = self.readSMTstring(v, self.allFunctions)
                 except Exception as e:
                     print(e)
                     print("assertion failed:", v)
@@ -564,7 +574,7 @@ class smtAI(object):
                 # exit()
                 return AlgoVerdict.SAT
             else:
-                lemmaDict.setRefinementCall(True)
+                lemmasDict.setRefinementCall(True)
                 self.pop()
                 console.info("received a model, not consistent so give feedback to LLM")
                 # lemmasDict.setIncrementalCall(True)
@@ -593,8 +603,10 @@ class smtAI(object):
                                         # print(BitVecVal(inp, domain.size()))
                                     elif domain == IntSort():
                                         tmpassert += str(inp) + " "
+                                    elif domain == BoolSort():
+                                        tmpassert += str(inp) + " "
                                     else:
-                                        print("Unknown type, line 477 smt.py")
+                                        print("Unknown type, line 477 smt.py", domain)
                                         exit()
                                     index += 1
                                 # print(tmpassert)
