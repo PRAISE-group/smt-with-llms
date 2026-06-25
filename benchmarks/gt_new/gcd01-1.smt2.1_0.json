@@ -2,9 +2,9 @@
   "smt_file": "./benchmarks/gt_new/gcd01-1.smt2.1_0.smt2",
   "object_file": "./benchmarks/gt_new/object.o",
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
+    "gcd_cb": {
+      "smtDecl": "(declare-fun gcd_cb (Int Int) Int)",
+      "desc": "Returns gcd of two integers.",
       "tests": [[1, 2], [3, 1]],
       "userLemmas": [""],
       "gptChat": [ ""

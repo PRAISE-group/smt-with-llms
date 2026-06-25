@@ -2,9 +2,9 @@
   "smt_file": "./benchmarks/gt_new/Addition03-1.smt2_5.smt2",
   "object_file": "./benchmarks/gt_new/object.o",
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
+    "addition_cb": {
+      "smtDecl": "(declare-fun addition_cb (Int Int) Int)",
+      "desc": "Returns addition of two numbers",
       "tests": [[1, 2], [3, 1]],
       "userLemmas": [""],
       "gptChat": [ ""

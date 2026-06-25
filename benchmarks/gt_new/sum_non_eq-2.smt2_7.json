@@ -2,9 +2,9 @@
   "smt_file": "./benchmarks/gt_new/sum_non_eq-2.smt2_7.smt2",
   "object_file": "./benchmarks/gt_new/object.o",
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
+    "sum_cb": {
+      "smtDecl": "(declare-fun sum_cb (Int Int) Int)",
+      "desc": "Returns sum of two inputs",
       "tests": [[1, 2], [3, 1]],
       "userLemmas": [""],
       "gptChat": [ ""
