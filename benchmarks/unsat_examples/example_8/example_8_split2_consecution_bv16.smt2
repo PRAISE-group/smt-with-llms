@@ -42,7 +42,7 @@
 
 ; Constraints all 16-bit BV constants to the inclusive range [0, 100]
 (define-fun in_0_100 ((x (_ BitVec 16))) Bool
-  (and (bvuge x (_ bv0 16)) (bvule x (_ bv100 16))))
+  (and (bvuge x (_ bv0 16)) (bvule x (_ bv1000 16))))
 
 ;(assert (= supported (_ bv5 16)))
 ;(assert (= supported_ (_ bv5 16)))
@@ -61,6 +61,21 @@
 ; Closed Box Function: From GCC Builtin Function: __builtin_ctz
 (declare-fun builtin_ctz_cb ((_ BitVec 16)) (_ BitVec 16))
 
+; syntax error in llm generated contract.
+;(assert  (forall ((x (_ BitVec 16)))    (= (builtin_ctz_cb x)       (ite (= ((_ extract 0 0) x) #b1) #x0000       (ite (= ((_ extract 1 0) x) #b10) #x0001       (ite (= ((_ extract 2 0) x) #b100) #x0002       (ite (= ((_ extract 3 0) x) #b1000) #x0003       (ite (= ((_ extract 4 0) x) #b10000) #x0004       (ite (= ((_ extract 5 0) x) #b100000) #x0005       (ite (= ((_ extract 6 0) x) #b1000000) #x0006       (ite (= ((_ extract 7 0) x) #b10000000) #x0007       (ite (= ((_ extract 8 0) x) #b100000000) #x0008       (ite (= ((_ extract 9 0) x) #b1000000000) #x0009       (ite (= ((_ extract 10 0) x) #b10000000000) #x000A       (ite (= ((_ extract 11 0) x) #b100000000000) #x000B       (ite (= ((_ extract 12 0) x) #b1000000000000) #x000C       (ite (= ((_ extract 13 0) x) #b10000000000000) #x000D       (ite (= ((_ extract 14 0) x) #b100000000000000) #x000E       (ite (= x #x8000) #x000F            #x0010)))))))))))))))))
+;			))
+(assert
+  (forall ((arg_1 (_ BitVec 16)))
+    (and
+      ; convention: ctz(0) = 16
+      (=> (= arg_1 #x0000)
+          (= (builtin_ctz_cb arg_1) #x0010))
+
+      ; for nonzero x:
+      ;   x & (-x) = 1 << ctz(x)
+      (=> (not (= arg_1 #x0000))
+          (= (bvand arg_1 (bvneg arg_1))
+             (bvshl #x0001 (builtin_ctz_cb arg_1)))))))
 ;(assert (forall ((x (_ BitVec 16))) (=> (= x (_ bv0 16)) (= (builtin_ctz_cb x) (_ bv16 16)))))
 ;(assert (forall ((x (_ BitVec 16))) (=> (not (= x (_ bv0 16))) (bvule (builtin_ctz_cb x) (_ bv15 16)))))
 ;(assert (forall ((x (_ BitVec 16))) (=> (= (bvand x (_ bv1 16)) (_ bv1 16)) (= (builtin_ctz_cb x) (_ bv0 16)))))

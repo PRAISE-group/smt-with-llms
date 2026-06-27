@@ -1,4 +1,5 @@
-int shift_cb (int a, int b) {
+#include <inttypes.h>
+int16_t shift_cb (int16_t a, int16_t b) {
     return a << b;
 }
 

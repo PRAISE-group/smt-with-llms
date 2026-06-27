@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const i (_ BitVec 16))
@@ -26,11 +26,12 @@
 (assert (in_0_100 sum))
 
 ; Closed Box Function: returns addition first argument + square of second argument
- (define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)
-  	(bvadd x (bvmul y y))
- )
+; (define-fun foo_cb ((x (_ BitVec 16)) (y (_ BitVec 16))) (_ BitVec 16)  	(bvadd x (bvmul y y)) )
 ; Closed Box Function: returns addition first argument + square of second argument
-;( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+( declare-fun foo_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+
+; Following is the actual contract as assertion.
+(assert  (forall ((sum (_ BitVec 16))           (i (_ BitVec 16)))    (= (foo_cb sum i)       (bvadd sum (bvmul i i)))))
 
 ; invariant predicate (here trivially true)
 (define-fun inv-f ((i (_ BitVec 16)) (n (_ BitVec 16)) (sum (_ BitVec 16))) Bool

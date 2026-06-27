@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 ;(set-option :produce-models true)
 
 ; ------------ State ------------
@@ -15,6 +15,9 @@
 
 (declare-fun set_lock_cb   ((_ BitVec 16)) (_ BitVec 16))
 (declare-fun set_unlock_cb ((_ BitVec 16)) (_ BitVec 16))
+
+(assert  (forall ((a (_ BitVec 16)))    (= (set_lock_cb a)       #x0001)))
+(assert  (forall ((a (_ BitVec 16)))    (= (set_unlock_cb a)       #x0000)))
 
 (define-fun inv-f ((x (_ BitVec 16)) (y (_ BitVec 16)) (lock (_ BitVec 16))) Bool
   (or

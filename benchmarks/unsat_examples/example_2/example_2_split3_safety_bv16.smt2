@@ -25,6 +25,7 @@
 ; Closed Box Function: returns true if input number is prime
 
 (declare-fun isprime_cb ((_ BitVec 16)) Bool)
+;(assert  (forall ((N (_ BitVec 16)))    (= (isprime_cb N)       (and         (bvugt N #x0001)         (not           (exists ((d (_ BitVec 16)))             (and               (bvugt d #x0001)               (bvult d N)               (= (bvurem N d) #x0000))))))))
 
 ;(define-fun isprime_cb ((n (_ BitVec 16))) Bool  (and    (bvugt n (_ bv1 16))    (forall ((d (_ BitVec 16)))      (=> (and (bvugt d (_ bv1 16)) (bvult d n))           (not (= (bvsrem n d) (_ bv0 16)))            )    )  ))
 

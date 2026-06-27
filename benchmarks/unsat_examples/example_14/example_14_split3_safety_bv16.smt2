@@ -24,6 +24,9 @@
 ; Closed Box Function: retuns the factorial of its argument
 ( declare-fun factorial_cb ((_ BitVec 16)) (_ BitVec 16))
 
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (= (multiply_cb a b)       (bvmul a b))))
+;(assert  (and    (= (factorial_cb #x0000)       #x0001)    (forall ((N (_ BitVec 16)))      (=> (bvugt N #x0000)          (= (factorial_cb N)             (bvmul N                     (factorial_cb (bvsub N #x0001))))))))
+
 ;(define-fun multiply_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
 ;  (bvmul a b)
 ;)

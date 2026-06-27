@@ -46,20 +46,24 @@
 
 
 ; Closed Box Function: returns the modulo of two numbers a % b.
-;( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+( declare-fun retmod_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
 ; Closed Box Function: returns a ^ b (a to the power of b) via bianry exponentiation.
-;( declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
+( declare-fun binpow_cb ((_ BitVec 16) (_ BitVec 16)) (_ BitVec 16) )
 
- (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-   (bvurem a b)
- )
+;(assert  (forall ((a (_ BitVec 16))           (b (_ BitVec 16)))    (= (retmod_cb a b)       (bvurem a b))))
+;(assert  (and    (forall ((a (_ BitVec 16)))      (= (binpow_cb a #x0000)         #x0001))    (forall ((a (_ BitVec 16))             (b (_ BitVec 16)))      (=> (bvugt b #x0000)          (= (binpow_cb a b)             (bvmul a                     (binpow_cb a (bvsub b #x0001))))))))
 
-(define-fun-rec binpow_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
-  (ite (= b #x0000)
-       #x0001
-       (bvmul a (binpow_cb a (bvsub b #x0001))))
-)
+
+; (define-fun retmod_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;   (bvurem a b)
+; )
+
+;(define-fun-rec binpow_cb ((a (_ BitVec 16)) (b (_ BitVec 16))) (_ BitVec 16)
+;  (ite (= b #x0000)
+;       #x0001
+;       (bvmul a (binpow_cb a (bvsub b #x0001))))
+;)
 
 ( define-fun inv-f( ( a (_ BitVec 16))( b (_ BitVec 16))( m (_ BitVec 16))( res (_ BitVec 16))( x (_ BitVec 16))( y (_ BitVec 16)) ) Bool
   (= (bvurem (bvmul res (binpow_cb a b)) m)

@@ -534,8 +534,8 @@ class smtAI(object):
         console.info(f"starting iteration {self.iteration}")
         self.push()
         if not args.addGamma == 0:
-            if len(self.inputoutputassertions) > 40:
-                self.inputoutputassertions = self.inputoutputassertions[-40:]
+            if len(self.inputoutputassertions) > 10:
+                self.inputoutputassertions = self.inputoutputassertions[-10:]
             for v in self.inputoutputassertions:
                 if args.verbose:
                     print(v)

@@ -1,4 +1,4 @@
-(set-logic QF_UFBV)
+;(set-logic QF_UFBV)
 (set-option :produce-models true)
 
 ( declare-const arr (_ BitVec 16) )
@@ -28,6 +28,9 @@
 
 ; closed-box predictor
 (declare-fun predict_cb ((_ BitVec 16)) (_ BitVec 16))
+
+
+;(assert  (forall ((arg1 (_ BitVec 16)))    (= (predict_cb arg1)       (ite (and (bvugt arg1 #x0000)                 (bvult arg1 #x0064))            (bvudiv arg1 #x000A)            #x0000))))
 
 ;(define-fun predict_cb ((index (_ BitVec 16))) (_ BitVec 16)
 ;  (ite (or (bvslt index #x0000)                 ; index < 0
