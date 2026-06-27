@@ -1,0 +1,5 @@
+array inp_word[2] : w32 -> w8 = symbolic
+(query [(Eq (And w32 N0:(ZExt w32 (ReadLSB w16 0 inp_word))
+                      255)
+             (AShr w32 N0 8))]
+        false)

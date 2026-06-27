@@ -1,0 +1,19 @@
+array inp_ready[2] : w32 -> w8 = symbolic
+(query [(Eq false
+             (Eq 0
+                 N0:(ReadLSB w16 0 inp_ready)))
+         (Slt 1
+              (Add w32 1
+                       (Add w32 (And w32 N1:(Add w32 (And w32 N2:(Add w32 (And w32 N3:(Add w32 (And w32 N4:(Add w32 (And w32 N5:(And w32 (Xor w32 4294967295 N6:(ZExt w32 N0))
+                                                                                                                                         (Add w32 4294967295 N6))
+                                                                                                                             1431655765)
+                                                                                                                    (And w32 (LShr w32 N5 1) 1431655765))
+                                                                                                        858993459)
+                                                                                               (And w32 (LShr w32 N4 2) 858993459))
+                                                                                   252645135)
+                                                                          (And w32 (LShr w32 N3 4) 252645135))
+                                                              16711935)
+                                                     (And w32 (LShr w32 N2 8) 16711935))
+                                         65535)
+                                (And w32 (LShr w32 N1 16) 65535))))]
+        false)

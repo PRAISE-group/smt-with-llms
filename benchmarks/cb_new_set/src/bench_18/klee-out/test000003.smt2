@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_value () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (let ( (?B1 ((_ zero_extend 16)  (concat  (select  inp_value (_ bv1 32) ) (select  inp_value (_ bv0 32) ) ) ) ) ) (let ( (?B2 ((_ zero_extend 16)  ((_ extract 15  0)  (bvudiv  ?B1 (_ bv10 32) ) ) ) ) ) (and  (and  (bvule  (_ bv10 32) ?B1 ) (bvule  (_ bv10 32) ?B2 ) ) (=  false (bvule  (_ bv10 32) ((_ zero_extend 16)  ((_ extract 15  0)  (bvudiv  ?B2 (_ bv10 32) ) ) ) ) ) ) ) ) )
+(check-sat)
+(exit)

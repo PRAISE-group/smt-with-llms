@@ -1,0 +1,4 @@
+array inp_mask[2] : w32 -> w8 = symbolic
+(query [(Eq 65535
+             (ReadLSB w16 0 inp_mask))]
+        false)

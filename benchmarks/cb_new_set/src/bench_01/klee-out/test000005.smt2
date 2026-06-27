@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_ballot () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (let ( (?B1 (concat  (select  inp_ballot (_ bv1 32) ) (select  inp_ballot (_ bv0 32) ) ) ) ) (let ( (?B2 ((_ zero_extend 16)  ?B1 ) ) ) (and  (and  (=  false (=  (_ bv65535 16) ?B1 ) ) (=  false (=  (_ bv0 16) ?B1 ) ) ) (=  (_ bv0 32) (bvand  ?B2 ((_ zero_extend 16)  ((_ extract 15  0)  (bvadd  (_ bv4294967295 32) ?B2 ) ) ) ) ) ) ) ) )
+(check-sat)
+(exit)

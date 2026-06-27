@@ -1,0 +1,4 @@
+Closed box function `digit_sum_cb()` takes one unsigned 16-bit integer input `inp_value`.
+It returns one unsigned 16-bit integer output `out_sum`.
+The function computes the sum of the decimal digits of `inp_value`.
+In other words, it adds the base-10 digits that appear in the input number.

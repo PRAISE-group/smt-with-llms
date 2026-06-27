@@ -1,0 +1,27 @@
+array inp_value[2] : w32 -> w8 = symbolic
+(query [(Eq false
+             (Eq 0
+                 N0:(ReadLSB w16 0 inp_value)))
+         (Eq false
+             (Eq 0
+                 N1:(Extract w16 0 (UDiv w32 N2:(ZExt w32 N0) 10))))
+         (Eq false
+             (Eq 0
+                 N3:(Extract w16 0 (UDiv w32 N4:(ZExt w32 N1) 10))))
+         (Eq false
+             (Eq 0
+                 N5:(Extract w16 0 (UDiv w32 N6:(ZExt w32 N3) 10))))
+         (Eq false
+             (Eq 0
+                 N7:(Extract w16 0 (UDiv w32 N8:(ZExt w32 N5) 10))))
+         (Eq (ZExt w32 (Extract w16 0 (Add w32 (Mul w32 10
+                                                        (ZExt w32 (Extract w16 0 (Add w32 (Mul w32 10
+                                                                                                   (ZExt w32 (Extract w16 0 (Add w32 (Mul w32 10
+                                                                                                                                              (ZExt w32 (Extract w16 0 (Add w32 (Mul w32 10
+                                                                                                                                                                                         (ZExt w32 (Extract w16 0 (URem w32 N2 10))))
+                                                                                                                                                                                (URem w32 N4 10)))))
+                                                                                                                                     (URem w32 N6 10)))))
+                                                                                          (URem w32 N8 10)))))
+                                               (URem w32 (ZExt w32 N7) 10))))
+             N2)]
+        false)

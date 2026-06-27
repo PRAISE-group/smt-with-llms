@@ -1,0 +1,4 @@
+Closed box function `builtin_clz_cb()` takes one unsigned 16-bit integer input `inp_window`.
+It returns one unsigned integer output `out_scale`.
+The function counts the number of leading zero bits in the nonzero 16-bit input.
+In other words, it measures how far the highest set bit is from the top of the word.

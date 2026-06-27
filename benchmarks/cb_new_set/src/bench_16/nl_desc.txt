@@ -1,0 +1,4 @@
+Closed box function `builtin_rotateleft16_cb()` takes two unsigned 16-bit integer inputs `inp_word` and `inp_steps`.
+It returns one unsigned 16-bit integer output `out_rotated`.
+The function rotates the 16 bits of `inp_word` to the left by the amount given in `inp_steps`.
+In other words, it performs a circular left shift where bits leaving the high end wrap back into the low end.

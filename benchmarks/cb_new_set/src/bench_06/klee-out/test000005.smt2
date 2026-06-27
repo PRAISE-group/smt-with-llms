@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_window () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (let ( (?B1 (concat  (select  inp_window (_ bv1 32) ) (select  inp_window (_ bv0 32) ) ) ) ) (let ( (?B2 ((_ zero_extend 16)  ?B1 ) ) ) (and  (and  (and  (=  false (=  (_ bv0 16) ?B1 ) ) (=  false (=  (_ bv0 32) (bvand  ?B2 (_ bv65280 32) ) ) ) ) (=  false (=  (_ bv0 32) (bvand  ?B2 (_ bv61440 32) ) ) ) ) (=  (_ bv0 32) (bvand  ?B2 (_ bv32768 32) ) ) ) ) ) )
+(check-sat)
+(exit)

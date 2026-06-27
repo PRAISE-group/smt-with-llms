@@ -1,0 +1,4 @@
+Closed box function `builtin_popcount_cb()` takes one unsigned 16-bit integer input `inp_window`.
+It returns one unsigned integer output `out_active`.
+The function counts how many bits are set to 1 in `inp_window`.
+In other words, it reports how many sampled bits are enabled across the two bytes of the input word.

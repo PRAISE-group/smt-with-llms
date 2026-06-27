@@ -1,0 +1,4 @@
+Closed box function `builtin_bswap16_cb()` takes one unsigned 16-bit integer input `inp_word`.
+It returns one unsigned 16-bit integer output `out_swapped`.
+The function swaps the two bytes of the 16-bit input value.
+In other words, it reverses the byte order of the input word.

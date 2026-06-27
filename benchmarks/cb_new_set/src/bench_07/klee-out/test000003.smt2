@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_addr () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (let ( (?B1 (concat  (select  inp_addr (_ bv1 32) ) (select  inp_addr (_ bv0 32) ) ) ) ) (let ( (?B2 ((_ zero_extend 16)  ?B1 ) ) ) (let ( (?B3 (bvand  (bvxor  (_ bv4294967295 32) ?B2 ) (bvadd  (_ bv4294967295 32) ?B2 ) ) ) ) (let ( (?B4 (bvadd  (bvand  ?B3 (_ bv1431655765 32) ) (bvand  (bvlshr  ?B3 (_ bv1 32) ) (_ bv1431655765 32) ) ) ) ) (let ( (?B5 (bvadd  (bvand  ?B4 (_ bv858993459 32) ) (bvand  (bvlshr  ?B4 (_ bv2 32) ) (_ bv858993459 32) ) ) ) ) (let ( (?B6 (bvadd  (bvand  ?B5 (_ bv252645135 32) ) (bvand  (bvlshr  ?B5 (_ bv4 32) ) (_ bv252645135 32) ) ) ) ) (let ( (?B7 (bvadd  (bvand  ?B6 (_ bv16711935 32) ) (bvand  (bvlshr  ?B6 (_ bv8 32) ) (_ bv16711935 32) ) ) ) ) (and  (=  false (=  (_ bv0 16) ?B1 ) ) (bvult  (_ bv0 32) (bvadd  (bvand  ?B7 (_ bv65535 32) ) (bvand  (bvlshr  ?B7 (_ bv16 32) ) (_ bv65535 32) ) ) ) ) ) ) ) ) ) ) ) )
+(check-sat)
+(exit)

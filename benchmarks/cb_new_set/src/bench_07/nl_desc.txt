@@ -1,0 +1,4 @@
+Closed box function `builtin_ctz_cb()` takes one unsigned 16-bit integer input `inp_addr`.
+It returns one unsigned integer output `out_trailing_zeros`.
+The function counts the number of trailing zero bits in the nonzero 16-bit input.
+In other words, it tells how many zero bits appear after the least significant side before the first 1 bit.

@@ -1,0 +1,4 @@
+Closed box function `builtin_clz_cb()` takes one unsigned 16-bit integer input `inp_code`.
+It returns one unsigned integer output `out_prefix_zeros`.
+The function counts the number of leading zero bits in the nonzero 16-bit input.
+In other words, it tells how many zero bits appear before the first 1 bit when scanning from the most significant side.

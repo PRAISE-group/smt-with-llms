@@ -1,0 +1,4 @@
+Closed box function `builtin_ffs_cb()` takes one unsigned 16-bit integer input `inp_ready`.
+It returns one integer output `out_lane`.
+The function finds the position of the first set bit in the input, using one-based indexing, and returns 0 when the input is zero.
+In other words, it reports the first ready lane in the 16-bit readiness mask.

@@ -1,0 +1,4 @@
+Closed box function `builtin_bswap32_cb()` takes two unsigned 16-bit integer inputs `inp_hi` and `inp_lo`.
+It returns one unsigned 32-bit integer output `out_stamp`.
+The function combines the two 16-bit inputs into one 32-bit value and then swaps the four bytes of that 32-bit value.
+In other words, it reverses the byte order of the constructed 32-bit packet stamp.

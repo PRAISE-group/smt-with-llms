@@ -1,0 +1,4 @@
+Closed box function `decimal_length_cb()` takes one unsigned 16-bit integer input `inp_value`.
+It returns one unsigned 16-bit integer output `out_digits`.
+The function computes how many decimal digits are needed to represent `inp_value`.
+In other words, it reports the length of the base-10 representation of the input number.

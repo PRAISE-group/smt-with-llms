@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_flags () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (let ( (?B1 (concat  (select  inp_flags (_ bv1 32) ) (select  inp_flags (_ bv0 32) ) ) ) ) (and  (=  false (=  (_ bv0 16) ?B1 ) ) (=  false (=  (_ bv65535 16) ?B1 ) ) ) ) )
+(check-sat)
+(exit)

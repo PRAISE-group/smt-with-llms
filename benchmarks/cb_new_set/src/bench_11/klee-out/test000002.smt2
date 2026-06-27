@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_word () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (let ( (?B1 ((_ zero_extend 16)  (concat  (select  inp_word (_ bv1 32) ) (select  inp_word (_ bv0 32) ) ) ) ) ) (=  (bvand  ?B1 (_ bv255 32) ) (ite (bvuge (_ bv8 32) (_ bv32 32) ) (_ bv0 32) (bvashr ?B1 (_ bv8 32) ) ) ) ) )
+(check-sat)
+(exit)

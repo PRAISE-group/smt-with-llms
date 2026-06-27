@@ -1,0 +1,4 @@
+Closed box function `decimal_palindrome_cb()` takes one unsigned 16-bit integer input `inp_value`.
+It returns one integer output `out_flag`.
+The function checks whether the decimal representation of `inp_value` reads the same forward and backward.
+In other words, it returns 1 for a decimal palindrome and 0 otherwise.

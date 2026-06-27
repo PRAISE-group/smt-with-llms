@@ -1,0 +1,4 @@
+Closed box function `builtin_ctz_cb()` takes one unsigned 16-bit integer input `inp_mask`.
+It returns one unsigned integer output `out_stride`.
+The function counts the number of trailing zero bits in the nonzero 16-bit input.
+In other words, it reports the alignment or stride implied by the least significant set bit in the mask.

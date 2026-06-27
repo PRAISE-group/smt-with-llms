@@ -1,0 +1,4 @@
+Closed box function `builtin_rotateright16_cb()` takes two unsigned 16-bit integer inputs `inp_mask` and `inp_steps`.
+It returns one unsigned 16-bit integer output `out_rotated`.
+The function rotates the 16 bits of `inp_mask` to the right by the amount given in `inp_steps`.
+In other words, bits shifted out from the low end wrap around and re-enter at the high end.

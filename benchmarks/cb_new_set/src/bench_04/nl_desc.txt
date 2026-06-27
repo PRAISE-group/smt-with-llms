@@ -1,0 +1,4 @@
+Closed box function `builtin_parity_cb()` takes one unsigned 16-bit integer input `inp_frame`.
+It returns one unsigned integer output `out_checksum`.
+The function computes the parity of the input bits.
+In other words, it returns a folded parity bit for the 16-bit frame: 1 for an odd number of set bits and 0 for an even number of set bits.

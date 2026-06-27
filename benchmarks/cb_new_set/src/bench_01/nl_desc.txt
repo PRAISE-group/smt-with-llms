@@ -1,0 +1,4 @@
+Closed box function `builtin_popcount_cb()` takes one unsigned 16-bit integer input `inp_ballot`.
+It returns one unsigned integer output `out_votes`.
+The function counts how many bits are set to 1 in `inp_ballot`.
+In other words, it reports how many marked positions appear in the 16-bit ballot mask.

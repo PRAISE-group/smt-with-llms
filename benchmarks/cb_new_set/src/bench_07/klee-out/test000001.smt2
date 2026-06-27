@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_addr () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (=  (_ bv0 16) (concat  (select  inp_addr (_ bv1 32) ) (select  inp_addr (_ bv0 32) ) ) ) )
+(check-sat)
+(exit)

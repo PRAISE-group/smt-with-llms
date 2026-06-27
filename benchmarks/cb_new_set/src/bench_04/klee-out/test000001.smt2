@@ -1,0 +1,5 @@
+(set-logic QF_AUFBV )
+(declare-fun inp_frame () (Array (_ BitVec 32) (_ BitVec 8) ) )
+(assert (let ( (?B1 (concat  (select  inp_frame (_ bv1 32) ) (select  inp_frame (_ bv0 32) ) ) ) ) (let ( (?B2 ((_ zero_extend 16)  ?B1 ) ) ) (and  (and  (=  ((_ zero_extend 24)  ((_ extract 7  0)  (bvand  ?B2 (_ bv255 32) ) ) ) ((_ zero_extend 24)  ((_ extract 7  0)  (ite (bvuge (_ bv8 32) (_ bv32 32) ) (_ bv0 32) (bvashr ?B2 (_ bv8 32) ) ) ) ) ) (=  false (=  (_ bv0 16) ?B1 ) ) ) (=  false (=  (_ bv65535 16) ?B1 ) ) ) ) ) )
+(check-sat)
+(exit)
