@@ -1,12 +1,11 @@
 {
   "smt_file": "./benchmarks/gt_new_1/bench_008_clz_ctz.smt2_6.smt2",
   "object_file": "./benchmarks/gt_new_1/object.o",
-  
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
-      "tests": [[1, 2], [3, 1]],
+    "my__builtin_clz_cb": {
+      "smtDecl": "(declare-fun my__builtin_clz_cb ((_ BitVec 32)) (_ BitVec 32))",
+      "desc": "Returns the number of leading 0-bits in x, starting at the most significant bit position. If x is 0, the result is undefined.",
+      "tests": [[1], [3]],
       "userLemmas": [""],
       "gptChat": [ ""
       ]

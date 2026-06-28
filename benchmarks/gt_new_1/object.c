@@ -5,7 +5,7 @@
 
 #define SCALE 1000
 
-int beale_int(int x, int y) {
+int beale_int_cb(int x, int y) {
 
     int y2 = (y * y) / SCALE;
     int y3 = (y2 * y) / SCALE;
@@ -21,7 +21,7 @@ int beale_int(int x, int y) {
 }
 
 
-int my__builtin_ffs(int x)
+int my__builtin_ffs_cb(int x)
 {
     if (x == 0)
         return 0;
@@ -37,7 +37,7 @@ int my__builtin_ffs(int x)
 }
 
 
-int my__builtin_clrsb(int x)
+int my__builtin_clrsb_cb(int x)
 {
     unsigned int ux = (unsigned int)x;
     unsigned int sign = ux >> 31;
@@ -57,7 +57,7 @@ int my__builtin_clrsb(int x)
 
 
 
-int my__builtin_clz(unsigned int x)
+int my__builtin_clz_cb(unsigned int x)
 {
     int count = 0;
     unsigned int mask = 1U << (sizeof(unsigned int) * 8 - 1);
@@ -72,7 +72,7 @@ int my__builtin_clz(unsigned int x)
 }
 
 
-int my__builtin_ctz(unsigned int x)
+int my__builtin_ctz_cb(unsigned int x)
 {
     int count = 0;
 
@@ -86,7 +86,7 @@ int my__builtin_ctz(unsigned int x)
 }
 
 
-int my__builtin_popcount(unsigned int x)
+int my__builtin_popcount_cb(unsigned int x)
 {
     int count = 0;
 
@@ -100,7 +100,7 @@ int my__builtin_popcount(unsigned int x)
 }
 
 
-int my__builtin_parity(unsigned int x)
+int my__builtin_parity_cb(unsigned int x)
 {
     int parity = 0;
 
@@ -114,7 +114,7 @@ int my__builtin_parity(unsigned int x)
 }
 
 
-int booth_int(int x, int y) {
+int booth_int_cb(int x, int y) {
 
     /* compute linear terms */
     int t1 = (x + (2 * y) - 7000);   // 7 * 1000
@@ -127,20 +127,20 @@ int booth_int(int x, int y) {
     // int k; return k;
 }
 
-uint16_t my_builtin_bswap16(uint16_t inp_word) {
+uint16_t my_builtin_bswap16_cb(uint16_t inp_word) {
     uint16_t out_swapped = __builtin_bswap16(inp_word);
     return out_swapped;
     // int k; return k;
 }
 
-uint32_t my_builtin_bswap32(uint16_t inp_hi, uint16_t inp_lo) {
+uint32_t my_builtin_bswap32_cb(uint16_t inp_hi, uint16_t inp_lo) {
     uint32_t inp_header = ((uint32_t)inp_hi << 16) | (uint32_t)inp_lo;
     uint32_t out_swapped = __builtin_bswap32(inp_header);
     return out_swapped;
     // int k; return k;
 }
 
-int bukin_int(int x, int y) {
+int bukin_int_cb(int x, int y) {
 
     // compute A = |100y - x^2|
     int A = 100 * y - x * x;
@@ -163,21 +163,21 @@ int bukin_int(int x, int y) {
     // int k; return k;
 }
 
-unsigned int my_builtin_clz(uint16_t inp_code) {
+unsigned int my_builtin_clz_cb(uint16_t inp_code) {
     unsigned int out_prefix_zeros =
         (unsigned int)(__builtin_clz((unsigned int)inp_code) - ((int)(sizeof(unsigned int) * CHAR_BIT) - 16));
     return out_prefix_zeros;
     // int k; return k;
 }
 
-unsigned int my_builtin_ctz(uint16_t inp_addr) {
+unsigned int my_builtin_ctz_cb(uint16_t inp_addr) {
     unsigned int out_trailing_zeros = (unsigned int)__builtin_ctz((unsigned int)inp_addr);
     return out_trailing_zeros;
     // int k; return k;
 }
 
 
-uint16_t decimal_length(uint16_t inp_value) {
+uint16_t decimal_length_cb(uint16_t inp_value) {
     uint16_t out_digits = 1U;
 
     while (inp_value >= 10U) {
@@ -189,20 +189,20 @@ uint16_t decimal_length(uint16_t inp_value) {
     // int k; return k;
 }
 
-int my_builtin_ffs(uint16_t inp_ready) {
+int my_builtin_ffs_cb(uint16_t inp_ready) {
     int out_lane = __builtin_ffs((int)inp_ready);
     return out_lane;
     // int k; return k;
 }
 
-unsigned int my_builtin_parity(uint16_t inp_frame) {
+unsigned int my_builtin_parity_cb(uint16_t inp_frame) {
     unsigned int out_checksum = (unsigned int)__builtin_parity((unsigned int)inp_frame);
     return out_checksum;
     // int k; return k;
 }
 
 
-unsigned int my_builtin_popcount(uint16_t inp_ballot) {
+unsigned int my_builtin_popcount_cb(uint16_t inp_ballot) {
     unsigned int out_votes = (unsigned int)__builtin_popcount((unsigned int)inp_ballot);
     return out_votes;
     // int k; return k;

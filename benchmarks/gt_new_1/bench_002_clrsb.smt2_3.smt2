@@ -69,7 +69,7 @@
 (declare-fun SIV@54 () Bool)
 (declare-fun SIV@28 () (_ BitVec 1))
 (declare-fun SIV@29 () (_ BitVec 1))
-(declare-fun my__builtin_clrsb@@0 ((_ BitVec 32)) (_ BitVec 32))
+(declare-fun my__builtin_clrsb_cb ((_ BitVec 32)) (_ BitVec 32))
 (declare-fun boogie_si_record_ref (Int) Bool)
 (declare-fun SIV@53 () Bool)
 (assert
@@ -195,7 +195,7 @@
  (let (($x586 (=> (and $x574 (= SIV@29 (ite (bvsle SIV@27 (_ bv31 32)) (_ bv1 1) (_ bv0 1)))) $x585)))
  (let (($x602 (and (=> (and (= (ControlFlow 1 308216) 308217) (and $x574 (= SIV@29 (ite (bvsle SIV@27 (_ bv31 32)) (_ bv1 1) (_ bv0 1))))) $x585) (=> (and (= (ControlFlow 1 308216) 308218) (and (not $x574) (= (ControlFlow 1 308218) 308219)) true (and true SIV@54)) (and (=> (and (= (ControlFlow 1 308219) 308220) $x554 (= (ControlFlow 1 316142) (- 0 316939))) $x277) $x563)))))
  (let (($x614 (and (boogie_si_record_bv32 SIV@27) (= (ControlFlow 1 308215) 308216))))
- (let (($x609 (and (boogie_si_record_ref main) (= SIV@27 (my__builtin_clrsb@@0 $u0)))))
+ (let (($x609 (and (boogie_si_record_ref main) (= SIV@27 (my__builtin_clrsb_cb $u0)))))
  (let (($x616 (=> (and (and $x609 $x614) (= SIV@28 (ite (bvsge SIV@27 (_ bv0 32)) (_ bv1 1) (_ bv0 1)))) $x602)))
  (let (($x622 (=> (and (= (ControlFlow 1 316140) 308215) true (and true SIV@53) (and $x609 $x614) (= SIV@28 (ite (bvsge SIV@27 (_ bv0 32)) (_ bv1 1) (_ bv0 1)))) $x602)))
  (let (($x628 (and (= (ControlFlow 1 0) 316149) (not (=> (and (and true (= (ControlFlow 1 316149) 316140)) (= (ControlFlow 1 316140) 308215) true (and true SIV@53) (and $x609 $x614) (= SIV@28 (ite (bvsge SIV@27 (_ bv0 32)) (_ bv1 1) (_ bv0 1)))) $x602)))))

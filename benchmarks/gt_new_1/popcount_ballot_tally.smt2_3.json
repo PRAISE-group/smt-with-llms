@@ -1,12 +1,11 @@
 {
   "smt_file": "./benchmarks/gt_new_1/popcount_ballot_tally.smt2_3.smt2",
   "object_file": "./benchmarks/gt_new_1/object.o",
-  
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
-      "tests": [[1, 2], [3, 1]],
+    "my_builtin_popcount_cb": {
+      "smtDecl": "(declare-fun my_builtin_popcount_cb ((_ BitVec 16)) (_ BitVec 32))",
+      "desc": "Returns the number of 1-bits in input x.",
+      "tests": [[12], [31]],
       "userLemmas": [""],
       "gptChat": [ ""
       ]

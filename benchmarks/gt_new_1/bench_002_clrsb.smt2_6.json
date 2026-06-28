@@ -1,12 +1,11 @@
 {
   "smt_file": "./benchmarks/gt_new_1/bench_002_clrsb.smt2_6.smt2",
   "object_file": "./benchmarks/gt_new_1/object.o",
-  
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
-      "tests": [[1, 2], [3, 1]],
+    "my__builtin_clrsb_cb": {
+      "smtDecl": "(declare-fun my__builtin_clrsb_cb ((_ BitVec 32)) (_ BitVec 32))",
+      "desc": "Returns the number of leading redundant sign bits in x, i.e. the number of bits following the most significant bit that are identical to it. There are no special cases for 0 or other values.",
+      "tests": [[1], [3]],
       "userLemmas": [""],
       "gptChat": [ ""
       ]

@@ -1,15 +1,14 @@
 {
   "smt_file": "./benchmarks/gt_new_1/bench_001_ffs.smt2_6.smt2",
   "object_file": "./benchmarks/gt_new_1/object.o",
-  
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
-      "tests": [[1, 2], [3, 1]],
+    "my__builtin_ffs_cb": {
+      "smtDecl": "(declare-fun my__builtin_ffs_cb ((_ BitVec 32)) (_ BitVec 32))",
+      "desc": "Returns one plus the index of the least significant 1-bit of x, or if x is zero, returns zero.",
+      "tests": [[1], [3]],
       "userLemmas": [""],
       "gptChat": [ ""
       ]
     }
   }
-}
+  }

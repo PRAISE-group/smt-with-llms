@@ -1,15 +1,14 @@
 {
   "smt_file": "./benchmarks/gt_new_1/baele.smt2_5.smt2",
   "object_file": "./benchmarks/gt_new_1/object.o",
-  
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
+    "beale_int_cb": {
+      "smtDecl": "(declare-fun beale_int_cb (Int Int) Int)",
+      "desc": "This function computes an integer-scaled variant of the Beale function for two inputs x and y",
       "tests": [[1, 2], [3, 1]],
       "userLemmas": [""],
       "gptChat": [ ""
       ]
     }
   }
-}
+  }

@@ -1,11 +1,10 @@
 {
   "smt_file": "./benchmarks/gt_new_1/bukin.smt2_6.smt2",
   "object_file": "./benchmarks/gt_new_1/object.o",
-  
   "functions": {
-    "ackermann_cb": {
-      "smtDecl": "(declare-fun ackermann_cb (Int Int) Int)",
-      "desc": "For inputs (m, n), it returns the Ackermann value A(m, n)",
+    "bukin_int_cb": {
+      "smtDecl": "(declare-fun bukin_int_cb (Int Int) Int)",
+      "desc": "This function computes an integer-scaled variant of the Bukin function for two inputs x and y",
       "tests": [[1, 2], [3, 1]],
       "userLemmas": [""],
       "gptChat": [ ""
