@@ -36,7 +36,7 @@ def get_functions(expr):
 
 def typenameConversion(domain):
     # print(domain, type(domain))
-    if isinstance(domain, z3.z3.ArithSortRef):
+    if isinstance(domain, z3.z3.ArithSortRef) or isinstance(domain, z3.z3.ArithRef):
         return "int"
     elif isinstance(domain, z3.z3.BoolSortRef):
         return "bool"
@@ -95,6 +95,7 @@ extern \"C\"{\n
         c_code += f"{' '*4}std::cin >> {name_i};\n\n"
 
     for i in lemma_vars:
+        # print(i)
         name_i = str(i).replace("!","_")
         if name_i in var_list:
             continue

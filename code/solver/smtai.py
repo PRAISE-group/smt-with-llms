@@ -86,6 +86,7 @@ class smtAI(object):
         self.iteration = 0
         self.lemmasUsed = {}  # key is the iteration number starts from 1
         self.cbFunctions = None  # Map of close box functions z3 object
+        self.AllFunctions = None
         self.inputoutputassertions = (
             []
         )  # input output constraints obtained from modelcheck inconsistency
@@ -196,7 +197,8 @@ class smtAI(object):
         return "#b" + format(twos_complement, f"0{width}b")
 
     def z3_to_c(self, expr):
-        # print("expr",expr)
+        # if "If" in str(expr):
+        #     print("expr", expr, expr.decl().kind())
         if expr.decl().kind() == Z3_OP_IMPLIES:
             a, b = expr.children()
             return f"(!({self.z3_to_c(a)}) || ({self.z3_to_c(b)}))"
@@ -248,20 +250,50 @@ class smtAI(object):
             # Arithmetic right shift (sign-extend)
             return f'((int){self.z3_to_c(expr.arg(0))} >> {self.z3_to_c(expr.arg(1))})'
         
-        elif expr.decl().kind() == Z3_OP_ITE:
+        elif expr.decl().kind() == Z3_OP_ITE or expr.decl().name() == "If":
             cond, then_expr, else_expr = expr.children()
+            # print("ite ", then_expr, else_expr.sort())
             return f"(({self.z3_to_c(cond)}) ? ({self.z3_to_c(then_expr)}) : ({self.z3_to_c(else_expr)}))"
         elif is_false(expr):
             return "0"
         elif is_true(expr):
             return "1"
         elif is_const(expr):
+            # print("const", expr)
             return str(expr)
         elif is_int_value(expr) or is_rational_value(expr):
+            # print("is_int_value or is_rational_value ",expr, expr.decl().kind())
             return str(expr.as_long())
+        
+        elif expr.decl().kind() == Z3_OP_ADD:
+            return " + ".join(f"({self.z3_to_c(c)})" for c in expr.children())
+
+        elif expr.decl().kind() == Z3_OP_SUB:
+            children = expr.children()
+            if len(children) == 1:
+                return f"(-({self.z3_to_c(children[0])}))"
+            return " - ".join(f"({self.z3_to_c(c)})" for c in children)
+
+        elif expr.decl().kind() == Z3_OP_MUL:
+            return " * ".join(f"({self.z3_to_c(c)})" for c in expr.children())
+
+        elif expr.decl().kind() == Z3_OP_DIV:
+            a, b = expr.children()
+            return f"({self.z3_to_c(a)}) / ({self.z3_to_c(b)})"
+
+        elif expr.decl().kind() == Z3_OP_IDIV:
+            a, b = expr.children()
+            return f"({self.z3_to_c(a)}) / ({self.z3_to_c(b)})"
+
+        elif expr.decl().kind() == Z3_OP_MOD:
+            a, b = expr.children()
+            return f"({self.z3_to_c(a)}) % ({self.z3_to_c(b)})"
+
+        elif expr.decl().kind() == Z3_OP_UMINUS:
+            return f"(-({self.z3_to_c(expr.arg(0))}))"
         else:
             # if is_app(expr) and expr.decl().kind() == Z3_OP_UNINTERPRETED:
-            print("Fallback ",expr, expr.decl().kind())
+            # print("Fallback ",expr, expr.decl().kind())
             return str(expr)  # fallback
 
     def getFunctions(self, expr, funs):
@@ -347,8 +379,13 @@ class smtAI(object):
         # print("self.formulas:", self.formulas)
         inputOutput = []  # maps functions to input outputs
         for f in funs:
-            # print(f)
+            # print(f.decl().name())
             funName = str(f)
+            # print(funName)
+            # print(str(f.decl().name()[-3:]))
+            if not str(f.decl().name()).endswith("_cb"):
+                continue
+            # print("Look for it", funName)
             index = str(funName).find("(")
             if index != -1:
                 funName = str(funName)[:index]
@@ -357,14 +394,21 @@ class smtAI(object):
             outlist = []
             # print(temp[f], len(temp[f].split(" ")))
             if args.verbose:
-                print("Printing output of getCBInputOutput()")
+                print("Printing output of getCBInputOutput()", out)
+            if len(out) == 1:
+                if out[0] == '':
+                    # print("success")
+                    continue
             for i in range(len(out)):
                 if args.verbose:
                     print(i, out[i])
                 outlist.append(int(out[i]))
+                print("printed")
             # exit()
             temp[funName] = outlist
             inputOutput.append(temp)
+        # print("exiting")
+        # exit()
         return inputOutput
 
     def harnessForOutput(self, f):
@@ -373,7 +417,12 @@ class smtAI(object):
     #include <stdlib.h>
     #include <inttypes.h>
     #include <assert.h>
+    #define True true
+    #define False false
     """
+        m = self.model()
+        functs = print_model_as_c(m)
+        s+= functs + "\n"
         s += 'extern "C"{\n'
         for name in self.cbFunctions:
             # s+= "extern "
@@ -479,6 +528,7 @@ class smtAI(object):
     def initialize(self, args, bench):
         formulas = self.formulas
         functions = {}
+    
         vars = set()
         for f in formulas:
             functions.update(self.collect_functions(f, functions))
@@ -488,7 +538,9 @@ class smtAI(object):
         # Show results
         # print("\nFunction symbols found in SMT2:")
         cbFunctions = {}
+        allFunctions = {}
         for name, decl in functions.items():
+            allFunctions[name] = decl
             if name.endswith("_cb"):
                 cbFunctions[name] = decl
         # s.add(f_func(3, 4) > 0)
@@ -501,6 +553,7 @@ class smtAI(object):
         if args.verbose:
             print("pushed")
         self.cbFunctions = cbFunctions
+        self.allFunctions = allFunctions
         self.smtFile = self.s.to_smt2()[:-12]
         # print(self.smtFile)
         # exit()
@@ -540,7 +593,7 @@ class smtAI(object):
                 if args.verbose:
                     print(v)
                 try:
-                    assertion = self.readSMTstring(v, self.cbFunctions)
+                    assertion = self.readSMTstring(v, self.allFunctions)
                 except Exception as e:
                     print(e)
                     print("assertion failed:", v)
@@ -773,6 +826,8 @@ class smtAI(object):
                                         )
                                         # print(BitVecVal(inp, domain.size()))
                                     elif domain == IntSort():
+                                        tmpassert += str(inp) + " "
+                                    elif domain == BoolSort():
                                         tmpassert += str(inp) + " "
                                     else:
                                         print("Unknown type, line 477 smt.py")

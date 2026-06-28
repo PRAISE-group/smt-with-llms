@@ -15,7 +15,7 @@ from code.lemma.lemmaDict import LemmaDict
 from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
 from code.models import Function, Lemmas, LemmaStatus
-from code.utils.lemmaTester import smtlib_to_c
+# from code.utils.lemmaTester import smtlib_to_c
 
 decl = ""
 funcInputs = []

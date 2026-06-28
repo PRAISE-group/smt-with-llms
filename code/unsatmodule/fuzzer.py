@@ -52,9 +52,10 @@ __AFL_FUZZ_INIT();
 
 
 def createRest(filepath, lemma, varMap, id, lemma_vars, jsonData):
+    # print("createRest")
     def get_offset(var):
             # print(domain, type(domain))
-        if isinstance(var, z3.z3.ArithSortRef):
+        if isinstance(var, z3.z3.ArithSortRef) or isinstance(var, z3.z3.ArithRef):
             return 4
         elif isinstance(var, z3.z3.BoolSortRef):
             raise "BOOL should not come here :p"
@@ -118,10 +119,12 @@ def createRest(filepath, lemma, varMap, id, lemma_vars, jsonData):
     content += f"{tcount*4*' '}assert(0);\n"
     content += f"{(tcount-1) * 4 *' '}}}\n"
     content += "\n} // end of main\n"
+    # print(content)
     return content
 
 
 def createFuzzFile(id, lemma, varMap, funcMap, lemma_vars, jsonData):
+    # print("createFuzzFile")
     pwd = os.getcwd()
     fuzzd = pwd + "/fuzz_temp/"
     pu.createDirectory(fuzzd)
@@ -141,6 +144,7 @@ def fuzzIt(path, file, argObj, id):
     # compile first
     objFile = file.replace(".cc", ".out")
     compileCommand = [f"afl-c++ {path + file} -o {path + objFile} {argObj.sharedLib}"]
+    print(compileCommand)
     pu.execute_command(compileCommand, child_name="aflcompile", need_live_output=False, shell=True, crash=True)
 
     # now fuzzzzzzzz
@@ -171,7 +175,7 @@ def fuzzIt(path, file, argObj, id):
            "AFL_QUIET":"1"}
     """
 
-
+    print(fuzzCommand)
     pu.execute_command(fuzzCommand, child_name="Fuzzzzing", need_live_output=True, shell=True, timeout=fuzzTimeout)
 
     resultFile = f"{path}lemma_check_cex_{str(id)}.txt"

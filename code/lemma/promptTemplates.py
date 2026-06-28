@@ -44,7 +44,7 @@ LEMMA_GENERATION_GUIDELINES = """
         For example, `(assert (forall ((a (_ BitVec 32))) (= (foo_cb a a) a)))` is a valid lemma.
         However, `(assert (exists ((a (_ BitVec 32))) (= (foo_cb a a) a)))` is not a valid lemma.
         
-    6) User is interested in only <FORMAT> theory. Use <FORMAT> size accordingly based upon the FUNCTION_PROTOTYPE of the function provided by user.
+    6) User is interested in only <FORMAT> theory. Use <FORMAT> theory based upon the FUNCTION_PROTOTYPE of the function provided by user.
     
     7) <ARTIFACT> should look like '(assert FORMULA)', where FORMULA is a first order predicate with `forall` quantifier in correct SMT-LIB <FORMAT> format.
     
@@ -75,7 +75,7 @@ FEW_SHOTS = """
     (assert (forall ((z (_ BitVec 32))) (=> (not (bvugt z (_ bv0 32))) (= (bvugt (foo_cb z) (_ bv0 32)) false))))
     ```
     
-    Generate similar lemmas for the given closed box <FUNCTION> with `forall` constraints in <FORMAT> theory between LEMMA_START and LEMMA_END blocks.
+    Generate similar lemmas for the given closed box <FUNCTION> with `forall` constraints in <FORMAT> theory between LEMMA_START and LEMMA_END blocks. This example is in bitvector theory, but you will need to generate in SMT theory described in function prototype which can be bitvector or integer theroy.
 """
 
 # PROMPT-3 New we provide the details about a function and ask the LLM to generate a response.
@@ -90,7 +90,7 @@ GEN_FUNCTION_LEMMAS = f"""
     PROTOTYPE: <FUNCTION_PROTOTYPE>
     OUTPUT_FORMAT: List of <ARTIFACT> in <FORMAT>, between LEMMA_START and LEMMA_END blocks.
     ```
-    You are free to generate lemmas over one or more of the closed-box functions whose descriptions have been provided till now.
+    You are free to generate lemmas over one or more of the closed-box functions whose descriptions and prototype have been provided till now.
 """
 
 # Refinement Lemmas Blocking Clause.

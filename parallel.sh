@@ -4,8 +4,8 @@
 # $1: json file path
 # $2: smt file path
 # $3: log_file
-file1="/home/out1.txt"
-file2="/home/out2.txt"
+file1="./out1.txt"
+file2="./out2.txt"
 
 # Clear old outputs
 > "$file1"
@@ -67,18 +67,17 @@ kill_tree() {
 
 # echo "Orax done"
 # Run program2 in its own process group with timeout
-cd /home/
+# cd /home/
 # Done
-model="--model gpt-oss:20b --use156"
+# model="--model gpt-oss:20b --use156"
 # model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
 # model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
-# model="--usebedrock --model qwen.qwen3-32b-v1:0"
-# model="--usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0"
+model="--usebedrock --model us.anthropic.claude-opus-4-6-v1"
 # # model="--model llama3:latest"
 # model="--usebedrock --model openai.gpt-oss-120b-1:0"
 
 echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
-for i in {1..10}; do
+for i in {1..3}; do
     if ! check_files; then
         # echo "not sat checking for unsat"
         echo "Current time: $(date)"
@@ -106,7 +105,7 @@ for i in {1..10}; do
         #     echo "Process timed out after 10 minutes on iteration $i"
         #     break
         # fi
-        sleep 60
+        sleep 30
         # wait $pid2
     fi 
     wait

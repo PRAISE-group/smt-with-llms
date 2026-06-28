@@ -1,11 +1,12 @@
 import subprocess
 import os
 from code.utils.unsatUtil import *
+from code.solver.funcModelToC import print_function_as_c, print_model_as_c
 import z3
 
 def typenameConversion(domain):
     # print(domain, type(domain))
-    if isinstance(domain, z3.z3.ArithSortRef):
+    if isinstance(domain, z3.z3.ArithSortRef) or isinstance(domain, z3.z3.ArithRef):
         return "int"
     elif isinstance(domain, z3.z3.BoolSortRef):
         return "bool"
@@ -43,7 +44,12 @@ def getHarness(solver, funs):
 #include <stdlib.h>
 #include <inttypes.h>
 #include <assert.h>
+#define True true
+#define False false
 """
+    m = solver.model()
+    functs = print_model_as_c(m)
+    s+= functs + "\n"
     s+= "extern \"C\"{\n"
     for name in funs:
         # s+= "extern "
@@ -89,9 +95,10 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
     # print("model:", m)
     input_tuple = []
     for d in solver.vars:
-        val = m[d]
-        if args.verbose:
-            print(f"{d} = {m[d]}")
+        # val = m[d]
+        val = m.eval(d, model_completion=True)
+        # if args.verbose:
+        #     print(f"{d} = {m[d]}")
         if val.sort().name() == "Bool":
             input_tuple.append(int(z3.is_true(val)))  # True → 1, False → 0
         else:
@@ -126,21 +133,26 @@ def getCBInputOutput(solver, args, cbFunctions, objectFile):
         # Step 2: Run the compiled program with arguments
         run_cmd = ["oracleTemp/program"]
         process = subprocess.Popen(
-            ["oracleTemp/program"],          # Or use ["input_program.exe"] on Windows
+            ["oracleTemp/program"] + [str(x) for x in input_tuple],          # Or use ["input_program.exe"] on Windows
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True                     # Ensures input/output is in text mode (Python 3.6+)
         )
         input_data = ""
+        print(input_tuple)
         for value in input_tuple:
             input_data += str(value)+ " "
-        stdout, stderr = process.communicate(input=input_data)
+        stdout, stderr = process.communicate()
+        print(stdout, stderr)
+        print("returncode:", process.returncode)
         if args.verbose:
             print(stderr)
             print("input:", input_data)
         out = {}
         out[cbFunctions] = stdout
+        print(out)
+        print(stdout)
         # print(stdout, type(stdout))
         # input_tuple.append(int(stdout))
         return stdout
@@ -151,9 +163,10 @@ def modelCheck(solver, args, cbFunctions, objectFile, failedFunctions):
     m = solver.model()
     input_tuple = []
     for d in solver.vars:
-        val = m[d]
-        if args.verbose:
-            print(f"{d} = {m[d]}")
+        # val = m[d]
+        val = m.eval(d, model_completion=True)
+        # if args.verbose:
+        #     print(f"{d} = {m[d]}")
         if val.sort().name() == "Bool":
             input_tuple.append(int(z3.is_true(val)))  # True → 1, False → 0
         else:
