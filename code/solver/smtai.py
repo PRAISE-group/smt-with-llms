@@ -494,9 +494,12 @@ class smtAI(object):
                 vardecl += "int " + str(var.decl().name()) + ";\n"
             elif is_bv(var):
                 width = var.sort().size()  # extract bit width
-                if width == 8:
+                if width <= 8:
                     ctype = "uint8_t"
                     fmt = "%hhu"
+                # elif width == 1:
+                #     ctype = "int"
+                #     fmt = "%d"
                 elif width == 16:
                     ctype = "uint16_t"
                     fmt = "%hu"

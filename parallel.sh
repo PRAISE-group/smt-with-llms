@@ -72,9 +72,9 @@ kill_tree() {
 # model="--model gpt-oss:20b --use156"
 # model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
 # model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
-model="--usebedrock --model us.anthropic.claude-opus-4-6-v1"
+# model="--usebedrock --model us.anthropic.claude-opus-4-6-v1"
 # # model="--model llama3:latest"
-# model="--usebedrock --model openai.gpt-oss-120b-1:0"
+model="--usebedrock --model openai.gpt-oss-120b-1:0"
 
 echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
 for i in {1..3}; do
