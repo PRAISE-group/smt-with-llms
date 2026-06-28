@@ -1,0 +1,14 @@
+{
+  "smt_file": "./benchmarks/gt_new/sum_non_eq-2.smt2_5.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "sum_cb": {
+      "smtDecl": "(declare-fun sum_cb (Int Int) Int)",
+      "desc": "Returns sum of two inputs",
+      "tests": [[1, 2], [3, 1]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}

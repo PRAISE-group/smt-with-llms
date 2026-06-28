@@ -1,0 +1,14 @@
+{
+  "smt_file": "./benchmarks/gt_new/recHanoi03-2.smt2.1_0.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "hanoi_cb": {
+      "smtDecl": "(declare-fun hanoi_cb (Int) Int)",
+      "desc": "the number of moves needed to move n (given as argument) disks in the Tower of Hanoi puzzle.",
+      "tests": [[1], [3]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}

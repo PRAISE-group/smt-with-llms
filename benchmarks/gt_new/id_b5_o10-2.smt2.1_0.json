@@ -1,0 +1,14 @@
+{
+  "smt_file": "./benchmarks/gt_new/id_b5_o10-2.smt2.1_0.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "idb510_cb": {
+      "smtDecl": "(declare-fun idb510_cb (Int) Int)",
+      "desc": "For inputs less than 6, it returns the identity (i.e. the same input) else it returns 5.",
+      "tests": [[1], [3]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}

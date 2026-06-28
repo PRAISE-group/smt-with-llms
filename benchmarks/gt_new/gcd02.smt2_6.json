@@ -1,0 +1,14 @@
+{
+  "smt_file": "./benchmarks/gt_new/gcd02.smt2_6.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "divides_cb": {
+      "smtDecl": "(declare-fun divides_cb (Int Int) Int)",
+      "desc": "Takes two integers as arguments, returns 1 if first argument divides second argument else returns 0.",
+      "tests": [[1, 2], [3, 1]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}

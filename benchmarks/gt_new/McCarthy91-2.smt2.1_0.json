@@ -1,0 +1,14 @@
+{
+  "smt_file": "./benchmarks/gt_new/McCarthy91-2.smt2.1_0.smt2",
+  "object_file": "./benchmarks/gt_new/object.o",
+  "functions": {
+    "f91_cb": {
+      "smtDecl": "(declare-fun f91_cb (Int) Int)",
+      "desc": "If the input is less then 100 then returns 91 else returns input after subtracting 10",
+      "tests": [[1], [300]],
+      "userLemmas": [""],
+      "gptChat": [ ""
+      ]
+    }
+  }
+}
