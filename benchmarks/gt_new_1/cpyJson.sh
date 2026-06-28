@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRC="Ackermann01-2.smt2_6.json"
+SRC="baele.smt2_1.json"
 
 # check source exists
 if [ ! -f "$SRC" ]; then

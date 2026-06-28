@@ -1,12 +1,12 @@
 #!/bin/bash
 
-TARGET="Ackermann01-2.smt2_6.smt2"
+TARGET="/gt_new/"
 
 for file in *.json; do
     [ -e "$file" ] || continue
 
     # derive smt2 name from json filename
-    smt_name="${file%.json}.smt2"
+    smt_name="/gt_new_1/"
 
     echo "[+] Processing $file -> replacing with $smt_name"
 
