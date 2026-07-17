@@ -9,6 +9,29 @@ Run all commands in this guide from the repository root.
 - Docker Engine or Docker Desktop with the `docker` command available.
 - An `.env` file containing the credentials required by the selected model. The file is excluded from the image by `.dockerignore`.
 
+## Install and verify Docker
+
+Use the official installation guide for your system:
+
+- [Docker Engine installation for supported Linux distributions](https://docs.docker.com/engine/install/)
+- [Docker Engine installation on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+- [Docker Desktop installation on macOS](https://docs.docker.com/desktop/setup/install/mac-install/)
+
+After installation, check the Docker CLI version and confirm that the daemon is reachable:
+
+```bash
+docker --version
+docker info
+```
+
+Finally, download and run Docker's test image:
+
+```bash
+docker run --rm hello-world
+```
+
+If the installation requires root access and the current user has not been configured to use Docker, prefix the verification commands with `sudo`.
+
 ## Update the Dockerfile or dependencies
 
 Edit `Dockerfile` when the base image, operating-system packages, build steps, or runtime command need to change.
@@ -74,17 +97,17 @@ docker run --rm --env-file .env nlusat-tool:latest \
   -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
 ```
 
-To mount the host repository's `benchmarks` directory over the image's benchmark directory, use `-v`:
+To mount the host repository's `benchmarks` directory over the image's benchmark directory and use a benchmark directly from that mounted path, run:
 
 ```bash
 docker run --rm --env-file .env \
   -v "$(pwd)/benchmarks:/app/benchmarks" \
   nlusat-tool:latest \
-  -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
+  -i /app/benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
   -t 1 -v --usegpt --model gpt-5-nano-2025-08-07 --stop
 ```
 
-The host directory must exist before starting the container. Because this is a bind mount, files created or changed under `/app/benchmarks` are reflected in the host `benchmarks` directory.
+Here, `$(pwd)/benchmarks` is the host path and `/app/benchmarks` is its mounted path inside the container. The host directory must exist before starting the container. Because this is a read-write bind mount, files created or changed under `/app/benchmarks` are reflected in the host `benchmarks` directory.
 
 Do not use `COPY .env` or an `ENV` instruction for secrets in the Dockerfile. Pass them with `--env-file` or your container platform's secret mechanism.
 
