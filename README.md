@@ -21,6 +21,10 @@ CHAT_OPENAI_API_KEY=...................
 AWS_BEARER_TOKEN_BEDROCK=..............
 ```
 
+## Docker
+
+See [DOCKER.md](DOCKER.md) for instructions to update and build the uv-based image, run `main.py`, export the image to a tar archive, and load it on another machine.
+
 ## Options Available
 
 ```aiignore
