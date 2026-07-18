@@ -1,3 +1,5 @@
+.trunk/*
+trunk/*
 .idea/*
 **/.idea/*
 *.test.py
