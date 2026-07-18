@@ -15,6 +15,7 @@ from code.lemma.lemmaDict import LemmaDict
 from code.utils.commandline import commandLineArgs
 from code.lemma.promptTemplates import *
 from code.models import Function, Lemmas, LemmaStatus
+
 # from code.utils.lemmaTester import smtlib_to_c
 
 decl = ""
@@ -22,7 +23,7 @@ funcInputs = []
 
 
 def perform_light_check_lemma(body: str, path_to_obj_file: str) -> bool:
-    console.print("[bold yellow]Running C code for lemma verification...")
+    console.print("[bold yellow]Light-check C code for lemma verification...")
     directory_path = os.path.dirname(path_to_obj_file)
 
     if not path_to_obj_file:
@@ -160,7 +161,7 @@ def get_lemmas_from_llm_response(
             # Quick check using C code execution.
             pathLib = os.path.normpath(
                 "./"
-                + "/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[2:])
+                + "/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[1:])
             )
             lightCheck = perform_light_check_lemma(
                 str(decl + "\n" + fragments), pathLib
@@ -281,7 +282,7 @@ def getRefinedLemmasFromExamples(
             validLemmas.append(lemma.smtFormat)
         if lemma.status == LemmaStatus.UNKNOWN:
             validLemmas.append(lemma.smtFormat)
-            
+
     user_prompt = LEMMA_REFINEMENT_TEMPLATE
     user_prompt = user_prompt.replace("<FORMAT>", formatting)
     user_prompt = user_prompt.replace("<ARTIFACT>", "lemmas")
