@@ -23,7 +23,7 @@ def checkUnsat(
     print("funcmap: ", funcMap)
     """
 
-    assert (len(lemmaList) > 0, "Empty unsat core")
+    assert len(lemmaList) > 0, "Empty unsat core"
 
     pu.initLogger()
 
