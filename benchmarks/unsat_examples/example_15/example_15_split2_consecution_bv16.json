@@ -1,6 +1,6 @@
 {
-  "smt_file": "/home/benchmarks/unsat_examples/example_15/example_15_split2_consecution_bv16.smt2",
-  "object_file": "/home/benchmarks/unsat_examples/example_15/example_15.o",
+  "smt_file": "./benchmarks/unsat_examples/example_15/example_15_split2_consecution_bv16.smt2",
+  "object_file": "./benchmarks/unsat_examples/example_15/example_15.o",
   "limit": [0, 40],
   "functions": {
     "foo_cb": {

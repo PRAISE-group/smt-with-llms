@@ -1,6 +1,6 @@
 {
-  "smt_file": "/home/benchmarks/unsat_examples/example_2/example_2_split1_initiation_bv16.smt2",
-  "object_file": "/home/benchmarks/unsat_examples/example_2/example_2.o",
+  "smt_file": "./benchmarks/unsat_examples/example_2/example_2_split1_initiation_bv16.smt2",
+  "object_file": "./benchmarks/unsat_examples/example_2/example_2.o",
   "limit": [1, 100],
   "functions": {
     "isprime_cb": {

@@ -1,6 +1,6 @@
 {
-  "smt_file": "/home/benchmarks/unsat_examples/example_4/example_4_split2_consecution_bv16.smt2",
-  "object_file": "/home/benchmarks/unsat_examples/example_4/example_4.o",
+  "smt_file": "./benchmarks/unsat_examples/example_4/example_4_split2_consecution_bv16.smt2",
+  "object_file": "./benchmarks/unsat_examples/example_4/example_4.o",
   "limit": [0, 20],
   "functions": {
     "add_sum_cb": {

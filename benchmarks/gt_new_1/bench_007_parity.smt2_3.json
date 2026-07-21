@@ -4,7 +4,7 @@
   "functions": {
     "my__builtin_parity_cb": {
       "smtDecl": "(declare-fun my__builtin_parity_cb ((_ BitVec 32)) (_ BitVec 32))",
-      "desc": "Returns the parity of x, i.e. the number of 1-bits in x modulo 2.",
+      "desc": "Returns 1 if the number of 1 bits is odd else returns 0.",
       "tests": [[1], [3]],
       "userLemmas": [""],
       "gptChat": [ ""

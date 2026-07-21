@@ -4,7 +4,7 @@
   "functions": {
     "my__builtin_clrsb_cb": {
       "smtDecl": "(declare-fun my__builtin_clrsb_cb ((_ BitVec 32)) (_ BitVec 32))",
-      "desc": "Returns the number of leading redundant sign bits in x, i.e. the number of bits following the most significant bit that are identical to it. There are no special cases for 0 or other values.",
+      "desc": "Returns the number of bits following the most significant bit that are identical to it.",
       "tests": [[1], [3]],
       "userLemmas": [""],
       "gptChat": [ ""

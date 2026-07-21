@@ -1,6 +1,6 @@
 {
-  "smt_file": "/home/benchmarks/unsat_examples/example_9/example_9_split1_initiation_bv16.smt2",
-  "object_file": "/home/benchmarks/unsat_examples/example_9/example_9.o",
+  "smt_file": "./benchmarks/unsat_examples/example_9/example_9_split1_initiation_bv16.smt2",
+  "object_file": "./benchmarks/unsat_examples/example_9/example_9.o",
   "limit": [0, 100],
   "functions": {
     "icbrt_cb": {

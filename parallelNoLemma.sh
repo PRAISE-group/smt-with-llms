@@ -12,10 +12,7 @@ file2="./out2.txt"
 > "$file2"
 
 check_files() {
-    # if [[ $(<"$file1") == "SAT" ]]; then
-    #     return 0
-    # fi
-    if grep -qE "SAT" "$file2"; then
+    if [[ $(<"$file1") == "SAT" ]]; then
         return 0
     fi
     if grep -qE "UNSAT" "$file2"; then
@@ -42,39 +39,32 @@ kill_tree() {
     kill -KILL -"$pid" 2>/dev/null
 }
 
-# model="--model gpt-oss:20b --use156"
-# model="--usebedrock --model us.meta.llama4-maverick-17b-instruct-v1:0"
-# model="--usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0"
-# model="--usebedrock --model us.anthropic.claude-opus-4-6-v1"
-# # model="--model llama3:latest"
-model="--usebedrock --model openai.gpt-oss-120b-1:0"
-
-echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
-for i in {1..3}; do
+model="--model gpt-oss:20b --use156"
+echo "Running: uv run main.py -i $1 -t 1 -v $model -l 0" > "$3" 2>&1
+# for i in {1..3}; do
     if ! check_files; then
+        # echo "not sat checking for unsat"
         echo "Current time: $(date)"
         echo " " >> $3
         echo "Starting script iteration" >> $3
         echo " " >> $3
-        start_time=$(date +%s)
-        setsid timeout 10m uv run main.py -i "$1" -t 1 -v $model >> "$3" 2>&1 &
+        setsid timeout 10m uv run main.py -i "$1" -t 1 -v $model -l 0 >> "$3" 2>&1 &
         pid2=$!
         exit_code=$?
         if ! wait "$pid2"; then
-            echo "uv process exited (iteration $i)" 
+            # exit_code=$?
+            echo "Warning: uv process exited unexpectedly (iteration $i)" 
         fi
         echo "finished iteration $i"
-        end_time=$(date +%s)
-        runtime=$((end_time - start_time))
         kill_tree "$pid2"
         kill_tree "$pid2"
-        sleep 5
+        sleep 0
+        # wait $pid2
     fi 
     wait
     rm -rf fuzz_temp/*
-done
-
+    # break
+# done
 echo "Exit code: $exit_code"
 sleep 1
-
 wait

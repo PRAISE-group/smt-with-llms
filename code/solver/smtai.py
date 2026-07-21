@@ -202,6 +202,9 @@ class smtAI(object):
         if expr.decl().kind() == Z3_OP_IMPLIES:
             a, b = expr.children()
             return f"(!({self.z3_to_c(a)}) || ({self.z3_to_c(b)}))"
+        elif expr.decl().kind() == Z3_OP_ZERO_EXT:
+            child = expr.children()[0]
+            return f"({self.z3_to_c(child)})"
         elif is_and(expr):
             return " && ".join(f"({self.z3_to_c(c)})" for c in expr.children())
         elif is_or(expr):
@@ -297,6 +300,7 @@ class smtAI(object):
             return str(expr)  # fallback
 
     def getFunctions(self, expr, funs):
+        # print(expr.decl().kind())
         # print(expr,expr.decl().kind(),Z3_OP_UNINTERPRETED, is_and(expr), Z3_OP_BAND)
         if expr.decl().kind() == Z3_OP_IMPLIES:
             a, b = expr.children()
@@ -356,6 +360,9 @@ class smtAI(object):
         elif expr.decl().kind() == Z3_OP_ITE:
             cond, then_expr, else_expr = expr.children()
             return f"(({self.getFunctions(cond, funs)}) ? ({self.getFunctions(then_expr, funs)}) : ({self.getFunctions(else_expr, funs)}))"
+        # elif expr.decl().kind() == Z3_OP_ZERO_EXT:
+        #     child = expr.children()[0]
+        #     return f"({self.getFunctions(child, funs)})"
         elif is_false(expr):
             return "0"
         elif is_true(expr):
@@ -366,13 +373,17 @@ class smtAI(object):
             return str(expr.as_long())
         else:
             if is_app(expr) and expr.decl().kind() == Z3_OP_UNINTERPRETED:
-                #     print("Fallback ",expr)
-                if expr not in funs:
+                # print("Fallback ",expr, funs)
+                seen = {e.hash() for e in funs}
+                if expr.hash() not in seen:
+                    # print("inside if cond")
                     funs.append(expr)
+            # print("return")
             return str(expr)  # fallback
 
     def getOutputForCBFunctions(self, args, bench):
         funs = []
+        # print("insode getoutputforcbfunctions")
         for f in self.formulas:
             self.getFunctions(f, funs)
         # print("funs:", funs)
@@ -400,10 +411,10 @@ class smtAI(object):
                     # print("success")
                     continue
             for i in range(len(out)):
-                if args.verbose:
-                    print(i, out[i])
+                # if args.verbose:
+                #     print(i, out[i])
                 outlist.append(int(out[i]))
-                print("printed")
+                # print("printed")
             # exit()
             temp[funName] = outlist
             inputOutput.append(temp)
@@ -550,11 +561,11 @@ class smtAI(object):
         if args.verbose:
             print("\nclose boxed functions", cbFunctions)
         self.add(formulas)
-        if args.verbose:
-            print("\nSMT file formulas", formulas)
+        # if args.verbose:
+        #     print("\nSMT file formulas", formulas)
         self.push()
-        if args.verbose:
-            print("pushed")
+        # if args.verbose:
+        #     print("pushed")
         self.cbFunctions = cbFunctions
         self.allFunctions = allFunctions
         self.smtFile = self.s.to_smt2()[:-12]
@@ -593,8 +604,8 @@ class smtAI(object):
             if len(self.inputoutputassertions) > 10:
                 self.inputoutputassertions = self.inputoutputassertions[-10:]
             for v in self.inputoutputassertions:
-                if args.verbose:
-                    print(v)
+                # if args.verbose:
+                #     print(v)
                 try:
                     assertion = self.readSMTstring(v, self.allFunctions)
                 except Exception as e:
@@ -619,11 +630,12 @@ class smtAI(object):
             print("lemmas from sumit:", lemmaStrings)
         # exit()
         console.info("Pasrsing lemmas using Z3 api")
-        if args.verbose:
-            console.info("functions:", self.cbFunctions)
+        # if args.verbose:
+        #     console.info("functions:", self.cbFunctions)
         for v in self.vars:
             if args.verbose:
-                console.info(v, v.sort())
+                # console.info(v, v.sort())
+                pass
         if not args.addLemma == 0:
             for lemmaKey, lemmaString in lemmaStrings.items():  # add lemmas from sumit
                 # if "assert" not in lemmaString:
@@ -805,7 +817,9 @@ class smtAI(object):
                 # lemmasDict.setIncrementalCall(True)
                 if not LemmaDict.checkIfRefinementCall:
                     lemmaDict.setRefinementCall(True)
+                # print("before")
                 inconsistency = self.getOutputForCBFunctions(args, bench)
+                # print("after")
                 if args.verbose:
                     print(inconsistency)
                 for val in inconsistency:

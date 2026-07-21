@@ -147,6 +147,8 @@ def get_lemmas_from_llm_response(
             and "end" not in fragments
             and "assert" in fragments
             and "forall" in fragments
+            and "exist" not in fragments
+            and  not fragments.lower().count("forall") > 1
         ):
             fragments = process_format(fragments)
 
@@ -162,9 +164,14 @@ def get_lemmas_from_llm_response(
                 "./"
                 + "/".join(x for x in commandLineArgs.sharedLib.strip().split("/")[2:])
             )
-            lightCheck = perform_light_check_lemma(
-                str(decl + "\n" + fragments), pathLib
-            )
+            try:
+                lightCheck = perform_light_check_lemma(
+                    str(decl + "\n" + fragments), pathLib
+                )
+            except Exception as e:
+                lightCheck = False
+            
+            # if "exist" in str(fragments) 
 
             if not lightCheck:
                 console.log(

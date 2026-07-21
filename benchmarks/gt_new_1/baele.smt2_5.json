@@ -1,6 +1,7 @@
 {
   "smt_file": "./benchmarks/gt_new_1/baele.smt2_5.smt2",
   "object_file": "./benchmarks/gt_new_1/object.o",
+  "limit": [1, 1000],
   "functions": {
     "beale_int_cb": {
       "smtDecl": "(declare-fun beale_int_cb (Int Int) Int)",

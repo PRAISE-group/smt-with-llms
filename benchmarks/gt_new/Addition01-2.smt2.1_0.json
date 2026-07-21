@@ -4,7 +4,7 @@
   "functions": {
     "addition_cb": {
       "smtDecl": "(declare-fun addition_cb (Int Int) Int)",
-      "desc": "Returns addition of two numbers",
+      "desc": "Returns addition of two numbers. Lemmas should not contain nested functions",
       "tests": [[1, 2], [3, 1]],
       "userLemmas": [""],
       "gptChat": [ ""

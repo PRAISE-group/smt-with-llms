@@ -108,7 +108,7 @@ if __name__ == "__main__":
     # TODO: commandLineArgs is a class dictonary of all the attributes presented via the command line.
     # TODO: Think how you use lemmaDict and functionsList to drive the complete algorithm.
     # You can add lemmas, but you cannot delete lemmas.
-    time.sleep(20)
+    time.sleep(2)
     solverai = smtAI()
     solverai.readSMTfile(data["smt_file"])
     solverai.initialize(commandLineArgs, data)
@@ -129,6 +129,8 @@ if __name__ == "__main__":
         except Exception as e:
             console.log("Error on execution:", str(e))
             break
+
+        # break
 
         if resultVerdict == AlgoVerdict.UNSAT:
             with open("out2.txt", "w") as f:

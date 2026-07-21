@@ -1,6 +1,6 @@
 {
-  "smt_file": "/home/benchmarks/unsat_examples/example_5/example_5_split2_consecution_bv16.smt2",
-  "object_file": "/home/benchmarks/unsat_examples/example_5/example_5.o",
+  "smt_file": "./benchmarks/unsat_examples/example_5/example_5_split2_consecution_bv16.smt2",
+  "object_file": "./benchmarks/unsat_examples/example_5/example_5.o",
   "limit": [0, 6],
   "functions": {
     "binpow_cb": {

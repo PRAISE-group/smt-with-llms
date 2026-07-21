@@ -90,7 +90,7 @@ GEN_FUNCTION_LEMMAS = f"""
     PROTOTYPE: <FUNCTION_PROTOTYPE>
     OUTPUT_FORMAT: List of <ARTIFACT> in <FORMAT>, between LEMMA_START and LEMMA_END blocks.
     ```
-    You are free to generate lemmas over one or more of the closed-box functions whose descriptions and prototype have been provided till now.
+    You are free to generate lemmas over one or more of the closed-box functions whose descriptions and prototype have been provided till now. Lemmas should not contain zeroext or extract smt2 functions. But no lemma should have nested functions.
 """
 
 # Refinement Lemmas Blocking Clause.
