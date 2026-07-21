@@ -197,3 +197,20 @@ docker run --rm -it nlusat-tool:latest
 ```
 
 An image archive is platform-specific. This repository also contains precompiled benchmark `.o` files, so use the archive only on a compatible CPU architecture. Rebuild those benchmark objects for the target architecture before producing an image for a different platform.
+
+## Running and testing docker image
+
+```bash
+cd smt-with-llms
+git checkout prompts
+
+# Build the docker image
+docker build --build-arg UV_IMAGE=ghcr.io/astral-sh/uv:python3.13-bookworm-slim -t nlusat-tool:latest -f Dockerfile .
+
+# Run the docker image, docker container with name nlusat created.
+docker run -v $PWD:/export --name nlusat -dit nlusat-tool:latest
+docker attach nlusat
+
+# From the docker terminal
+./runUnsat.sh benchSmokeTest
+```
