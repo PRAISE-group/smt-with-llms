@@ -1,0 +1,26 @@
+.git
+.github
+.idea
+.vscode
+.venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+
+# Never copy local credentials into an image.
+.env
+.env.*
+!.env.example
+
+# Local/generated files that are not needed in the runtime image.
+docs
+fuzz_temp
+oracleTemp
+light_check_lemma.cpp
+light_check_lemma.out
+constraints.smt2
+logging_unsat.txt
+out2.txt
+*.tar
+*.tar.gz
+*.tgz
