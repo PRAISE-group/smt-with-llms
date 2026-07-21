@@ -12,15 +12,23 @@ ENV PYTHONUNBUFFERED=1 \
 # main.py compiles benchmark code and uses AFL++ during full framework runs.
 RUN apt-get update \
     && apt-get install --no-install-recommends --yes \
+        gcc \
+        g++ \
+        clang \
+        afl \
         afl++ \
+        bash \
+        ssh \
+        git \
+        curl \
+        openssh-server \
+        nano \
         build-essential \
         ca-certificates \
         z3 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --create-home --uid 10001 appuser \
-    && mkdir -p /app \
-    && chown appuser:appuser /app
+RUN mkdir -p /app
 
 WORKDIR /app
 
@@ -29,8 +37,6 @@ COPY pyproject.toml uv.lock .python-version ./
 RUN uv sync --locked --no-dev --no-install-project
 
 # The application writes generated solver/fuzzer files beneath /app at runtime.
-COPY --chown=appuser:appuser . .
+COPY . .
 
-USER appuser
-
-ENTRYPOINT ["uv", "run", "--no-sync", "python", "main.py"]
+ENTRYPOINT ["/usr/bin/bash"]

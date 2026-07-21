@@ -19,7 +19,7 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
 
   filename=$(basename "$json_path")
   log_file="logFilesAll/${i}_${filename}"  # prepend counter to filename
-  # setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model llama3:latest >> "$3" 2>&1 &
+# setsid timeout 10m uv run main.py -i "$1" -t 1 -v --model llama3:latest >> "$3" 2>&1 &
 # setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model meta.llama4-maverick-17b-instruct-v1:0 >> "$3" 2>&1 &
 # setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model qwen.qwen3-coder-30b-a3b-v1:0 >> "$3" 2>&1 &
 # setsid timeout 10m uv run main.py -i "$1" -t 1 -v --usebedrock --model qwen.qwen3-32b-v1:0 >> "$3" 2>&1 &

@@ -1,6 +1,6 @@
 # Docker image guide
 
-The repository Dockerfile uses the Astral `uv` image with Python 3.13. It installs the dependencies pinned in `uv.lock`, copies the application and benchmarks, and runs `main.py` as the container entrypoint.
+The repository Dockerfile uses the Astral `uv` image with Python 3.13. It installs the dependencies pinned in `uv.lock`, copies the application and benchmarks, and starts an interactive shell by default as the container entrypoint.
 
 Run all commands in this guide from the repository root.
 
@@ -71,20 +71,55 @@ Confirm that the image exists:
 docker image ls nlusat-tool
 ```
 
-## Run main.py
+## Open a shell
 
-Arguments placed after the image name are passed directly to `main.py`.
+The image now opens `/bin/bash -il` by default, so `docker run`, `docker start`, and `docker attach` can all land in the container shell when the container was created with `-it`. The prompt is customized to say `You are now in the Docker shell, not your local machine.` so it is visually obvious that you are inside the container.
 
-Show the command-line help:
+Start a fresh interactive shell:
 
 ```bash
-docker run --rm nlusat-tool:latest --help
+docker run --rm -it --env-file .env nlusat-tool:latest
 ```
 
-Run the OpenAI example from `README.md` and load credentials at runtime:
+If you bind-mount a host directory and want the container to write into it on Linux, map the container user to your host UID and GID:
+
+```bash
+docker run --rm -it --env-file .env \
+  -e APP_UID="$(id -u)" \
+  -e APP_GID="$(id -g)" \
+  -v "$(pwd)/benchmarks:/app/benchmarks" \
+  nlusat-tool:latest
+```
+
+Keep the shell container running in the background, then attach later:
+
+```bash
+docker run -dit --name nlusat-shell --env-file .env nlusat-tool:latest
+docker attach nlusat-shell
+```
+
+If the container already exists but is stopped, restart it and attach:
+
+```bash
+docker start -ai nlusat-shell
+```
+
+Detach from the shell without stopping the container with `Ctrl-p` followed by `Ctrl-q`.
+
+## Run main.py
+
+Because the default entrypoint is now a shell, invoke the application explicitly:
 
 ```bash
 docker run --rm --env-file .env nlusat-tool:latest \
+  uv run --no-sync python main.py --help
+```
+
+Run the OpenAI example from `README.md`:
+
+```bash
+docker run --rm --env-file .env nlusat-tool:latest \
+  uv run --no-sync python main.py \
   -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
   -t 1 -v --usegpt --model gpt-5-nano-2025-08-07 --stop
 ```
@@ -93,6 +128,7 @@ Run the AWS Bedrock example:
 
 ```bash
 docker run --rm --env-file .env nlusat-tool:latest \
+  uv run --no-sync python main.py \
   -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
   -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
 ```
@@ -101,8 +137,11 @@ To mount the host repository's `benchmarks` directory over the image's benchmark
 
 ```bash
 docker run --rm --env-file .env \
+  -e APP_UID="$(id -u)" \
+  -e APP_GID="$(id -g)" \
   -v "$(pwd)/benchmarks:/app/benchmarks" \
   nlusat-tool:latest \
+  uv run --no-sync python main.py \
   -i /app/benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
   -t 1 -v --usegpt --model gpt-5-nano-2025-08-07 --stop
 ```
@@ -150,11 +189,11 @@ Load the image:
 docker image load --input nlusat-tool-latest.tar
 ```
 
-Confirm the restored tag and test the entrypoint:
+Confirm the restored tag and test the shell entrypoint:
 
 ```bash
 docker image ls nlusat-tool
-docker run --rm nlusat-tool:latest --help
+docker run --rm -it nlusat-tool:latest
 ```
 
 An image archive is platform-specific. This repository also contains precompiled benchmark `.o` files, so use the archive only on a compatible CPU architecture. Rebuild those benchmark objects for the target architecture before producing an image for a different platform.

@@ -1,0 +1,3 @@
+./benchmarks/gt_new/gcd01-1.smt2_5.json
+./benchmarks/gt_new/recHanoi03-2.smt2_6.json
+./smt-with-llms/benchmarks/gt_new/id_b2_o3.smt2.1_0.json
