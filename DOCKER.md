@@ -73,7 +73,7 @@ docker image ls nlunsat-tool
 
 ## Open a shell
 
-The image now opens `/usr/bin/zsh -il` by default with `oh-my-zsh` configured for the root user, so `docker run`, `docker start`, and `docker attach` can all land in the container shell when the container was created with `-it`. The shell uses the built-in `robbyrussell` theme and enables the `git`, `python`, and `pip` plugins.
+The image now opens `/usr/bin/zsh -il` by default with `oh-my-zsh` configured for the root user, so `docker run`, `docker start`, and `docker attach` can all land in the container shell when the container was created with `-it`. The shell uses the built-in `duellj` theme, enables the `git`, `python`, `pip`, and `zsh-z` plugins, and preloads `zsh-autocomplete` and `zsh-syntax-highlighting`.
 
 Start a fresh interactive shell:
 

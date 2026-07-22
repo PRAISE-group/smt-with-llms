@@ -4,6 +4,9 @@ trunk/*
 **/.idea/*
 *.test.py
 *.cpp
+*.tar
+*.tar.gz
+*.tgz
 *.out 
 **/klee-out/
 artifact/*
