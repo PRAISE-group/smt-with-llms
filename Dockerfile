@@ -29,6 +29,7 @@ RUN apt-get update \
         ssh \
         git \
         curl \
+        bat \
         openssh-server \
         nano \
         build-essential \
@@ -44,8 +45,8 @@ RUN git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${ZSH}" \
     && git clone --depth=1 https://github.com/marlonrichert/zsh-autocomplete.git "${ZSH}/custom/plugins/zsh-autocomplete" \
     && git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH}/custom/plugins/zsh-syntax-highlighting" \
     && cp "${ZSH}/templates/zshrc.zsh-template" /root/.zshrc \
-    && sed -i 's/^ZSH_THEME=.*/ZSH_THEME="duellj"/' /root/.zshrc \
-    && sed -i 's/^plugins=(git)$/plugins=(git python pip zsh-z)/' /root/.zshrc \
+    && sed -i 's/^ZSH_THEME=.*/ZSH_THEME="robbyrussell"/' /root/.zshrc \
+    && sed -i 's/^plugins=(git)$/plugins=(git python pip)/' /root/.zshrc \
     && printf '\nexport DEFAULT_USER=root\n' >> /root/.zshrc \
     && printf '\nsource ${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh\n' >> /root/.zshrc \
     && printf 'source ${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh\n' >> /root/.zshrc

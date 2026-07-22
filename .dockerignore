@@ -4,14 +4,12 @@
 .git/*
 .github/*
 .gitignore
-.agents/*
-.codex/*
-artifact/*
 GouravComments
 .idea/*
 .vscode/*
-assets/*
 .venv
+*.md
+*.MD
 **/__pycache__
 **/*.py[cod]
 **/.pytest_cache
