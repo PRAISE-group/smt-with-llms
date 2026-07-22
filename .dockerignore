@@ -3,8 +3,14 @@
 .trunk
 .git/*
 .github/*
+.gitignore
+.agents/*
+.codex/*
+artifact/*
+GouravComments
 .idea/*
 .vscode/*
+assets/*
 .venv
 **/__pycache__
 **/*.py[cod]
@@ -13,13 +19,17 @@
 # Never copy local credentials into an image.
 .env
 .env.*
+.dockerignore
+*.txt
 .env.prod.*
 !.env.example
 
 # Local/generated files that are not needed in the runtime image.
 docs
+program
 fuzz_temp
 oracleTemp
+Dockerfile
 light_check_lemma.cpp
 light_check_lemma.out
 constraints.smt2

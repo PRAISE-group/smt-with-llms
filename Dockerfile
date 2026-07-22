@@ -7,7 +7,10 @@ ENV PYTHONUNBUFFERED=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_NO_CACHE=1 \
-    PATH="/app/.venv/bin:${PATH}"
+    PATH="/app/.venv/bin:${PATH}" \
+    SHELL="/usr/bin/zsh" \
+    ZSH="/root/.oh-my-zsh" \
+    TERM="xterm-256color"
 
 # main.py compiles benchmark code and uses AFL++ during full framework runs.
 RUN apt-get update \
@@ -15,9 +18,14 @@ RUN apt-get update \
         gcc \
         g++ \
         clang \
+        cmake \
+        cmake-data \
+        ninja-build \
+        make \
         afl \
         afl++ \
         bash \
+        zsh \
         ssh \
         git \
         curl \
@@ -32,6 +40,12 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
+RUN git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${ZSH}" \
+    && cp "${ZSH}/templates/zshrc.zsh-template" /root/.zshrc \
+    && sed -i 's/^ZSH_THEME=.*/ZSH_THEME="robbyrussell"/' /root/.zshrc \
+    && sed -i 's/^plugins=(git)$/plugins=(git python pip)/' /root/.zshrc \
+    && printf '\nexport DEFAULT_USER=root\n' >> /root/.zshrc
+
 # Install dependencies separately so source-only changes reuse this layer.
 COPY pyproject.toml uv.lock .python-version ./
 RUN uv sync --locked --no-dev --no-install-project
@@ -39,4 +53,4 @@ RUN uv sync --locked --no-dev --no-install-project
 # The application writes generated solver/fuzzer files beneath /app at runtime.
 COPY . .
 
-ENTRYPOINT ["/usr/bin/bash"]
+ENTRYPOINT ["/usr/bin/zsh", "-il"]
