@@ -7,4 +7,4 @@ docker build --build-arg UV_IMAGE=ghcr.io/astral-sh/uv:python3.13-bookworm-slim 
 
 # Run the docker image, docker container with name nlusat created.
 docker run -v $PWD:/export --name nlunsat --env-file .env -dit nlunsat-tool:latest
-docker attach nlunsat
+docker start -ai nlunsat

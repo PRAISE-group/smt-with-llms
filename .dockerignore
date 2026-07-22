@@ -1,12 +1,13 @@
 .git
-.trunk/*
-.trunk
-.git/*
-.github/*
+.trunk/
+.git/
+.github/
 .gitignore
+artifact/
+docker-build.etcd.sh
 GouravComments
-.idea/*
-.vscode/*
+.idea/
+.vscode/
 .venv
 *.md
 *.MD
@@ -20,7 +21,7 @@ GouravComments
 .dockerignore
 *.txt
 .env.prod.*
-!.env.example
+.env.example
 
 # Local/generated files that are not needed in the runtime image.
 docs
@@ -32,7 +33,6 @@ light_check_lemma.cpp
 light_check_lemma.out
 constraints.smt2
 logging_unsat.txt
-out2.txt
 *.tar
 *.tar.gz
 *.tgz
