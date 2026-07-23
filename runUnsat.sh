@@ -13,7 +13,10 @@ i=1  # initialize counter
 # Loop through each line in the input file
 while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   # Skip empty lines
-  [[ -z "$json_path" ]] && continue
+  if [[ -z "$json_path" ]]; then
+    ((i++))
+    continue
+fi
   
 
   filename=$(basename "$json_path")
