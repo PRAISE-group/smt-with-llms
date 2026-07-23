@@ -21,6 +21,8 @@ fi
 
   filename=$(basename "$json_path")
   echo "benchmark: $filename"
+
+  mkdir -p logFilesAll
   log_file="logFilesAll/${i}_${filename}"  # prepend counter to filename
   
   rm -rf fuzz_temp/*

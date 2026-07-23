@@ -4,7 +4,12 @@ trunk/*
 **/.idea/*
 *.test.py
 *.cpp
+*.tar
+*.tar.gz
+*.tgz
 *.out 
+**/klee-out/
+artifact/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,jetbrains

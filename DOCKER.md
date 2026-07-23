@@ -1,6 +1,6 @@
 # Docker image guide
 
-The repository Dockerfile uses the Astral `uv` image with Python 3.13. It installs the dependencies pinned in `uv.lock`, copies the application and benchmarks, and runs `main.py` as the container entrypoint.
+The repository Dockerfile uses the Astral `uv` image with Python 3.13. It installs the dependencies pinned in `uv.lock`, copies the application and benchmarks, and starts an interactive shell by default as the container entrypoint.
 
 Run all commands in this guide from the repository root.
 
@@ -45,7 +45,7 @@ ARG UV_IMAGE=ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 Change that value to update the default base image. Alternatively, test another Astral uv image without editing the file:
 
 ```bash
-docker build --build-arg UV_IMAGE=ghcr.io/astral-sh/uv:python3.13-bookworm-slim -t nlusat-tool:latest .
+docker build --build-arg UV_IMAGE=ghcr.io/astral-sh/uv:python3.13-bookworm-slim -t nlunsat-tool:latest .
 ```
 
 For Python dependency changes, update `pyproject.toml` and regenerate the lock file before rebuilding:
@@ -62,29 +62,64 @@ Commit `pyproject.toml` and `uv.lock` together. The Docker build uses `uv sync -
 Build and tag the image:
 
 ```bash
-docker build --pull -t nlusat-tool:latest .
+docker build --pull -t nlunsat-tool:latest .
 ```
 
 Confirm that the image exists:
 
 ```bash
-docker image ls nlusat-tool
+docker image ls nlunsat-tool
 ```
+
+## Open a shell
+
+The image now opens `/usr/bin/zsh -il` by default with `oh-my-zsh` configured for the root user, so `docker run`, `docker start`, and `docker attach` can all land in the container shell when the container was created with `-it`. The shell uses the built-in `duellj` theme, enables the `git`, `python`, `pip`, and `zsh-z` plugins, and preloads `zsh-autocomplete` and `zsh-syntax-highlighting`.
+
+Start a fresh interactive shell:
+
+```bash
+docker run --rm -it --env-file .env nlunsat-tool:latest
+```
+
+If you bind-mount a host directory and want the container to write into it on Linux, map the container user to your host UID and GID:
+
+```bash
+docker run --rm -it --env-file .env \
+  -e APP_UID="$(id -u)" \
+  -e APP_GID="$(id -g)" \
+  -v "$(pwd)/benchmarks:/app/benchmarks" \
+  nlunsat-tool:latest
+```
+
+Keep the shell container running in the background, then attach later:
+
+```bash
+docker run -dit --name nlunsat-shell --env-file .env nlunsat-tool:latest
+docker attach nlunsat-shell
+```
+
+If the container already exists but is stopped, restart it and attach:
+
+```bash
+docker start -ai nlunsat-shell
+```
+
+Detach from the shell without stopping the container with `Ctrl-p` followed by `Ctrl-q`.
 
 ## Run main.py
 
-Arguments placed after the image name are passed directly to `main.py`.
-
-Show the command-line help:
+Because the default entrypoint is now a shell, invoke the application explicitly:
 
 ```bash
-docker run --rm nlusat-tool:latest --help
+docker run --rm --env-file .env nlunsat-tool:latest \
+  uv run --no-sync python main.py --help
 ```
 
-Run the OpenAI example from `README.md` and load credentials at runtime:
+Run the OpenAI example from `README.md`:
 
 ```bash
-docker run --rm --env-file .env nlusat-tool:latest \
+docker run --rm --env-file .env nlunsat-tool:latest \
+  uv run --no-sync python main.py \
   -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
   -t 1 -v --usegpt --model gpt-5-nano-2025-08-07 --stop
 ```
@@ -92,7 +127,8 @@ docker run --rm --env-file .env nlusat-tool:latest \
 Run the AWS Bedrock example:
 
 ```bash
-docker run --rm --env-file .env nlusat-tool:latest \
+docker run --rm --env-file .env nlunsat-tool:latest \
+  uv run --no-sync python main.py \
   -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
   -t 1 -v --usebedrock --model openai.gpt-oss-120b-1:0 --stop
 ```
@@ -101,8 +137,11 @@ To mount the host repository's `benchmarks` directory over the image's benchmark
 
 ```bash
 docker run --rm --env-file .env \
+  -e APP_UID="$(id -u)" \
+  -e APP_GID="$(id -g)" \
   -v "$(pwd)/benchmarks:/app/benchmarks" \
-  nlusat-tool:latest \
+  nlunsat-tool:latest \
+  uv run --no-sync python main.py \
   -i /app/benchmarks/BV-benchamrks/bvisalpha-16/test000030.json \
   -t 1 -v --usegpt --model gpt-5-nano-2025-08-07 --stop
 ```
@@ -124,14 +163,14 @@ Configure the application's Ollama base URL to use `host.docker.internal` rather
 Use `docker image save` to preserve the image, its layers, and its tags:
 
 ```bash
-docker image save --output nlusat-tool-latest.tar nlusat-tool:latest
+docker image save --output nlunsat-tool-latest.tar nlunsat-tool:latest
 ```
 
 Check the archive and optionally record a checksum before transferring it:
 
 ```bash
-ls -lh nlusat-tool-latest.tar
-sha256sum nlusat-tool-latest.tar > nlusat-tool-latest.tar.sha256
+ls -lh nlunsat-tool-latest.tar
+sha256sum nlunsat-tool-latest.tar > nlunsat-tool-latest.tar.sha256
 ```
 
 The tar archive is excluded by `.dockerignore`, preventing it from being copied into later image builds.
@@ -141,20 +180,37 @@ The tar archive is excluded by `.dockerignore`, preventing it from being copied 
 On the destination machine, verify the archive if a checksum was created:
 
 ```bash
-sha256sum --check nlusat-tool-latest.tar.sha256
+sha256sum --check nlunsat-tool-latest.tar.sha256
 ```
 
 Load the image:
 
 ```bash
-docker image load --input nlusat-tool-latest.tar
+docker image load --input nlunsat-tool-latest.tar
 ```
 
-Confirm the restored tag and test the entrypoint:
+Confirm the restored tag and test the shell entrypoint:
 
 ```bash
-docker image ls nlusat-tool
-docker run --rm nlusat-tool:latest --help
+docker image ls nlunsat-tool
+docker run --rm -it nlunsat-tool:latest
 ```
 
 An image archive is platform-specific. This repository also contains precompiled benchmark `.o` files, so use the archive only on a compatible CPU architecture. Rebuild those benchmark objects for the target architecture before producing an image for a different platform.
+
+## Running and testing docker image
+
+```bash
+cd smt-with-llms
+git checkout prompts
+
+# Build the docker image
+docker build --build-arg UV_IMAGE=ghcr.io/astral-sh/uv:python3.13-bookworm-slim -t nlunsat-tool:latest -f Dockerfile .
+
+# Run the docker image, docker container with name nlunsat created.
+docker run -v $PWD:/export --name nlunsat -dit nlunsat-tool:latest
+docker attach nlunsat
+
+# From the docker terminal
+./runUnsat.sh benchSmokeTest
+```

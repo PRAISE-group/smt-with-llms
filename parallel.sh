@@ -6,6 +6,7 @@
 # $3: log_file
 file1="./out1.txt"
 file2="./out2.txt"
+mkdir -p logFilesAll
 
 # Clear old outputs
 > "$file1"
@@ -48,6 +49,7 @@ kill_tree() {
 # model="--usebedrock --model us.anthropic.claude-opus-4-6-v1"
 # # model="--model llama3:latest"
 model="--usebedrock --model openai.gpt-oss-120b-1:0"
+# model="--usegpt --model gpt-5.6-sol"
 
 echo "Running: uv run main.py -i $1 -t 1 -v $model" > "$3" 2>&1
 for i in {1..3}; do

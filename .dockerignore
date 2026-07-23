@@ -1,8 +1,16 @@
 .git
-.github
-.idea
-.vscode
+.trunk/
+.git/
+.github/
+.gitignore
+artifact/
+docker-build.etcd.sh
+GouravComments
+.idea/
+.vscode/
 .venv
+*.md
+*.MD
 **/__pycache__
 **/*.py[cod]
 **/.pytest_cache
@@ -10,17 +18,21 @@
 # Never copy local credentials into an image.
 .env
 .env.*
-!.env.example
+.dockerignore
+*.txt
+.env.prod.*
+.env.example
 
 # Local/generated files that are not needed in the runtime image.
 docs
+program
 fuzz_temp
 oracleTemp
+Dockerfile
 light_check_lemma.cpp
 light_check_lemma.out
 constraints.smt2
 logging_unsat.txt
-out2.txt
 *.tar
 *.tar.gz
 *.tgz
