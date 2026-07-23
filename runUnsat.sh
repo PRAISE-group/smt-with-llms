@@ -16,9 +16,8 @@ while IFS= read -r json_path || [[ -n "$json_path" ]]; do
   if [[ -z "$json_path" ]]; then
     ((i++))
     continue
-fi
+  fi
   
-
   filename=$(basename "$json_path")
   echo "benchmark: $filename"
 

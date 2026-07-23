@@ -29,6 +29,8 @@ RUN apt-get update \
         ssh \
         git \
         curl \
+        vim \
+        neovim \
         bat \
         openssh-server \
         nano \

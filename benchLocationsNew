@@ -32,8 +32,6 @@
 ./benchmarks/gt_new/Primes.smt2_35.json
 ./benchmarks/gt_new/Primes.smt2_7.json
 ./benchmarks/gt_new/recHanoi01.smt2.1_0.json
-
-
 ./benchmarks/gt_new/recHanoi01.smt2_8.json
 ./benchmarks/gt_new/recHanoi02-2.smt2_5.json
 ./benchmarks/gt_new/recHanoi02-2.smt2_6.json
