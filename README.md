@@ -3,6 +3,7 @@
 ## Setup
 
 - Install `uv` package manager: [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- Check the README.pdf in the repository.
 
 ```bash
 # Install uv package manager.
