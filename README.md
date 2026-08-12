@@ -1,4 +1,4 @@
-# SMT Sat/Unsat with LLMs
+# LLM-Assisted Unsatisfiability Proofs for Satisfiability Modulo Theories, Oracles and Natural Language
 
 ## Setup
 
@@ -119,24 +119,4 @@ Please set the following in the `.env` file. Example shows some bedrock models t
 # Model anthropic.claude-sonnet-4-20250514-v1:0
 ❯ uv run main.py -i benchmarks/BV-benchamrks/bvisalpha-16/test000030.json -t 1 -v --usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0 --stop
 ❯ uv run main.py -i benchmarks/BV-benchamrks/2018-goel-hwbench/2018-goel-hwbench.json -t 1 -v --usebedrock --model us.anthropic.claude-sonnet-4-20250514-v1:0 --stop
-```
-
-## Running Ubuntu Docker
-
-```powershell
-docker buildx build -t dev1-clang-llvm:25.10 -f .\windows.dockerfile .
-
-docker run -d --name dev1-clang-llvm --restart unless-stopped `
-  -p 8080:8080 -p 8081:80 -p 443:443 -p 2025:22 -p 5056:56 -p 8082:8081 -p 3000:3000 -p 2000:2000 -p 5000:5000 `
-  --hostname=5b3f3926b12d `
-  --env FULLNAME=dev1-clang-llvm `
-  --env PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" `
-  --volume "C:\Users\lahir\Documents:/docs" `
-  --volume "C:\Users\lahir\Documents\workdir:/workdir" `
-  --volume "C:\Users\lahir\Downloads:/downloads" `
-  --volume dev1-perstatnce:/persist `
-  --network=bridge `
-  --label "org.opencontainers.image.ref.name=ubuntu" `
-  --label "org.opencontainers.image.version=25.10" `
-  dev1-clang-llvm:25.10
 ```
